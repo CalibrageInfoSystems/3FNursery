@@ -40,7 +40,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.HomeActivity"></activity>
+        <activity android:name=".ui.SelectionScreen"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.HomeActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -64,10 +66,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
             android:name=".ui.MainLoginScreen"
             android:label="@string/title_activity_main_login_screen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".datasync.ui.RefreshSyncActivity" />
         <activity android:name=".MainActivity" />
     </application>

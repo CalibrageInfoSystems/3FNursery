@@ -54,6 +54,7 @@ import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.MarketSurvey;
 import com.oilpalm3f.nursery.dbmodels.MissingTressInfo;
 import com.oilpalm3f.nursery.dbmodels.NeighbourPlot;
+import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
 import com.oilpalm3f.nursery.dbmodels.Ownershipfilerepository;
@@ -1387,6 +1388,47 @@ f
     }
 
 
+    public T getSelectedNurseryData(final String query, final int type) {
+        List<Address> farmerAddrList = new ArrayList<>();
+        Address mAddress = null;
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ address details query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    mAddress = new Address();
+                    mAddress.setCode(cursor.getString(1));
+                    mAddress.setAddressline1(cursor.getString(2));
+                    mAddress.setAddressline2(cursor.getString(3));
+                    mAddress.setAddressline3(cursor.getString(4));
+                    mAddress.setLandmark(cursor.getString(5));
+                    mAddress.setVillageid(cursor.getInt(6));
+                    mAddress.setMandalid(cursor.getInt(7));
+                    mAddress.setDistictid(cursor.getInt(8));
+                    mAddress.setStateid(cursor.getInt(9));
+                    mAddress.setCountryid(cursor.getInt(10));
+                    mAddress.setPincode(cursor.getInt(11));
+                    mAddress.setIsactive(cursor.getInt(12));
+                    mAddress.setCreatedbyuserid(cursor.getInt(13));
+                    mAddress.setCreateddate(cursor.getString(14));
+                    mAddress.setUpdatedbyuserid(Integer.parseInt(CommonConstants.USER_ID));
+                    mAddress.setUpdateddate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                    mAddress.setServerupdatedstatus(Integer.parseInt(CommonConstants.ServerUpdatedStatus));
+                    if (type == 1) {
+                        farmerAddrList.add(mAddress);
+                        mAddress = null;
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
+        }
+        return (T) ((type == 0) ? mAddress : farmerAddrList);
+    }
+
+
+
     public T getSelectedFarmerData(final String query, int type) {
 
         List<Farmer> farmerRefresh = new ArrayList<>();
@@ -1939,6 +1981,36 @@ f
         }
 
         return (T) ((type == 0) ? mPlantation : mPlantationList);
+    }
+
+
+
+    public List<NurseryDetails> getNurseryDetails(final String query) {
+        List<NurseryDetails> nurserySaplingDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryDetails nurseryDetails = new NurseryDetails();
+                    nurseryDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
+                    nurseryDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
+                    nurseryDetails.setPinCode(cursor.getInt(cursor.getColumnIndex("PinCode")));
+
+                    nurserySaplingDetails.add(nurseryDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nurserySaplingDetails;
     }
 
     public String getCropVariety(final String query, final int type) {

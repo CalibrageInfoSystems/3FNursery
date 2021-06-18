@@ -122,6 +122,14 @@ public class Queries {
         return "select Id, Code, Name from State";
     }
 
+    public String getNurseryMasterQuery() {
+        return "select Id, Code, Name, PinCode from Nursery";
+    }
+
+    public String getNurseryDetailsQuery(String name) {
+        return "select Code, Name, PinCode from Nursery where Name = '" + name + "'";
+    }
+
     public String getStatesQuery() {
         return "SELECT s.Id," +
                 "  s.Code," +
