@@ -25,6 +25,7 @@ import com.oilpalm3f.nursery.dbmodels.ComplaintStatusHistory;
 import com.oilpalm3f.nursery.dbmodels.ComplaintTypeXref;
 import com.oilpalm3f.nursery.dbmodels.Complaints;
 import com.oilpalm3f.nursery.dbmodels.ComplaintsDetails;
+import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
 import com.oilpalm3f.nursery.dbmodels.CookingOil;
 import com.oilpalm3f.nursery.dbmodels.CropMaintenanceHistory;
 import com.oilpalm3f.nursery.dbmodels.DigitalContract;
@@ -2012,6 +2013,36 @@ f
         }
         return nurserySaplingDetails;
     }
+
+
+    public List<ConsignmentDetails> getConsignmentDetails(final String query) {
+        List<ConsignmentDetails> consignmentDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    ConsignmentDetails consDetails = new ConsignmentDetails();
+                    consDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    consDetails.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
+                    consDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+
+                    consignmentDetails.add(consDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return consignmentDetails;
+    }
+
 
     public String getCropVariety(final String query, final int type) {
         ArrayList<String> arrCropVariety = new ArrayList<>();

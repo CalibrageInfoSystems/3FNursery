@@ -269,12 +269,11 @@ public class CloudDataHandler {
                                 for (String tableName : keysList) {
                                   //  if (!tableName.equalsIgnoreCase("KnowledgeZone") && !tableName.equalsIgnoreCase("KRA")) {
                                         masterDataMap.put(tableName, CommonUtils.toList(parentMasterDataObject.getJSONArray(tableName)));
+
                                 //}
                                 }
-
+                                onComplete.execute(success, masterDataMap, msg);
                                 Log.v(LOG_TAG, "@@@@ Tables Data " + masterDataMap.size());
-
-                                onComplete.execute(success, null, msg);
 
                             } catch (Exception e) {
                                 e.printStackTrace();

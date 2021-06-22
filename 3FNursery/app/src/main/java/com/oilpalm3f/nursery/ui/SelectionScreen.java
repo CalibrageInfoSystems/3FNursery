@@ -20,6 +20,7 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 
 import java.util.LinkedHashMap;
@@ -28,9 +29,12 @@ import java.util.List;
 public class SelectionScreen extends AppCompatActivity {
 
     Spinner nurserySpinner, consignmentSpinner;
-    private LinkedHashMap<String, Pair> nurserydatamap = null, consignmentdatamap = null;
+    private LinkedHashMap<String, Pair> nurserydatamap = null;
+    private LinkedHashMap<String, Pair> consignmentdatamap = null;
+
     private DataAccessHandler dataAccessHandler;
-    private List<NurseryDetails> nurseryDetails, consignmentDetails;
+    private List<NurseryDetails> nurseryDetails;
+    private List<ConsignmentDetails> consignmentDetails;
     LinearLayout detailslyt, consignmentdetailslyt;
     TextView nurseryname, nurserycode, nurserypin;
     TextView consignmentname, consignmentcode, consignmentpin;
@@ -96,10 +100,10 @@ public class SelectionScreen extends AppCompatActivity {
 
 
 
-        consignmentdatamap = dataAccessHandler.getPairData(Queries.getInstance().getNurseryMasterQuery());
-        ArrayAdapter<String> cspinnerArrayAdapter = new ArrayAdapter<>(SelectionScreen.this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(consignmentdatamap, "Consignment"));
-        cspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        consignmentSpinner.setAdapter(cspinnerArrayAdapter);
+        consignmentdatamap = dataAccessHandler.getPairData(Queries.getInstance().getConsignmentMasterQuery());
+        ArrayAdapter<String> consspinnerArrayAdapter = new ArrayAdapter<>(SelectionScreen.this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(consignmentdatamap, "Cons"));
+        consspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        consignmentSpinner.setAdapter(consspinnerArrayAdapter);
 
         consignmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -108,10 +112,10 @@ public class SelectionScreen extends AppCompatActivity {
                 if (consignmentSpinner.getSelectedItemPosition() != 0) {
                     consignmentdetailslyt.setVisibility(View.VISIBLE);
                     Log.d("Selected1", consignmentSpinner.getSelectedItem().toString());
-                    consignmentDetails = dataAccessHandler.getNurseryDetails(Queries.getInstance().getNurseryDetailsQuery(consignmentSpinner.getSelectedItem().toString()));
-                    consignmentname.setText(consignmentDetails.get(0).getName());
-                    consignmentcode.setText(consignmentDetails.get(0).getCode());
-                    consignmentpin.setText(consignmentDetails.get(0).getPinCode() + "");
+                    consignmentDetails = dataAccessHandler.getConsignmentDetails(Queries.getInstance().getConsignmentDetailsQuery(consignmentSpinner.getSelectedItem().toString()));
+                    consignmentname.setText(consignmentDetails.get(0).getNurseryCode());
+                    consignmentcode.setText(consignmentDetails.get(0).getConsignmentCode());
+                   // consignmentpin.setText(consignmentDetails.get(0).getPinCode() + "");
 
                 }else {
 
