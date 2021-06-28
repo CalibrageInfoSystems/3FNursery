@@ -1,9 +1,5 @@
 package com.oilpalm3f.nursery.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -14,9 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.oilpalm3f.nursery.R;
-import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
@@ -86,6 +83,11 @@ public class SelectionScreen extends AppCompatActivity {
                     nurserycode.setText(nurseryDetails.get(0).getCode());
                     nurserypin.setText(nurseryDetails.get(0).getPinCode() + "");
 
+                    consignmentdatamap = dataAccessHandler.getPairData(Queries.getInstance().getConsignmentByNurceryMasterQuery(""+nurseryDetails.get(0).getCode()));
+                    ArrayAdapter<String> consspinnerArrayAdapter = new ArrayAdapter<>(SelectionScreen.this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(consignmentdatamap, "Cons"));
+                    consspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    consignmentSpinner.setAdapter(consspinnerArrayAdapter);
+
                 }else {
 
                     detailslyt.setVisibility(View.GONE);
@@ -100,10 +102,7 @@ public class SelectionScreen extends AppCompatActivity {
 
 
 
-        consignmentdatamap = dataAccessHandler.getPairData(Queries.getInstance().getConsignmentMasterQuery());
-        ArrayAdapter<String> consspinnerArrayAdapter = new ArrayAdapter<>(SelectionScreen.this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(consignmentdatamap, "Cons"));
-        consspinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        consignmentSpinner.setAdapter(consspinnerArrayAdapter);
+
 
         consignmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -129,7 +129,9 @@ public class Queries {
     public String getConsignmentMasterQuery() {
         return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling";
     }
-
+    public String getConsignmentByNurceryMasterQuery(String nurcerYId) {
+        return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling  where NurseryCode ='" + nurcerYId + "'";
+    }
     public String getNurseryDetailsQuery(String name) {
         return "select Code, Name, PinCode from Nursery where Name = '" + name + "'";
     }
