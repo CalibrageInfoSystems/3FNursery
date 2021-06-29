@@ -3,7 +3,6 @@ package com.oilpalm3f.nursery.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -163,7 +161,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(HomeActivity.this, SelectionScreen.class);
+                Intent intent = new Intent(HomeActivity.this, Activities.class);
                 startActivity(intent);
             }
         });

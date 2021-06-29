@@ -1,13 +1,14 @@
 package com.oilpalm3f.nursery.ui;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
@@ -44,11 +45,12 @@ public class Activities extends AppCompatActivity {
 
     private void setViews() {
 
-       // mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
+        //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-
+        mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities());
+        Log.d("AcvityList", mActivitiesList + "");
         activitiesRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        //activitiesRecyclerview = new ActivitiesRecyclerviewAdapter(Activities.this, )
+        activitiesRecyclerview = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList)
         activitiesRecyclerview.setAdapter(activitiesRecyclerviewAdapter);
     }
 

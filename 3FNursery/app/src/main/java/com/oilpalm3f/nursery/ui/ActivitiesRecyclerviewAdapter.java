@@ -5,7 +5,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
+
+import java.util.List;
+
 public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter {
+
+
+    public ActivitiesRecyclerviewAdapter(Activities activities, List<NurseryAcitivity> mActivitiesList) {
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
