@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="4dp">
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="35dp"
+            android:background="@color/blue"/>
+
+        <TextView
+            android:id="@+id/activityName"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="40dp"
+           />
+
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:layout_height="40dp"
+            android:src="@drawable/sync"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+</LinearLayout>

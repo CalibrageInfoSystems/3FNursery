@@ -1,6 +1,7 @@
 package com.oilpalm3f.nursery.ui;
 
 import android.os.Bundle;
+import android.util.AttributeSet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -50,7 +51,7 @@ public class Activities extends AppCompatActivity {
         mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities());
         Log.d("AcvityList", mActivitiesList + "");
         activitiesRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        activitiesRecyclerview = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList)
+        activitiesRecyclerview = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList);
         activitiesRecyclerview.setAdapter(activitiesRecyclerviewAdapter);
     }
 
