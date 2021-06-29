@@ -531,6 +531,10 @@ public class Queries {
         return "select * from Farmer where Code = '" + farmerCode + "'";
     }
 
+    public String getNurseryActivities() {
+        return "Select * from NurseryActivity";
+    }
+
     public String getSelectedPlot(final String plotCode) {
         return "select * from Plot where Code = '" + plotCode + "'";
     }

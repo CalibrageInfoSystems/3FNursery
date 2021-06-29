@@ -40,8 +40,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.SelectionScreen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+
+
+        <activity
+            android:name=".ui.Activities"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.SelectionScreen"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.HomeActivity" />
 
         <uses-library

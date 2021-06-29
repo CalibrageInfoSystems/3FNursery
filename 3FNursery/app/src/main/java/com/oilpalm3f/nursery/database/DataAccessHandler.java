@@ -55,6 +55,7 @@ import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.MarketSurvey;
 import com.oilpalm3f.nursery.dbmodels.MissingTressInfo;
 import com.oilpalm3f.nursery.dbmodels.NeighbourPlot;
+import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
@@ -2114,6 +2115,39 @@ f
             Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
         }
         return (T) ((type == 0) ? mFollowUp : mFollowUpList);
+    }
+
+    public T getNurseryActivities(final String query, final int type) {
+        NurseryAcitivity nurseryAcitivity = null;
+        List<NurseryAcitivity> mnurseryAcitivity = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ FollowUp query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    nurseryAcitivity = new NurseryAcitivity();
+                    nurseryAcitivity.setId(cursor.getInt(1));
+                    nurseryAcitivity.setActivityTypeId(cursor.getInt(2));
+                    nurseryAcitivity.setCode(cursor.getString(3));
+                    nurseryAcitivity.setName(cursor.getString(4));
+                    nurseryAcitivity.setTargetDays(cursor.getInt(5));
+                    nurseryAcitivity.setIsActive(cursor.getInt(6));
+                    nurseryAcitivity.setCreatedByUserId(cursor.getInt(7));
+                    nurseryAcitivity.setCreatedDate(cursor.getString(8));
+                    nurseryAcitivity.setUpdatedByUserId(cursor.getInt(9));
+                    nurseryAcitivity.setUpdatedDate(cursor.getString(10));
+                    nurseryAcitivity.setServerUpdatedStatus(cursor.getInt(11));
+                    if (type == 1) {
+                        mnurseryAcitivity.add(nurseryAcitivity);
+                    }
+
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting user details " + e.getMessage());
+        }
+        return (T) ((type == 0) ? nurseryAcitivity : mnurseryAcitivity);
     }
 
     public T getMarketSurveyData(final String query, final int type) {
