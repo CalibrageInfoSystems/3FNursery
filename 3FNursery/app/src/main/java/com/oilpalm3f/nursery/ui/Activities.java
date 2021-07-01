@@ -51,7 +51,7 @@ public class Activities extends AppCompatActivity {
         mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities());
         Log.d("AcvityList", mActivitiesList + "");
         activitiesRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        activitiesRecyclerview = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList);
+        activitiesRecyclerviewAdapter = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList);
         activitiesRecyclerview.setAdapter(activitiesRecyclerviewAdapter);
     }
 
