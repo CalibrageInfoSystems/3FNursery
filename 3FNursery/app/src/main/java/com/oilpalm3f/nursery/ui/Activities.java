@@ -1,7 +1,7 @@
 package com.oilpalm3f.nursery.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Activities extends AppCompatActivity {
-
+      private static final String LOG_TAG =  Activities.class.getSimpleName();
     private RecyclerView activitiesRecyclerview;
     private ActivitiesRecyclerviewAdapter activitiesRecyclerviewAdapter;
     private List<NurseryAcitivity> mActivitiesList = new ArrayList<>();
@@ -42,6 +42,11 @@ public class Activities extends AppCompatActivity {
     private void init() {
 
         activitiesRecyclerview = findViewById(R.id.activitiesRecyclerview);
+
+        Intent intent = getIntent();
+        String saplingDate = intent.getStringExtra("SaplingDate");
+        Log.d(LOG_TAG, "====> Analysis ===(SaplingDate :)"+saplingDate);
+
     }
 
     private void setViews() {

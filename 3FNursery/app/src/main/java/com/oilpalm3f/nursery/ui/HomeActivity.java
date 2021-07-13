@@ -162,6 +162,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(HomeActivity.this, Activities.class);
+                intent.putExtra("SaplingDate",consignmentDetails.get(0).getArrivalDate() );
                 startActivity(intent);
             }
         });

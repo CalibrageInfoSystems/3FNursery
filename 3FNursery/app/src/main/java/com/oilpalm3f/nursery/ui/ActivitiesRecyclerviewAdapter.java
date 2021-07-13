@@ -3,28 +3,19 @@ package com.oilpalm3f.nursery.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.CommonUtils;
-import com.oilpalm3f.nursery.database.DataAccessHandler;
-import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 
 import java.util.List;
@@ -32,6 +23,7 @@ import java.util.List;
 public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<ActivitiesRecyclerviewAdapter.ViewHolder> {
 
     public Context context;
+
     List<NurseryAcitivity> mActivitiesList;
 
 
@@ -55,13 +47,13 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         holder.activityName.setText(mActivitiesList.get(position).getName());
 
+        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
 
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 showDialog((Activity) context);
-
 
             }
         });
@@ -75,22 +67,26 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView activityName;
+        public TextView activityName,expecteddate,saplingExpecteddate;
         public LinearLayout mainlyt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.activityName = (TextView )itemView.findViewById(R.id.activityName);
+            this.expecteddate = (TextView )itemView.findViewById(R.id.expecteddate);
+            this.saplingExpecteddate = (TextView )itemView.findViewById(R.id.saplingExpecteddate);
             this.mainlyt = (LinearLayout) itemView.findViewById(R.id.mainlyt);
         }
     }
 
     public void showDialog(Activity activity) {
+
         final Dialog dialog = new Dialog(activity, R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.questionsdialouge);
+
 
         dialog.show();
         new Handler().postDelayed(new Runnable() {

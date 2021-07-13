@@ -98,7 +98,14 @@
         <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
         <item name="android:windowExitAnimation">@anim/slide_out_down</item>
     </style>
-
+    <style name="MyStyleText">
+        <item name="android:textColor">#ff0000</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:shadowColor">#ffffff</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">10</item>
+    </style>
 
 
 </resources>
