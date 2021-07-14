@@ -14,6 +14,7 @@ import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.ActivityLog;
+import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
 import com.oilpalm3f.nursery.dbmodels.Address;
 import com.oilpalm3f.nursery.dbmodels.Alerts;
 import com.oilpalm3f.nursery.dbmodels.AlertsPlotInfo;
@@ -2125,7 +2126,7 @@ f
                 do {
 
                     NurseryAcitivity nurseryActivityyDetails = new NurseryAcitivity();
-                    nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    nurseryActivityyDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
                     nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
@@ -2145,6 +2146,50 @@ f
         }
         return nurseryActivityDetails;
     }
+
+    public List<ActivityTasks> getActivityTasksDetails(final String query) {
+        List<ActivityTasks> activityTaskDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    ActivityTasks taskDetails = new ActivityTasks();
+                    taskDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    taskDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
+                    taskDetails.setDependency(cursor.getString(cursor.getColumnIndex("Dependency")));
+                    taskDetails.setIsOptional(cursor.getInt(cursor.getColumnIndex("IsOptional")));
+                    taskDetails.setBucket(cursor.getString(cursor.getColumnIndex("Bucket")));
+                    taskDetails.setField(cursor.getString(cursor.getColumnIndex("Field")));
+                    taskDetails.setItemCode(cursor.getString(cursor.getColumnIndex("ItemCode")));
+                    taskDetails.setItemCodeName(cursor.getString(cursor.getColumnIndex("ItemCodeName")));
+                    taskDetails.setGLCode(cursor.getString(cursor.getColumnIndex("GLCode")));
+                    taskDetails.setGLName(cursor.getString(cursor.getColumnIndex("GLName")));
+                    taskDetails.setCostCenter(cursor.getString(cursor.getColumnIndex("CostCenter")));
+                    taskDetails.setInputType(cursor.getString(cursor.getColumnIndex("InputType")));
+                    taskDetails.setUom(cursor.getString(cursor.getColumnIndex("UOM")));
+                    taskDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    taskDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    taskDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    taskDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    taskDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+
+                    activityTaskDetails.add(taskDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return activityTaskDetails;
+    }
+
 
     public T getMarketSurveyData(final String query, final int type) {
         MarketSurvey mMarketSurvey = null;

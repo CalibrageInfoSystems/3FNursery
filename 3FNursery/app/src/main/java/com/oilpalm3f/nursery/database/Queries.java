@@ -535,6 +535,10 @@ public class Queries {
         return "select Id, ActivityTypeId, Code, Name, TargetDays from NurseryActivity where IsActive = 'true' ORDER BY TargetDays ASC";
     }
 
+    public String getActivityTaskDetails(int Id) {
+        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
+    }
+
     public String getSelectedPlot(final String plotCode) {
         return "select * from Plot where Code = '" + plotCode + "'";
     }
