@@ -67,6 +67,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case CommonUtils.PERMISSION_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -76,7 +77,7 @@ public class SplashActivity extends AppCompatActivity {
                         palm3FoilDatabase.createDataBase();
                         dbUpgradeCall();
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "@@@ Error while getting master data "+e.getMessage());
+                        Log.e(LOG_TAG, "@@@ Error while getting master data " + e.getMessage());
                     }
                     startMasterSync();
                 }

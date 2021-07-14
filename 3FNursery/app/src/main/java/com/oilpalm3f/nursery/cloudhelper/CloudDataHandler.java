@@ -268,9 +268,10 @@ public class CloudDataHandler {
                                 LinkedHashMap<String, List> masterDataMap = new LinkedHashMap<>();
                                 for (String tableName : keysList) {
                                   //  if (!tableName.equalsIgnoreCase("KnowledgeZone") && !tableName.equalsIgnoreCase("KRA")) {
+                                    if (!tableName.equalsIgnoreCase("Sapling")){
                                         masterDataMap.put(tableName, CommonUtils.toList(parentMasterDataObject.getJSONArray(tableName)));
 
-                                //}
+                                }
                                 }
                                 onComplete.execute(success, masterDataMap, msg);
                                 Log.v(LOG_TAG, "@@@@ Tables Data " + masterDataMap.size());

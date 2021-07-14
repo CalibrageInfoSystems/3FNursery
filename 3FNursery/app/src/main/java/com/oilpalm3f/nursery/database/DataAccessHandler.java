@@ -2125,6 +2125,7 @@ f
                 do {
 
                     NurseryAcitivity nurseryActivityyDetails = new NurseryAcitivity();
+                    nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("Id")));
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
                     nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));

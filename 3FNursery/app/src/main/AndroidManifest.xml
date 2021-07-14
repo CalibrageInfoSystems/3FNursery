@@ -40,12 +40,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.ActivityTask"></activity>
+        <activity android:name=".ui.RefreshSyncActivity" />
         <activity android:name=".testUI.TestActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.Activities"
@@ -72,6 +76,7 @@
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -80,7 +85,9 @@
             android:label="@string/title_activity_main_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".datasync.ui.RefreshSyncActivity" />
+        <activity
+            android:name=".datasync.ui.RefreshSyncActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
     </application>
 

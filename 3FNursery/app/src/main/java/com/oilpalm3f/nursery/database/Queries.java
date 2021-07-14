@@ -532,7 +532,7 @@ public class Queries {
     }
 
     public String getNurseryActivities() {
-        return "select ActivityTypeId, Code, Name, TargetDays from NurseryActivity where IsActive = 'true' ORDER BY TargetDays ASC";
+        return "select Id, ActivityTypeId, Code, Name, TargetDays from NurseryActivity where IsActive = 'true' ORDER BY TargetDays ASC";
     }
 
     public String getSelectedPlot(final String plotCode) {

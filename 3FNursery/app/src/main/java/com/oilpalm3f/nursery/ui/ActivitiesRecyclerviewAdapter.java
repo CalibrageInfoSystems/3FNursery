@@ -3,6 +3,7 @@ package com.oilpalm3f.nursery.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 
@@ -53,8 +55,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             @Override
             public void onClick(View view) {
 
-                showDialog((Activity) context);
-
+                Intent at = new Intent(context, ActivityTask.class);
+                at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
+                context.startActivity(at);
             }
         });
 
@@ -84,11 +88,12 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         final Dialog dialog = new Dialog(activity, R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.setContentView(R.layout.questionsdialouge);
 
 
         dialog.show();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

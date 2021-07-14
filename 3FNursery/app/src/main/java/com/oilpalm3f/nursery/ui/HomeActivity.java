@@ -20,9 +20,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.datasync.helpers.DataManager;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 
@@ -36,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
     List<ConsignmentDetails> consignmentDetails;
+    private LinearLayout refreshRel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class HomeActivity extends AppCompatActivity {
     private void init() {
 
         newactivity = findViewById(R.id.newactivityRel);
+        refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
     }
 
     private void setviews() {
@@ -65,12 +69,48 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+        refreshRel.setOnClickListener(view -> {
+            resetPrevRegData();
+            startActivity(new Intent(HomeActivity.this, RefreshSyncActivity.class));
+        });
+    }
+
+    public static void resetPrevRegData() {
+        DataManager.getInstance().deleteData(DataManager.FARMER_ADDRESS_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.FARMER_PERSONAL_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.FILE_REPOSITORY);
+        DataManager.getInstance().deleteData(DataManager.PLOT_ADDRESS_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.PLOT_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.PLOT_CURRENT_CROPS_DATA);
+        DataManager.getInstance().deleteData(DataManager.PLOT_NEIGHBOURING_PLOTS_DATA);
+        DataManager.getInstance().deleteData(DataManager.SOURCE_OF_WATER);
+        DataManager.getInstance().deleteData(DataManager.SoilType);
+        DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
+        DataManager.getInstance().deleteData(DataManager.PLOT_FOLLOWUP);
+        DataManager.getInstance().deleteData(DataManager.REFERRALS_DATA);
+        DataManager.getInstance().deleteData(DataManager.MARKET_SURVEY_DATA);
+        DataManager.getInstance().deleteData(DataManager.OIL_TYPE_MARKET_SURVEY_DATA);
+        DataManager.getInstance().deleteData(DataManager.ID_PROOFS_DATA);
+        DataManager.getInstance().deleteData(DataManager.FARMER_BANK_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.PLANTATION_CON_DATA);
+        DataManager.getInstance().deleteData(DataManager.COMPLAINT_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.COMPLAINT_REPOSITORY);
+        DataManager.getInstance().deleteData(DataManager.COMPLAINT_STATUS_HISTORY);
+        DataManager.getInstance().deleteData(DataManager.COMPLAINT_TYPE);
+        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_DETAILS);
+        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_REPOSITORY);
+        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_STATUS_HISTORY);
+        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_TYPE);
+        //ConversionDigitalContractFragment.isContractAgreed = false;
+        CommonConstants.PLOT_CODE = "";
+        CommonConstants.FARMER_CODE = "";
     }
 
     public void showDialog(Activity activity) {
         final Dialog dialog = new Dialog(activity, R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog);
         final Spinner nurserySpinner, consignmentSpinner;
          final DataAccessHandler dataAccessHandler;
@@ -162,7 +202,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(HomeActivity.this, Activities.class);
-                intent.putExtra("SaplingDate",consignmentDetails.get(0).getArrivalDate() );
+                //intent.putExtra("SaplingDate",consignmentDetails.get(0).getArrivalDate() );
                 startActivity(intent);
             }
         });
