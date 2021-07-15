@@ -574,6 +574,21 @@ public class Queries {
     public String getAddressRefresh() {
         return "select * from Address where ServerUpdatedStatus = 0";
     }
+    public String getSaplingRefresh() {
+        return "select * from Sapling where ServerUpdatedStatus = 0";
+    }
+
+    public String getSaplingActivityRefresh() {
+        return "select * from SaplingActivity where ServerUpdatedStatus = 0";
+    }
+
+    public String getSaplingActivityXrefRefresh() {
+        return "select * from SaplingActivityXref where ServerUpdatedStatus = 0";
+    }
+
+    public String getSaplingActivityHistoryRefresh() {
+        return "select * from SaplingActivityHistory where ServerUpdatedStatus = 0";
+    }
 
     public String getFileRepositoryRefresh() {
         return "select * from FileRepository where ServerUpdatedStatus = 0";

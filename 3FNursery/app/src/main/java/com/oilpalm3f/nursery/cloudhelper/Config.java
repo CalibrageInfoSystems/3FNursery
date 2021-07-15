@@ -26,7 +26,7 @@ public class Config {
 
     public static final String masterSyncUrl = "/SyncMasters/SyncNurseryMasters";
 
-    public static final String transactionSyncURL = "/SyncTransactions/SyncTransactions";
+    public static final String transactionSyncURL = "/SyncTransactions/SyncNurseryTransactions";
     public static final String locationTrackingURL = "/LocationTracker/SaveOfflineLocations";
     public static final String imageUploadURL = "/SyncTransactions/UploadImage";
 
@@ -36,7 +36,7 @@ public class Config {
 
     public static final String updatedbFile = "/TabDatabase/UploadDatabase";
 
-    public static final String getTransCount = "/SyncTransactions/GetCount";//{Date}/{UserId}
+    public static final String getTransCount = "/SyncTransactions/GetNurseryCount";//{Date}/{UserId}
     public static final String getTransData = "/SyncTransactions/%s";//api/TranSync/SyncFarmers/{Date}/{UserId}/{Index}
     public static final String validateTranSync = "/TranSync/ValidateTranSync/%s";
     // public static final String image_url = "http://182.18.139.166/3FOilPalm/3FOilPalmRepository/FileRepository/";//Commented on 12-04-2021 to change the URL to local

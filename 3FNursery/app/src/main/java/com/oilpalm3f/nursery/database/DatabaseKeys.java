@@ -10,6 +10,13 @@ public class DatabaseKeys {
     public static String TABLE_YIELDASSESMENT="YieldAssessment";
     public static String TABLE_ADDRESS = "Address";
 
+    public static String TABLE_SAPLING = "Sapling";
+    public static String TABLE_SaplingActivity = "SaplingActivity";
+    public static String TABLE_SaplingActivityXref = "SaplingActivityXref";
+    public static String TABLE_SaplingActivityHistory = "SaplingActivityHistory";
+
+
+
     public static String TABLE_FILEREPOSITORY = "FileRepository";
     public static String TABLE_NURSERYSAPLING_DETAILS = "NurserySaplingDetails";
     public static String TABLE_ADVANCED_DETAILS = "AdvancedDetails";

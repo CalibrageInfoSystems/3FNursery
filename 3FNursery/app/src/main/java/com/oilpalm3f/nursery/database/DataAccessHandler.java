@@ -73,6 +73,10 @@ import com.oilpalm3f.nursery.dbmodels.PlotLandlord;
 import com.oilpalm3f.nursery.dbmodels.ProspectivePlotsModel;
 import com.oilpalm3f.nursery.dbmodels.RecommndFertilizer;
 import com.oilpalm3f.nursery.dbmodels.Referrals;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivityXrefModel;
+import com.oilpalm3f.nursery.dbmodels.Saplings;
 import com.oilpalm3f.nursery.dbmodels.SoilResource;
 import com.oilpalm3f.nursery.dbmodels.Uprootment;
 import com.oilpalm3f.nursery.dbmodels.UserDetails;
@@ -702,8 +706,62 @@ f
         }
     }
 
+
+    public synchronized void insertMyData(boolean fromMaster, String tableName, List<LinkedHashMap> mapList, final ApplicationThread.OnComplete<String> oncomplete) {
+        int checkCount = 0;
+        try {
+            List<ContentValues> values1 = new ArrayList<>();
+            for (int i = 0; i < mapList.size(); i++) {
+                checkCount++;
+                List<LinkedHashMap.Entry> entryList = new ArrayList<>((mapList.get(i)).entrySet());
+
+                ContentValues contentValues = new ContentValues();
+                for (LinkedHashMap.Entry temp : entryList) {
+                    String keyToInsert = temp.getKey().toString();
+                    if (!fromMaster) {
+                        if (keyToInsert.equalsIgnoreCase("Id") && !tableName.equalsIgnoreCase(DatabaseKeys.TABLE_ALERTS))
+                            continue;
+                    }
+                    if (keyToInsert.equalsIgnoreCase("ServerUpdatedStatus")) {
+                        contentValues.put(keyToInsert, "0");
+                    } else {
+                        contentValues.put(temp.getKey().toString(), temp.getValue().toString());
+                    }
+                }
+                values1.add(contentValues);
+            }
+            Log.v(LOG_TAG, "@@@@ log check " + checkCount + " here " + values1.size());
+            boolean hasError = bulkinserttoTable(values1, tableName);
+            if (hasError) {
+                Log.v(LOG_TAG, "@@@ Error while inserting data ");
+                if (null != oncomplete) {
+                    oncomplete.execute(false, "failed to insert data", "");
+                }
+            } else {
+                Log.v(LOG_TAG, "@@@ data inserted successfully for table :" + tableName);
+                if (null != oncomplete) {
+                    oncomplete.execute(true, "data inserted successfully", "");
+                }
+            }
+        } catch (Exception e) {
+            checkCount++;
+            e.printStackTrace();
+            Log.v(LOG_TAG, "@@@@ exception log check " + checkCount + " here " + mapList.size());
+            if (checkCount == mapList.size()) {
+                if (null != oncomplete)
+                    oncomplete.execute(false, "data insertion failed", "" + e.getMessage());
+            }
+        } finally {
+            closeDataBase();
+        }
+    }
+
     public synchronized void insertData(String tableName, List<LinkedHashMap> mapList, final ApplicationThread.OnComplete<String> oncomplete) {
         insertData(false, tableName, mapList, oncomplete);
+    }
+
+    public synchronized void insertMyDataa(String tableName, List<LinkedHashMap> mapList, final ApplicationThread.OnComplete<String> oncomplete) {
+        insertMyData(false, tableName, mapList, oncomplete);
     }
 
     /**
@@ -2188,6 +2246,152 @@ f
             }
         }
         return activityTaskDetails;
+    }
+
+    public List<Saplings> getSaplingDetails(final String query,final int type) {
+        List<Saplings> saplingDataDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    Saplings saplingsDetails = new Saplings();
+                    saplingsDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    saplingsDetails.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
+                    saplingsDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    saplingsDetails.setOriginId(cursor.getInt(cursor.getColumnIndex("OriginId")));
+                    saplingsDetails.setVendorId(cursor.getInt(cursor.getColumnIndex("VendorId")));
+                    saplingsDetails.setVarietyId(cursor.getInt(cursor.getColumnIndex("VarietyId")));
+                    saplingsDetails.setPurchaseDate(cursor.getString(cursor.getColumnIndex("PurchaseDate")));
+                    saplingsDetails.setEstimatedDate(cursor.getString(cursor.getColumnIndex("EstimatedDate")));
+                    saplingsDetails.setEstimatedQuantity(cursor.getInt(cursor.getColumnIndex("EstimatedQuantity")));
+                    saplingsDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    saplingsDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    saplingsDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    saplingsDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    saplingsDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    saplingDataDetails.add(saplingsDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return saplingDataDetails;
+    }
+
+
+    public List<SaplingActivity> getSaplingActivityDetails(final String query,final int type) {
+        List<SaplingActivity> saplingActivityDataDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivity saplingsactivityDetails = new SaplingActivity();
+                    saplingsactivityDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    saplingsactivityDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    saplingsactivityDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    saplingsactivityDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    saplingsactivityDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    saplingsactivityDetails.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
+                    saplingsactivityDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    saplingsactivityDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    saplingsactivityDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsactivityDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    saplingsactivityDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    saplingsactivityDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    saplingActivityDataDetails.add(saplingsactivityDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return saplingActivityDataDetails;
+    }
+
+    public List<SaplingActivityXrefModel> getSaplingActivityXrefDetails(final String query, final int type) {
+        List<SaplingActivityXrefModel> saplingActivityXrefDataDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivityXrefModel saplingsactivityxrefDetails = new SaplingActivityXrefModel();
+                    saplingsactivityxrefDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    saplingsactivityxrefDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    saplingsactivityxrefDetails.setFieldId(cursor.getInt(cursor.getColumnIndex("FieldId")));
+                    saplingsactivityxrefDetails.setValue(cursor.getString(cursor.getColumnIndex("Value")));
+                    saplingsactivityxrefDetails.setFilePath(cursor.getString(cursor.getColumnIndex("FilePath")));
+                    saplingsactivityxrefDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    saplingsactivityxrefDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    saplingsactivityxrefDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsactivityxrefDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    saplingsactivityxrefDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    saplingsactivityxrefDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    saplingActivityXrefDataDetails.add(saplingsactivityxrefDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return saplingActivityXrefDataDetails;
+    }
+
+    public List<SaplingActivityHistoryModel> getSaplingActivityHistoryDetails(final String query,final int type) {
+        List<SaplingActivityHistoryModel> saplingActivityHistoryDataDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivityHistoryModel saplingsactivityhistoryDetails = new SaplingActivityHistoryModel();
+                    saplingsactivityhistoryDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    saplingsactivityhistoryDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    saplingsactivityhistoryDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    saplingsactivityhistoryDetails.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    saplingsactivityhistoryDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    saplingsactivityhistoryDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsactivityhistoryDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    saplingActivityHistoryDataDetails.add(saplingsactivityhistoryDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return saplingActivityHistoryDataDetails;
     }
 
 
