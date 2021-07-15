@@ -11,11 +11,14 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.datasync.helpers.DataManager;
 import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.TypeItem;
 
 import java.lang.reflect.Type;
@@ -27,11 +30,13 @@ public class ActivityTask extends AppCompatActivity {
     String activityTypeId;
     private List<ActivityTasks> activityTasklist = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
+    private List<SaplingActivity> saplingActivitiesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
 
         Bundle extras = getIntent().getExtras();
@@ -60,10 +65,7 @@ public class ActivityTask extends AppCompatActivity {
           ll.addView( addSpinner(activityTasklist.get(i).getId()));
       }
 
-
-
   }
-
 
     }
     public CheckBox addCheckbox(String content, int id){
@@ -105,5 +107,27 @@ return  cb;
 
     }
 
+    private void setSaplingActivity() {
+
+        SaplingActivity saplingActivity = new SaplingActivity();
+
+        saplingActivity.setId(0);
+        saplingActivity.setTransactionId("");
+        saplingActivity.setConsignmentCode("");
+        saplingActivity.setActivityId(0);
+        saplingActivity.setStatusTypeId(0);
+        saplingActivity.setComment("");
+        saplingActivity.setIsActive(0);
+        saplingActivity.setCreatedByUserId(0);
+        saplingActivity.setCreatedDate("");
+        saplingActivity.setUpdatedByUserId(0);
+        saplingActivity.setUpdatedDate("");
+        saplingActivity.setServerUpdatedStatus(0);
+
+        saplingActivitiesList.add(saplingActivity);
+
+        DataManager.getInstance().addData(DataManager.SAPLING_ACTIVITY, saplingActivitiesList);
+
+    }
 
 }
