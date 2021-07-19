@@ -77,31 +77,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public static void resetPrevRegData() {
-        DataManager.getInstance().deleteData(DataManager.FARMER_ADDRESS_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.FARMER_PERSONAL_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.FILE_REPOSITORY);
-        DataManager.getInstance().deleteData(DataManager.PLOT_ADDRESS_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.PLOT_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.PLOT_CURRENT_CROPS_DATA);
-        DataManager.getInstance().deleteData(DataManager.PLOT_NEIGHBOURING_PLOTS_DATA);
-        DataManager.getInstance().deleteData(DataManager.SOURCE_OF_WATER);
-        DataManager.getInstance().deleteData(DataManager.SoilType);
-        DataManager.getInstance().deleteData(DataManager.PLOT_GEO_TAG);
-        DataManager.getInstance().deleteData(DataManager.PLOT_FOLLOWUP);
-        DataManager.getInstance().deleteData(DataManager.REFERRALS_DATA);
-        DataManager.getInstance().deleteData(DataManager.MARKET_SURVEY_DATA);
-        DataManager.getInstance().deleteData(DataManager.OIL_TYPE_MARKET_SURVEY_DATA);
-        DataManager.getInstance().deleteData(DataManager.ID_PROOFS_DATA);
-        DataManager.getInstance().deleteData(DataManager.FARMER_BANK_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.PLANTATION_CON_DATA);
-        DataManager.getInstance().deleteData(DataManager.COMPLAINT_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.COMPLAINT_REPOSITORY);
-        DataManager.getInstance().deleteData(DataManager.COMPLAINT_STATUS_HISTORY);
-        DataManager.getInstance().deleteData(DataManager.COMPLAINT_TYPE);
-        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_DETAILS);
-        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_REPOSITORY);
-        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_STATUS_HISTORY);
-        DataManager.getInstance().deleteData(DataManager.NEW_COMPLAINT_TYPE);
+        DataManager.getInstance().deleteData(DataManager.SAPLING);
+        DataManager.getInstance().deleteData(DataManager.SAPLING_ACTIVITY);
+        DataManager.getInstance().deleteData(DataManager.SAPLING_ACTIVITY_XREF);
+        DataManager.getInstance().deleteData(DataManager.SAPLING_ACTIVITY_HISTORY);
         //ConversionDigitalContractFragment.isContractAgreed = false;
         CommonConstants.PLOT_CODE = "";
         CommonConstants.FARMER_CODE = "";

@@ -87,7 +87,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".datasync.ui.RefreshSyncActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".MainActivity" />
     </application>
 

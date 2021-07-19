@@ -66,7 +66,7 @@ public class ActivityTask extends AppCompatActivity {
 
         dataAccessHandler = new DataAccessHandler(this);
 
-        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(1));
+        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
 
         Log.d("activityTasklist", activityTasklist.size() + "");
 
@@ -121,9 +121,10 @@ return  cb;
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              if (validate())
-                setSaplingActivity();
-              finish();
+              if (validate()) {
+                  setSaplingActivity();
+                  finish();
+              }
             }
         });
         return  btn;
@@ -192,9 +193,9 @@ return  cb;
         map.put("TransactionId",  random_int+"");
         map.put("ConsignmentCode", "CONS001");
         map.put("ActivityId", activityTypeId);
-        map.put("StatusTypeId", 347);
+        map.put("StatusTypeId", 346);
         map.put("Comment", "Test");
-        map.put("IsActive", "0");
+        map.put("IsActive", 1);
         map.put("CreatedByUserId", CommonConstants.USER_ID);
         map.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         map.put("UpdatedByUserId", CommonConstants.USER_ID);
@@ -223,7 +224,7 @@ return  cb;
                         map.put("FieldId", dataValue.get(j).id);
                         map.put("Value", dataValue.get(j).value);
                         map.put("FilePath", "");
-                        map.put("IsActive", "0");
+                        map.put("IsActive", 1);
                         map.put("CreatedByUserId", CommonConstants.USER_ID);
                         map.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         map.put("UpdatedByUserId", CommonConstants.USER_ID);

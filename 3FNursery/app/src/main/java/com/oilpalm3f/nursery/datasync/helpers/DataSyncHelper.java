@@ -285,14 +285,14 @@ public class DataSyncHelper {
                         });
                         transactionsCheck++;
                         if (transactionsCheck == refreshtransactionsDataMap.size()) {
-                            Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
-                            final List<ImageDetails> imagesData = dataAccessHandler.getImageDetails();
-                            if (null != imagesData && !imagesData.isEmpty()) {
-                                sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
-                            } else {
+//                            Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
+//                            final List<ImageDetails> imagesData = dataAccessHandler.getImageDetails();
+//                            if (null != imagesData && !imagesData.isEmpty()) {
+//                                sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
+//                            } else {
                                 ProgressBar.hideProgressBar();
                                 onComplete.execute(true, null, "Sync is success");
-                            }
+                            //}
                         } else {
                             postTransactionsDataToCloud(context, refreshtableNamesList.get(transactionsCheck), dataAccessHandler, onComplete);
                         }
@@ -305,16 +305,16 @@ public class DataSyncHelper {
         } else {
             transactionsCheck++;
             if (transactionsCheck == refreshtransactionsDataMap.size()) {
-                Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
-                final List<ImageDetails> imagesData = dataAccessHandler.getImageDetails();
-                if (null != imagesData && !imagesData.isEmpty()) {
-                    sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
-                } else {
+//                Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
+//                final List<ImageDetails> imagesData = dataAccessHandler.getImageDetails();
+//                if (null != imagesData && !imagesData.isEmpty()) {
+//                    sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
+//                } else {
                     ProgressBar.hideProgressBar();
                     onComplete.execute(true, null, "Sync is success");
                     Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
 
-                }
+//                }
             } else {
                 postTransactionsDataToCloud(context, refreshtableNamesList.get(transactionsCheck), dataAccessHandler, onComplete);
             }
@@ -703,7 +703,7 @@ public class DataSyncHelper {
                 URL obj = new URL(countUrl);
                 Map<String, String> syncDataMap = new LinkedHashMap<>();
                 syncDataMap.put("Date", TextUtils.isEmpty(date) ? "null" : date);
-                syncDataMap.put("UserId", CommonConstants.USER_ID);
+                syncDataMap.put("UserId", "1");
                 syncDataMap.put("IsUserDataAccess", CommonConstants.migrationSync);
                 syncDataMap.put("Index", String.valueOf(currentIndex));
                 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -832,6 +832,7 @@ public class DataSyncHelper {
                         }
                         if (CommonUtils.isNetworkAvailable(context)) {
                             updateSyncDate(context, null);
+                            RefreshSyncActivity.allRefreshDataMap = new ArrayList<String>();
                             for (String s : RefreshSyncActivity.allRefreshDataMap) {
                                 dataAccessHandler.executeRawQuery("DELETE FROM " + s);
                                 Log.v(LOG_TAG, "delete table" + s);

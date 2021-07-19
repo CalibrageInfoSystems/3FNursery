@@ -56,8 +56,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             public void onClick(View view) {
 
                 Intent at = new Intent(context, ActivityTask.class);
-                at.putExtra("ActivityTypeId", mActivitiesList.get(position).getActivityTypeId() + "");
-                Log.d("ActivityTypeId11", mActivitiesList.get(position).getActivityTypeId() + "");
+                at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
                 context.startActivity(at);
             }
         });

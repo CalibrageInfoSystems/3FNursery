@@ -64,6 +64,7 @@ public class MainLoginScreen extends AppCompatActivity {
         this.sync=(FloatingActionButton) findViewById(R.id.sync);
         toolbar.setTitle(R.string.login_screen);
         setSupportActionBar(toolbar);
+
         dataAccessHandler = new DataAccessHandler(MainLoginScreen.this);
 
 

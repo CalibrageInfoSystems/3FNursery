@@ -68,7 +68,10 @@ public class DataManager<T> {
     public static final String LANDLORD_IDPROOFS_DATA="landlord_idproofs_data";
 
     public static final String SAPLING_ACTIVITY = "sapling_activity";
+    public static final String SAPLING = "sapling";
 
+    public static final String SAPLING_ACTIVITY_HISTORY = "sapling_activity_history";
+    public static final String SAPLING_ACTIVITY_XREF = "sapling_activity_xref";
 
     public static final String PLOT_NEIGHBOURING_PLOTS_DATA_PAIR = "plot_neighbouring_plots_data_pair";
     public static final String PLOT_CURRENT_CROPS_DATA_PAIR = "plot_current_crops_data_pair";

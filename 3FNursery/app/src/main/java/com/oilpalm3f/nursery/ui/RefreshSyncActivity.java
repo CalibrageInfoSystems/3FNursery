@@ -49,9 +49,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvfarmer, tvidproofs, tvaddress, tvfarmerhistory, tvbank, tvplot, tvplotcurrentcrop,
-            tvneighbourplot, tvwaterresource, tvsoilresource, tvplotirrigation, geoBoundriesCountTxt, plantationCountTxt, uprootmentCountTxt, hopCountTxt,
-            tvfollowup, tvreferrals, tvmarketsurvey, tvimages, cmpCount, activity_logs;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -60,7 +58,6 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
     private List<Pair> farmerhistoryCodes = null;
     private ArrayList<String> tableNames = new ArrayList<>();
     public static ArrayList<String> allRefreshDataMap;
-    private TextView vist_logstv;
     public static int resetFarmerCount = 0;
     public static int resetPlotCount = 0;
     public static int afterResetFarmerCount = 0;
@@ -82,51 +79,11 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 //        setSupportActionBar(toolbar);
 
         allRefreshDataMap = new ArrayList<>();
-        allRefreshDataMap.add(DatabaseKeys.TABLE_ADDRESS);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_FARMER);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PLOT);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PLOTCURRENTCROP);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_NEIGHBOURPLOT);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_WATERESOURCE);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PLOTIRRIGATIONTYPEXREF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_SOILRESOURCE);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_FOLLOWUP);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_REFERRALS);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_MARKETSURVEY);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_FARMERHISTORY);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_IDENTITYPROOF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_FARMERBANK);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PLANTATION);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PLOTLANDLORD);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_LANDLORDBANK);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_LANDLORDIDPROOFS);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_COOKINGOIL);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_CROPMAINTENANCEHISTORY);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_DISEASE);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_FERTLIZER);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_RECOMMND_FERTLIZER);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_HARVEST);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_HEALTHPLANTATION);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_INTERCROPPLANTATIONXREF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_NUTRIENT);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_OWNERSHIPFILEREPO);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PEST);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_UPROOTMENT);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_WEED);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_YIELDASSESMENT);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_WHITE);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_IDPROOFFILEREPOXREF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PESTCHEMICALXREF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_PLANTATIONFILEREPOXREF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_FILEREPOSITORY);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_GEOBOUNDARIES);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_COMPLAINT);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_COMPLAINTSTATUSHISTORY);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_COMPLAINTREPOSITORY);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_COMPLAINTTYPEXREF);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_NURSERYSAPLING_DETAILS);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_ADVANCED_DETAILS);
-        allRefreshDataMap.add(DatabaseKeys.TABLE_Location_TRACKING_DETAILS);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_SAPLING);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivity);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityXref);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityHistory);
+
 
         dataAccessHandler = new DataAccessHandler(this);
 
@@ -144,35 +101,18 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
      */
     private void initUI() {
 
-        geoBoundriesCountTxt = findViewById(R.id.geoBoudariesCount);
-        plantationCountTxt = findViewById(R.id.plantationCount);
-        uprootmentCountTxt = findViewById(R.id.uprootmentCount);
-        hopCountTxt = findViewById(R.id.hopCount);
 
-        tvfarmer = findViewById(R.id.farmerCount);
-        tvidproofs = findViewById(R.id.idproofCount);
-        tvaddress = findViewById(R.id.addressCount);
-        tvfarmerhistory = findViewById(R.id.farmerhistoryCount);
-        tvbank = findViewById(R.id.bankCount);
-        tvplot = findViewById(R.id.plotCount);
-        tvplotcurrentcrop = findViewById(R.id.plotcurrentcropCount);
-        tvneighbourplot = findViewById(R.id.neighbourplotCount);
-        tvwaterresource = findViewById(R.id.waterresourceCount);
-        tvsoilresource = findViewById(R.id.soilresourceCount);
-        tvplotirrigation = findViewById(R.id.plotirrigationCount);
-        tvfollowup = findViewById(R.id.followupCount);
-        tvreferrals = findViewById(R.id.referralCount);
-        tvmarketsurvey = findViewById(R.id.marketsurveyCount);
-        tvimages = findViewById(R.id.allimagesCount);
-        cmpCount = findViewById(R.id.cmpCount);
-        vist_logstv = findViewById(R.id.vist_logs);
+
+        tvsapling = findViewById(R.id.saplingcount);
+        tvsaplingActivity = findViewById(R.id.saplingactivitycount);
+        tvsaplingxref = findViewById(R.id.xrefcount);
+        tvsaplinghistory = findViewById(R.id.historycount);
 
         btnsend = findViewById(R.id.btsynctoserver);
         btnmastersync = findViewById(R.id.btnmastersync);
         btnDBcopy = findViewById(R.id.btcopydatabase);
         transSyncBtn = findViewById(R.id.transSyncBtn);
         btresetdatabase = findViewById(R.id.btresetdatabase);
-        activity_logs = findViewById(R.id.activity_logs);
 
         btnsend.setOnLongClickListener(view -> {
             Log.v(LOG_TAG, "long pressed");
@@ -226,28 +166,10 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
         bindData();
 
-        if (tvfarmer.getText().toString().equalsIgnoreCase("0")
-                && tvaddress.getText().toString().equalsIgnoreCase("0")
-                && tvimages.getText().toString().equalsIgnoreCase("0")
-                && tvplot.getText().toString().equalsIgnoreCase("0")
-                && tvplotcurrentcrop.getText().toString().equalsIgnoreCase("0")
-                && tvneighbourplot.getText().toString().equalsIgnoreCase("0")
-                && tvwaterresource.getText().toString().equalsIgnoreCase("0")
-                && tvsoilresource.getText().toString().equalsIgnoreCase("0")
-                && tvplotirrigation.getText().toString().equalsIgnoreCase("0")
-                && tvfollowup.getText().toString().equalsIgnoreCase("0")
-                && tvreferrals.getText().toString().equalsIgnoreCase("0")
-                && tvmarketsurvey.getText().toString().equalsIgnoreCase("0")
-                && tvidproofs.getText().toString().equalsIgnoreCase("0")
-                && tvfarmerhistory.getText().toString().equalsIgnoreCase("0")
-                && tvbank.getText().toString().equalsIgnoreCase("0")
-                && geoBoundriesCountTxt.getText().toString().equalsIgnoreCase("0")
-                && uprootmentCountTxt.getText().toString().equalsIgnoreCase("0")
-                && plantationCountTxt.getText().toString().equalsIgnoreCase("0")
-                && hopCountTxt.getText().toString().equalsIgnoreCase("0")
-                && cmpCount.getText().toString().equalsIgnoreCase("0")
-                && vist_logstv.getText().toString().equalsIgnoreCase("0")
-                && activity_logs.getText().toString().equalsIgnoreCase("0")
+        if (tvsapling.getText().toString().equalsIgnoreCase("0")
+                && tvsaplingActivity.getText().toString().equalsIgnoreCase("0")
+                && tvsaplingxref.getText().toString().equalsIgnoreCase("0")
+                && tvsaplinghistory.getText().toString().equalsIgnoreCase("0")
         ) {
 
 //            btresetdatabase.setEnabled(true);
@@ -268,35 +190,16 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
     private void bindData() {
         try {
 
-            tvfarmer.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Farmer")));
-            tvaddress.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Address")));
-            tvimages.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQueryForFileRepo()));
-            tvplot.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Plot")));
-            tvplotcurrentcrop.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("PlotCurrentCrop")));
-            tvneighbourplot.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NeighbourPlot")));
-            tvwaterresource.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("WaterResource")));
-            tvsoilresource.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SoilResource")));
-            tvplotirrigation.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("PlotIrrigationTypeXref")));
-            tvfollowup.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FollowUp")));
-            tvreferrals.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Referrals")));
-            tvmarketsurvey.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("MarketSurvey")));
-            tvidproofs.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("IdentityProof")));
-            tvfarmerhistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FarmerHistory ")));
-            tvbank.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FarmerBank")));
-
-            geoBoundriesCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("GeoBoundaries")));
-            uprootmentCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Uprootment")));
-            plantationCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Plantation")));
-            hopCountTxt.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("HealthPlantation")));
-            cmpCount.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Complaints")));
+            tvsapling.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("Sapling")));
+            tvsaplingActivity.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivity")));
+            tvsaplingxref.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityXref")));
+            tvsaplinghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityHistory")));
 
             //getVistLogRecords
             String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
             Log.v(LOG_TAG, "getVistLogRecords " + getVistLogRecords);
-            vist_logstv.setText(getVistLogRecords);
             String recomFertilizer = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FertilizerRecommendations"));
             Log.v(LOG_TAG, "recomFertilizer data count" + recomFertilizer);
-            activity_logs.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("ActivityLog")));
 
             isDataUpdated = true;
         } catch (Exception e) {
