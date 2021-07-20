@@ -89,6 +89,7 @@ public class CommonConstants {
     public static String Basin_Health_rating = "";
     public static String Spear_leaf_rating = "";
     public static String Prev_Fertilizer_CMD ="";
+    public static String ConsignmentCode ="";
 
     //public static UserData totalFarmerData = new UserData();
     // Bundle Constants

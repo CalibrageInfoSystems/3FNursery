@@ -294,6 +294,8 @@
                     android:text="@string/Send_Data_To_Server" />
 
                 <Button
+                    android:clickable="false"
+                    android:focusable="false"
                     android:id="@+id/btnmastersync"
                     style="@style/basicBtnStyle"
                     android:layout_width="150dp"
@@ -324,6 +326,8 @@
                     android:text="@string/Get_Data_From_Server" />
 
                 <Button
+                    android:clickable="false"
+                    android:focusable="false"
                     android:id="@+id/btcopydatabase"
                     style="@style/basicBtnStyle"
                     android:layout_width="150dp"
@@ -335,7 +339,10 @@
                     android:visibility="visible" />
             </LinearLayout>
 
+
             <Button
+                android:clickable="false"
+                android:focusable="false"
                 android:id="@+id/btresetdatabase"
                 style="@style/basicBtnStyle"
                 android:layout_width="250dp"

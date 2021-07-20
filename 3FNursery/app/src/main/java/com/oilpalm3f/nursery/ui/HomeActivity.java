@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     List<NurseryDetails> nurseryDetails;
     List<ConsignmentDetails> consignmentDetails;
     private LinearLayout refreshRel;
+    private Spinner nurserySpinner, consignmentSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,12 @@ public class HomeActivity extends AppCompatActivity {
         CommonConstants.FARMER_CODE = "";
     }
 
+
     public void showDialog(Activity activity) {
         final Dialog dialog = new Dialog(activity, R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog);
-        final Spinner nurserySpinner, consignmentSpinner;
          final DataAccessHandler dataAccessHandler;
         final LinearLayout detailslyt, consignmentdetailslyt;
         final TextView nurseryname, nurserycode, nurserypin;
@@ -180,9 +182,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(HomeActivity.this, Activities.class);
-                //intent.putExtra("SaplingDate",consignmentDetails.get(0).getArrivalDate() );
-                startActivity(intent);
+                if (validations()) {
+                    Intent intent = new Intent(HomeActivity.this, Activities.class);
+                    intent.putExtra("ConsignmentCode", consignmentcode.getText().toString() + "");
+                    CommonConstants.ConsignmentCode = consignmentcode.getText().toString();
+                    Log.d("ConsignmentCode", consignmentcode.getText().toString() + "");
+                    Log.d("ConsignmentCode",  CommonConstants.ConsignmentCode+ "");
+                    startActivity(intent);
+
+                }
             }
         });
 
@@ -195,4 +203,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         }, 500);
     }
+
+    public boolean validations(){
+
+        if (nurserySpinner.getSelectedItemPosition() ==0){
+
+            Toast.makeText(this, "Please Select Nursery", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(consignmentSpinner.getSelectedItemPosition() == 0){
+
+            Toast.makeText(this, "Please Select Consignment", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
 }

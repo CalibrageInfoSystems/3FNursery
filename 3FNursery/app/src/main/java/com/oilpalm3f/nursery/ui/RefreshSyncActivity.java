@@ -114,6 +114,10 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         transSyncBtn = findViewById(R.id.transSyncBtn);
         btresetdatabase = findViewById(R.id.btresetdatabase);
 
+        btnmastersync.setEnabled(false);
+        btresetdatabase.setEnabled(false);
+        btnDBcopy.setEnabled(false);
+
         btnsend.setOnLongClickListener(view -> {
             Log.v(LOG_TAG, "long pressed");
             CommonUtils.copyFile(RefreshSyncActivity.this);
@@ -195,11 +199,11 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             tvsaplingxref.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityXref")));
             tvsaplinghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityHistory")));
 
-            //getVistLogRecords
-            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
-            Log.v(LOG_TAG, "getVistLogRecords " + getVistLogRecords);
-            String recomFertilizer = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FertilizerRecommendations"));
-            Log.v(LOG_TAG, "recomFertilizer data count" + recomFertilizer);
+//            //getVistLogRecords
+//            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
+//            Log.v(LOG_TAG, "getVistLogRecords " + getVistLogRecords);
+//            String recomFertilizer = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FertilizerRecommendations"));
+//            Log.v(LOG_TAG, "recomFertilizer data count" + recomFertilizer);
 
             isDataUpdated = true;
         } catch (Exception e) {

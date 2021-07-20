@@ -76,9 +76,9 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         setContentView(R.layout.refresh_sync);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.refresh);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        toolbar.setTitle(R.string.refresh);
+//        setSupportActionBar(toolbar);
 
         allRefreshDataMap = new ArrayList<>();
         allRefreshDataMap.add(DatabaseKeys.TABLE_SAPLING);
@@ -113,6 +113,10 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         btnDBcopy = findViewById(R.id.btcopydatabase);
         transSyncBtn = findViewById(R.id.transSyncBtn);
         btresetdatabase = findViewById(R.id.btresetdatabase);
+
+        btnmastersync.setEnabled(false);
+        btresetdatabase.setEnabled(false);
+        btnDBcopy.setEnabled(false);
 
         btnsend.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -150,7 +154,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View view) {
 
-                RefreshSyncActivity.this.fetchCount();
+               // RefreshSyncActivity.this.fetchCount();
                 RefreshSyncActivity.this.showTransactionsAlertDialog(true);
                 // List<UserSync> resetList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfResetdata());
                 List<UserSync> resetList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
@@ -202,10 +206,10 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             tvsaplinghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityHistory")));
 
             //getVistLogRecords
-            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
-            Log.v(LOG_TAG, "getVistLogRecords " + getVistLogRecords);
-            String recomFertilizer = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FertilizerRecommendations"));
-            Log.v(LOG_TAG, "recomFertilizer data count" + recomFertilizer);
+           // String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
+           //Log.v(LOG_TAG, "getVistLogRecords " + getVistLogRecords);
+           // String recomFertilizer = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("FertilizerRecommendations"));
+            //Log.v(LOG_TAG, "recomFertilizer data count" + recomFertilizer);
 
             isDataUpdated = true;
         } catch (Exception e) {

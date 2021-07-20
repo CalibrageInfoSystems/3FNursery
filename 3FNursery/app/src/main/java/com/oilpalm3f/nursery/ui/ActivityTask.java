@@ -3,6 +3,7 @@ package com.oilpalm3f.nursery.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,12 +34,13 @@ import java.util.List;
 
 public class ActivityTask extends AppCompatActivity {
 
-    String activityTypeId;
+    String activityTypeId, consignmentCode, activityName;
     private List<ActivityTasks> activityTasklist = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
     private List<SaplingActivity> saplingActivitiesList;
    List<KeyValues>  dataValue = new ArrayList<>();
     int random_int  = 0;
+    TextView textView5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class ActivityTask extends AppCompatActivity {
         setContentView(R.layout.activity_task);
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
+        textView5 = findViewById(R.id.textView5);
 
         int min = 50;
         int max = 100;
@@ -58,11 +61,16 @@ public class ActivityTask extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             activityTypeId = extras.getString("ActivityTypeId");
+            activityName = extras.getString("ActivityName");
             Log.d("ActivityTypeId123", activityTypeId + "");
         }
 
+        textView5.setText(activityName + "");
+
+        consignmentCode = CommonConstants.ConsignmentCode;
 
         Log.d("ActivityTypeId456", activityTypeId + "");
+        Log.d("consignmentCode234", consignmentCode + "");
 
         dataAccessHandler = new DataAccessHandler(this);
 
@@ -124,6 +132,7 @@ return  cb;
               if (validate()) {
                   setSaplingActivity();
                   finish();
+                  Toast.makeText(ActivityTask.this, "Task Completed Successfully", Toast.LENGTH_SHORT).show();
               }
             }
         });
@@ -149,6 +158,32 @@ return  cb;
              }
 
             }
+            if(activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")){
+
+                EditText et = findViewById(id);
+
+                if (TextUtils.isEmpty(et.getText().toString())){
+                    //TOdo  need to check already exist or not
+
+                    Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
+            if(activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")){
+
+                Spinner spinnner = findViewById(id);
+
+                if (spinnner.getSelectedItemPosition() ==0){
+                    //TOdo  need to check already exist or not
+
+                    Toast.makeText(this, "Please Select Dropdown Data", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
+
+
         }
         return true;
     }
@@ -191,7 +226,7 @@ return  cb;
 
         map.put("Id", 0);
         map.put("TransactionId",  random_int+"");
-        map.put("ConsignmentCode", "CONS001");
+        map.put("ConsignmentCode", consignmentCode+"");
         map.put("ActivityId", activityTypeId);
         map.put("StatusTypeId", 346);
         map.put("Comment", "Test");

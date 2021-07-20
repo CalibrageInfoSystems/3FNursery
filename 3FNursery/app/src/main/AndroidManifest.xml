@@ -57,7 +57,7 @@
         <activity
             android:name=".ui.SelectionScreen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.HomeActivity"  android:theme="@style/AppTheme.NoActionBar"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
