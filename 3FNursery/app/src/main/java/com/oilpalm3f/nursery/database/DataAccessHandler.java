@@ -148,7 +148,27 @@ public class DataAccessHandler<T> {
             Log.d("WhatistheException", e.toString());
         }
     }
+    public String getSingleValue(String query) {
+        Log.v(LOG_TAG, "@@@ query " + query);
+        Cursor mOprQuery = null;
+        try {
+            mOprQuery = mDatabase.rawQuery(query, null);
+            if (mOprQuery != null && mOprQuery.moveToFirst()) {
+                return mOprQuery.getString(0);
+            }
 
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != mOprQuery)
+                mOprQuery.close();
+
+            closeDataBase();
+        }
+        return "";
+    }
     public LinkedHashMap<String, String> getGenericData(final String query) {
         Log.v(LOG_TAG, "@@@ Generic Query " + query);
         LinkedHashMap<String, String> mGenericData = new LinkedHashMap<>();
