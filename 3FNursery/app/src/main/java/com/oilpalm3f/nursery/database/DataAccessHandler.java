@@ -26,6 +26,7 @@ import com.oilpalm3f.nursery.dbmodels.ComplaintStatusHistory;
 import com.oilpalm3f.nursery.dbmodels.ComplaintTypeXref;
 import com.oilpalm3f.nursery.dbmodels.Complaints;
 import com.oilpalm3f.nursery.dbmodels.ComplaintsDetails;
+import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
 import com.oilpalm3f.nursery.dbmodels.CookingOil;
 import com.oilpalm3f.nursery.dbmodels.CropMaintenanceHistory;
@@ -57,6 +58,7 @@ import com.oilpalm3f.nursery.dbmodels.MarketSurvey;
 import com.oilpalm3f.nursery.dbmodels.MissingTressInfo;
 import com.oilpalm3f.nursery.dbmodels.NeighbourPlot;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
+import com.oilpalm3f.nursery.dbmodels.NurseryData;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
@@ -2074,6 +2076,70 @@ f
         return nurserySaplingDetails;
     }
 
+
+
+    public List<NurseryData> getNurseryData(final String query) {
+        List<NurseryData> nurseryData = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryData nurseryDataDetails = new NurseryData();
+                    nurseryDataDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
+                    nurseryDataDetails.setName(cursor.getString(cursor.getColumnIndex("name")));
+                    nurseryDataDetails.setStatename(cursor.getString(cursor.getColumnIndex("Statename")));
+                    nurseryDataDetails.setDistrictname(cursor.getString(cursor.getColumnIndex("DistrictName")));
+                    nurseryDataDetails.setMandalname(cursor.getString(cursor.getColumnIndex("MandalName")));
+                    nurseryDataDetails.setVillagename(cursor.getString(cursor.getColumnIndex("Villagename")));
+                    nurseryDataDetails.setPinCode(cursor.getInt(cursor.getColumnIndex("PinCode")));
+
+
+                    nurseryData.add(nurseryDataDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nurseryData;
+    }
+
+    public List<ConsignmentData> getConsignmentData(final String query) {
+        List<ConsignmentData> consignmentData = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    ConsignmentData consignmentdetails = new ConsignmentData();
+                    consignmentdetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    consignmentdetails.setOriginname(cursor.getString(cursor.getColumnIndex("Originname")));
+                    consignmentdetails.setVendorname(cursor.getString(cursor.getColumnIndex("Vendorname")));
+                    consignmentdetails.setVarietyname(cursor.getString(cursor.getColumnIndex("Varietyname")));
+
+
+                    consignmentData.add(consignmentdetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return consignmentData;
+    }
 
     public List<ConsignmentDetails> getConsignmentDetails(final String query) {
         List<ConsignmentDetails> consignmentDetails = new ArrayList<>();

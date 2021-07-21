@@ -8,7 +8,7 @@ public class NurseryDetails {
     private  int VillageId;
     private  int  MandalId;
     private  int DistrictId;
-    private  String StateId;
+    private  int StateId;
     private  int CountryId;
     private  int PinCode;
     private  int IsActive;
@@ -65,11 +65,11 @@ public class NurseryDetails {
         DistrictId = districtId;
     }
 
-    public String getStateId() {
+    public int getStateId() {
         return StateId;
     }
 
-    public void setStateId(String stateId) {
+    public void setStateId(int stateId) {
         StateId = stateId;
     }
 

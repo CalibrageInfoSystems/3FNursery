@@ -64,10 +64,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                Intent selectionscreen = new Intent(HomeActivity.this, SelectionScreen.class);
-//                startActivity(selectionscreen);
+                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
+                startActivity(selectionscreen);
 
-                showDialog(HomeActivity.this);
+              //  showDialog(HomeActivity.this);
 
             }
         });
