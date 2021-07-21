@@ -40,7 +40,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.ActivityTask"></activity>
+        <activity android:name=".ConsignmentSelectionScreen"></activity>
+        <activity android:name=".ui.NurserySelectionScreen" />
+        <activity android:name=".ui.ActivityTask" />
         <activity android:name=".ui.RefreshSyncActivity" />
         <activity android:name=".testUI.TestActivity">
 
@@ -53,12 +55,13 @@
         </activity>
         <activity
             android:name=".ui.Activities"
-            android:theme="@style/AppTheme.NoActionBar" ></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.SelectionScreen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.HomeActivity"  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -88,8 +91,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".datasync.ui.RefreshSyncActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
     </application>
 

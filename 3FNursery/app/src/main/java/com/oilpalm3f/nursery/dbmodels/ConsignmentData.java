@@ -6,6 +6,42 @@ public class ConsignmentData {
     private String Originname;
     private String Vendorname;
     private String Varietyname;
+    private  int EstimatedQuantity;
+    private String CreatedDate;
+    private String ArrivedDate;
+    private int ArrivedQuantity;
+
+    public int getEstimatedQuantity() {
+        return EstimatedQuantity;
+    }
+
+    public void setEstimatedQuantity(int estimatedQuantity) {
+        EstimatedQuantity = estimatedQuantity;
+    }
+
+    public String getCreatedDate() {
+        return CreatedDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        CreatedDate = createdDate;
+    }
+
+    public String getArrivedDate() {
+        return ArrivedDate;
+    }
+
+    public void setArrivedDate(String arrivedDate) {
+        ArrivedDate = arrivedDate;
+    }
+
+    public int getArrivedQuantity() {
+        return ArrivedQuantity;
+    }
+
+    public void setArrivedQuantity(int arrivedQuantity) {
+        ArrivedQuantity = arrivedQuantity;
+    }
 
     public String getConsignmentCode() {
         return ConsignmentCode;

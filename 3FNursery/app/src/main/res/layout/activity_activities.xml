@@ -131,7 +131,7 @@
                     android:layout_below="@+id/reg_logo"
                     android:fontFamily="Roboto_Regular"
                     android:gravity="bottom"
-                    android:text="Aproved" />
+                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
@@ -155,7 +155,7 @@
 
                     android:fontFamily="Roboto_Regular"
                     android:gravity="bottom"
-                    android:text="Aproved" />
+                    />
             </LinearLayout>
         </LinearLayout>
 

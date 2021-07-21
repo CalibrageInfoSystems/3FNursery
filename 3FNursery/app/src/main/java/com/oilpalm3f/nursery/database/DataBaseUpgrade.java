@@ -59,9 +59,20 @@ public class DataBaseUpgrade {
 
        // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
 
+        String column1 = "Alter Table Sapling Add StatusTypeId int";
+        String column2 = "Alter Table Sapling Add ArrivedDate datetime";
+        String column3 = "Alter Table Sapling Add ArrivedQuantity int";
+        String column4 = "Alter Table Sapling Add SowingDate datetime";
+        String column5 = "Alter Table Sapling Add TransplantingDate datetime";
+
+
         try {
             //db.execSQL(alterGeoBoundariesTable1);
-            //  db.execSQL(alterPlotTable1);
+              db.execSQL(column1);
+            db.execSQL(column2);
+            db.execSQL(column3);
+            db.execSQL(column4);
+            db.execSQL(column5);
 
         } catch (Exception e) {
             e.printStackTrace();

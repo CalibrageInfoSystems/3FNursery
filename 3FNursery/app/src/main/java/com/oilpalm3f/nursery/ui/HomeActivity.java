@@ -185,9 +185,9 @@ public class HomeActivity extends AppCompatActivity {
                 if (validations()) {
                     Intent intent = new Intent(HomeActivity.this, Activities.class);
                     intent.putExtra("ConsignmentCode", consignmentcode.getText().toString() + "");
-                    CommonConstants.ConsignmentCode = consignmentcode.getText().toString();
-                    Log.d("ConsignmentCode", consignmentcode.getText().toString() + "");
-                    Log.d("ConsignmentCode",  CommonConstants.ConsignmentCode+ "");
+                    //CommonConstants.ConsignmentCode = consignmentcode.getText().toString();
+                    //Log.d("ConsignmentCode", consignmentcode.getText().toString() + "");
+                    //Log.d("ConsignmentCode",  CommonConstants.ConsignmentCode+ "");
                     startActivity(intent);
 
                 }

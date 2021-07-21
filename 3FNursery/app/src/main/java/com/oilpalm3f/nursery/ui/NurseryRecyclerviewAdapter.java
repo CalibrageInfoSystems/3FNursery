@@ -47,10 +47,10 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
     @Override
     public void onBindViewHolder(@NonNull NurseryRecyclerviewAdapter.ViewHolder holder, int position) {
 
-        holder.nurseryName.setText(nurserysList.get(position).getName());
-        holder.nurserycode.setText(nurserysList.get(position).getCode());
-
-        holder.nurseryaddress.setText(nurserysList.get(position).getVillagename() + " - "+nurserysList.get(position).getPinCode());
+        holder.nurseryName.setText(":  " +nurserysList.get(position).getName());
+        holder.nurserycode.setText(":  "+nurserysList.get(position).getCode());
+        holder.nurseryaddress.setText(":  "+nurserysList.get(position).getVillagename());
+        holder.pincode.setText(":  "+nurserysList.get(position).getPinCode() + "");
 
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +70,7 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView nurseryName,nurserycode,nurseryaddress;
+        public TextView nurseryName,nurserycode,nurseryaddress, pincode;
         LinearLayout mainlyt;
 
         public ViewHolder(@NonNull View itemView) {
@@ -79,6 +79,7 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
             this.nurseryName = (TextView )itemView.findViewById(R.id.nurseryname);
             this.nurserycode = (TextView )itemView.findViewById(R.id.nurserycode);
             this.nurseryaddress = (TextView )itemView.findViewById(R.id.nurseryaddress);
+            this.pincode = (TextView )itemView.findViewById(R.id.nurserypincode);
             mainlyt = (LinearLayout ) itemView.findViewById(R.id.mainlyt);
         }
     }

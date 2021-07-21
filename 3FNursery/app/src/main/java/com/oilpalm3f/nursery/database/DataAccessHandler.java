@@ -2144,6 +2144,11 @@ f
                     consignmentdetails.setOriginname(cursor.getString(cursor.getColumnIndex("Originname")));
                     consignmentdetails.setVendorname(cursor.getString(cursor.getColumnIndex("Vendorname")));
                     consignmentdetails.setVarietyname(cursor.getString(cursor.getColumnIndex("Varietyname")));
+                    consignmentdetails.setEstimatedQuantity(cursor.getInt(cursor.getColumnIndex("EstimatedQuantity")));
+                    consignmentdetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    consignmentdetails.setArrivedDate(cursor.getString(cursor.getColumnIndex("ArrivedDate")));
+                    consignmentdetails.setArrivedQuantity(cursor.getInt(cursor.getColumnIndex("ArrivedQuantity")));
+
 
 
                     consignmentData.add(consignmentdetails);

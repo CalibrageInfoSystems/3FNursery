@@ -83,6 +83,8 @@ public class Activities extends AppCompatActivity {
 
 
         txtType.setText(": "+ dataAccessHandler.getSingleValue(Queries.getInstance().getSaplingVerirty("35")));
+        txtAge.setText(": " + "");
+        txtDateOfJoining.setText(": " + "");
 
     }
 

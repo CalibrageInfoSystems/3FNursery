@@ -25,18 +25,24 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
     private DataAccessHandler dataAccessHandler;
     private List<ConsignmentData> consignmentList = new ArrayList<>();
     private ConsignmentRecyclerviewAdapter consignmentRecyclerviewAdapter;
+    String nurserycode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consignment_selection_screen);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            nurserycode = extras.getString("NurseryCode");
+        }
+
+        Log.d("nurserycode", nurserycode + "");
         dataAccessHandler = new DataAccessHandler(this);
         init();
         setViews();
         String UserId = CommonConstants.USER_ID;
         Log.d("UserId Is : ", UserId);
-
 
     }
 
@@ -50,7 +56,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery("NurARRoi"));
+        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(nurserycode));
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList);
         consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);

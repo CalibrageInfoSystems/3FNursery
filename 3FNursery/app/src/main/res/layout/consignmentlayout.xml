@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:id="@+id/mainlyt">
+            android:id="@+id/mainnlyt"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,6 +124,109 @@
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
                     android:text="NurseryName"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Estimated Quantity"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/estimatedQty"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:textSize="20dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:text="NurseryName"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Ordered Date"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/ordereddate"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:textSize="20dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:text="NurseryName"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Arrival Date"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/arrivaldate"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:textSize="20dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Arrived Quantity"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/arrivedqty"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:textSize="20dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 

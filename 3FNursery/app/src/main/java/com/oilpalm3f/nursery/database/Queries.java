@@ -152,7 +152,7 @@ public class Queries {
         "where X.UserId=155  Group By N.Code";
     }
     public String getConsignmentDataQuery(String NurseryCode) {
-        return "select S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
+        return "select S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
         "inner join sapling S ON X.ConsignmentId = S.id \n" +
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
