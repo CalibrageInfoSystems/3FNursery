@@ -80,7 +80,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
             this.activityName = (TextView )itemView.findViewById(R.id.activityName);
             this.expecteddate = (TextView )itemView.findViewById(R.id.expecteddate);
-            this.saplingExpecteddate = (TextView )itemView.findViewById(R.id.saplingExpecteddate);
+//            this.saplingExpecteddate = (TextView )itemView.findViewById(R.id.saplingExpecteddate);
             this.mainlyt = (LinearLayout) itemView.findViewById(R.id.mainlyt);
         }
     }

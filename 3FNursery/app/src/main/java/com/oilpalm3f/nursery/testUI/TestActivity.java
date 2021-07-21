@@ -27,8 +27,6 @@ public class TestActivity extends AppCompatActivity {
 
         for(int i =0; i <10; i ++) {
             ll.addView(textview(i, "mallem mahesh :"+i));
-
-
         }
         for(int i =0; i <10; i ++){
         TextView txt = ll.findViewById(i);

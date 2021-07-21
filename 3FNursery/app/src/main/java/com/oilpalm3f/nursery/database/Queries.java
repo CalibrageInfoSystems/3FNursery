@@ -31,6 +31,9 @@ public class Queries {
     public String getCollectionCenterMaster() {
         return "select Code, Name  from CollectionCenter ORDER BY Name Asc";
     }
+    public String getSaplingVerirty(String verityId) {
+        return "Select Desc from TypeCdDmt where TypeCdId = "+verityId;
+    }
 
 
     public static String getAlertsPlotFollowUpQuery(int limit, int offset) {
