@@ -133,13 +133,15 @@ public class Queries {
         return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling";
     }
     public String getConsignmentByNurceryMasterQuery(String nurcerYId) {
-        return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling  where NurseryCode ='" + nurcerYId + "'";
+        //return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling  where NurseryCode ='" + nurcerYId + "'";
+
+        return "select S.Id,S.NurseryCode,S.ConsignmentCode,S.OriginId from  UserConsignmentXref X \n" +
+        "inner join sapling S ON X.ConsignmentId = S.id \n" +
+        "where X.UserId=155 AND S.NurseryCode = '" + nurcerYId + "' GROUP By S.ConsignmentCode";
     }
     public String getNurseryDetailsQuery(String name) {
         return "select Code, Name, PinCode from Nursery where Name = '" + name + "'";
     }
-
-
 
     public String getNurseryDataQuery() {
         return "select N.Code as Code, N.name as name, N.VillageId as VillageId, N.DistrictId as DistrictId , N.MandalId as MandalId, N.StateId as StateId, v.name as Villagename, st.name as Statename,d.name as DistrictName, m.name as MandalName,N.PinCode as PinCode from  UserConsignmentXref X \n" +
@@ -158,6 +160,14 @@ public class Queries {
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +
         "where X.UserId=155 AND S.NurseryCode = '"+NurseryCode+"' GROUP By S.ConsignmentCode";
+    }
+
+    public String getConsignmentStatusQuery(String consignmentcode) {
+        return "select S.SowingDate,S.CreatedDate, S.ConsignmentCode, L.name as Originname, T.Desc as StatusType  from  UserConsignmentXref X \n" +
+        "inner join sapling S ON X.ConsignmentId = S.id \n" +
+        "inner join LookUp L ON S.OriginId = L.Id \n" +
+        "inner join TypeCdDmt T ON S.StatusTypeId = T.TypeCdId \n" +
+        "where S.ConsignmentCode = '"+consignmentcode+"' GROUP By S.ConsignmentCode";
     }
 
 

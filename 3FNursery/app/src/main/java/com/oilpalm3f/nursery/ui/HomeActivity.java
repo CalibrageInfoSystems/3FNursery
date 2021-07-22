@@ -166,6 +166,8 @@ public class HomeActivity extends AppCompatActivity {
                     consignmentcode.setText(consignmentDetails.get(0).getConsignmentCode());
                     // consignmentpin.setText(consignmentDetails.get(0).getPinCode() + "");
 
+
+
                 }else {
 
                     consignmentdetailslyt.setVisibility(View.GONE);

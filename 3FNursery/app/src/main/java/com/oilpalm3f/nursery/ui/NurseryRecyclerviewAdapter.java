@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
@@ -58,6 +59,7 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
 
                 Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
                 intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
+                CommonConstants.NurseryCode = nurserysList.get(position).getCode();
                 context.startActivity(intent);
             }
         });

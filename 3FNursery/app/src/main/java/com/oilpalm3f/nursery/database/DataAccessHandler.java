@@ -28,6 +28,7 @@ import com.oilpalm3f.nursery.dbmodels.Complaints;
 import com.oilpalm3f.nursery.dbmodels.ComplaintsDetails;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
+import com.oilpalm3f.nursery.dbmodels.ConsignmentStatuData;
 import com.oilpalm3f.nursery.dbmodels.CookingOil;
 import com.oilpalm3f.nursery.dbmodels.CropMaintenanceHistory;
 import com.oilpalm3f.nursery.dbmodels.DigitalContract;
@@ -2164,6 +2165,38 @@ f
             }
         }
         return consignmentData;
+    }
+
+    public List<ConsignmentStatuData> getConsignmentStatus(final String query) {
+        List<ConsignmentStatuData> consignmentStatusData = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    ConsignmentStatuData consignmentstatusdetails = new ConsignmentStatuData();
+                    consignmentstatusdetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    consignmentstatusdetails.setOriginname(cursor.getString(cursor.getColumnIndex("Originname")));
+                    consignmentstatusdetails.setSowingDate(cursor.getString(cursor.getColumnIndex("SowingDate")));
+                    consignmentstatusdetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    consignmentstatusdetails.setStatusType(cursor.getString(cursor.getColumnIndex("StatusType")));
+
+
+
+                    consignmentStatusData.add(consignmentstatusdetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return consignmentStatusData;
     }
 
     public List<ConsignmentDetails> getConsignmentDetails(final String query) {
