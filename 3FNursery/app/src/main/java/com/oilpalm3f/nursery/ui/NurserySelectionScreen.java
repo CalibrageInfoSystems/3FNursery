@@ -48,7 +48,7 @@ public class NurserySelectionScreen extends AppCompatActivity {
 
         //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-        nurserysList = dataAccessHandler.getNurseryData(Queries.getInstance().getNurseryDataQuery());
+        nurserysList = dataAccessHandler.getNurseryData(Queries.getInstance().getNurseryDataQuery(CommonConstants.USER_ID));
         nurseryRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         nurseryRecyclerviewAdapter = new NurseryRecyclerviewAdapter(NurserySelectionScreen.this, nurserysList);
         nurseryRecyclerview.setAdapter(nurseryRecyclerviewAdapter);

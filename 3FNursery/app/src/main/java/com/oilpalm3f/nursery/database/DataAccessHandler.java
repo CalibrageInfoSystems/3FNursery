@@ -52,11 +52,13 @@ import com.oilpalm3f.nursery.dbmodels.IdentityProofRefresh;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.InterCropPlantationXref;
 import com.oilpalm3f.nursery.dbmodels.KrasDataToDisplay;
+import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.LandlordBank;
 import com.oilpalm3f.nursery.dbmodels.LandlordIdProof;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.MarketSurvey;
 import com.oilpalm3f.nursery.dbmodels.MissingTressInfo;
+import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NeighbourPlot;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
@@ -78,6 +80,7 @@ import com.oilpalm3f.nursery.dbmodels.RecommndFertilizer;
 import com.oilpalm3f.nursery.dbmodels.Referrals;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityXrefModel;
 import com.oilpalm3f.nursery.dbmodels.Saplings;
 import com.oilpalm3f.nursery.dbmodels.SoilResource;
@@ -2141,6 +2144,7 @@ f
                 do {
 
                     ConsignmentData consignmentdetails = new ConsignmentData();
+                    consignmentdetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     consignmentdetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
                     consignmentdetails.setOriginname(cursor.getString(cursor.getColumnIndex("Originname")));
                     consignmentdetails.setVendorname(cursor.getString(cursor.getColumnIndex("Vendorname")));
@@ -2167,6 +2171,46 @@ f
         return consignmentData;
     }
 
+    public List<SaplingActivity> getSaplingActivityData(final String query) {
+        List<SaplingActivity> sapactivitydata = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivity saplingsactivityDetails = new SaplingActivity();
+                    saplingsactivityDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    saplingsactivityDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    saplingsactivityDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    saplingsactivityDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    saplingsactivityDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    saplingsactivityDetails.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
+                    saplingsactivityDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    saplingsactivityDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    saplingsactivityDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsactivityDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    saplingsactivityDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    saplingsactivityDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+
+
+                    sapactivitydata.add(saplingsactivityDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return sapactivitydata;
+    }
+
+
     public List<ConsignmentStatuData> getConsignmentStatus(final String query) {
         List<ConsignmentStatuData> consignmentStatusData = new ArrayList<>();
         Cursor cursor = null;
@@ -2181,8 +2225,7 @@ f
                     consignmentstatusdetails.setSowingDate(cursor.getString(cursor.getColumnIndex("SowingDate")));
                     consignmentstatusdetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     consignmentstatusdetails.setStatusType(cursor.getString(cursor.getColumnIndex("StatusType")));
-
-
+                    consignmentstatusdetails.setVarietyname(cursor.getString(cursor.getColumnIndex("Varietyname")));
 
                     consignmentStatusData.add(consignmentstatusdetails);
                 } while (cursor.moveToNext());
@@ -2313,6 +2356,7 @@ f
                     nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
                     nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
                     nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDays")));
+                    nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
 
                     nurseryActivityDetails.add(nurseryActivityyDetails);
                 } while (cursor.moveToNext());
@@ -2327,6 +2371,68 @@ f
             }
         }
         return nurseryActivityDetails;
+    }
+
+
+    public List<MutipleData> getMultipleDataDetails(final String query) {
+        List<MutipleData> mutipleDataListDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    MutipleData multipleDataDetails = new MutipleData();
+                    multipleDataDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    multipleDataDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    multipleDataDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    multipleDataDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    multipleDataDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    multipleDataDetails.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
+                    multipleDataDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    multipleDataDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    multipleDataDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+                    multipleDataDetails.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
+
+                    mutipleDataListDetails.add(multipleDataDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return mutipleDataListDetails;
+    }
+
+    public List<LandlevellingFields> getlandlevelligfeildDetails(final String query) {
+        List<LandlevellingFields> landlevellingDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    LandlevellingFields fieldDetails = new LandlevellingFields();
+                    fieldDetails.setValue(cursor.getInt(cursor.getColumnIndex("Value")));
+                    fieldDetails.setField(cursor.getString(cursor.getColumnIndex("Field")));
+                    landlevellingDetails.add(fieldDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return landlevellingDetails;
     }
 
     public List<ActivityTasks> getActivityTasksDetails(final String query) {
@@ -2516,6 +2622,40 @@ f
             }
         }
         return saplingActivityHistoryDataDetails;
+    }
+
+    public List<SaplingActivityStatusModel> getSaplingActivityStatusDetails(final String query, final int type) {
+        List<SaplingActivityStatusModel> saplingActivitystatusDataDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivityStatusModel saplingsactivitystatusDetails = new SaplingActivityStatusModel();
+                    saplingsactivitystatusDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    saplingsactivitystatusDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    saplingsactivitystatusDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    saplingsactivitystatusDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    saplingsactivitystatusDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    saplingsactivitystatusDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsactivitystatusDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    saplingsactivitystatusDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    saplingsactivitystatusDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    saplingActivitystatusDataDetails.add(saplingsactivitystatusDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return saplingActivitystatusDataDetails;
     }
 
 

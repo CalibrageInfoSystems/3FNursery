@@ -14,6 +14,7 @@ public class DatabaseKeys {
     public static String TABLE_SaplingActivity = "SaplingActivity";
     public static String TABLE_SaplingActivityXref = "SaplingActivityXref";
     public static String TABLE_SaplingActivityHistory = "SaplingActivityHistory";
+    public static String TABLE_SaplingActivityStatus = "SaplingActivityStatus";
 
 
 

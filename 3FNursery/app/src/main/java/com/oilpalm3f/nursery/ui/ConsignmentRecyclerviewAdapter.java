@@ -92,7 +92,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, Activities.class);
-                CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
+                CommonConstants.ConsignmentID = consignmentList.get(position).getId();
                 context.startActivity(intent);
             }
         });

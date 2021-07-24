@@ -34,18 +34,24 @@ import java.util.List;
 
 public class ActivityTask extends AppCompatActivity {
 
-    String activityTypeId, consignmentCode, activityName;
+    String activityTypeId, consignmentCode, activityName, isMultipleentry;
     private List<ActivityTasks> activityTasklist = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
-    private List<SaplingActivity> saplingActivitiesList;
+    private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
+    int SaplingActivityCount;
    List<KeyValues>  dataValue = new ArrayList<>();
     int random_int  = 0;
+    int maxnumber;
     TextView textView5;
+    String TransactionID;
+    int sapactivitysize,sapactivitysizeinc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+
+        dataAccessHandler = new DataAccessHandler(this);
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         textView5 = findViewById(R.id.textView5);
@@ -58,12 +64,23 @@ public class ActivityTask extends AppCompatActivity {
          random_int = (int)Math.floor(Math.random()*(max-min+1)+min);
         System.out.println(random_int);
 
+
+
+        maxnumber = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber());
+        Log.d("maxnumber", maxnumber+ "");
+
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             activityTypeId = extras.getString("ActivityTypeId");
             activityName = extras.getString("ActivityName");
+            isMultipleentry = extras.getString("Ismultipleentry");
             Log.d("ActivityTypeId123", activityTypeId + "");
+            Log.d("Ismultipleentryy", isMultipleentry+ "");
         }
+
+
+
 
         textView5.setText(activityName + "");
 
@@ -72,11 +89,26 @@ public class ActivityTask extends AppCompatActivity {
         Log.d("ActivityTypeId456", activityTypeId + "");
         Log.d("consignmentCode234", consignmentCode + "");
 
-        dataAccessHandler = new DataAccessHandler(this);
+        saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCountQuery());
+
+        Log.d("SaplingActivityCount", saplingActivitiesList.size()+"");
+
+        sapactivitysize = saplingActivitiesList.size();
+        sapactivitysizeinc = sapactivitysize +1;
+
+        Log.d("TABID", CommonConstants.TAB_ID+ "");
+        Log.d("ConsignmentID", CommonConstants.ConsignmentID+ "");
+        Log.d("sapactivitysize", sapactivitysize+ "");
+        Log.d("sapactivitysizeinc", sapactivitysizeinc+ "");
+
+
+        TransactionID = "T"+CommonConstants.TAB_ID+CommonConstants.ConsignmentID+activityTypeId+"-"+(dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber())+1);
+        Log.d("TransactionIDddd", TransactionID);
 
         activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
 
         Log.d("activityTasklist", activityTasklist.size() + "");
+        Log.d("activityTasklistISOPtional", activityTasklist.get(0).getIsOptional()+"");
 
   for(int i = 0 ; i < activityTasklist.size();i ++){
       if(activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")){
@@ -90,6 +122,10 @@ public class ActivityTask extends AppCompatActivity {
       }
 
   }
+        if (isMultipleentry.equalsIgnoreCase("true")){
+
+        ll.addView( isJoneDoneChecbox("Is Job Done", 1));
+        }
 
         ll.addView( addButton("Submit", 1));
 
@@ -100,6 +136,13 @@ public class ActivityTask extends AppCompatActivity {
             cb.setId(id);
 return  cb;
     }
+    public CheckBox isJoneDoneChecbox(String content, int id){
+        CheckBox cb = new CheckBox(this);
+        cb.setText(content);
+        cb.setId(id);
+        return  cb;
+    }
+
 
     public EditText addEdittext(String content, int id)
     {
@@ -151,7 +194,7 @@ return  cb;
              Log.d("TESTING", "IS CHECKED  "+chk.isChecked()+"");
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(),chk.isChecked()+""));
              if (chk.isChecked() == false){
-                 //TOdo  need to check already exist or not
+                 //Todo  need to check already exist or not
 
                  Toast.makeText(this, "Please Select the checkbox", Toast.LENGTH_SHORT).show();
                  return false;
@@ -162,7 +205,9 @@ return  cb;
 
                 EditText et = findViewById(id);
 
-                if (TextUtils.isEmpty(et.getText().toString())){
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(),et.getText().toString()+""));
+
+                if (activityTasklist.get(i).getIsOptional() == 0 && TextUtils.isEmpty(et.getText().toString())){
                     //TOdo  need to check already exist or not
 
                     Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
@@ -225,7 +270,7 @@ return  cb;
         LinkedHashMap map = new LinkedHashMap();
 
         map.put("Id", 0);
-        map.put("TransactionId",  random_int+"");
+        map.put("TransactionId",  TransactionID);
         map.put("ConsignmentCode", consignmentCode+"");
         map.put("ActivityId", activityTypeId);
         map.put("StatusTypeId", 346);
@@ -242,7 +287,36 @@ return  cb;
         list.add(map);
 
 
-      //  DataManager.getInstance().addData(DataManager.SAPLING_ACTIVITY, saplingActivitiesList);
+        LinkedHashMap map1 = new LinkedHashMap();
+
+        map1.put("Id", 0);
+        map1.put("ConsignmentCode", consignmentCode+"");
+        map1.put("ActivityId", activityTypeId);
+        map1.put("StatusTypeId", 346);
+        map1.put("CreatedByUserId", CommonConstants.USER_ID);
+        map1.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        map1.put("UpdatedByUserId", CommonConstants.USER_ID);
+        map1.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        map1.put("ServerUpdatedStatus", 0);
+
+        final List<LinkedHashMap> list1 = new ArrayList<>();
+
+        list1.add(map1);
+
+        dataAccessHandler.insertMyDataa("SaplingActivityStatus", list1, new ApplicationThread.OnComplete<String>() {
+            @Override
+            public void execute(boolean success, String result, String msg) {
+
+                if (success) {
+
+                }
+
+            }
+        });
+
+
+
+        //  DataManager.getInstance().addData(DataManager.SAPLING_ACTIVITY, saplingActivitiesList);
 
         dataAccessHandler.insertMyDataa("SaplingActivity", list, new ApplicationThread.OnComplete<String>() {
             @Override
@@ -255,7 +329,7 @@ return  cb;
 
                         LinkedHashMap map = new LinkedHashMap();
                         map.put("Id", 0);
-                        map.put("TransactionId", random_int+"");
+                        map.put("TransactionId", TransactionID);
                         map.put("FieldId", dataValue.get(j).id);
                         map.put("Value", dataValue.get(j).value);
                         map.put("FilePath", "");

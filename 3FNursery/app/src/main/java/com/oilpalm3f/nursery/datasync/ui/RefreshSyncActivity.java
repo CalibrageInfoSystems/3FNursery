@@ -49,7 +49,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref, tvsaplingactivitystatus;
 
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
@@ -85,6 +85,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivity);
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityXref);
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityHistory);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityStatus);
 
         dataAccessHandler = new DataAccessHandler(this);
 
@@ -106,6 +107,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         tvsaplingActivity = findViewById(R.id.saplingactivitycount);
         tvsaplingxref = findViewById(R.id.xrefcount);
         tvsaplinghistory = findViewById(R.id.historycount);
+        tvsaplingactivitystatus = findViewById(R.id.statuscount);
 
 
         btnsend = findViewById(R.id.btsynctoserver);
@@ -180,6 +182,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                 && tvsaplingActivity.getText().toString().equalsIgnoreCase("0")
                 && tvsaplingxref.getText().toString().equalsIgnoreCase("0")
                 && tvsaplinghistory.getText().toString().equalsIgnoreCase("0")
+                && tvsaplingactivitystatus.getText().toString().equalsIgnoreCase("0")
         ) {
 
 //            btresetdatabase.setEnabled(true);
@@ -204,6 +207,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             tvsaplingActivity.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivity")));
             tvsaplingxref.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityXref")));
             tvsaplinghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityHistory")));
+            tvsaplingactivitystatus.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityStatus")));
 
             //getVistLogRecords
            // String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));

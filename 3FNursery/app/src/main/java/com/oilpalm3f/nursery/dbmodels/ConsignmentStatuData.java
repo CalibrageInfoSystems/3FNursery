@@ -7,6 +7,15 @@ public class ConsignmentStatuData {
     private String ConsignmentCode;
     private String Originname;
     private String StatusType;
+    private String Varietyname;
+
+    public String getVarietyname() {
+        return Varietyname;
+    }
+
+    public void setVarietyname(String varietyname) {
+        Varietyname = varietyname;
+    }
 
     public String getSowingDate() {
         return SowingDate;

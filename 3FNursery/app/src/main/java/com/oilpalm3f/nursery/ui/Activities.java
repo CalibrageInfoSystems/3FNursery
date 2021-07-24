@@ -5,6 +5,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class Activities extends AppCompatActivity {
     private Spinner consignmentSpinner;
     private String Nurserycode;
     private List<ConsignmentStatuData> consignmentstatusList = new ArrayList<>();
+    LinearLayout consignmentdatalyt, recyclerviewlayout;
 
 
     LinkedHashMap<String, Pair> consignmentdatamap = null;
@@ -65,6 +67,8 @@ public class Activities extends AppCompatActivity {
 
         activitiesRecyclerview = findViewById(R.id.activitiesRecyclerview);
         consignmentSpinner = findViewById(R.id.consignmentSpin);
+        consignmentdatalyt = findViewById(R.id.consignmentdatalyt);
+        recyclerviewlayout = findViewById(R.id.recyclerviewlayout);
 
 //        Intent intent = getIntent();
 //        String saplingDate = intent.getStringExtra("SaplingDate");
@@ -90,12 +94,22 @@ public class Activities extends AppCompatActivity {
 
                 if (consignmentSpinner.getSelectedItemPosition() != 0) {
 
+                    consignmentdatalyt.setVisibility(View.VISIBLE);
+                    recyclerviewlayout.setVisibility(View.VISIBLE);
                     Log.d("SelectedConsignment", consignmentSpinner.getSelectedItem() + "");
                     consignmentstatusList = dataAccessHandler.getConsignmentStatus(Queries.getInstance().getConsignmentStatusQuery(consignmentSpinner.getSelectedItem() + ""));
                     Log.d("ConsignmentStatus", consignmentstatusList.get(0).getStatusType());
+                    Log.d("ConsignmentSaplingType", consignmentstatusList.get(0).getVarietyname());
+
+                    txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
+                    txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
+
+                    CommonConstants.ConsignmentCode = consignmentSpinner.getSelectedItem() + "";
+
 
                 }else {
-
+                    consignmentdatalyt.setVisibility(View.GONE);
+                    recyclerviewlayout.setVisibility(View.GONE);
                 }
             }
 
@@ -112,7 +126,7 @@ public class Activities extends AppCompatActivity {
         activitiesRecyclerview.setAdapter(activitiesRecyclerviewAdapter);
 
 
-        txtType.setText(": "+ dataAccessHandler.getSingleValue(Queries.getInstance().getSaplingVerirty("35")));
+        //txtType.setText(": "+ dataAccessHandler.getSingleValue(Queries.getInstance().getSaplingVerirty("35")));
         txtAge.setText(": " + "");
         txtDateOfJoining.setText(": " + "");
 

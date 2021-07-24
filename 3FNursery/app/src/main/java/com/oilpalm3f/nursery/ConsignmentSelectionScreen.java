@@ -56,7 +56,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(nurserycode));
+        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID,nurserycode));
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList);
         consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);

@@ -20,6 +20,11 @@ public class NurseryAcitivity {
     @SerializedName("TargetDays")
     @Expose
     private Integer targetDays;
+
+    @SerializedName("IsMultipleEntries")
+    @Expose
+    private String IsMultipleEntries;
+
     @SerializedName("IsActive")
     @Expose
     private int isActive;
@@ -38,6 +43,14 @@ public class NurseryAcitivity {
     @SerializedName("ServerUpdatedStatus")
     @Expose
     private int serverUpdatedStatus;
+
+    public String getIsMultipleEntries() {
+        return IsMultipleEntries;
+    }
+
+    public void setIsMultipleEntries(String isMultipleEntries) {
+        IsMultipleEntries = isMultipleEntries;
+    }
 
     public Integer getId() {
         return id;

@@ -67,6 +67,7 @@ import com.oilpalm3f.nursery.dbmodels.RecommndFertilizer;
 import com.oilpalm3f.nursery.dbmodels.Referrals;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityXrefModel;
 import com.oilpalm3f.nursery.dbmodels.Saplings;
 import com.oilpalm3f.nursery.dbmodels.SoilResource;
@@ -366,16 +367,21 @@ public class DataSyncHelper {
 
         final DataAccessHandler dataAccessHandler = new DataAccessHandler(context);
 
+        List<SaplingActivityStatusModel> saplingActivityStatuslist = (List<SaplingActivityStatusModel>) dataAccessHandler.getSaplingActivityStatusDetails(Queries.getInstance().getSaplingActivityStatusRefresh(), 1);
         List<Saplings> saplingsList = (List<Saplings>) dataAccessHandler.getSaplingDetails(Queries.getInstance().getSaplingRefresh(), 1);
         List<SaplingActivity> saplingacityList = (List<SaplingActivity>) dataAccessHandler.getSaplingActivityDetails(Queries.getInstance().getSaplingActivityRefresh(), 1);
         List<SaplingActivityXrefModel> saplingActivityXreflist = (List<SaplingActivityXrefModel>) dataAccessHandler.getSaplingActivityXrefDetails(Queries.getInstance().getSaplingActivityXrefRefresh(), 1);
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
 
+
+
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
+        allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityStatus, saplingActivityStatuslist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SAPLING, saplingsList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivity, saplingacityList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityXref, saplingActivityXreflist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityHistory, saplingActivityHistorylist);
+
 
 //        allRefreshDataMap.put(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, gpsTrackingList);
 

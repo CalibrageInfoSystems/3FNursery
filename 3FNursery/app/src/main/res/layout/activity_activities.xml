@@ -62,6 +62,12 @@
                     android:background="@drawable/spinner_bg"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/consignmentdatalyt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -82,8 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/reg_logo"
                     android:fontFamily="Roboto_Regular"
-                    android:gravity="bottom"
-                    android:text=": Aproved" />
+                    android:gravity="bottom"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
@@ -157,9 +162,13 @@
                     android:gravity="bottom"
                     />
             </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
        <LinearLayout
+           android:id="@+id/recyclerviewlayout"
+           android:visibility="gone"
            android:layout_marginBottom="20dp"
            android:orientation="vertical"
            android:layout_weight="0.75"
@@ -282,7 +291,6 @@ android:background="@color/light_gray"
 
            <androidx.recyclerview.widget.RecyclerView
                android:id="@+id/activitiesRecyclerview"
-
                android:layout_width="match_parent"
                android:layout_height="match_parent"/>
        </LinearLayout>

@@ -55,11 +55,23 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             @Override
             public void onClick(View view) {
 
-                Intent at = new Intent(context, ActivityTask.class);
-                at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
-                at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
-                Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
-                context.startActivity(at);
+                if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true")){
+
+                    Intent met = new Intent(context, MultipleEntryScreen.class);
+                    met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
+                    context.startActivity(met);
+
+                }else{
+                    Intent at = new Intent(context, ActivityTask.class);
+                    at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                    at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                    at.putExtra("Ismultipleentry",mActivitiesList.get(position).getIsMultipleEntries() );
+                    Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
+                    Log.d("Ismultipleentry", mActivitiesList.get(position).getIsMultipleEntries()  + "");
+                    context.startActivity(at);
+                }
+
+
             }
         });
 

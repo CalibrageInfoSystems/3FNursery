@@ -40,7 +40,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ConsignmentSelectionScreen"></activity>
+        <activity android:name=".ui.MultipleEntryScreen"></activity>
+        <activity android:name=".ConsignmentSelectionScreen" />
         <activity android:name=".ui.NurserySelectionScreen" />
         <activity android:name=".ui.ActivityTask" />
         <activity android:name=".ui.RefreshSyncActivity" />

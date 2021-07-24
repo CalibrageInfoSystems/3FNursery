@@ -143,7 +143,20 @@ public class Queries {
         return "select Code, Name, PinCode from Nursery where Name = '" + name + "'";
     }
 
-    public String getNurseryDataQuery() {
+    public String getMultiplerecordsDetailsQuery(String code, String activitytypeId) {
+        return "Select S.Id,S.TransactionId,S.ConsignmentCode,S.ActivityId,S.StatusTypeId,S.Comment,S.IsActive, S.CreatedDate,S.ServerUpdatedStatus,t.Desc from  SaplingActivity S \n" +
+        "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
+        "where ConsignmentCode  ='"+code+"' and ActivityId = '"+activitytypeId+"'";
+    }
+    public String getFieldsData() {
+        return "Select sz.Value, na.Field from SaplingActivityXref  sz \n" +
+        "inner Join   SaplingActivity s on  s.TransactionId = sz.TransactionId \n" +
+        "inner Join NurseryActivityField na on na.Id = sz.FieldId \n" +
+        "where s.ConsignmentCode  ='CONS002' and ActivityId = 7 and s.TransactionId = '53'";
+    }
+
+
+    public String getNurseryDataQuery(String Userid) {
         return "select N.Code as Code, N.name as name, N.VillageId as VillageId, N.DistrictId as DistrictId , N.MandalId as MandalId, N.StateId as StateId, v.name as Villagename, st.name as Statename,d.name as DistrictName, m.name as MandalName,N.PinCode as PinCode from  UserConsignmentXref X \n" +
         "inner join sapling S ON X.ConsignmentId = S.id \n" +
         "inner join Nursery N ON N.Code = S.NurseryCode \n" +
@@ -151,22 +164,23 @@ public class Queries {
         "inner join State st on n.StateId = st.id \n" +
         "inner join District d on n.StateId = d.id \n" +
         "inner join Mandal m on n.StateId = m.id \n" +
-        "where X.UserId=155  Group By N.Code";
+        "where X.UserId='"+Userid+"'  Group By N.Code";
     }
-    public String getConsignmentDataQuery(String NurseryCode) {
-        return "select S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
+    public String getConsignmentDataQuery(String Userid, String NurseryCode) {
+        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
         "inner join sapling S ON X.ConsignmentId = S.id \n" +
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +
-        "where X.UserId=155 AND S.NurseryCode = '"+NurseryCode+"' GROUP By S.ConsignmentCode";
+        "where X.UserId='"+Userid+"' AND S.NurseryCode = '"+NurseryCode+"' GROUP By S.ConsignmentCode";
     }
 
     public String getConsignmentStatusQuery(String consignmentcode) {
-        return "select S.SowingDate,S.CreatedDate, S.ConsignmentCode, L.name as Originname, T.Desc as StatusType  from  UserConsignmentXref X \n" +
+        return "select S.SowingDate,S.CreatedDate, S.ConsignmentCode, L.name as Originname,K.name as Varietyname, T.Desc as StatusType  from  UserConsignmentXref X \n" +
         "inner join sapling S ON X.ConsignmentId = S.id \n" +
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join TypeCdDmt T ON S.StatusTypeId = T.TypeCdId \n" +
+         "inner join LookUp K ON S.VarietyId = K.Id \n" +
         "where S.ConsignmentCode = '"+consignmentcode+"' GROUP By S.ConsignmentCode";
     }
 
@@ -280,7 +294,13 @@ public class Queries {
     }
 
 
+    public String getSaplingActivityCountQuery() {
+        return "select * from SaplingActivity";
+    }
 
+    public String getSaplingActivityMaxNumber() {
+        return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";
+    }
 
     public String marketSurveyDataCheck(String farmerCode) {
         return "select * from MarketSurveyAndReferrals where FarmerCode = '" + farmerCode + "'";
@@ -567,7 +587,7 @@ public class Queries {
     }
 
     public String getNurseryActivities() {
-        return "select Id, ActivityTypeId, Code, Name, TargetDays from NurseryActivity where IsActive = 'true' ORDER BY TargetDays ASC";
+        return "select Id, ActivityTypeId, Code, Name, TargetDays, IsMultipleEntries from NurseryActivity where IsActive = 'true' ORDER BY TargetDays ASC";
     }
 
 
@@ -625,6 +645,10 @@ public class Queries {
 
     public String getSaplingActivityHistoryRefresh() {
         return "select * from SaplingActivityHistory where ServerUpdatedStatus = 0";
+    }
+
+    public String getSaplingActivityStatusRefresh() {
+        return "select * from SaplingActivityStatus where ServerUpdatedStatus = 0";
     }
 
     public String getFileRepositoryRefresh() {

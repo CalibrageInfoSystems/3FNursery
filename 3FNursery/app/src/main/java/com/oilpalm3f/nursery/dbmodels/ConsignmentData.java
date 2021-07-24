@@ -2,6 +2,7 @@ package com.oilpalm3f.nursery.dbmodels;
 
 public class ConsignmentData {
 
+    private int Id;
     private  String ConsignmentCode;
     private String Originname;
     private String Vendorname;
@@ -10,6 +11,14 @@ public class ConsignmentData {
     private String CreatedDate;
     private String ArrivedDate;
     private int ArrivedQuantity;
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
 
     public int getEstimatedQuantity() {
         return EstimatedQuantity;
