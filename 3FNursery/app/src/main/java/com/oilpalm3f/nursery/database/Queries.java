@@ -129,6 +129,10 @@ public class Queries {
         return "select Id, Code, Name, PinCode from Nursery";
     }
 
+    public String getTypeofLabourQuery() {
+        return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '73'";
+    }
+
     public String getConsignmentMasterQuery() {
         return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling";
     }
@@ -154,6 +158,23 @@ public class Queries {
         "inner Join NurseryActivityField na on na.Id = sz.FieldId \n" +
         "where s.ConsignmentCode  ='CONS002' and ActivityId = 7 and s.TransactionId = '53'";
     }
+
+    public String getExistingData(String CCode, String activityTypeId) {
+        return "Select s.ServerUpdatedStatus,sz.Value, na.Field from SaplingActivityXref  sz \n" +
+        "inner Join   SaplingActivity s on  s.TransactionId = sz.TransactionId \n" +
+        "inner Join NurseryActivityField na on na.Id = sz.FieldId \n" +
+        "where s.ConsignmentCode  ='"+CCode+"' and ActivityId = '"+activityTypeId+"' order by s.Id desc  Limit  1";
+    }
+
+    public String getDisplayData(String CCode, String activityTypeId) {
+        return "Select Sf.TransactionId,Sf.ServerUpdatedStatus, Sf.FieldId, N.InputType, Sf.Value from SaplingActivityXref Sf \n" +
+        "Inner Join NurseryActivityField N  On N.Id = Sf.FieldId \n" +
+        "where TransactionId = (Select  TransactionId from SaplingActivity \n" +
+        "where ConsignmentCode = '"+CCode+"'  and  ActivityId = '"+activityTypeId+"' order by Id desc  Limit  1)";
+
+
+    }
+
 
 
     public String getNurseryDataQuery(String Userid) {

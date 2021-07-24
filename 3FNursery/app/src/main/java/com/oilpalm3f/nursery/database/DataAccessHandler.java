@@ -33,6 +33,8 @@ import com.oilpalm3f.nursery.dbmodels.CookingOil;
 import com.oilpalm3f.nursery.dbmodels.CropMaintenanceHistory;
 import com.oilpalm3f.nursery.dbmodels.DigitalContract;
 import com.oilpalm3f.nursery.dbmodels.Disease;
+import com.oilpalm3f.nursery.dbmodels.DisplayData;
+import com.oilpalm3f.nursery.dbmodels.ExistingData;
 import com.oilpalm3f.nursery.dbmodels.Farmer;
 import com.oilpalm3f.nursery.dbmodels.FarmerBank;
 import com.oilpalm3f.nursery.dbmodels.FarmerBankRefresh;
@@ -2433,6 +2435,62 @@ f
             }
         }
         return landlevellingDetails;
+    }
+
+    public List<ExistingData> getexistingDetails(final String query) {
+        List<ExistingData> existingData = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    ExistingData existingDetails = new ExistingData();
+                    existingDetails.setValue(cursor.getString(cursor.getColumnIndex("Value")));
+                    existingDetails.setField(cursor.getString(cursor.getColumnIndex("Field")));
+                    existingDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+                    existingData.add(existingDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return existingData;
+    }
+
+    public List<DisplayData> getdisplayDetails(final String query) {
+        List<DisplayData> displayData = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    DisplayData displayDetails = new DisplayData();
+                    displayDetails.setFieldId(cursor.getInt(cursor.getColumnIndex("FieldId")));
+                    displayDetails.setInputType(cursor.getString(cursor.getColumnIndex("InputType")));
+                    displayDetails.setValue(cursor.getString(cursor.getColumnIndex("Value")));
+                    displayDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+                    displayDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    displayData.add(displayDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return displayData;
     }
 
     public List<ActivityTasks> getActivityTasksDetails(final String query) {

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonUtils;
+import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 
 import java.util.List;
@@ -27,11 +28,14 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     public Context context;
 
     List<NurseryAcitivity> mActivitiesList;
+    private List<MutipleData> multiplelist;
+
 
 
     public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
+
 
     }
 
@@ -55,13 +59,13 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             @Override
             public void onClick(View view) {
 
-                if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true")){
-
-                    Intent met = new Intent(context, MultipleEntryScreen.class);
-                    met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
-                    context.startActivity(met);
-
-                }else{
+//                if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true")){
+//
+//                    Intent met = new Intent(context, MultipleEntryScreen.class);
+//                    met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
+//                    context.startActivity(met);
+//
+//                }else{
                     Intent at = new Intent(context, ActivityTask.class);
                     at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
                     at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
@@ -69,7 +73,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
                     Log.d("Ismultipleentry", mActivitiesList.get(position).getIsMultipleEntries()  + "");
                     context.startActivity(at);
-                }
+//               }
 
 
             }

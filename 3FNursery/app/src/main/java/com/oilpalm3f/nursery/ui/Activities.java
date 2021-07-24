@@ -22,6 +22,7 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentStatuData;
+import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class Activities extends AppCompatActivity {
     private String Nurserycode;
     private List<ConsignmentStatuData> consignmentstatusList = new ArrayList<>();
     LinearLayout consignmentdatalyt, recyclerviewlayout;
+    private List<MutipleData> multiplelist = new ArrayList<>();
+
 
 
     LinkedHashMap<String, Pair> consignmentdatamap = null;
