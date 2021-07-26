@@ -40,10 +40,11 @@ import java.util.List;
 
 public class ActivityTask extends AppCompatActivity {
 
-    String activityTypeId, consignmentCode, activityName, isMultipleentry;
+    String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionId;
     private List<ActivityTasks> activityTasklist = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
     LinkedHashMap<String, Pair> typeofLabourdatamap = null;
+    Boolean isSingleentry = false;
 
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     int SaplingActivityCount;
@@ -87,11 +88,18 @@ public class ActivityTask extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            isSingleentry = extras.getBoolean("isSingleEntry");
+            transactionId = extras.getString("transactionId");
             activityTypeId = extras.getString("ActivityTypeId");
             activityName = extras.getString("ActivityName");
             isMultipleentry = extras.getString("Ismultipleentry");
-            Log.d("ActivityTypeId123", activityTypeId + "");
-            Log.d("Ismultipleentryy", isMultipleentry+ "");
+            consignmentCode = extras.getString("consignmentcode");
+            Log.d("ActivityTaskisSingleentry", isSingleentry + "");
+            Log.d("ActivityTasktransactionId", transactionId);
+            Log.d("ActivityTaskActivityTypeId123", activityTypeId + "");
+            Log.d("ActivityTaskActivityName", activityName + "");
+            Log.d("ActivityTaskconsignmentCode", consignmentCode);
+            Log.d("ActivityTaskIsmultipleentryy", isMultipleentry+ "");
         }
 
 
@@ -100,18 +108,18 @@ public class ActivityTask extends AppCompatActivity {
 //        Log.d("existingDataField", existingData.get(0).getField());
 //        Log.d("existingDataValue", existingData.get(0).getValue());
 
-        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(CommonConstants.ConsignmentCode,CommonConstants.ActivityTypeId + ""));
+       // displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(CommonConstants.ConsignmentCode,CommonConstants.ActivityTypeId + ""));
 
 //        Log.d("displayData", displayData.size() + "");
 //        Log.d("displayDataField", displayData.get(0).getInputType());
 //        Log.d("displayDataValue", displayData.get(0).getValue());
 
-        textView5.setText(CommonConstants.ActivityName);
+        textView5.setText(activityName);
 
-        consignmentCode = CommonConstants.ConsignmentCode;
+       // consignmentCode = CommonConstants.ConsignmentCode;
 
-        Log.d("ActivityTypeId456", activityTypeId + "");
-        Log.d("consignmentCode234", consignmentCode + "");
+//        Log.d("ActivityTypeId456", activityTypeId + "");
+//        Log.d("consignmentCode234", consignmentCode + "");
 
         saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCountQuery());
 
@@ -120,19 +128,19 @@ public class ActivityTask extends AppCompatActivity {
         sapactivitysize = saplingActivitiesList.size();
         sapactivitysizeinc = sapactivitysize +1;
 
-        Log.d("TABID", CommonConstants.TAB_ID+ "");
-        Log.d("ConsignmentID", CommonConstants.ConsignmentID+ "");
-        Log.d("sapactivitysize", sapactivitysize+ "");
-        Log.d("sapactivitysizeinc", sapactivitysizeinc+ "");
+//        Log.d("TABID", CommonConstants.TAB_ID+ "");
+//        Log.d("ConsignmentID", CommonConstants.ConsignmentID+ "");
+//        Log.d("sapactivitysize", sapactivitysize+ "");
+//        Log.d("sapactivitysizeinc", sapactivitysizeinc+ "");
 
 
-        TransactionID = "T"+CommonConstants.TAB_ID+CommonConstants.ConsignmentID+activityTypeId+"-"+(dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber())+1);
+        TransactionID = "T"+CommonConstants.TAB_ID+consignmentCode+activityTypeId+"-"+(dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber())+1);
         Log.d("TransactionIDddd", TransactionID);
 
-        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(CommonConstants.ActivityTypeId + "")));
+        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
 
-        Log.d("activityTasklist", activityTasklist.size() + "");
-        Log.d("activityTasklistISOPtional", activityTasklist.get(0).getIsOptional()+"");
+//        Log.d("activityTasklist", activityTasklist.size() + "");
+//        Log.d("activityTasklistISOPtional", activityTasklist.get(0).getIsOptional()+"");
 
   for(int i = 0 ; i < activityTasklist.size();i ++){
       if(activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")){
@@ -161,7 +169,7 @@ public class ActivityTask extends AppCompatActivity {
         // TODO
         // Get Data feald id and value
 
-        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(CommonConstants.ConsignmentCode,activityTypeId));
+        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(consignmentCode,activityTypeId));
 
         Log.d("displayData", displayData.size() + "");
 

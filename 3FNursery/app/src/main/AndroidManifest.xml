@@ -90,9 +90,6 @@
             android:label="@string/title_activity_main_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".datasync.ui.RefreshSyncActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
     </application>
 

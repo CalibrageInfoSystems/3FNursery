@@ -133,14 +133,14 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 showTransactionsAlertDialog(false);
 //                List<UserSync> resetList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfTraSync());
-                List<UserSync> resetList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
-
-                if (resetList.size() == 0) {
-                    Log.v("@@@MM", "mas");
-                    addUserTraSyncDetails();
-                } else {
-                    dataAccessHandler.updateTransactionSync();
-                }
+//                List<UserSync> resetList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
+//
+//                if (resetList.size() == 0) {
+//                    Log.v("@@@MM", "mas");
+//                    addUserTraSyncDetails();
+//                } else {
+//                    dataAccessHandler.updateTransactionSync();
+//                }
 
 
             }
@@ -152,14 +152,14 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             fetchCount();
             showTransactionsAlertDialog(true);
             // List<UserSync> resetList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfResetdata());
-            List<UserSync> resetList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
-
-            if (resetList.size() == 0) {
-                Log.v("@@@MM", "mas");
-                addUserResetSyncDetails();
-            } else {
-                dataAccessHandler.updateResetDataSync();
-            }
+//            List<UserSync> resetList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
+//
+//            if (resetList.size() == 0) {
+//                Log.v("@@@MM", "mas");
+//                addUserResetSyncDetails();
+//            } else {
+//                dataAccessHandler.updateResetDataSync();
+//            }
 
         });
 

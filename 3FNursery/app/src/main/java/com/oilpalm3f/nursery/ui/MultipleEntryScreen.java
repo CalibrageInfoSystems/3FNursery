@@ -24,7 +24,7 @@ public class MultipleEntryScreen extends AppCompatActivity {
     RecyclerView multipleentryrcv;
     private DataAccessHandler dataAccessHandler;
     Button addBtn;
-    String activityTypeId;
+    String activityTypeId, activityName, ismultipleentry, consignmentcode;
     MultipleEntriesRecyclerViewAdapter multipleEntriesRecyclerViewAdapter;
     private List<MutipleData> multiplelist = new ArrayList<>();
     private List<LandlevellingFields> fieldslist = new ArrayList<>();
@@ -41,6 +41,10 @@ public class MultipleEntryScreen extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             activityTypeId = extras.getString("ActivityTypeId1");
+            activityName = extras.getString("ActivityName1");
+            ismultipleentry = extras.getString("Ismultipleentry1");
+            consignmentcode = extras.getString("consignmentcode");
+            Log.d("ActivityTypeIdHere", activityTypeId + "");
             Log.d("ActivityTypeIdHere", activityTypeId + "");
         }
 
@@ -58,13 +62,13 @@ public class MultipleEntryScreen extends AppCompatActivity {
     private void  setViews(){
 
 
-        multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(CommonConstants.ConsignmentCode, activityTypeId));
+        multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(consignmentcode, activityTypeId));
 
         fieldslist = dataAccessHandler.getlandlevelligfeildDetails(Queries.getInstance().getFieldsData());
 
         Log.d("multiplelist", multiplelist.size() + "");
         multipleentryrcv.setLayoutManager(new LinearLayoutManager(this));
-        multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist);
+        multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist ,activityName, activityTypeId, ismultipleentry,consignmentcode);
         multipleentryrcv.setAdapter(multipleEntriesRecyclerViewAdapter);
 
     }

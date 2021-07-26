@@ -107,7 +107,13 @@ public class Activities extends AppCompatActivity {
                     txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
                     txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
 
-                    CommonConstants.ConsignmentCode = consignmentSpinner.getSelectedItem() + "";
+                    //CommonConstants.ConsignmentCode = consignmentSpinner.getSelectedItem() + "";
+
+                    mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities());
+                    Log.d("AcvityList", mActivitiesList + "");
+                    activitiesRecyclerview.setLayoutManager(new LinearLayoutManager(Activities.this));
+                    activitiesRecyclerviewAdapter = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList, consignmentSpinner.getSelectedItem() + "");
+                    activitiesRecyclerview.setAdapter(activitiesRecyclerviewAdapter);
 
 
                 }else {
@@ -122,11 +128,7 @@ public class Activities extends AppCompatActivity {
             }
         });
 
-        mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities());
-        Log.d("AcvityList", mActivitiesList + "");
-        activitiesRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        activitiesRecyclerviewAdapter = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList);
-        activitiesRecyclerview.setAdapter(activitiesRecyclerviewAdapter);
+
 
 
         //txtType.setText(": "+ dataAccessHandler.getSingleValue(Queries.getInstance().getSaplingVerirty("35")));

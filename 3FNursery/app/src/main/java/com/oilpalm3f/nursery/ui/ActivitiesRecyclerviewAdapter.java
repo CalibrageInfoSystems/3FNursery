@@ -36,12 +36,14 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     private List<MutipleData> multiplelist;
     private DataAccessHandler dataAccessHandler;
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
+    String ConsignmentCode;
 
 
 
-    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList) {
+    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
+        this.ConsignmentCode = ConsignmentCode;
     }
 
     @NonNull
@@ -68,26 +70,29 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             @Override
             public void onClick(View view) {
 
-                saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(CommonConstants.ConsignmentCode, mActivitiesList.get(position).getId() + ""));
+                saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(ConsignmentCode, mActivitiesList.get(position).getId() + ""));
                 Log.d("saplingActivitiesListSize", saplingActivitiesList.size() + "");
 
                 if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true") && saplingActivitiesList.size() != 0){
 
                     Intent met = new Intent(context, MultipleEntryScreen.class);
+                    met.putExtra("consignmentcode", ConsignmentCode);
                     met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
-                    CommonConstants.ActivityTypeId = mActivitiesList.get(position).getId();
-                    CommonConstants.ActivityName = mActivitiesList.get(position).getName();
+                    met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
+                    met.putExtra("Ismultipleentry1",mActivitiesList.get(position).getIsMultipleEntries());
+                    Log.d("consignmentcode1", ConsignmentCode);
                     context.startActivity(met);
 
                 }else{
+                    // Todo Check ALready hava data or not.
                     Intent at = new Intent(context, ActivityTask.class);
+                    at.putExtra("consignmentcode", ConsignmentCode);
+                    at.putExtra("isSingleEntry",true);
                     at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
                     at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
                     at.putExtra("Ismultipleentry",mActivitiesList.get(position).getIsMultipleEntries() );
-                    CommonConstants.ActivityTypeId = mActivitiesList.get(position).getId();
-                    CommonConstants.ActivityName = mActivitiesList.get(position).getName();
-                    Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
-                    Log.d("Ismultipleentry", mActivitiesList.get(position).getIsMultipleEntries()  + "");
+                    Log.d("consignmentcode2", ConsignmentCode);
+
                     context.startActivity(at);
                }
 

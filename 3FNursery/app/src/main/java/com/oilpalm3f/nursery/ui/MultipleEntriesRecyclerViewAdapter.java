@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.cloudhelper.Log;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
@@ -42,11 +43,17 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
     private List<LandlevellingFields> fieldslist;
     SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
+    String ActivityTypeId, ActivityName, ismultipleentry;
+    String ConsignmentCode;
 
-    public MultipleEntriesRecyclerViewAdapter(Context context, List<MutipleData> multiplelist,List<LandlevellingFields> fieldslist) {
+    public MultipleEntriesRecyclerViewAdapter(Context context, List<MutipleData> multiplelist,List<LandlevellingFields> fieldslist,String ActivityName,String ActivityTypeId,String ismultipleentry,  String ConsignmentCode) {
         this.context = context;
         this.multiplelist = multiplelist;
         this.fieldslist = fieldslist;
+        this.ActivityTypeId = ActivityTypeId;
+        this.ActivityName = ActivityName;
+        this.ismultipleentry = ismultipleentry;
+        this.ConsignmentCode = ConsignmentCode;
     }
 
     @Override
@@ -59,6 +66,9 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
     @Override
     public void onBindViewHolder(@NonNull MultipleEntriesRecyclerViewAdapter.ViewHolder holder, int position) {
+
+        Log.d("ActivityTypeIdM", ActivityTypeId);
+        Log.d("ActivityTypeNameM", ActivityName);
 
 
         try {
@@ -92,8 +102,14 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent atintent = new Intent(context, ActivityTask.class);
-                context.startActivity(atintent);
+                Intent at = new Intent(context, ActivityTask.class);
+                at.putExtra("isSingleEntry",false);
+                at.putExtra("consignmentcode", ConsignmentCode);
+                at.putExtra("transactionId",multiplelist.get(position).getTransactionId());
+                at.putExtra("ActivityTypeId", ActivityTypeId);
+                at.putExtra("ActivityName", ActivityName);
+                at.putExtra("Ismultipleentry",ismultipleentry );
+                context.startActivity(at);
             }
         });
 
