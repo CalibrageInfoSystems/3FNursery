@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -64,12 +67,36 @@ public class MultipleEntryScreen extends AppCompatActivity {
 
         multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(consignmentcode, activityTypeId));
 
+
         fieldslist = dataAccessHandler.getlandlevelligfeildDetails(Queries.getInstance().getFieldsData());
 
         Log.d("multiplelist", multiplelist.size() + "");
         multipleentryrcv.setLayoutManager(new LinearLayoutManager(this));
         multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist ,activityName, activityTypeId, ismultipleentry,consignmentcode);
         multipleentryrcv.setAdapter(multipleEntriesRecyclerViewAdapter);
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // TOdo  Check Job Done or Not
+               int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
+                if(value  != 346){
+                    Intent at = new Intent(MultipleEntryScreen.this, ActivityTask.class);
+                    at.putExtra("consignmentcode", consignmentcode);
+                    at.putExtra("isSingleEntry",false);
+                    at.putExtra("ActivityTypeId", activityTypeId);
+                    at.putExtra("ActivityName", activityName);
+                    at.putExtra("Ismultipleentry",ismultipleentry );
+                    at.putExtra("addActivity",true );
+                    startActivity(at);
+                }else
+                {
+                    Toast.makeText(MultipleEntryScreen.this, "Already Job done", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
     }
 

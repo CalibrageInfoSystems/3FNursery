@@ -784,7 +784,15 @@ public class DataSyncHelper {
                     if (TextUtils.isEmpty(date)) {
                         ProgressBar.hideProgressBar();
                         if (null != progressDialogFragment && !CommonUtils.currentActivity.isFinishing()) {
-                            progressDialogFragment.dismiss();
+                            //progressDialogFragment.dismiss();
+
+                            try{
+                                progressDialogFragment.dismiss();
+                            }catch(Exception exc){
+                                Log.d(DataSyncHelper.LOG_TAG,"==> analysis  => CLOSE Dilogue :"+exc);
+                            }
+
+
 
                         }
                         if (CommonUtils.isNetworkAvailable(context)) {

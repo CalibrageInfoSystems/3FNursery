@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.MultipleEntryScreen">
+    tools:context=".ui.MultipleEntryScreen"
+    android:weightSum="1">
 
     <TextView
+        android:layout_weight="0.05"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,11 +18,13 @@
         android:text="Completed Activities"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_weight="0.9"
         android:id="@+id/multipleentries"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
+        android:layout_weight="0.05"
         android:id="@+id/addBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

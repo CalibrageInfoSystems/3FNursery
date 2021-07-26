@@ -169,7 +169,7 @@ public class ActivityTask extends AppCompatActivity {
         // TODO
         // Get Data feald id and value
 
-        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(consignmentCode,activityTypeId));
+//        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(consignmentCode,activityTypeId));
 
         Log.d("displayData", displayData.size() + "");
 
@@ -382,7 +382,7 @@ return  cb;
 
        // map.put("Id", 0);
         map.put("TransactionId",  TransactionID);
-        map.put("ConsignmentCode", consignmentCode+"");
+        map.put("ConsignmentCode", consignmentCode);
         map.put("ActivityId", activityTypeId);
 
         if (isjobDoneId != 0) {

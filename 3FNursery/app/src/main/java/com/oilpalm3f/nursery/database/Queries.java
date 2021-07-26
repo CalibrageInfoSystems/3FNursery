@@ -324,6 +324,11 @@ public class Queries {
     }
 
 
+    public  String CheckJobDoneOrnot (String consinmentid,String activityId)
+    {
+        return "Select  StatusTypeId from SaplingActivity where ConsignmentCode = '"+consinmentid+"'  and  ActivityId = '"+activityId+"'  order by Id desc  Limit  1";
+    }
+
 
     public String getSaplingActivityMaxNumber() {
         return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";
