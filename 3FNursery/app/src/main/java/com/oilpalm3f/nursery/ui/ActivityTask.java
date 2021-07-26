@@ -100,13 +100,13 @@ public class ActivityTask extends AppCompatActivity {
 //        Log.d("existingDataField", existingData.get(0).getField());
 //        Log.d("existingDataValue", existingData.get(0).getValue());
 
-        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(CommonConstants.ConsignmentCode,activityTypeId));
+        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(CommonConstants.ConsignmentCode,CommonConstants.ActivityTypeId + ""));
 
 //        Log.d("displayData", displayData.size() + "");
 //        Log.d("displayDataField", displayData.get(0).getInputType());
 //        Log.d("displayDataValue", displayData.get(0).getValue());
 
-        textView5.setText(activityName + "");
+        textView5.setText(CommonConstants.ActivityName);
 
         consignmentCode = CommonConstants.ConsignmentCode;
 
@@ -129,7 +129,7 @@ public class ActivityTask extends AppCompatActivity {
         TransactionID = "T"+CommonConstants.TAB_ID+CommonConstants.ConsignmentID+activityTypeId+"-"+(dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber())+1);
         Log.d("TransactionIDddd", TransactionID);
 
-        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
+        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(CommonConstants.ActivityTypeId + "")));
 
         Log.d("activityTasklist", activityTasklist.size() + "");
         Log.d("activityTasklistISOPtional", activityTasklist.get(0).getIsOptional()+"");
@@ -372,7 +372,7 @@ return  cb;
 
         LinkedHashMap map = new LinkedHashMap();
 
-        map.put("Id", 0);
+       // map.put("Id", 0);
         map.put("TransactionId",  TransactionID);
         map.put("ConsignmentCode", consignmentCode+"");
         map.put("ActivityId", activityTypeId);
@@ -462,8 +462,6 @@ Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   KEY :"+dataValue.get(j
 
             }
 
-
-
             dataAccessHandler.insertMyDataa("SaplingActivityStatus", list1, new ApplicationThread.OnComplete<String>() {
                 @Override
                 public void execute(boolean success, String result, String msg) {}});
@@ -475,14 +473,13 @@ Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   KEY :"+dataValue.get(j
 
                 if(chk.isChecked()) {
 
-                    dataAccessHandler.insertMyDataa("SaplingActivity", list, new ApplicationThread.OnComplete<String>() {
+                    dataAccessHandler.updateData("SaplingActivity", list,true," where TransactionId = " + "'"+TransactionID+"'", new ApplicationThread.OnComplete<String>() {
                         @Override
-                        public void execute(boolean success, String result, String msg) {}});
+                        public void execute(boolean success, String result, String msg) {
+
+                        }});
                 }
             }
-
-
-
 
         }else{
             dataAccessHandler.insertMyDataa("SaplingActivityStatus", list1, new ApplicationThread.OnComplete<String>() {

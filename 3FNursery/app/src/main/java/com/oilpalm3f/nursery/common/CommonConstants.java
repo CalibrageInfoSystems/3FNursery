@@ -91,6 +91,8 @@ public class CommonConstants {
     public static String Prev_Fertilizer_CMD ="";
     public static String ConsignmentCode ="";
     public static int ConsignmentID =0;
+    public static int ActivityTypeId =0;
+    public static String ActivityName ="";
     public static String NurseryCode ="";
 
     //public static UserData totalFarmerData = new UserData();

@@ -175,6 +175,10 @@ public class Queries {
 
     }
 
+    public String getSaplingActivityCounttQuery(String CCode, String activityTypeId) {
+        return "select * from SaplingActivity where ActivityId = '"+activityTypeId+"' and ConsignmentCode ='"+CCode+"'";
+    }
+
 
 
     public String getNurseryDataQuery(String Userid) {
@@ -318,6 +322,8 @@ public class Queries {
     public String getSaplingActivityCountQuery() {
         return "select * from SaplingActivity";
     }
+
+
 
     public String getSaplingActivityMaxNumber() {
         return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";

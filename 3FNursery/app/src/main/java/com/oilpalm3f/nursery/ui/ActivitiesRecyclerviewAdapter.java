@@ -17,10 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
+import com.oilpalm3f.nursery.database.DataAccessHandler;
+import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<ActivitiesRecyclerviewAdapter.ViewHolder> {
@@ -29,14 +34,14 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
     List<NurseryAcitivity> mActivitiesList;
     private List<MutipleData> multiplelist;
+    private DataAccessHandler dataAccessHandler;
+    private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
 
 
 
     public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
-
-
     }
 
     @NonNull
@@ -51,6 +56,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
+        dataAccessHandler = new DataAccessHandler(context);
+
+
+
         holder.activityName.setText(mActivitiesList.get(position).getName());
 
         holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
@@ -59,21 +68,28 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             @Override
             public void onClick(View view) {
 
-//                if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true")){
-//
-//                    Intent met = new Intent(context, MultipleEntryScreen.class);
-//                    met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
-//                    context.startActivity(met);
-//
-//                }else{
+                saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(CommonConstants.ConsignmentCode, mActivitiesList.get(position).getId() + ""));
+                Log.d("saplingActivitiesListSize", saplingActivitiesList.size() + "");
+
+                if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true") && saplingActivitiesList.size() != 0){
+
+                    Intent met = new Intent(context, MultipleEntryScreen.class);
+                    met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
+                    CommonConstants.ActivityTypeId = mActivitiesList.get(position).getId();
+                    CommonConstants.ActivityName = mActivitiesList.get(position).getName();
+                    context.startActivity(met);
+
+                }else{
                     Intent at = new Intent(context, ActivityTask.class);
                     at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
                     at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
                     at.putExtra("Ismultipleentry",mActivitiesList.get(position).getIsMultipleEntries() );
+                    CommonConstants.ActivityTypeId = mActivitiesList.get(position).getId();
+                    CommonConstants.ActivityName = mActivitiesList.get(position).getName();
                     Log.d("ActivityTypeId11", mActivitiesList.get(position).getId() + "");
                     Log.d("Ismultipleentry", mActivitiesList.get(position).getIsMultipleEntries()  + "");
                     context.startActivity(at);
-//               }
+               }
 
 
             }

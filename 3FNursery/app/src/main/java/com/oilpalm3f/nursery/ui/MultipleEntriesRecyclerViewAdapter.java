@@ -89,6 +89,14 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
             }
         });
 
+        holder.mainlyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent atintent = new Intent(context, ActivityTask.class);
+                context.startActivity(atintent);
+            }
+        });
+
 
     }
 
@@ -101,6 +109,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
         public TextView transactionId,consignmentcode,status, comment, createddate;
         ImageView editicon, infoicon;
+        LinearLayout mainlyt;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -113,6 +122,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
             editicon = itemView.findViewById(R.id.editicon);
             infoicon = itemView.findViewById(R.id.infoicon);
             this.createddate = (TextView )itemView.findViewById(R.id.createddate);
+            this.mainlyt = itemView.findViewById(R.id.mainlyt);
         }
     }
 
