@@ -390,7 +390,7 @@ public class DataSyncHelper {
         String countUrl = "";
         LinkedHashMap<String, String> syncDataMap = new LinkedHashMap<>();
         syncDataMap.put("Date", TextUtils.isEmpty(date) ? "null" : date);
-        syncDataMap.put("UserId", "1");
+        syncDataMap.put("UserId", CommonConstants.USER_ID);
         syncDataMap.put("IsUserDataAccess", CommonConstants.migrationSync);
         countUrl = Config.live_url + Config.getTransCount;
         CloudDataHandler.getGenericData(countUrl, syncDataMap, new ApplicationThread.OnComplete<List<DataCountModel>>() {
@@ -660,7 +660,7 @@ public class DataSyncHelper {
                 URL obj = new URL(countUrl);
                 Map<String, String> syncDataMap = new LinkedHashMap<>();
                 syncDataMap.put("Date", TextUtils.isEmpty(date) ? "null" : date);
-                syncDataMap.put("UserId", "1");
+                syncDataMap.put("UserId", CommonConstants.USER_ID);
                 syncDataMap.put("IsUserDataAccess", CommonConstants.migrationSync);
                 syncDataMap.put("Index", String.valueOf(currentIndex));
                 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -784,15 +784,13 @@ public class DataSyncHelper {
                     if (TextUtils.isEmpty(date)) {
                         ProgressBar.hideProgressBar();
                         if (null != progressDialogFragment && !CommonUtils.currentActivity.isFinishing()) {
-                            //progressDialogFragment.dismiss();
+                            progressDialogFragment.dismiss();
 
-                            try{
-                                progressDialogFragment.dismiss();
-                            }catch(Exception exc){
-                                Log.d(DataSyncHelper.LOG_TAG,"==> analysis  => CLOSE Dilogue :"+exc);
-                            }
-
-
+//                            try{
+//                                progressDialogFragment.dismiss();
+//                            }catch(Exception exc){
+//                                Log.d(DataSyncHelper.LOG_TAG,"==> analysis  => CLOSE Dilogue :"+exc);
+//                            }
 
                         }
                         if (CommonUtils.isNetworkAvailable(context)) {

@@ -44,7 +44,7 @@ public class ActivityTask extends AppCompatActivity {
     private List<ActivityTasks> activityTasklist = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
     LinkedHashMap<String, Pair> typeofLabourdatamap = null;
-    Boolean isSingleentry = false;
+    Boolean isSingleentry = false, addactivity = false;
 
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     int SaplingActivityCount;
@@ -57,7 +57,7 @@ public class ActivityTask extends AppCompatActivity {
     private List<ExistingData> existingData = new ArrayList<>();
     private List<DisplayData> displayData = new ArrayList<>();
     boolean isUpdate  = false;
-
+    int activityStatus;
     int isjobDoneId = 0;
 
     @Override
@@ -66,7 +66,6 @@ public class ActivityTask extends AppCompatActivity {
         setContentView(R.layout.activity_task);
 
         dataAccessHandler = new DataAccessHandler(this);
-
 
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
@@ -94,6 +93,7 @@ public class ActivityTask extends AppCompatActivity {
             activityName = extras.getString("ActivityName");
             isMultipleentry = extras.getString("Ismultipleentry");
             consignmentCode = extras.getString("consignmentcode");
+            addactivity = extras.getBoolean("addActivity");
             Log.d("ActivityTaskisSingleentry", isSingleentry + "");
             Log.d("ActivityTasktransactionId", transactionId);
             Log.d("ActivityTaskActivityTypeId123", activityTypeId + "");
@@ -101,6 +101,7 @@ public class ActivityTask extends AppCompatActivity {
             Log.d("ActivityTaskconsignmentCode", consignmentCode);
             Log.d("ActivityTaskIsmultipleentryy", isMultipleentry+ "");
         }
+
 
 
 //        existingData = dataAccessHandler.getexistingDetails(Queries.getInstance().getExistingData(CommonConstants.ConsignmentCode,activityTypeId));
@@ -169,7 +170,11 @@ public class ActivityTask extends AppCompatActivity {
         // TODO
         // Get Data feald id and value
 
-//        displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(consignmentCode,activityTypeId));
+        if (!addactivity ){
+            displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(consignmentCode,activityTypeId));
+        }
+
+
 
         Log.d("displayData", displayData.size() + "");
 
@@ -182,7 +187,13 @@ public class ActivityTask extends AppCompatActivity {
             {
                 btn.setEnabled(true);
             }else{
-                btn.setEnabled(false);
+                activityStatus = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckActivityStatus(consignmentCode, activityTypeId, transactionId));
+                if(activityStatus == 349){
+                    btn.setEnabled(true);
+                }else{
+                    btn.setEnabled(false);
+                }
+
             }
 
             for(int i = 0; i < displayData.size() ; i ++){

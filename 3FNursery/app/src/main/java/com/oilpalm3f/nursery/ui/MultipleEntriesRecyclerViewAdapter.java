@@ -109,6 +109,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
                 at.putExtra("ActivityTypeId", ActivityTypeId);
                 at.putExtra("ActivityName", ActivityName);
                 at.putExtra("Ismultipleentry",ismultipleentry );
+                at.putExtra("addActivity",false );
                 context.startActivity(at);
             }
         });

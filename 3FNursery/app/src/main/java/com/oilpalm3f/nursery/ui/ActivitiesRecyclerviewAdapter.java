@@ -80,6 +80,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
                     met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
                     met.putExtra("Ismultipleentry1",mActivitiesList.get(position).getIsMultipleEntries());
+                    met.putExtra("addActivity",false );
                     Log.d("consignmentcode1", ConsignmentCode);
                     context.startActivity(met);
 
@@ -91,6 +92,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
                     at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
                     at.putExtra("Ismultipleentry",mActivitiesList.get(position).getIsMultipleEntries() );
+                    at.putExtra("addActivity",false );
                     Log.d("consignmentcode2", ConsignmentCode);
 
                     context.startActivity(at);

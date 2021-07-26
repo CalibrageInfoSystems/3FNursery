@@ -94,6 +94,7 @@ public class Activities extends AppCompatActivity {
         consignmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] consimnentList =  CommonUtils.arrayFromPair(consignmentdatamap, "Cons");
 
                 if (consignmentSpinner.getSelectedItemPosition() != 0) {
 
@@ -106,6 +107,8 @@ public class Activities extends AppCompatActivity {
 
                     txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
                     txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
+
+                    Log.d("SelectedConsignmentId",consignmentSpinner.getSelectedItemId() + "");
 
                     //CommonConstants.ConsignmentCode = consignmentSpinner.getSelectedItem() + "";
 

@@ -81,7 +81,7 @@ public class MultipleEntryScreen extends AppCompatActivity {
 
                 // TOdo  Check Job Done or Not
                int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
-                if(value  != 346){
+                if(  value  != 346){
                     Intent at = new Intent(MultipleEntryScreen.this, ActivityTask.class);
                     at.putExtra("consignmentcode", consignmentcode);
                     at.putExtra("isSingleEntry",false);
