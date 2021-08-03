@@ -5,11 +5,8 @@ import android.app.Application;
 import android.os.Build;
 import android.os.StrictMode;
 
-import com.crashlytics.android.Crashlytics;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.cloudhelper.Config;
-
-import io.fabric.sdk.android.Fabric;
 
 public class Oil3FPalmMainApplication extends Application {
 
@@ -23,7 +20,7 @@ public class Oil3FPalmMainApplication extends Application {
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyDeath().build());
         }
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         ApplicationThread.start();
         Config.initialize();
 

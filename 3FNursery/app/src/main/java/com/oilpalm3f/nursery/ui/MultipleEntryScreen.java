@@ -1,14 +1,14 @@
 package com.oilpalm3f.nursery.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -17,7 +17,6 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
-import com.oilpalm3f.nursery.dbmodels.NurseryData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,12 +82,12 @@ public class MultipleEntryScreen extends AppCompatActivity {
                int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
                 if(  value  != 346){
                     Intent at = new Intent(MultipleEntryScreen.this, ActivityTask.class);
-                    at.putExtra("consignmentcode", consignmentcode);
-                    at.putExtra("isSingleEntry",false);
+
                     at.putExtra("ActivityTypeId", activityTypeId);
+                    at.putExtra("consignmentcode", consignmentcode);
+                    at.putExtra("Ismultipleentry",true );
                     at.putExtra("ActivityName", activityName);
-                    at.putExtra("Ismultipleentry",ismultipleentry );
-                    at.putExtra("addActivity",true );
+                    at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK);
                     startActivity(at);
                 }else
                 {

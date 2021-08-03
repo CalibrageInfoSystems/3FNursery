@@ -1,6 +1,5 @@
 package com.oilpalm3f.nursery.ui;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,20 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
-import com.oilpalm3f.nursery.common.CommonUtils;
-import com.oilpalm3f.nursery.database.DataAccessHandler;
-import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
-import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<MultipleEntriesRecyclerViewAdapter.ViewHolder>{
+public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<MultipleEntriesRecyclerViewAdapter.ViewHolder> {
 
     public Context context;
     String convertedDate;
@@ -46,7 +37,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
     String ActivityTypeId, ActivityName, ismultipleentry;
     String ConsignmentCode;
 
-    public MultipleEntriesRecyclerViewAdapter(Context context, List<MutipleData> multiplelist,List<LandlevellingFields> fieldslist,String ActivityName,String ActivityTypeId,String ismultipleentry,  String ConsignmentCode) {
+    public MultipleEntriesRecyclerViewAdapter(Context context, List<MutipleData> multiplelist, List<LandlevellingFields> fieldslist, String ActivityName, String ActivityTypeId, String ismultipleentry, String ConsignmentCode) {
         this.context = context;
         this.multiplelist = multiplelist;
         this.fieldslist = fieldslist;
@@ -59,7 +50,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem= layoutInflater.inflate(R.layout.multiplelayout, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.multiplelayout, parent, false);
         ViewHolder viewHolder = new ViewHolder(listItem);
         return viewHolder;
     }
@@ -79,18 +70,18 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
             e.printStackTrace();
         }
 
-        if (multiplelist.get(position).getServerUpdatedStatus() == 1){
+        if (multiplelist.get(position).getServerUpdatedStatus() == 1) {
 
             holder.editicon.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.editicon.setVisibility(View.VISIBLE);
         }
 
-        holder.transactionId.setText(":  "+multiplelist.get(position).getTransactionId());
-        holder.consignmentcode.setText(":  "+multiplelist.get(position).getConsignmentCode());
-        holder.status.setText(":  "+multiplelist.get(position).getDesc());
-        holder.comment.setText(":  "+multiplelist.get(position).getComment());
-        holder.createddate.setText(":  "+convertedDate);
+        holder.transactionId.setText(":  " + multiplelist.get(position).getTransactionId());
+        holder.consignmentcode.setText(":  " + multiplelist.get(position).getConsignmentCode());
+        holder.status.setText(":  " + multiplelist.get(position).getDesc());
+        holder.comment.setText(":  " + multiplelist.get(position).getComment());
+        holder.createddate.setText(":  " + convertedDate);
 
         holder.infoicon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,13 +94,18 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
             @Override
             public void onClick(View view) {
                 Intent at = new Intent(context, ActivityTask.class);
-                at.putExtra("isSingleEntry",false);
+//                at.putExtra("isSingleEntry",false);
+//                at.putExtra("consignmentcode", ConsignmentCode);
+//                at.putExtra("transactionId",multiplelist.get(position).getTransactionId());
+//                at.putExtra("ActivityTypeId", ActivityTypeId);
+//                at.putExtra("ActivityName", ActivityName);
+//                at.putExtra("Ismultipleentry",ismultipleentry );
+//                at.putExtra("addActivity",false );
                 at.putExtra("consignmentcode", ConsignmentCode);
-                at.putExtra("transactionId",multiplelist.get(position).getTransactionId());
-                at.putExtra("ActivityTypeId", ActivityTypeId);
                 at.putExtra("ActivityName", ActivityName);
-                at.putExtra("Ismultipleentry",ismultipleentry );
-                at.putExtra("addActivity",false );
+                at.putExtra("ActivityTypeId", ActivityTypeId);
+                at.putExtra("transactionId", multiplelist.get(position).getTransactionId());
+                at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA);
                 context.startActivity(at);
             }
         });
@@ -124,7 +120,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView transactionId,consignmentcode,status, comment, createddate;
+        public TextView transactionId, consignmentcode, status, comment, createddate;
         ImageView editicon, infoicon;
         LinearLayout mainlyt;
 
@@ -132,13 +128,13 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.transactionId = (TextView )itemView.findViewById(R.id.transactionid);
-            this.consignmentcode = (TextView )itemView.findViewById(R.id.conscode);
-            this.status = (TextView )itemView.findViewById(R.id.status);
-            this.comment = (TextView )itemView.findViewById(R.id.comment);
+            this.transactionId = (TextView) itemView.findViewById(R.id.transactionid);
+            this.consignmentcode = (TextView) itemView.findViewById(R.id.conscode);
+            this.status = (TextView) itemView.findViewById(R.id.status);
+            this.comment = (TextView) itemView.findViewById(R.id.comment);
             editicon = itemView.findViewById(R.id.editicon);
             infoicon = itemView.findViewById(R.id.infoicon);
-            this.createddate = (TextView )itemView.findViewById(R.id.createddate);
+            this.createddate = (TextView) itemView.findViewById(R.id.createddate);
             this.mainlyt = itemView.findViewById(R.id.mainlyt);
         }
     }
@@ -149,8 +145,8 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.infodialog);
 
-        TextView maleregulartxt,maleregular,femaleregulartxt,femaleregular,maleoutsidetxt,maleoutside,femaleoutsidetxt,femaleoutside,tractorhirechargestxt,tractorhirecharges,diselchargestxt,
-                diselcharges,completedtxt,completed;
+        TextView maleregulartxt, maleregular, femaleregulartxt, femaleregular, maleoutsidetxt, maleoutside, femaleoutsidetxt, femaleoutside, tractorhirechargestxt, tractorhirecharges, diselchargestxt,
+                diselcharges, completedtxt, completed;
 
         maleregulartxt = dialog.findViewById(R.id.maleregulartxt);
         maleregular = dialog.findViewById(R.id.maleregular);
@@ -177,19 +173,19 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
         String value;
 
-        if (fieldslist.get(6).getValue() == 0){
+        if (fieldslist.get(6).getValue() == 0) {
             value = "true";
-        }else{
+        } else {
             value = "false";
         }
 
-        maleregular.setText(":  " +fieldslist.get(0).getValue() +"");
-        femaleregular.setText(":  " +fieldslist.get(1).getValue()+"");
-        maleoutside.setText(":  " +fieldslist.get(2).getValue()+"");
-        femaleoutside.setText(":  " +fieldslist.get(3).getValue()+"");
-        tractorhirecharges.setText(":  " +fieldslist.get(4).getValue()+"");
-        diselcharges.setText(":  " +fieldslist.get(5).getValue()+"");
-        completed.setText(":  " +value);
+        maleregular.setText(":  " + fieldslist.get(0).getValue() + "");
+        femaleregular.setText(":  " + fieldslist.get(1).getValue() + "");
+        maleoutside.setText(":  " + fieldslist.get(2).getValue() + "");
+        femaleoutside.setText(":  " + fieldslist.get(3).getValue() + "");
+        tractorhirecharges.setText(":  " + fieldslist.get(4).getValue() + "");
+        diselcharges.setText(":  " + fieldslist.get(5).getValue() + "");
+        completed.setText(":  " + value);
 
 
         dialog.show();

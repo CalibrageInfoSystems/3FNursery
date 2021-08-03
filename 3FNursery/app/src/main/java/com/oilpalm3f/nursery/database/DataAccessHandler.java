@@ -2357,8 +2357,12 @@ f
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
                     nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
-                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDays")));
+//                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDays")));
                     nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
+                    nurseryActivityyDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("StatusType")));
+
+                    nurseryActivityyDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
 
                     nurseryActivityDetails.add(nurseryActivityyDetails);
                 } while (cursor.moveToNext());
@@ -2520,6 +2524,7 @@ f
                     taskDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     taskDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     taskDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    taskDetails.setDataType(cursor.getString(cursor.getColumnIndex("DataType")));
 
                     activityTaskDetails.add(taskDetails);
                 } while (cursor.moveToNext());

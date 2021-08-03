@@ -7,7 +7,6 @@ public class SaplingActivityXrefModel {
     private Integer FieldId;
     private String Value;
     private String FilePath;
-
     private int IsActive;
     private int CreatedByUserId;
     private String CreatedDate;

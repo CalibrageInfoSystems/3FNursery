@@ -36,7 +36,7 @@
                 android:layout_height="match_parent"/>
             <TextView
                 android:gravity="center"
-                android:text="partially approved"
+                android:text=""
                 android:layout_weight="0.15"
                 android:textColor="@color/black"
                 android:id="@+id/expecteddate"
@@ -51,7 +51,7 @@
                 android:text="partially approved"
                 android:layout_weight="0.12"
                 android:textColor="@color/black"
-                android:id="@+id/txtSatus"
+                android:id="@+id/txtStatusTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <LinearLayout

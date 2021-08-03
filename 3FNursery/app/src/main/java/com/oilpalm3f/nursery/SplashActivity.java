@@ -20,6 +20,7 @@ import com.oilpalm3f.nursery.database.Palm3FoilDatabase;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.helper.PrefUtil;
+import com.oilpalm3f.nursery.ui.Activities;
 import com.oilpalm3f.nursery.ui.MainLoginScreen;
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
 import com.oilpalm3f.nursery.utils.UiUtils;
@@ -95,7 +96,8 @@ public class SplashActivity extends AppCompatActivity {
                     if (success) {
                         sharedPreferences.edit().putBoolean(CommonConstants.IS_MASTER_SYNC_SUCCESS, true).apply();
                         UiUtils.showCustomToastMessage("Master Sync Success", SplashActivity.this, 0);
-                        startActivity(new Intent(SplashActivity.this, MainLoginScreen.class));
+//                        startActivity(new Intent(SplashActivity.this, MainLoginScreen.class));
+                        startActivity(new Intent(SplashActivity.this, Activities.class));
                         finish();
                     } else {
                         Log.v(LOG_TAG, "@@@ Master sync failed " + msg);

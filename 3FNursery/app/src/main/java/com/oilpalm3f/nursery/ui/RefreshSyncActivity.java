@@ -1,9 +1,5 @@
 package com.oilpalm3f.nursery.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +11,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
@@ -115,7 +114,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         btresetdatabase = findViewById(R.id.btresetdatabase);
 
         btnmastersync.setEnabled(false);
-        btresetdatabase.setEnabled(false);
+        btresetdatabase.setEnabled(true);
         btnDBcopy.setEnabled(false);
 
         btnsend.setOnLongClickListener(view -> {
@@ -149,7 +148,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
         btresetdatabase.setOnClickListener(view -> {
 
-            fetchCount();
+//            fetchCount();
             showTransactionsAlertDialog(true);
             // List<UserSync> resetList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfResetdata());
 //            List<UserSync> resetList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
@@ -160,7 +159,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 //            } else {
 //                dataAccessHandler.updateResetDataSync();
 //            }
-
+          //  dataAccessHandler.updateResetDataSync();
         });
 
         btnsend.setOnClickListener(this);
@@ -548,6 +547,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                             Log.v(LOG_TAG, "delete table" + s);
                         }
                     }
+//                    DataSyncHelper.updateSyncDate(RefreshSyncActivity.this, null);
                     FragmentManager fm = getSupportFragmentManager();
                     ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
                     progressDialogFragment.show(fm, "progress dialog fragment");

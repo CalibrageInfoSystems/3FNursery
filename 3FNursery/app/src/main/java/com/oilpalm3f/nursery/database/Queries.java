@@ -166,14 +166,16 @@ public class Queries {
         "where s.ConsignmentCode  ='"+CCode+"' and ActivityId = '"+activityTypeId+"' order by s.Id desc  Limit  1";
     }
 
-    public String getDisplayData(String CCode, String activityTypeId) {
-        return "Select Sf.TransactionId,Sf.ServerUpdatedStatus, Sf.FieldId, N.InputType, Sf.Value from SaplingActivityXref Sf \n" +
-        "Inner Join NurseryActivityField N  On N.Id = Sf.FieldId \n" +
-        "where TransactionId = (Select  TransactionId from SaplingActivity \n" +
-        "where ConsignmentCode = '"+CCode+"'  and  ActivityId = '"+activityTypeId+"' order by Id desc  Limit  1)";
-
+    public String getDisplayData(String transactionId) {
+        return "Select sx.TransactionId,sx.ServerUpdatedStatus, sx.FieldId, nf.InputType, sx.Value from SaplingActivityXref sx \n" +
+                "       INNER JOIN NurseryActivityField nf ON  nf.Id = sx.FieldId \n" +
+                "\t   WHERE sx.TransactionId ='"+transactionId+"'";
 
     }
+public  String getTransactionIdUsingConsimentCode(String consignmentCode,String activityId)
+{
+    return  "SELECT TransactionId from SaplingActivity where ConsignmentCode ='"+consignmentCode+"' and ActivityId = '"+activityId+"'";
+}
 
     public String getSaplingActivityCounttQuery(String CCode, String activityTypeId) {
         return "select * from SaplingActivity where ActivityId = '"+activityTypeId+"' and ConsignmentCode ='"+CCode+"'";
@@ -325,6 +327,11 @@ public class Queries {
 
 
     public  String CheckJobDoneOrnot (String consinmentid,String activityId)
+    {
+        return "Select  StatusTypeId from SaplingActivity where ConsignmentCode = '"+consinmentid+"'  and  ActivityId = '"+activityId+"'  order by Id desc  Limit  1";
+    }
+
+    public  String CheckCheckActivityStatusExistOrnot (String consinmentid,String activityId)
     {
         return "Select  StatusTypeId from SaplingActivity where ConsignmentCode = '"+consinmentid+"'  and  ActivityId = '"+activityId+"'  order by Id desc  Limit  1";
     }
@@ -623,14 +630,22 @@ public class Queries {
         return "select * from Farmer where Code = '" + farmerCode + "'";
     }
 
-    public String getNurseryActivities() {
-        return "select Id, ActivityTypeId, Code, Name, TargetDays, IsMultipleEntries from NurseryActivity where IsActive = 'true' ORDER BY TargetDays ASC";
+    public String getNurseryActivities(String consinmentCode) {
+        return "Select na.Id, na.ActivityTypeId,na.IsMultipleEntries, t.Desc ActivityType,na.Code,na.name,s.StatusTypeId, ts.Desc StatusType, s.CreatedDate\n" +
+                "\n" +
+                "  from NurseryActivity na \n" +
+                "       INNER JOIN TypeCdDmt t ON na.ActivityTypeId = t.TypeCdId\n" +
+                "\t   LEFT JOIN  SaplingActivityStatus s ON s.ConsignmentCode = '"+consinmentCode+"' and s.ActivityId = na.id \n" +
+                "\t   LEFT JOIN TypeCdDmt ts ON s.StatusTypeId = ts.TypeCdId\n" +
+                "\t   LEFT JOIN SaplingActivity sa ON sa.ConsignmentCode = '"+consinmentCode+"' and sa.ActivityId = s.ActivityId\n" +
+                "\t   LEFT JOIN SaplingActivityHistory sh ON sh.TransactionId = sa.TransactionId \n" +
+                "\t   ORDER BY na.id";
     }
 
 
 
     public String getActivityTaskDetails(int Id) {
-        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
+        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
     }
 
     public String getSelectedPlot(final String plotCode) {
@@ -997,6 +1012,10 @@ public class Queries {
     }
     public String checkRecordStatusInTable(String tableName, String columnName, String columnValue) {
         return "SELECT EXISTS(SELECT 1 FROM " + tableName + " where " + columnName + "= '" + columnValue + "'" + " LIMIT 1)";
+    }
+
+    public String checkRecordStatusInTable2(String tableName, String columnName, String columnValue,String columnName2, String columnValue2) {
+        return "SELECT EXISTS(SELECT 1 FROM " + tableName + " where " + columnName + "= '" + columnValue + "' AND  " + columnName2 + "= '" + columnValue2+ "' LIMIT 1)";
     }
     public String checkRecordStatusInAdvanceDetailsTable(String plotCode, String receiptNum, String createdDate) {
         return " SELECT EXISTS(SELECT 1 FROM AdvancedDetails where PlotCode = '" + plotCode + "' and " +

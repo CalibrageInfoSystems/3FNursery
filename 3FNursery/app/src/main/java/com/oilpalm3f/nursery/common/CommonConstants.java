@@ -223,5 +223,10 @@ public class CommonConstants {
             isMarketSurveyUpdated = false;
         }
     }
-
+    public  static  String SCREEN_CAME_FROM ="SCREENCAMEFROME";
+    public static int FROM_MULTIPLE_ADD_NEW_TASK = 2000;
+    public static int FROM_MUTIPLE_ENTRY_VIEWDATA = 2001;
+    public static int FROM_MUTIPLE_ENTRY_EDITDATA = 2002;
+    public static int FROM_SINGLE_ENTRY_VIEWDATA = 2003;
+    public static int FROM_SINGLE_ENTRY_EDITDATA = 2004;
 }

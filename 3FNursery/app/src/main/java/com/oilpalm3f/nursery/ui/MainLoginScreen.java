@@ -2,7 +2,6 @@ package com.oilpalm3f.nursery.ui;
 
 import android.content.Intent;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -85,13 +84,13 @@ public class MainLoginScreen extends AppCompatActivity {
 //            }
             // Updated Services For Android Q ###  CIS ## 21/05/21\\
 
-            if (CommonUtils.isLocationPermissionGranted(MainLoginScreen.this) ) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    getApplicationContext().startForegroundService(new Intent(this, FalogService.class));
-                } else {
-                    getApplicationContext().startService(new Intent(this, FalogService.class));
-                }
-            }
+//            if (CommonUtils.isLocationPermissionGranted(MainLoginScreen.this) ) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    getApplicationContext().startForegroundService(new Intent(this, FalogService.class));
+//                } else {
+//                    getApplicationContext().startService(new Intent(this, FalogService.class));
+//                }
+//            }
             userID.setText(userDetails.getUserName());
             passwordEdit.setText(userDetails.getPassword());
 

@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
-import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
@@ -60,11 +59,17 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         dataAccessHandler = new DataAccessHandler(context);
 
-
-
         holder.activityName.setText(mActivitiesList.get(position).getName());
+        String status ="";
+        if(mActivitiesList.get(position).getDesc() == null || mActivitiesList.get(position).getDesc().isEmpty() || mActivitiesList.get(position).toString() =="")
+        {
+            holder.txtStatusTxt.setText("");
+        }else{
+            holder.txtStatusTxt.setText(mActivitiesList.get(position).getDesc() );
+        }
 
-        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
+        holder.txtDoneDate.setText(mActivitiesList.get(position).getUpdatedDate());
+//        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
 
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,20 +86,19 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
                     met.putExtra("Ismultipleentry1",mActivitiesList.get(position).getIsMultipleEntries());
                     met.putExtra("addActivity",false );
+
                     Log.d("consignmentcode1", ConsignmentCode);
                     context.startActivity(met);
 
                 }else{
                     // Todo Check ALready hava data or not.
+
                     Intent at = new Intent(context, ActivityTask.class);
+                    at.putExtra("multipleEntry",mActivitiesList.get(position).getIsMultipleEntries());
                     at.putExtra("consignmentcode", ConsignmentCode);
-                    at.putExtra("isSingleEntry",true);
                     at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
                     at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
-                    at.putExtra("Ismultipleentry",mActivitiesList.get(position).getIsMultipleEntries() );
-                    at.putExtra("addActivity",false );
-                    Log.d("consignmentcode2", ConsignmentCode);
-
+                    at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
                     context.startActivity(at);
                }
 
@@ -111,7 +115,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView activityName,expecteddate,saplingExpecteddate;
+        public TextView activityName,expecteddate,saplingExpecteddate,txtStatusTxt,txtDoneDate;
         public LinearLayout mainlyt;
 
         public ViewHolder(@NonNull View itemView) {
@@ -119,6 +123,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
             this.activityName = (TextView )itemView.findViewById(R.id.activityName);
             this.expecteddate = (TextView )itemView.findViewById(R.id.expecteddate);
+            this.txtStatusTxt = (TextView )itemView.findViewById(R.id.txtStatusTxt);
+            this.txtDoneDate = (TextView )itemView.findViewById(R.id.txtDoneDate);
 //            this.saplingExpecteddate = (TextView )itemView.findViewById(R.id.saplingExpecteddate);
             this.mainlyt = (LinearLayout) itemView.findViewById(R.id.mainlyt);
         }

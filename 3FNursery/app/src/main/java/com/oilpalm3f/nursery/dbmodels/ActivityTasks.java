@@ -60,6 +60,18 @@ public class ActivityTasks {
     @Expose
     private String updatedDate;
 
+    @SerializedName("DataType")
+    @Expose
+    private String DataType;
+
+    public String getDataType() {
+        return DataType;
+    }
+
+    public void setDataType(String dataType) {
+        DataType = dataType;
+    }
+
     public Integer getId() {
         return id;
     }

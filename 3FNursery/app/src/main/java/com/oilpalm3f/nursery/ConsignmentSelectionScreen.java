@@ -1,20 +1,17 @@
 package com.oilpalm3f.nursery;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
 
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
-import com.oilpalm3f.nursery.dbmodels.NurseryData;
 import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
-import com.oilpalm3f.nursery.ui.NurseryRecyclerviewAdapter;
-import com.oilpalm3f.nursery.ui.NurserySelectionScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +55,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID,nurserycode));
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList);
+        consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList,nurserycode);
         consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
     }
 }

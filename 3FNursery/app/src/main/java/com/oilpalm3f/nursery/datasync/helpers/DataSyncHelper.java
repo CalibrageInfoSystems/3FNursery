@@ -23,7 +23,6 @@ import com.oilpalm3f.nursery.dbmodels.DataCountModel;
 import com.oilpalm3f.nursery.dbmodels.FarmerHistory;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
-import com.oilpalm3f.nursery.dbmodels.Plot;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -346,7 +345,7 @@ public class DataSyncHelper {
         SharedPreferences sharedPreferences = context.getSharedPreferences("appprefs", MODE_PRIVATE);
         String date = sharedPreferences.getString(PREVIOUS_SYNC_DATE, null);
 
-        final String finalDate = date;
+        final String finalDate =date;// "2021-07-28 10:28:36";  // date
         Log.v(LOG_TAG, "@@@ Date " + date);
         progressDialogFragment.updateText("Getting total records count");
         final ProgressDialogFragment finalProgressDialogFragment = progressDialogFragment;
@@ -444,18 +443,19 @@ public class DataSyncHelper {
         String whereCondition = null;
 
         if (dataList.size() > 0) {
-            if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING)) {
-                Saplings saplingslist = (Saplings) dataList.get(innerCountCheck);
-                saplingslist.setServerUpdatedStatus(1);
-                whereCondition = " where  NurseryCode = '" + saplingslist.getNurseryCode() + "'";
-                try {
-                    ccData = new JSONObject(gson.toJson(saplingslist));
-                    dataToInsert.add(CommonUtils.toMap(ccData));
-                } catch (JSONException e) {
-                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
-                }
-                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "NurseryCode", saplingslist.getNurseryCode()));
-            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivity)) {
+//            if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING)) {
+//                Saplings saplingslist = (Saplings) dataList.get(innerCountCheck);
+//                saplingslist.setServerUpdatedStatus(1);
+//                whereCondition = " where  NurseryCode = '" + saplingslist.getNurseryCode() + "'";
+//                try {
+//                    ccData = new JSONObject(gson.toJson(saplingslist));
+//                    dataToInsert.add(CommonUtils.toMap(ccData));
+//                } catch (JSONException e) {
+//                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+//                }
+//                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "NurseryCode", saplingslist.getNurseryCode()));
+//            } else
+                if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivity)) {
                 SaplingActivity saplingActivity = (SaplingActivity) dataList.get(innerCountCheck);
                 saplingActivity.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId = '" + saplingActivity.getTransactionId() + "'";
@@ -466,8 +466,15 @@ public class DataSyncHelper {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
-            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
-                SaplingActivityXrefModel saplingActivityXredata = (SaplingActivityXrefModel) dataList.get(innerCountCheck);
+//            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
+            } else if (tableName.equalsIgnoreCase("SaplingActivityXref")) {
+                SaplingActivityXrefModel saplingActivityXredata = null;
+                try {
+                    saplingActivityXredata = (SaplingActivityXrefModel) dataList.get(innerCountCheck);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                    e.printStackTrace();
+                }
                 saplingActivityXredata.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId= '" + saplingActivityXredata.getTransactionId() + "'";
                 try {
@@ -490,6 +497,19 @@ public class DataSyncHelper {
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "TransactionId", saplingActivityHistorydata.getTransactionId()));
             }
+            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityStatus)) {
+                SaplingActivityStatusModel saplingActivityStatusModel = (SaplingActivityStatusModel) dataList.get(innerCountCheck);
+                saplingActivityStatusModel.setServerUpdatedStatus(1);
+                whereCondition = " where  ConsignmentCode= '" + saplingActivityStatusModel.getConsignmentCode() + "'  AND ActivityId = '"+saplingActivityStatusModel.getActivityId()+"'";
+                try {
+                    ccData = new JSONObject(gson.toJson(saplingActivityStatusModel));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                Log.d(DataSyncHelper.LOG_TAG,"===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :"+Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(),"ActivityId",saplingActivityStatusModel.getActivityId()+""));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(),"ActivityId",saplingActivityStatusModel.getActivityId()+""));
+            }
 
             if (dataList.size() != innerCountCheck) {
                 updateOrInsertData(tableName, dataToInsert, whereCondition, recordExisted, dataAccessHandler, new ApplicationThread.OnComplete() {
@@ -499,6 +519,7 @@ public class DataSyncHelper {
                         if (innerCountCheck == dataList.size()) {
                             innerCountCheck = 0;
                             onComplete.execute(true, "", "");
+
                         } else {
                             updateDataIntoDataBase(transactionsData, dataAccessHandler, tableName, onComplete);
                         }
@@ -521,6 +542,7 @@ public class DataSyncHelper {
 
     public static synchronized void updateTransactionData(final LinkedHashMap<String, List> transactionsData, final DataAccessHandler dataAccessHandler, final List<String> tableNames, final ProgressDialogFragment progressDialogFragment, final ApplicationThread.OnComplete onComplete) {
         progressDialogFragment.updateText("Updating data...");
+
         if (transactionsData != null && transactionsData.size() > 0) {
             Log.v(LOG_TAG, "@@@ Transactions sync is success and data size is " + transactionsData.size());
             final String tableName = tableNames.get(reverseSyncTransCount);
@@ -529,6 +551,7 @@ public class DataSyncHelper {
                 @Override
                 public void execute(boolean success, Object result, String msg) {
                     if (success) {
+                        //Todo check
                         reverseSyncTransCount++;
                         if (reverseSyncTransCount == transactionsData.size()) {
                             onComplete.execute(success, "data updated successfully", "");
@@ -748,7 +771,7 @@ public class DataSyncHelper {
                                 dataToUpdate.put(tableName, saplingActivityDataList);
                         } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<Plot>>() {
+                            Type type = new TypeToken<List<SaplingActivityXrefModel>>() {
                             }.getType();
                             List<SaplingActivityXrefModel> saplingActivityXrefList = gson.fromJson(dataArray.toString(), type);
                             if (null != saplingActivityXrefList && saplingActivityXrefList.size() > 0)
@@ -760,6 +783,13 @@ public class DataSyncHelper {
                             List<SaplingActivityHistoryModel> SaplingActivityHistoryDataList = gson.fromJson(dataArray.toString(), type);
                             if (null != SaplingActivityHistoryDataList && SaplingActivityHistoryDataList.size() > 0)
                                 dataToUpdate.put(tableName, SaplingActivityHistoryDataList);
+                        }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityStatus)) {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<SaplingActivityStatusModel>>() {
+                            }.getType();
+                            List<SaplingActivityStatusModel> saplingActivityStatusModel = gson.fromJson(dataArray.toString(), type);
+                            if (null != saplingActivityStatusModel && saplingActivityStatusModel.size() > 0)
+                                dataToUpdate.put(tableName, saplingActivityStatusModel);
                         }
                     }
                     resultMessage = "success";
@@ -784,24 +814,20 @@ public class DataSyncHelper {
                     if (TextUtils.isEmpty(date)) {
                         ProgressBar.hideProgressBar();
                         if (null != progressDialogFragment && !CommonUtils.currentActivity.isFinishing()) {
-                            progressDialogFragment.dismiss();
-
-//                            try{
-//                                progressDialogFragment.dismiss();
-//                            }catch(Exception exc){
-//                                Log.d(DataSyncHelper.LOG_TAG,"==> analysis  => CLOSE Dilogue :"+exc);
-//                            }
+                            if (null != progressDialogFragment && !CommonUtils.currentActivity.isFinishing()) {
+                                progressDialogFragment.dismiss();
+                            }
 
                         }
                         if (CommonUtils.isNetworkAvailable(context)) {
-                            updateSyncDate(context, null);
+                            updateSyncDate(context,  CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                             RefreshSyncActivity.allRefreshDataMap = new ArrayList<String>();
                             for (String s : RefreshSyncActivity.allRefreshDataMap) {
                                 dataAccessHandler.executeRawQuery("DELETE FROM " + s);
                                 Log.v(LOG_TAG, "delete table" + s);
                             }
-                            progressDialogFragment = new ProgressDialogFragment();
-                            startTransactionSync(context, progressDialogFragment);
+                          //  progressDialogFragment = new ProgressDialogFragment();
+                           // startTransactionSync(context, progressDialogFragment);
                         } else {
                             UiUtils.showCustomToastMessage("Please check network connection", context, 1);
                         }
@@ -841,6 +867,12 @@ public class DataSyncHelper {
                         Set tableNames = dataToUpdate.keySet();
                         List<String> tableNamesList = new ArrayList();
                         tableNamesList.addAll(tableNames);
+                        updateSyncDate(context, CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                        UiUtils.showCustomToastMessage("Data synced successfully", context, 0);
+                        if (null != progressDialogFragment && !CommonUtils.currentActivity.isFinishing()) {
+                            progressDialogFragment.dismiss();
+                        }
+                        //TODO checj sync pending
                         updateTransactionData(dataToUpdate, dataAccessHandler, tableNamesList, progressDialogFragment, new ApplicationThread.OnComplete() {
                             @Override
                             public void execute(boolean success, Object result, String msg) {

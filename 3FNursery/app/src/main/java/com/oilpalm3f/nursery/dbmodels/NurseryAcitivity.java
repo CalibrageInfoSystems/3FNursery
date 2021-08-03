@@ -44,6 +44,47 @@ public class NurseryAcitivity {
     @Expose
     private int serverUpdatedStatus;
 
+
+    @SerializedName("StatusTypeId")
+    @Expose
+    private int StatusTypeId;
+
+    @SerializedName("Desc")
+    @Expose
+    private String Desc;
+
+    @SerializedName("ConsignmentCode")
+    @Expose
+    private String ConsignmentCode;
+
+    @SerializedName("UpdatedDate")
+    @Expose
+    private String UpdatedDate;
+
+    public String getConsignmentCode() {
+        return ConsignmentCode;
+    }
+
+    public void setConsignmentCode(String consignmentCode) {
+        ConsignmentCode = consignmentCode;
+    }
+
+    public int getStatusTypeId() {
+        return StatusTypeId;
+    }
+
+    public void setStatusTypeId(int statusTypeId) {
+        StatusTypeId = statusTypeId;
+    }
+
+    public String getDesc() {
+        return Desc;
+    }
+
+    public void setDesc(String desc) {
+        Desc = desc;
+    }
+
     public String getIsMultipleEntries() {
         return IsMultipleEntries;
     }

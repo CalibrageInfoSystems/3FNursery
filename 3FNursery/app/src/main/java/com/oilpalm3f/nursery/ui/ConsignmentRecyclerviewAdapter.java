@@ -13,11 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
-import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
-import com.oilpalm3f.nursery.dbmodels.NurseryData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,11 +30,12 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
     SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
-    String convertedcreatedDate;
+    String convertedcreatedDate,nurceryId;
 
-    public ConsignmentRecyclerviewAdapter(Context context,  List<ConsignmentData> consignmentList) {
+    public ConsignmentRecyclerviewAdapter(Context context,  List<ConsignmentData> consignmentList,String nurceryId) {
         this.context = context;
         this.consignmentList = consignmentList;
+        this.nurceryId = nurceryId;
 
     }
 
@@ -92,7 +90,8 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, Activities.class);
-                CommonConstants.ConsignmentID = consignmentList.get(position).getId();
+                intent.putExtra("nurceryId",nurceryId);
+                intent.putExtra("ConsignmentCode",consignmentList.get(position).getConsignmentCode());
                 context.startActivity(intent);
             }
         });
