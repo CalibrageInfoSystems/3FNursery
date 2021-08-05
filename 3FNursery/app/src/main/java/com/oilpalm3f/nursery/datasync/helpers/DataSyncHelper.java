@@ -341,7 +341,7 @@ public class DataSyncHelper {
     }
 
     public static void startTransactionSync(final Context context, final ProgressDialogFragment progressDialogFragment) {
-
+//        updateSyncDate(context,"2021-08-05 15:21:00");// TODO MAHESH ADDED for Static testing
         SharedPreferences sharedPreferences = context.getSharedPreferences("appprefs", MODE_PRIVATE);
         String date = sharedPreferences.getString(PREVIOUS_SYNC_DATE, null);
 

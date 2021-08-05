@@ -198,8 +198,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 mapXref.put("ServerUpdatedStatus", 0);
 
                 listKey.add(mapXref);
-            }
 
+            }
 
             dataAccessHandler.insertMyDataa("SaplingActivityXref", listKey, new ApplicationThread.OnComplete<String>() {
                 @Override
@@ -209,6 +209,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
+
 
             LinkedHashMap sapling = new LinkedHashMap();
             sapling.put("TransactionId", _transactionId);
@@ -318,51 +319,49 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     private boolean validate() {
         dataValue = new ArrayList<>();
-        if (showHideActivity != null) {
-            for (int i = 0; i < activityTasklist.size(); i++) {
-                int id = activityTasklist.get(i).getId();
-                if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
 
-                    CheckBox chk = (CheckBox) findViewById(id);
-                    Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
-                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
+        for (int i = 0; i < activityTasklist.size(); i++) {
+            int id = activityTasklist.get(i).getId();
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
 
-                }
-                if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
-
-                    EditText et = findViewById(id);
-
-                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
-
-                    if (et.getVisibility() == View.VISIBLE && TextUtils.isEmpty(et.getText().toString())) {
-                        //TOdo  need to check already exist or not
-
-                        Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-
-                }
-                if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
-
-                    Spinner spinnner = findViewById(id);
-                    int selectedPo = spinnner.getSelectedItemPosition();
-                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(), spinnner.getSelectedItem().toString()));
-                    Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString());
-                    if (spinnner.getSelectedItemPosition() == 0) {
-                        //TOdo  need to check already exist or not
-
-                        Toast.makeText(this, "Please Select Dropdown Data", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-
-                }
-
+                CheckBox chk = (CheckBox) findViewById(id);
+                Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
             }
-            return true;
-        } else {
-            return true;
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+
+                EditText et = findViewById(id);
+
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
+
+                if (et.getVisibility() == View.VISIBLE && TextUtils.isEmpty(et.getText().toString())) {
+                    //TOdo  need to check already exist or not
+
+                    Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
+
+                Spinner spinnner = findViewById(id);
+                int selectedPo = spinnner.getSelectedItemPosition();
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), spinnner.getSelectedItem().toString()));
+                Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString());
+                if (spinnner.getSelectedItemPosition() == 0) {
+                    //TOdo  need to check already exist or not
+
+                    Toast.makeText(this, "Please Select Dropdown Data", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
+
+
         }
+        return true;
+
     }
 
     public Spinner addSpinner(int id) {
