@@ -77,19 +77,30 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate()))
         {
             Log.d("###################", mActivitiesList.get(position).getUpdatedDate());
-            holder.imgStatus.setImageResource(R.drawable.done);
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate()));
         }
 
         if(mActivitiesList.get(position).getStatusTypeId() == 346){
+            holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
-        }else if(mActivitiesList.get(position).getStatusTypeId() == 352){
+        }else if(mActivitiesList.get(position).getStatusTypeId() == 347){
+            holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
+        }else if(mActivitiesList.get(position).getStatusTypeId() == 348){
+            holder.imgStatus.setImageResource(R.drawable.done);
+            holder.imgNurStatus.setImageResource(R.drawable.done);
+            holder.imgShStatus.setImageResource(R.drawable.done);
         }else if(mActivitiesList.get(position).getStatusTypeId() == 349){
+            holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.rejected);
             holder.imgShStatus.setImageResource(R.drawable.rejected);
+        }
+        else if(mActivitiesList.get(position).getStatusTypeId() == 352){
+            holder.imgStatus.setImageResource(R.drawable.inprogress);
+            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
+            holder.imgShStatus.setImageResource(R.drawable.inprogress);
         }
 
 //        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
