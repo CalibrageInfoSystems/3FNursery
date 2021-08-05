@@ -78,7 +78,6 @@ public class Activities extends AppCompatActivity {
 
     private void setViews() {
 
-
         consignmentstatusList = dataAccessHandler.getConsignmentStatus(Queries.getInstance().getConsignmentStatusQuery(CONSINEMENTCODE));
         if(consignmentstatusList != null & consignmentstatusList.size() > 0){
             txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
@@ -87,7 +86,7 @@ public class Activities extends AppCompatActivity {
         displayActivityData();
 
 
-        txtSlectedConsiment.setText(CONSINEMENTCODE);
+        txtSlectedConsiment.setText(": " +CONSINEMENTCODE);
         txtAge.setText(": " + "");
         txtDateOfJoining.setText(": " + "");
 

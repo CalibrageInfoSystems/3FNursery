@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -28,11 +29,13 @@ import com.oilpalm3f.nursery.dbmodels.DisplayData;
 import com.oilpalm3f.nursery.dbmodels.ExistingData;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ActivityTask extends AppCompatActivity {
+public class ActivityTask extends AppCompatActivity implements View.OnClickListener {
 
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
 
@@ -56,6 +59,9 @@ public class ActivityTask extends AppCompatActivity {
     int isjobDoneId = 0;
     int SCREEN_FROM = 0;
 
+    ActivityTasks showHideActivity;
+    CheckBox chkShowHide;
+    int yesnoCHeckbox = -10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +86,23 @@ public class ActivityTask extends AppCompatActivity {
 
 
         createDynamicUI(ll);
+
+
+        CheckMantoryItem();
         if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
             // SCREEN CAME FROM UPDATE CURRENT SCREEN
             String consignmentcode = extras.getString("consignmentcode");
             String intentTransactionId = extras.getString("transactionId");
-            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id :"+intentTransactionId);
+            boolean enableEditing = extras.getBoolean("enableEditing");
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id :" + intentTransactionId);
             bindExistingData(intentTransactionId);
+            int buttonid = 1;
+            Button btn = (Button) findViewById(buttonid);
+            if (enableEditing)
+                btn.setVisibility(View.VISIBLE);
+            else
+                btn.setVisibility(View.GONE);
             // TODO Bind DATA UsingTransactionID
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
@@ -118,7 +134,6 @@ public class ActivityTask extends AppCompatActivity {
 
 
         }
-
 
 
     }
@@ -199,7 +214,7 @@ public class ActivityTask extends AppCompatActivity {
             sapling.put("TransactionId", _transactionId);
             sapling.put("ConsignmentCode", _consignmentCode);
             sapling.put("ActivityId", _activityId);
-            sapling.put("StatusTypeId", _statusTypeId);
+            sapling.put("StatusTypeId", 346);  // TODO CHECK DB
             sapling.put("Comment", "");
             sapling.put("IsActive", 1);
             sapling.put("CreatedByUserId", CommonConstants.USER_ID);
@@ -222,8 +237,7 @@ public class ActivityTask extends AppCompatActivity {
                 }
             });
 
-            if(isFromMultipleEntry)
-            {
+            if (isFromMultipleEntry) {
                 // Came from Multiple entry then we can update Status only
                 LinkedHashMap status = new LinkedHashMap();
 
@@ -248,7 +262,7 @@ public class ActivityTask extends AppCompatActivity {
                     }
                 });
 
-            }else{
+            } else {
                 LinkedHashMap mapStatus = new LinkedHashMap();
                 mapStatus.put("Id", 0);
                 mapStatus.put("ConsignmentCode", _consignmentCode);
@@ -284,8 +298,11 @@ public class ActivityTask extends AppCompatActivity {
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
                 if (activityTasklist.get(i).getField().equalsIgnoreCase("Is the activity completed")) {
                     isjobDoneId = activityTasklist.get(i).getId();
+                    ll.addView(addCheckbox
+                            (activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
+                } else {
+                    ll.addView(addCheckbox(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
                 }
-                ll.addView(addCheckbox(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
                 ll.addView(addEdittext(activityTasklist.get(i).getField(), activityTasklist.get(i).getId(), activityTasklist.get(i).getDataType()));
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Display")) {
@@ -301,45 +318,51 @@ public class ActivityTask extends AppCompatActivity {
 
     private boolean validate() {
         dataValue = new ArrayList<>();
-        for (int i = 0; i < activityTasklist.size(); i++) {
-            int id = activityTasklist.get(i).getId();
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
+        if (showHideActivity != null) {
+            for (int i = 0; i < activityTasklist.size(); i++) {
+                int id = activityTasklist.get(i).getId();
+                if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
 
-                CheckBox chk = (CheckBox) findViewById(id);
-                Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
+                    CheckBox chk = (CheckBox) findViewById(id);
+                    Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
+                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
-            }
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+                }
+                if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
 
-                EditText et = findViewById(id);
+                    EditText et = findViewById(id);
 
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText().toString() + ""));
+                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
 
-                if (activityTasklist.get(i).getIsOptional() == 0 && TextUtils.isEmpty(et.getText().toString())) {
-                    //TOdo  need to check already exist or not
+                    if (et.getVisibility() == View.VISIBLE && TextUtils.isEmpty(et.getText().toString())) {
+                        //TOdo  need to check already exist or not
 
-                    Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
-                    return false;
+                        Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                }
+                if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
+
+                    Spinner spinnner = findViewById(id);
+                    int selectedPo = spinnner.getSelectedItemPosition();
+                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(), spinnner.getSelectedItem().toString()));
+                    Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString());
+                    if (spinnner.getSelectedItemPosition() == 0) {
+                        //TOdo  need to check already exist or not
+
+                        Toast.makeText(this, "Please Select Dropdown Data", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
                 }
 
-            }
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
-
-                Spinner spinnner = findViewById(id);
-
-                if (spinnner.getSelectedItemPosition() == 0) {
-                    //TOdo  need to check already exist or not
-
-                    Toast.makeText(this, "Please Select Dropdown Data", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
 
             }
-
-
+            return true;
+        } else {
+            return true;
         }
-        return true;
     }
 
     public Spinner addSpinner(int id) {
@@ -351,8 +374,9 @@ public class ActivityTask extends AppCompatActivity {
         sp.setAdapter(spinnerArrayAdapter);
 
         sp.setId(id);
-        //sp.setAdapter(new SpinnerTypeArrayAdapter(this,datatoseed));
+
         return sp;
+
 
     }
 
@@ -366,7 +390,25 @@ public class ActivityTask extends AppCompatActivity {
         CheckBox cb = new CheckBox(this);
         cb.setText(content);
         cb.setId(id);
+
+        cb.setOnClickListener(this::onClick);
+        if (content.contains("Requried?")) {
+            yesnoCHeckbox = id;
+            cb.setChecked(true);
+            Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:" + yesnoCHeckbox);
+
+        }
         return cb;
+    }
+
+    public CheckBox yesNoChekcbox(String content, int id) {
+        chkShowHide = new CheckBox(this);
+        chkShowHide.setText(content);
+        chkShowHide.setId(id);
+        chkShowHide.setSelected(true);
+
+
+        return chkShowHide;
     }
 
     public CheckBox isJoneDoneChecbox(String content, int id) {
@@ -377,20 +419,25 @@ public class ActivityTask extends AppCompatActivity {
     }
 
 
-    public EditText addEdittext(String content, int id,String dataType) {
+    public TextInputLayout addEdittext(String content, int id, String dataType) {
+
+        TextInputLayout textInputLayout = new TextInputLayout(this);
+        textInputLayout.setId(id + 9000);
         EditText et = new EditText(this);
-        et.setHint(content);
+//        et.setHint(content);
         et.setId(id);
         et.setMinLines(1);
         et.setMaxLines(1);
 
-        if(dataType.equalsIgnoreCase("Integer")  || dataType.equalsIgnoreCase("Float"))
-        {
+        if (dataType.equalsIgnoreCase("Integer") || dataType.equalsIgnoreCase("Float")) {
             et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         }
+        textInputLayout.setHint(content);
+        textInputLayout.addView(et);
 
-        return et;
+
+        return textInputLayout;
 
     }
 
@@ -408,91 +455,198 @@ public class ActivityTask extends AppCompatActivity {
         btn.setBackgroundColor(getResources().getColor(R.color.green_dark));
 
         btn.setId(id);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (validate()) {
-                    Bundle extras = getIntent().getExtras();
-                    if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
-                        Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
-                        // SCREEN CAME FROM UPDATE CURRENT SCREEN
-                        String intentTransactionId = extras.getString("transactionId");
-                        String consignmentcode = extras.getString("consignmentcode");
-                        String ActivityTypeId = extras.getString("ActivityTypeId");
+        btn.setOnClickListener(this::onClick);
+        return btn;
 
-                        int statusTypeId ;
-                        if (isjobDoneId != 0) {
-                            CheckBox chk = findViewById(isjobDoneId);
-                            if (chk.isChecked()) {
-                                statusTypeId = 346;
-                            } else {
-                                statusTypeId  = 352;
-                            }
-                        } else {
-                            statusTypeId = 346;
-                        }
-                        Log.d(ActivityTask.class.getSimpleName(),"==> Analysis => FROM CHECKBOX  STATUS TYPEID : "+statusTypeId);
-                        updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId,statusTypeId);
+    }
 
-                    } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
-                        Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
-                        String activityTypeId = extras.getString("ActivityTypeId");
-                        String consignmentcode = extras.getString("consignmentcode");
-                        boolean Ismultipleentry = extras.getBoolean("Ismultipleentry");
-                        int statusTypeId ;
-                        if (isjobDoneId != 0) {
-                            CheckBox chk = findViewById(isjobDoneId);
-                            if (chk.isChecked()) {
-                                statusTypeId = 346;
-                            } else {
-                                statusTypeId  = 352;
-                            }
-                        } else {
-                            statusTypeId = 346;
-                        }
-                        String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
-                        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
-                        addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, true);
+    private void saveData() {
+        if (validate()) {
 
-                    } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
-                        Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
-                        String consignmentcode = extras.getString("consignmentcode");
-                        String activityTypeId = extras.getString("ActivityTypeId");
-                        String multipleentry = extras.getString("multipleEntry");
+            Bundle extras = getIntent().getExtras();
+            if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
+                // SCREEN CAME FROM UPDATE CURRENT SCREEN
+                String intentTransactionId = extras.getString("transactionId");
+                String consignmentcode = extras.getString("consignmentcode");
+                String ActivityTypeId = extras.getString("ActivityTypeId");
 
-                        int statusTypeId ;
-                        if (isjobDoneId != 0) {
-                            CheckBox chk = findViewById(isjobDoneId);
-                            if (chk.isChecked()) {
-                                statusTypeId = 346;
-                            } else {
-                                statusTypeId  = 352;
-                            }
-                        } else {
-                            statusTypeId = 346;
-                        }
-                        Log.d(ActivityTask.class.getSimpleName(),"==> Analysis => FROM CHECKBOX  STATUS TYPEID : "+statusTypeId);
-                        String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
-                        if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
-                            updateSingleEntryData(consignmentcode, activityTypeId, transactionId,statusTypeId);
-                        } else {
-                            // TODO dont have any Existind data add new activity
-                            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                            String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
-                            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
-
-                            addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew,false);
-                        }
-
-
+                int statusTypeId;
+                if (isjobDoneId != 0) {
+                    CheckBox chk = findViewById(isjobDoneId);
+                    if (chk.isChecked()) {
+                        statusTypeId = 346;
+                    } else {
+                        statusTypeId = 352;
                     }
+                } else {
+                    statusTypeId = 346;
+                }
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
+                updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId);
+
+            } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
+                String activityTypeId = extras.getString("ActivityTypeId");
+                String consignmentcode = extras.getString("consignmentcode");
+                boolean Ismultipleentry = extras.getBoolean("Ismultipleentry");
+                int statusTypeId;
+                if (isjobDoneId != 0) {
+                    CheckBox chk = findViewById(isjobDoneId);
+                    if (chk.isChecked()) {
+                        statusTypeId = 346;
+                    } else {
+                        statusTypeId = 352;
+                    }
+                } else {
+                    statusTypeId = 346;
+                }
+                String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
+                addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, true);
+
+            } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
+                String consignmentcode = extras.getString("consignmentcode");
+                String activityTypeId = extras.getString("ActivityTypeId");
+                String multipleentry = extras.getString("multipleEntry");
+
+                int statusTypeId;
+                if (isjobDoneId != 0) {
+                    CheckBox chk = findViewById(isjobDoneId);
+                    if (chk.isChecked()) {
+                        statusTypeId = 346;
+                    } else {
+                        statusTypeId = 352;
+                    }
+                } else {
+                    statusTypeId = 346;
+                }
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
+                String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
+                if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+                    updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId);
+                } else {
+                    // TODO dont have any Existind data add new activity
+                    Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
+                    String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                    Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
+
+                    addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, false);
+                }
+
+
+            }
 //                    setSaplingActivity();
 //                    finish();
 //                    Toast.makeText(ActivityTask.this, "Task Completed Successfully", Toast.LENGTH_SHORT).show();
-                }
+        }
+    }
+
+    private void CheckMantoryItem() {
+        for (int i = 0; i < activityTasklist.size(); i++) {
+
+
+            if (activityTasklist.get(i).getActivityTypeId() == 26 || activityTasklist.get(i).getActivityTypeId() == 27 || activityTasklist.get(i).getActivityTypeId() == 93 ||
+                    activityTasklist.get(i).getActivityTypeId() == 37 || activityTasklist.get(i).getActivityTypeId() == 38 || activityTasklist.get(i).getActivityTypeId() == 39 ||
+                    activityTasklist.get(i).getActivityTypeId() == 40 || activityTasklist.get(i).getActivityTypeId() == 41 || activityTasklist.get(i).getActivityTypeId() == 16 ||
+                    activityTasklist.get(i).getActivityTypeId() == 17 || activityTasklist.get(i).getActivityTypeId() == 18 || activityTasklist.get(i).getActivityTypeId() == 19 ||
+                    activityTasklist.get(i).getActivityTypeId() == 124 || activityTasklist.get(i).getActivityTypeId() == 125 || activityTasklist.get(i).getActivityTypeId() == 130 ||
+                    activityTasklist.get(i).getActivityTypeId() == 131 || activityTasklist.get(i).getActivityTypeId() == 132 || activityTasklist.get(i).getActivityTypeId() == 133 ||
+                    activityTasklist.get(i).getActivityTypeId() == 134 || activityTasklist.get(i).getActivityTypeId() == 139 || activityTasklist.get(i).getActivityTypeId() == 140 ||
+                    activityTasklist.get(i).getActivityTypeId() == 141 || activityTasklist.get(i).getActivityTypeId() == 142 || activityTasklist.get(i).getActivityTypeId() == 143 ||
+                    activityTasklist.get(i).getActivityTypeId() == 163 || activityTasklist.get(i).getActivityTypeId() == 288 || activityTasklist.get(i).getActivityTypeId() == 289 ||
+                    activityTasklist.get(i).getActivityTypeId() == 296 || activityTasklist.get(i).getActivityTypeId() == 21 || activityTasklist.get(i).getActivityTypeId() == 28 || activityTasklist.get(i).getActivityTypeId() == 33 ||
+                    activityTasklist.get(i).getActivityTypeId() == 45 || activityTasklist.get(i).getActivityTypeId() == 49 || activityTasklist.get(i).getActivityTypeId() == 55 ||
+                    activityTasklist.get(i).getActivityTypeId() == 59 || activityTasklist.get(i).getActivityTypeId() == 71 || activityTasklist.get(i).getActivityTypeId() == 76 ||
+                    activityTasklist.get(i).getActivityTypeId() == 82 || activityTasklist.get(i).getActivityTypeId() == 86 || activityTasklist.get(i).getActivityTypeId() == 100 ||
+                    activityTasklist.get(i).getActivityTypeId() == 104 || activityTasklist.get(i).getActivityTypeId() == 109 || activityTasklist.get(i).getActivityTypeId() == 113 ||
+                    activityTasklist.get(i).getActivityTypeId() == 117 || activityTasklist.get(i).getActivityTypeId() == 22 || activityTasklist.get(i).getActivityTypeId() == 29 ||
+                    activityTasklist.get(i).getActivityTypeId() == 34 || activityTasklist.get(i).getActivityTypeId() == 46 || activityTasklist.get(i).getActivityTypeId() == 50 ||
+                    activityTasklist.get(i).getActivityTypeId() == 56 || activityTasklist.get(i).getActivityTypeId() == 60 || activityTasklist.get(i).getActivityTypeId() == 72 ||
+                    activityTasklist.get(i).getActivityTypeId() == 77 || activityTasklist.get(i).getActivityTypeId() == 83 || activityTasklist.get(i).getActivityTypeId() == 87 || activityTasklist.get(i).getActivityTypeId() == 101 ||
+                    activityTasklist.get(i).getActivityTypeId() == 105 || activityTasklist.get(i).getActivityTypeId() == 110 || activityTasklist.get(i).getActivityTypeId() == 114 ||
+                    activityTasklist.get(i).getActivityTypeId() == 118 || activityTasklist.get(i).getActivityTypeId() == 23 || activityTasklist.get(i).getActivityTypeId() == 30 ||
+                    activityTasklist.get(i).getActivityTypeId() == 35 || activityTasklist.get(i).getActivityTypeId() == 47 || activityTasklist.get(i).getActivityTypeId() == 51 ||
+                    activityTasklist.get(i).getActivityTypeId() == 57 || activityTasklist.get(i).getActivityTypeId() == 61 || activityTasklist.get(i).getActivityTypeId() == 73 ||
+                    activityTasklist.get(i).getActivityTypeId() == 78 || activityTasklist.get(i).getActivityTypeId() == 84 || activityTasklist.get(i).getActivityTypeId() == 88 ||
+                    activityTasklist.get(i).getActivityTypeId() == 102 || activityTasklist.get(i).getActivityTypeId() == 106 || activityTasklist.get(i).getActivityTypeId() == 111 ||
+                    activityTasklist.get(i).getActivityTypeId() == 115 || activityTasklist.get(i).getActivityTypeId() == 119 || activityTasklist.get(i).getActivityTypeId() == 24 ||
+                    activityTasklist.get(i).getActivityTypeId() == 31 || activityTasklist.get(i).getActivityTypeId() == 36 || activityTasklist.get(i).getActivityTypeId() == 48 ||
+                    activityTasklist.get(i).getActivityTypeId() == 52 || activityTasklist.get(i).getActivityTypeId() == 58 || activityTasklist.get(i).getActivityTypeId() == 62 ||
+                    activityTasklist.get(i).getActivityTypeId() == 74 || activityTasklist.get(i).getActivityTypeId() == 79 || activityTasklist.get(i).getActivityTypeId() == 85 || activityTasklist.get(i).getActivityTypeId() == 89 ||
+                    activityTasklist.get(i).getActivityTypeId() == 103 || activityTasklist.get(i).getActivityTypeId() == 107 || activityTasklist.get(i).getActivityTypeId() == 112 ||
+                    activityTasklist.get(i).getActivityTypeId() == 116 || activityTasklist.get(i).getActivityTypeId() == 120 || activityTasklist.get(i).getActivityTypeId() == 151 ||
+                    activityTasklist.get(i).getActivityTypeId() == 166 || activityTasklist.get(i).getActivityTypeId() == 178 || activityTasklist.get(i).getActivityTypeId() == 191 ||
+                    activityTasklist.get(i).getActivityTypeId() == 203 || activityTasklist.get(i).getActivityTypeId() == 215 || activityTasklist.get(i).getActivityTypeId() == 228 ||
+                    activityTasklist.get(i).getActivityTypeId() == 242 || activityTasklist.get(i).getActivityTypeId() == 255 || activityTasklist.get(i).getActivityTypeId() == 270 ||
+                    activityTasklist.get(i).getActivityTypeId() == 152 || activityTasklist.get(i).getActivityTypeId() == 167 || activityTasklist.get(i).getActivityTypeId() == 179 ||
+                    activityTasklist.get(i).getActivityTypeId() == 192 || activityTasklist.get(i).getActivityTypeId() == 204 || activityTasklist.get(i).getActivityTypeId() == 216 ||
+                    activityTasklist.get(i).getActivityTypeId() == 229 || activityTasklist.get(i).getActivityTypeId() == 243 || activityTasklist.get(i).getActivityTypeId() == 256 ||
+                    activityTasklist.get(i).getActivityTypeId() == 271 || activityTasklist.get(i).getActivityTypeId() == 154 || activityTasklist.get(i).getActivityTypeId() == 169 ||
+                    activityTasklist.get(i).getActivityTypeId() == 181 || activityTasklist.get(i).getActivityTypeId() == 194 || activityTasklist.get(i).getActivityTypeId() == 206 ||
+                    activityTasklist.get(i).getActivityTypeId() == 218 || activityTasklist.get(i).getActivityTypeId() == 231 || activityTasklist.get(i).getActivityTypeId() == 191 ||
+                    activityTasklist.get(i).getActivityTypeId() == 203 || activityTasklist.get(i).getActivityTypeId() == 215 || activityTasklist.get(i).getActivityTypeId() == 245 ||
+                    activityTasklist.get(i).getActivityTypeId() == 258 || activityTasklist.get(i).getActivityTypeId() == 273 || activityTasklist.get(i).getActivityTypeId() == 155 ||
+                    activityTasklist.get(i).getActivityTypeId() == 170 || activityTasklist.get(i).getActivityTypeId() == 182 || activityTasklist.get(i).getActivityTypeId() == 195 ||
+                    activityTasklist.get(i).getActivityTypeId() == 207 || activityTasklist.get(i).getActivityTypeId() == 219 || activityTasklist.get(i).getActivityTypeId() == 232 ||
+                    activityTasklist.get(i).getActivityTypeId() == 246 || activityTasklist.get(i).getActivityTypeId() == 259 || activityTasklist.get(i).getActivityTypeId() == 274 ||
+                    activityTasklist.get(i).getActivityTypeId() == 283 || activityTasklist.get(i).getActivityTypeId() == 297 || activityTasklist.get(i).getActivityTypeId() == 310 || activityTasklist.get(i).getActivityTypeId() == 324 ||
+                    activityTasklist.get(i).getActivityTypeId() == 337 || activityTasklist.get(i).getActivityTypeId() == 284 || activityTasklist.get(i).getActivityTypeId() == 298 ||
+                    activityTasklist.get(i).getActivityTypeId() == 311 || activityTasklist.get(i).getActivityTypeId() == 325 || activityTasklist.get(i).getActivityTypeId() == 338 ||
+                    activityTasklist.get(i).getActivityTypeId() == 285 || activityTasklist.get(i).getActivityTypeId() == 299 || activityTasklist.get(i).getActivityTypeId() == 312 ||
+                    activityTasklist.get(i).getActivityTypeId() == 326 || activityTasklist.get(i).getActivityTypeId() == 339 || activityTasklist.get(i).getActivityTypeId() == 286 ||
+                    activityTasklist.get(i).getActivityTypeId() == 300 || activityTasklist.get(i).getActivityTypeId() == 313 || activityTasklist.get(i).getActivityTypeId() == 327 ||
+                    activityTasklist.get(i).getActivityTypeId() == 340 || activityTasklist.get(i).getActivityTypeId() == 287 || activityTasklist.get(i).getActivityTypeId() == 301 || activityTasklist.get(i).getActivityTypeId() == 314 ||
+                    activityTasklist.get(i).getActivityTypeId() == 328 || activityTasklist.get(i).getActivityTypeId() == 341 ||
+                    activityTasklist.get(i).getActivityTypeId() == 153 || activityTasklist.get(i).getActivityTypeId() == 168 || activityTasklist.get(i).getActivityTypeId() == 180 || activityTasklist.get(i).getActivityTypeId() == 193 ||
+                    activityTasklist.get(i).getActivityTypeId() == 205 || activityTasklist.get(i).getActivityTypeId() == 217 || activityTasklist.get(i).getActivityTypeId() == 230 ||
+                    activityTasklist.get(i).getActivityTypeId() == 244 || activityTasklist.get(i).getActivityTypeId() == 257 || activityTasklist.get(i).getActivityTypeId() == 272 ||
+                    activityTasklist.get(i).getActivityTypeId() == 43 || activityTasklist.get(i).getActivityTypeId() == 53 || activityTasklist.get(i).getActivityTypeId() == 69 || activityTasklist.get(i).getActivityTypeId() == 80 ||
+                    activityTasklist.get(i).getActivityTypeId() == 44 || activityTasklist.get(i).getActivityTypeId() == 54 || activityTasklist.get(i).getActivityTypeId() == 70 ||
+                    activityTasklist.get(i).getActivityTypeId() == 81 || activityTasklist.get(i).getActivityTypeId() == 38 || activityTasklist.get(i).getActivityTypeId() == 39 ||
+                    activityTasklist.get(i).getActivityTypeId() == 40 || activityTasklist.get(i).getActivityTypeId() == 41 || activityTasklist.get(i).getActivityTypeId() == 64 ||
+                    activityTasklist.get(i).getActivityTypeId() == 65 || activityTasklist.get(i).getActivityTypeId() == 66 || activityTasklist.get(i).getActivityTypeId() == 67 ||
+                    activityTasklist.get(i).getActivityTypeId() == 68 || activityTasklist.get(i).getActivityTypeId() == 95 || activityTasklist.get(i).getActivityTypeId() == 96 ||
+                    activityTasklist.get(i).getActivityTypeId() == 97 || activityTasklist.get(i).getActivityTypeId() == 98 || activityTasklist.get(i).getActivityTypeId() == 99 ||
+                    activityTasklist.get(i).getActivityTypeId() == 137 || activityTasklist.get(i).getActivityTypeId() == 149 || activityTasklist.get(i).getActivityTypeId() == 164 ||
+                    activityTasklist.get(i).getActivityTypeId() == 176 || activityTasklist.get(i).getActivityTypeId() == 189 || activityTasklist.get(i).getActivityTypeId() == 201 || activityTasklist.get(i).getActivityTypeId() == 220 ||
+                    activityTasklist.get(i).getActivityTypeId() == 233 || activityTasklist.get(i).getActivityTypeId() == 247 || activityTasklist.get(i).getActivityTypeId() == 260 || activityTasklist.get(i).getActivityTypeId() == 275 ||
+                    activityTasklist.get(i).getActivityTypeId() == 138 || activityTasklist.get(i).getActivityTypeId() == 150 || activityTasklist.get(i).getActivityTypeId() == 165 || activityTasklist.get(i).getActivityTypeId() == 177 || activityTasklist.get(i).getActivityTypeId() == 190 || activityTasklist.get(i).getActivityTypeId() == 202 ||
+                    activityTasklist.get(i).getActivityTypeId() == 221 || activityTasklist.get(i).getActivityTypeId() == 234 || activityTasklist.get(i).getActivityTypeId() == 248 ||
+                    activityTasklist.get(i).getActivityTypeId() == 261 || activityTasklist.get(i).getActivityTypeId() == 276 ||
+                    activityTasklist.get(i).getActivityTypeId() == 214 || activityTasklist.get(i).getActivityTypeId() == 241 || activityTasklist.get(i).getActivityTypeId() == 268 ||
+                    activityTasklist.get(i).getActivityTypeId() == 144 || activityTasklist.get(i).getActivityTypeId() == 145 ||
+                    activityTasklist.get(i).getActivityTypeId() == 146 || activityTasklist.get(i).getActivityTypeId() == 147 || activityTasklist.get(i).getActivityTypeId() == 148 ||
+                    activityTasklist.get(i).getActivityTypeId() == 158 || activityTasklist.get(i).getActivityTypeId() == 159 || activityTasklist.get(i).getActivityTypeId() == 160 ||
+                    activityTasklist.get(i).getActivityTypeId() == 161 || activityTasklist.get(i).getActivityTypeId() == 162 || activityTasklist.get(i).getActivityTypeId() == 171 ||
+                    activityTasklist.get(i).getActivityTypeId() == 172 || activityTasklist.get(i).getActivityTypeId() == 173 || activityTasklist.get(i).getActivityTypeId() == 174 ||
+                    activityTasklist.get(i).getActivityTypeId() == 175 || activityTasklist.get(i).getActivityTypeId() == 184 || activityTasklist.get(i).getActivityTypeId() == 185 ||
+                    activityTasklist.get(i).getActivityTypeId() == 186 || activityTasklist.get(i).getActivityTypeId() == 187 || activityTasklist.get(i).getActivityTypeId() == 188 ||
+                    activityTasklist.get(i).getActivityTypeId() == 196 || activityTasklist.get(i).getActivityTypeId() == 197 || activityTasklist.get(i).getActivityTypeId() == 198 ||
+                    activityTasklist.get(i).getActivityTypeId() == 199 || activityTasklist.get(i).getActivityTypeId() == 200 || activityTasklist.get(i).getActivityTypeId() == 209 || activityTasklist.get(i).getActivityTypeId() == 210 ||
+                    activityTasklist.get(i).getActivityTypeId() == 211 || activityTasklist.get(i).getActivityTypeId() == 212 || activityTasklist.get(i).getActivityTypeId() == 213 || activityTasklist.get(i).getActivityTypeId() == 223 || activityTasklist.get(i).getActivityTypeId() == 224 ||
+                    activityTasklist.get(i).getActivityTypeId() == 225 || activityTasklist.get(i).getActivityTypeId() == 226 || activityTasklist.get(i).getActivityTypeId() == 227 ||
+                    activityTasklist.get(i).getActivityTypeId() == 236 || activityTasklist.get(i).getActivityTypeId() == 237 || activityTasklist.get(i).getActivityTypeId() == 238 || activityTasklist.get(i).getActivityTypeId() == 239 ||
+                    activityTasklist.get(i).getActivityTypeId() == 240 || activityTasklist.get(i).getActivityTypeId() == 250 || activityTasklist.get(i).getActivityTypeId() == 251 || activityTasklist.get(i).getActivityTypeId() == 252 || activityTasklist.get(i).getActivityTypeId() == 253 || activityTasklist.get(i).getActivityTypeId() == 254 || activityTasklist.get(i).getActivityTypeId() == 263 ||
+                    activityTasklist.get(i).getActivityTypeId() == 264 || activityTasklist.get(i).getActivityTypeId() == 265 || activityTasklist.get(i).getActivityTypeId() == 266 || activityTasklist.get(i).getActivityTypeId() == 302 ||
+                    activityTasklist.get(i).getActivityTypeId() == 315 || activityTasklist.get(i).getActivityTypeId() == 329 || activityTasklist.get(i).getActivityTypeId() == 342 ||
+                    activityTasklist.get(i).getActivityTypeId() == 316 || activityTasklist.get(i).getActivityTypeId() == 330 || activityTasklist.get(i).getActivityTypeId() == 343 || activityTasklist.get(i).getActivityTypeId() == 323 ||
+                    activityTasklist.get(i).getActivityTypeId() == 278 || activityTasklist.get(i).getActivityTypeId() == 279 || activityTasklist.get(i).getActivityTypeId() == 280 ||
+                    activityTasklist.get(i).getActivityTypeId() == 281 || activityTasklist.get(i).getActivityTypeId() == 282 || activityTasklist.get(i).getActivityTypeId() == 291 || activityTasklist.get(i).getActivityTypeId() == 292 ||
+                    activityTasklist.get(i).getActivityTypeId() == 293 || activityTasklist.get(i).getActivityTypeId() == 294 || activityTasklist.get(i).getActivityTypeId() == 295 ||
+                    activityTasklist.get(i).getActivityTypeId() == 305 || activityTasklist.get(i).getActivityTypeId() == 306 || activityTasklist.get(i).getActivityTypeId() == 307 || activityTasklist.get(i).getActivityTypeId() == 308 ||
+                    activityTasklist.get(i).getActivityTypeId() == 309 || activityTasklist.get(i).getActivityTypeId() == 318 || activityTasklist.get(i).getActivityTypeId() == 319 || activityTasklist.get(i).getActivityTypeId() == 320 ||
+                    activityTasklist.get(i).getActivityTypeId() == 321 || activityTasklist.get(i).getActivityTypeId() == 322 || activityTasklist.get(i).getActivityTypeId() == 332 ||
+                    activityTasklist.get(i).getActivityTypeId() == 333 || activityTasklist.get(i).getActivityTypeId() == 334 || activityTasklist.get(i).getActivityTypeId() == 335 || activityTasklist.get(i).getActivityTypeId() == 336) {
+
+                showHideActivity = activityTasklist.get(i);
+
+
+                // if True We will get id
             }
-        });
-        return btn;
+
+        }
 
     }
 
@@ -536,7 +690,7 @@ public class ActivityTask extends AppCompatActivity {
             activityMap.put("TransactionId", _transactionId);
             activityMap.put("ConsignmentCode", _consignmentcode);
             activityMap.put("ActivityId", _activityTypeId);
-            activityMap.put("StatusTypeId", _statusTypeId);
+            activityMap.put("StatusTypeId", 346);  // TODO Check with In DB
 //            activityMap.put("Comment", "");
             activityMap.put("IsActive", 1);
 //            activityMap.put("CreatedByUserId", CommonConstants.USER_ID);
@@ -576,11 +730,45 @@ public class ActivityTask extends AppCompatActivity {
                     });
                 }
             });
-
         }
     }
 
 
+    @Override
+    public void onClick(View view) {
+        int btnid = 1;
+        if (view.getId() == btnid) {
+
+            saveData();
+
+        } else if (view.getId() == yesnoCHeckbox) {
+            if (yesnoCHeckbox > 0) {
+                if (((CheckBox) view).isChecked()) {
+                    for (ActivityTasks widget : activityTasklist) {
+                        findViewById(widget.getId()).setVisibility(View.VISIBLE);
+                        try {
+                            findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+//                    Toast.makeText(ActivityTask.this, "CHECKED", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Need to disble remainign widgets
+                    for (ActivityTasks widget : activityTasklist) {
+                        String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField(widget.getId()));
+                        Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> isOptional :" + optional);
+                        if (optional != null && !StringUtils.isEmpty(optional)) {
+                            findViewById(widget.getId()).setVisibility(View.GONE);
+                            findViewById(widget.getId() + 9000).setVisibility(View.GONE);
+                        }
+                    }
+//                    Toast.makeText(ActivityTask.this, "UN-CHECKED", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+    }
 }
 
 

@@ -18,12 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
+import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 
-import java.text.ParseException;
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<MultipleEntriesRecyclerViewAdapter.ViewHolder> {
@@ -60,15 +61,8 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
         Log.d("ActivityTypeIdM", ActivityTypeId);
         Log.d("ActivityTypeNameM", ActivityName);
+        holder.lyt_coments.setVisibility(View.GONE);
 
-
-        try {
-            Date oneWayTripDate = input.parse(multiplelist.get(position).getCreatedDate());
-
-            convertedDate = output.format(oneWayTripDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         if (multiplelist.get(position).getServerUpdatedStatus() == 1) {
 
@@ -80,8 +74,13 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         holder.transactionId.setText(":  " + multiplelist.get(position).getTransactionId());
         holder.consignmentcode.setText(":  " + multiplelist.get(position).getConsignmentCode());
         holder.status.setText(":  " + multiplelist.get(position).getDesc());
-        holder.comment.setText(":  " + multiplelist.get(position).getComment());
-        holder.createddate.setText(":  " + convertedDate);
+        if (multiplelist.get(position).getComment() != null && !StringUtils.isEmpty(multiplelist.get(position).getComment())  && !multiplelist.get(position).getComment().equalsIgnoreCase("null"))
+        {
+            holder.lyt_coments.setVisibility(View.VISIBLE);
+            holder.comment.setText(":  " + multiplelist.get(position).getComment());
+        }
+
+        holder.createddate.setText(":  " + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
 
         holder.infoicon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,13 +93,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
             @Override
             public void onClick(View view) {
                 Intent at = new Intent(context, ActivityTask.class);
-//                at.putExtra("isSingleEntry",false);
-//                at.putExtra("consignmentcode", ConsignmentCode);
-//                at.putExtra("transactionId",multiplelist.get(position).getTransactionId());
-//                at.putExtra("ActivityTypeId", ActivityTypeId);
-//                at.putExtra("ActivityName", ActivityName);
-//                at.putExtra("Ismultipleentry",ismultipleentry );
-//                at.putExtra("addActivity",false );
+
                 at.putExtra("consignmentcode", ConsignmentCode);
                 at.putExtra("ActivityName", ActivityName);
                 at.putExtra("ActivityTypeId", ActivityTypeId);
@@ -122,7 +115,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
         public TextView transactionId, consignmentcode, status, comment, createddate;
         ImageView editicon, infoicon;
-        LinearLayout mainlyt;
+        LinearLayout mainlyt, lyt_coments;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -130,6 +123,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
             this.transactionId = (TextView) itemView.findViewById(R.id.transactionid);
             this.consignmentcode = (TextView) itemView.findViewById(R.id.conscode);
+            this.lyt_coments = itemView.findViewById(R.id.lyt_coments);
             this.status = (TextView) itemView.findViewById(R.id.status);
             this.comment = (TextView) itemView.findViewById(R.id.comment);
             editicon = itemView.findViewById(R.id.editicon);

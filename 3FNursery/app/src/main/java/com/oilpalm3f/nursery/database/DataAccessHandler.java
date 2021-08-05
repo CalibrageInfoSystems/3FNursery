@@ -175,6 +175,29 @@ public class DataAccessHandler<T> {
         }
         return "";
     }
+
+    public String getSingleValueInt(String query) {
+        Log.v(LOG_TAG, "@@@ query " + query);
+        Cursor mOprQuery = null;
+        try {
+            mOprQuery = mDatabase.rawQuery(query, null);
+            if (mOprQuery != null && mOprQuery.moveToFirst()) {
+                 String isSelect = String.valueOf(mOprQuery.getColumnIndex("IsOptional"));
+                return isSelect;
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != mOprQuery)
+                mOprQuery.close();
+
+            closeDataBase();
+        }
+        return null;
+    }
     public LinkedHashMap<String, String> getGenericData(final String query) {
         Log.v(LOG_TAG, "@@@ Generic Query " + query);
         LinkedHashMap<String, String> mGenericData = new LinkedHashMap<>();
@@ -2345,6 +2368,7 @@ f
         return (T) ((type == 0) ? mFollowUp : mFollowUpList);
     }
     public List<NurseryAcitivity> getNurseryActivityDetails(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(),"====> Analysis ==> GET ACTIVITIES :"+query);
         List<NurseryAcitivity> nurseryActivityDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2381,6 +2405,7 @@ f
 
 
     public List<MutipleData> getMultipleDataDetails(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(),"==> analysis Query :"+query);
         List<MutipleData> mutipleDataListDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2499,6 +2524,7 @@ f
 
     public List<ActivityTasks> getActivityTasksDetails(final String query) {
         List<ActivityTasks> activityTaskDetails = new ArrayList<>();
+        Log.d(DataAccessHandler.class.getSimpleName(), "===> getActivityTasksDetails Query :"+query);
         Cursor cursor = null;
         try {
             cursor = mDatabase.rawQuery(query, null);

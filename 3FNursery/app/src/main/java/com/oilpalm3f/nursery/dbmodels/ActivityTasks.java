@@ -16,7 +16,7 @@ public class ActivityTasks {
     private String dependency;
     @SerializedName("IsOptional")
     @Expose
-    private int isOptional;
+    private Integer isOptional;
     @SerializedName("Bucket")
     @Expose
     private String bucket;
@@ -96,11 +96,11 @@ public class ActivityTasks {
         this.dependency = dependency;
     }
 
-    public int getIsOptional() {
+    public Integer getIsOptional() {
         return isOptional;
     }
 
-    public void setIsOptional(int isOptional) {
+    public void setIsOptional(Integer isOptional) {
         this.isOptional = isOptional;
     }
 

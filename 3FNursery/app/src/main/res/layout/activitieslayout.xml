@@ -33,11 +33,11 @@
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="100dp"/>
             <TextView
                 android:gravity="center"
                 android:text=""
-                android:layout_weight="0.15"
+                android:layout_weight="0.19"
                 android:textColor="@color/black"
                 android:id="@+id/expecteddate"
                 android:layout_width="0dp"
@@ -45,7 +45,7 @@
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="100dp"/>
             <TextView
                 android:gravity="center"
                 android:text="partially approved"
@@ -57,11 +57,11 @@
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="100dp"/>
 
             <ImageView
                 android:padding="10dp"
-                android:src="@drawable/done"
+
                 android:layout_weight="0.1"
                 android:textColor="@color/black"
                 android:id="@+id/imgStatus"
@@ -70,11 +70,11 @@
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="100dp"/>
             <TextView
                 android:gravity="center"
                 android:text="20-Mar-21"
-                android:layout_weight="0.13"
+                android:layout_weight="0.17"
                 android:textColor="@color/black"
                 android:id="@+id/txtDoneDate"
                 android:layout_width="0dp"
@@ -82,7 +82,7 @@
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="100dp"/>
             <ImageView
                 android:padding="10dp"
                 android:src="@drawable/done"
@@ -94,7 +94,7 @@
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="100dp"/>
             <ImageView
                 android:padding="10dp"
                 android:src="@drawable/done"
@@ -103,18 +103,8 @@
                 android:id="@+id/imgShStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
-            <LinearLayout
-                android:background="@color/black"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"/>
-            <ImageView
-                android:padding="10dp"
-                android:src="@drawable/info"
-                android:layout_weight="0.08"
-                android:textColor="@color/black"
-                android:id="@+id/imgInfo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+
+
 
         </LinearLayout>
 

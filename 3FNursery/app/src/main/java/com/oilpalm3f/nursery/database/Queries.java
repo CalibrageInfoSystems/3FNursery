@@ -14,6 +14,11 @@ public class Queries {
         return instance;
     }
 
+    public  static String getIsoptionalField (int id)
+    {
+
+       return  "Select IsOptional from NurseryActivityField where id ='"+id+"' and IsOptional = 'true'";
+    }
     public static String getCropId(){
         return "SELECT Id FROM LookUp WHERE Name ='Oil Palm' AND LookUpTypeId = '22'";
     }
@@ -631,7 +636,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
 
     public String getNurseryActivities(String consinmentCode) {
-        return "Select na.Id, na.ActivityTypeId,na.IsMultipleEntries, t.Desc ActivityType,na.Code,na.name,s.StatusTypeId, ts.Desc StatusType, s.CreatedDate\n" +
+        return "Select DISTINCT na.Id, na.ActivityTypeId,na.IsMultipleEntries, t.Desc ActivityType,na.Code,na.name,s.StatusTypeId, ts.Desc StatusType, s.CreatedDate\n" +
                 "\n" +
                 "  from NurseryActivity na \n" +
                 "       INNER JOIN TypeCdDmt t ON na.ActivityTypeId = t.TypeCdId\n" +
@@ -641,8 +646,6 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "\t   LEFT JOIN SaplingActivityHistory sh ON sh.TransactionId = sa.TransactionId \n" +
                 "\t   ORDER BY na.id";
     }
-
-
 
     public String getActivityTaskDetails(int Id) {
         return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
