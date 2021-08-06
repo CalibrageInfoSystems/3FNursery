@@ -18,7 +18,6 @@ import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.DatabaseKeys;
 import com.oilpalm3f.nursery.database.Queries;
-import com.oilpalm3f.nursery.dbmodels.Address;
 import com.oilpalm3f.nursery.dbmodels.DataCountModel;
 import com.oilpalm3f.nursery.dbmodels.FarmerHistory;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
@@ -757,7 +756,7 @@ public class DataSyncHelper {
                     } else {
                         if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING)) {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<Address>>() {
+                            Type type = new TypeToken<List<Saplings>>() {
                             }.getType();
                             List<Saplings> saplingsDataList = gson.fromJson(dataArray.toString(), type);
                             if (null != saplingsDataList && saplingsDataList.size() > 0)

@@ -3,7 +3,6 @@ package com.oilpalm3f.nursery.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,11 +55,11 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
         holder.estimatedqty.setText(":  " + consignmentList.get(position).getEstimatedQuantity() + "");
         holder.ordereddate.setText(":  " + CommonUtils.getProperComplaintsDate(consignmentList.get(position).getCreatedDate()));
-        Log.d("ArrivedDate", consignmentList.get(position).getArrivedDate());
+//        Log.d("ArrivedDate", consignmentList.get(position).getArrivedDate());
 
         holder.lytarrivaldate.setVisibility(View.GONE);
         holder.lytarrivedqty.setVisibility(View.GONE);
-        if (consignmentList.get(position).getArrivedDate().equalsIgnoreCase("null") || consignmentList.get(position).getArrivedDate() == "null" || TextUtils.isEmpty(consignmentList.get(position).getArrivedDate())) {
+        if (consignmentList.get(position).getArrivedDate() == null || consignmentList.get(position).getArrivedDate().equalsIgnoreCase("null") || consignmentList.get(position).getArrivedDate() == "null" || TextUtils.isEmpty(consignmentList.get(position).getArrivedDate())) {
             holder.lytarrivaldate.setVisibility(View.GONE);
             holder.arrivaldate.setText(":  " + "");
 

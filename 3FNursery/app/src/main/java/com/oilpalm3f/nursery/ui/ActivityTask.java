@@ -97,11 +97,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
             int buttonid = 1;
-//            Button btn = (Button) findViewById(buttonid);
-//            if (enableEditing)
-//                btn.setVisibility(View.VISIBLE);
-//            else
-//                btn.setVisibility(View.GONE);
+            Button btn = (Button) findViewById(buttonid);
+            if (enableEditing)
+                btn.setVisibility(View.VISIBLE);
+            else
+                btn.setVisibility(View.GONE);
             // TODO Bind DATA UsingTransactionID
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
