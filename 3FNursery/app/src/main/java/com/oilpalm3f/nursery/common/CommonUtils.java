@@ -823,7 +823,7 @@ public class CommonUtils {
         for (String permission : permissions) {
             int result = ContextCompat.checkSelfPermission(context, permission);
             if (result != PackageManager.PERMISSION_GRANTED) {
-                return   isAllPermissionsGranted = false;
+                return isAllPermissionsGranted = false;
             }
         }
         return isAllPermissionsGranted;
@@ -1378,8 +1378,7 @@ public class CommonUtils {
         }
     }
 
-    public static String getTargetDate(String expecteddate, int targetday)
-    {
+    public static String getTargetDate(String expecteddate, int targetday) {
         final SimpleDateFormat sdfq = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         df.setTimeZone(UTC_TIME_ZONE);
@@ -1387,20 +1386,60 @@ public class CommonUtils {
         sdfq.setTimeZone(TimeZone.getDefault());
         Date date = null;
         try {
-           date = df.parse(expecteddate);
+            date = df.parse(expecteddate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
 
-
         Calendar cal = Calendar.getInstance();
-         cal.set(date.getYear(),date.getMonth(),date.getDate());
+        cal.set(date.getYear(), date.getMonth(), date.getDate());
         cal.add(Calendar.DAY_OF_YEAR, targetday);
         return sdfq.format(new Date(cal.getTimeInMillis()));
 
     }
 
+    public static String getTargetDate2(String expecteddate, int targetday) {
+        final SimpleDateFormat sdfq = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        df.setTimeZone(UTC_TIME_ZONE);
+        sdfq.setLenient(true);
+        sdfq.setTimeZone(TimeZone.getDefault());
+        Date date = null;
+        try {
+            date = df.parse(expecteddate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(date.getYear(), date.getMonth(), date.getDate());
+        cal.add(Calendar.DATE, targetday);
+        return getProperComplaintsDate(sdfq.format(new Date(cal.getTimeInMillis())));
+
+    }
+    public static Date addDays(Date date, int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
+    }
+    public static String getTargetDateNew(String datestr, int days) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        Date date = null;
+        try {
+            date = dateFormat.parse(datestr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar c = Calendar.getInstance();
+
+        c.add(Calendar.DATE, 5);
+        return dateFormat.format(c.getTime());
+    }
 
 //    public static String getImageUrl(final BasicFarmerDetails basicFarmerDetails) {
 //        if (basicFarmerDetails == null) {

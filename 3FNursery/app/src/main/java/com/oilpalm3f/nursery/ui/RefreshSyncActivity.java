@@ -278,15 +278,15 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                                 if (!msg.equalsIgnoreCase("Sync is up-to-date")) {
                                     Toast.makeText(RefreshSyncActivity.this, "Data synced successfully", Toast.LENGTH_SHORT).show();
                                     // List<UserSync> userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfMasterSync());
-                                    List<UserSync> userSyncList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
-
-                                    if (userSyncList.size() == 0) {
-                                        Log.v("@@@MM", "mas");
-                                        addUserMasSyncDetails();
-                                    } else {
-                                        dataAccessHandler.updateMasterSync();
-                                    }
-
+//                                    List<UserSync> userSyncList = (List<UserSync>) dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
+//
+//                                    if (userSyncList.size() == 0) {
+//                                        Log.v("@@@MM", "mas");
+//                                        addUserMasSyncDetails();
+//                                    } else {
+//                                        dataAccessHandler.updateMasterSync();
+//                                    }
+                                    dataAccessHandler.updateMasterSync();
                                     // DataAccessHandler dataAccessHandler = new DataAccessHandler(RefreshSyncActivity.this);
                                     // dataAccessHandler.updateMasterSyncDate(false, CommonConstants.USER_ID);
                                 } else {

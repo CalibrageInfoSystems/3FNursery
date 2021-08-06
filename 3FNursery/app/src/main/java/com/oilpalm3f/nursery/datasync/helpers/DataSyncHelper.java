@@ -443,18 +443,18 @@ public class DataSyncHelper {
         String whereCondition = null;
 
         if (dataList.size() > 0) {
-//            if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING)) {
-//                Saplings saplingslist = (Saplings) dataList.get(innerCountCheck);
-//                saplingslist.setServerUpdatedStatus(1);
-//                whereCondition = " where  NurseryCode = '" + saplingslist.getNurseryCode() + "'";
-//                try {
-//                    ccData = new JSONObject(gson.toJson(saplingslist));
-//                    dataToInsert.add(CommonUtils.toMap(ccData));
-//                } catch (JSONException e) {
-//                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
-//                }
-//                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "NurseryCode", saplingslist.getNurseryCode()));
-//            } else
+            if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING)) {
+                Saplings saplingslist = (Saplings) dataList.get(innerCountCheck);
+                saplingslist.setServerUpdatedStatus(1);
+                whereCondition = " where  NurseryCode = '" + saplingslist.getNurseryCode() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(saplingslist));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "NurseryCode", saplingslist.getNurseryCode()));
+            } else
                 if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivity)) {
                 SaplingActivity saplingActivity = (SaplingActivity) dataList.get(innerCountCheck);
                 saplingActivity.setServerUpdatedStatus(1);

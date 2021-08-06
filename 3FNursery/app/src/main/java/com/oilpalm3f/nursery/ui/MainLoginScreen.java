@@ -204,16 +204,18 @@ public class MainLoginScreen extends AppCompatActivity {
                         public void run() {
                             UiUtils.showCustomToastMessage("Data syncing success", MainLoginScreen.this, 1);
                             ProgressBar.hideProgressBar();
-                            List<UserSync> userSyncList;
-//                                userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfMasterSync());
-                            userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
+//                            List<UserSync> userSyncList;
+////                                userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfMasterSync());
+//                            userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfSync());
+//
+//                            if(userSyncList.size()==0){
+//                                Log.v("@@@MM","mas");
+//                                //addUserMasSyncDetails();
+//                            }else {
+//                                dataAccessHandler.updateMasterSync();
+//                            }
 
-                            if(userSyncList.size()==0){
-                                Log.v("@@@MM","mas");
-                                addUserMasSyncDetails();
-                            }else {
-                                dataAccessHandler.updateMasterSync();
-                            }
+                            dataAccessHandler.updateMasterSync();
 
                         }
                     });

@@ -40,12 +40,13 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     private DataAccessHandler dataAccessHandler;
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     String ConsignmentCode;
+String targetDatedata ;
 
-
-    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode) {
+    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode,String targetDate) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
         this.ConsignmentCode = ConsignmentCode;
+        this.targetDatedata = targetDate;
     }
 
     @NonNull
@@ -103,7 +104,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
         }
 
-//        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
+//        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate2("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
+//        holder.expecteddate.setText( ( CommonUtils.getTargetDate2("2021-08-05 17:14:11",mActivitiesList.get(position).getTargetDays())));
 
 
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +122,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
                     met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
                     met.putExtra("Ismultipleentry1", mActivitiesList.get(position).getIsMultipleEntries());
+                    met.putExtra("status", mActivitiesList.get(position).getDesc());
+                    met.putExtra("statusId", mActivitiesList.get(position).getStatusTypeId());
                     met.putExtra("addActivity", false);
 
                     Log.d("consignmentcode1", ConsignmentCode);
@@ -140,6 +144,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
             }
         });
+
 
     }
 

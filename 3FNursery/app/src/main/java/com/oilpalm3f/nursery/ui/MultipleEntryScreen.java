@@ -26,7 +26,8 @@ public class MultipleEntryScreen extends AppCompatActivity {
     RecyclerView multipleentryrcv;
     private DataAccessHandler dataAccessHandler;
     Button addBtn;
-    String activityTypeId, activityName, ismultipleentry, consignmentcode;
+    String activityTypeId, activityName, ismultipleentry, consignmentcode,status;
+    int statusId;
     MultipleEntriesRecyclerViewAdapter multipleEntriesRecyclerViewAdapter;
     private List<MutipleData> multiplelist = new ArrayList<>();
     private List<LandlevellingFields> fieldslist = new ArrayList<>();
@@ -46,6 +47,9 @@ public class MultipleEntryScreen extends AppCompatActivity {
             activityName = extras.getString("ActivityName1");
             ismultipleentry = extras.getString("Ismultipleentry1");
             consignmentcode = extras.getString("consignmentcode");
+            status = extras.getString("status");
+            statusId = extras.getInt("statusId");
+//            consignmentcode = extras.getString("addActivity");
             Log.d("ActivityTypeIdHere", activityTypeId + "");
             Log.d("ActivityTypeIdHere", activityTypeId + "");
         }
@@ -72,11 +76,11 @@ public class MultipleEntryScreen extends AppCompatActivity {
 
         Log.d("multiplelist", multiplelist.size() + "");
         multipleentryrcv.setLayoutManager(new LinearLayoutManager(this));
-        multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist, activityName, activityTypeId, ismultipleentry, consignmentcode);
+        multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist, activityName, activityTypeId, ismultipleentry, consignmentcode,status);
         multipleentryrcv.setAdapter(multipleEntriesRecyclerViewAdapter);
 
-        int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
-        if (value == 352) {
+//        int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
+        if (statusId == 352) {
             addBtn.setVisibility(View.VISIBLE);
         } else {
             addBtn.setVisibility(View.GONE);
@@ -88,11 +92,11 @@ public class MultipleEntryScreen extends AppCompatActivity {
                 boolean showbutton = false;
 
                 // TOdo  Check Job Done or Not
-                int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
-                if (value == 349) {
+//                int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
+                if (statusId == 349) {
                     showbutton = true;
                 }
-                if (value != 346) {
+                if (statusId != 346) {
                     Intent at = new Intent(MultipleEntryScreen.this, ActivityTask.class);
 
                     at.putExtra("ActivityTypeId", activityTypeId);

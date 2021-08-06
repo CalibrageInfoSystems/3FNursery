@@ -96,13 +96,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             String intentTransactionId = extras.getString("transactionId");
             boolean enableEditing = extras.getBoolean("enableEditing");
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id :" + intentTransactionId);
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
             int buttonid = 1;
-            Button btn = (Button) findViewById(buttonid);
-            if (enableEditing)
-                btn.setVisibility(View.VISIBLE);
-            else
-                btn.setVisibility(View.GONE);
+//            Button btn = (Button) findViewById(buttonid);
+//            if (enableEditing)
+//                btn.setVisibility(View.VISIBLE);
+//            else
+//                btn.setVisibility(View.GONE);
             // TODO Bind DATA UsingTransactionID
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
@@ -338,7 +339,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 if (et.getVisibility() == View.VISIBLE && TextUtils.isEmpty(et.getText().toString())) {
                     //TOdo  need to check already exist or not
 
-                    Toast.makeText(this, "Please Enter Proper Data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please Enter"+activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -352,7 +353,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 if (spinnner.getSelectedItemPosition() == 0) {
                     //TOdo  need to check already exist or not
 
-                    Toast.makeText(this, "Please Select Dropdown Data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please Select "+activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 

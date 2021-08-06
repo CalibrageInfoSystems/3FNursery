@@ -154,6 +154,7 @@ public class DataAccessHandler<T> {
             Log.d("WhatistheException", e.toString());
         }
     }
+
     public String getSingleValue(String query) {
         Log.v(LOG_TAG, "@@@ query " + query);
         Cursor mOprQuery = null;
@@ -182,7 +183,7 @@ public class DataAccessHandler<T> {
         try {
             mOprQuery = mDatabase.rawQuery(query, null);
             if (mOprQuery != null && mOprQuery.moveToFirst()) {
-                 String isSelect = String.valueOf(mOprQuery.getColumnIndex("IsOptional"));
+                String isSelect = String.valueOf(mOprQuery.getColumnIndex("IsOptional"));
                 return isSelect;
             }
 
@@ -198,6 +199,7 @@ public class DataAccessHandler<T> {
         }
         return null;
     }
+
     public LinkedHashMap<String, String> getGenericData(final String query) {
         Log.v(LOG_TAG, "@@@ Generic Query " + query);
         LinkedHashMap<String, String> mGenericData = new LinkedHashMap<>();
@@ -296,7 +298,7 @@ public class DataAccessHandler<T> {
         ContentValues contentValues = new ContentValues();
         contentValues.put("MasterSync", 1);
         contentValues.put("ServerUpdatedStatus", 0);
-        contentValues.put("Date",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        contentValues.put("Date", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         contentValues.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         contentValues.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
 
@@ -309,7 +311,7 @@ public class DataAccessHandler<T> {
         ContentValues contentValues = new ContentValues();
         contentValues.put("TransactionSync", 1);
         contentValues.put("ServerUpdatedStatus", 0);
-        contentValues.put("Date",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        contentValues.put("Date", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         contentValues.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         contentValues.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
 
@@ -322,7 +324,7 @@ public class DataAccessHandler<T> {
         ContentValues contentValues = new ContentValues();
         contentValues.put("ResetData", 1);
         contentValues.put("ServerUpdatedStatus", 0);
-        contentValues.put("Date",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        contentValues.put("Date", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         contentValues.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         contentValues.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
 
@@ -720,7 +722,7 @@ f
                 for (LinkedHashMap.Entry temp : entryList) {
                     String keyToInsert = temp.getKey().toString();
                     if (!fromMaster) {
-                        if (keyToInsert.equalsIgnoreCase("Id") && !tableName.equalsIgnoreCase(DatabaseKeys.TABLE_ALERTS))
+                        if (keyToInsert.equalsIgnoreCase("Id") && !tableName.equalsIgnoreCase(DatabaseKeys.TABLE_ALERTS) && !tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING))
                             continue;
                     }
                     if (keyToInsert.equalsIgnoreCase("ServerUpdatedStatus")) {
@@ -1415,10 +1417,14 @@ f
         try {
             for (int i = 0; i < cv.size(); i++) {
                 ContentValues stockResponse = cv.get(i);
-                long id = mDatabase.insert(tableName, null, stockResponse);
-                if (id < 0) {
-                    isError = true;
-                }
+
+                    // Added BY MAHESH - CIS   06082021 SAPLING TABLE ID NOT INCREMENT VALUE
+                    long id = mDatabase.insert(tableName, null, stockResponse);
+                    if (id < 0) {
+                        isError = true;
+                    }
+
+
             }
             mDatabase.setTransactionSuccessful();
         } finally {
@@ -1538,7 +1544,6 @@ f
         }
         return (T) ((type == 0) ? mAddress : farmerAddrList);
     }
-
 
 
     public T getSelectedFarmerData(final String query, int type) {
@@ -2096,7 +2101,6 @@ f
     }
 
 
-
     public List<NurseryDetails> getNurseryDetails(final String query) {
         List<NurseryDetails> nurserySaplingDetails = new ArrayList<>();
         Cursor cursor = null;
@@ -2124,7 +2128,6 @@ f
         }
         return nurserySaplingDetails;
     }
-
 
 
     public List<NurseryData> getNurseryData(final String query) {
@@ -2161,6 +2164,7 @@ f
     }
 
     public List<ConsignmentData> getConsignmentData(final String query) {
+        Log.d(LOG_TAG, "==> analysis GetConsinmentData :" + query);
         List<ConsignmentData> consignmentData = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2178,7 +2182,6 @@ f
                     consignmentdetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     consignmentdetails.setArrivedDate(cursor.getString(cursor.getColumnIndex("ArrivedDate")));
                     consignmentdetails.setArrivedQuantity(cursor.getInt(cursor.getColumnIndex("ArrivedQuantity")));
-
 
 
                     consignmentData.add(consignmentdetails);
@@ -2217,7 +2220,6 @@ f
                     saplingsactivityDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     saplingsactivityDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     saplingsactivityDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
-
 
 
                     sapactivitydata.add(saplingsactivityDetails);
@@ -2367,8 +2369,9 @@ f
         }
         return (T) ((type == 0) ? mFollowUp : mFollowUpList);
     }
+
     public List<NurseryAcitivity> getNurseryActivityDetails(final String query) {
-        Log.d(DataAccessHandler.class.getSimpleName(),"====> Analysis ==> GET ACTIVITIES :"+query);
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET ACTIVITIES :" + query);
         List<NurseryAcitivity> nurseryActivityDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2387,6 +2390,7 @@ f
                     nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("StatusType")));
 
                     nurseryActivityyDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDays")));
 
                     nurseryActivityDetails.add(nurseryActivityyDetails);
                 } while (cursor.moveToNext());
@@ -2405,7 +2409,7 @@ f
 
 
     public List<MutipleData> getMultipleDataDetails(final String query) {
-        Log.d(DataAccessHandler.class.getSimpleName(),"==> analysis Query :"+query);
+        Log.d(DataAccessHandler.class.getSimpleName(), "==> analysis Query :" + query);
         List<MutipleData> mutipleDataListDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2524,7 +2528,7 @@ f
 
     public List<ActivityTasks> getActivityTasksDetails(final String query) {
         List<ActivityTasks> activityTaskDetails = new ArrayList<>();
-        Log.d(DataAccessHandler.class.getSimpleName(), "===> getActivityTasksDetails Query :"+query);
+        Log.d(DataAccessHandler.class.getSimpleName(), "===> getActivityTasksDetails Query :" + query);
         Cursor cursor = null;
         try {
             cursor = mDatabase.rawQuery(query, null);
@@ -2567,7 +2571,7 @@ f
         return activityTaskDetails;
     }
 
-    public List<Saplings> getSaplingDetails(final String query,final int type) {
+    public List<Saplings> getSaplingDetails(final String query, final int type) {
         List<Saplings> saplingDataDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2608,7 +2612,7 @@ f
     }
 
 
-    public List<SaplingActivity> getSaplingActivityDetails(final String query,final int type) {
+    public List<SaplingActivity> getSaplingActivityDetails(final String query, final int type) {
         List<SaplingActivity> saplingActivityDataDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2681,7 +2685,7 @@ f
         return saplingActivityXrefDataDetails;
     }
 
-    public List<SaplingActivityHistoryModel> getSaplingActivityHistoryDetails(final String query,final int type) {
+    public List<SaplingActivityHistoryModel> getSaplingActivityHistoryDetails(final String query, final int type) {
         List<SaplingActivityHistoryModel> saplingActivityHistoryDataDetails = new ArrayList<>();
         Cursor cursor = null;
         try {

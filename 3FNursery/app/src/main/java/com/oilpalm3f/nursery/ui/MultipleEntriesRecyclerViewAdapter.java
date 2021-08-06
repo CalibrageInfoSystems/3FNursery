@@ -37,8 +37,9 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
     SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
     String ActivityTypeId, ActivityName, ismultipleentry;
     String ConsignmentCode;
+    String status;
 
-    public MultipleEntriesRecyclerViewAdapter(Context context, List<MutipleData> multiplelist, List<LandlevellingFields> fieldslist, String ActivityName, String ActivityTypeId, String ismultipleentry, String ConsignmentCode) {
+    public MultipleEntriesRecyclerViewAdapter(Context context, List<MutipleData> multiplelist, List<LandlevellingFields> fieldslist, String ActivityName, String ActivityTypeId, String ismultipleentry, String ConsignmentCode,String status) {
         this.context = context;
         this.multiplelist = multiplelist;
         this.fieldslist = fieldslist;
@@ -46,6 +47,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         this.ActivityName = ActivityName;
         this.ismultipleentry = ismultipleentry;
         this.ConsignmentCode = ConsignmentCode;
+        this.status = status;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
         holder.transactionId.setText(":  " + multiplelist.get(position).getTransactionId());
         holder.consignmentcode.setText(":  " + multiplelist.get(position).getConsignmentCode());
-        holder.status.setText(":  " + multiplelist.get(position).getDesc());
+        holder.status.setText(":  " +status);
         if (multiplelist.get(position).getComment() != null && !StringUtils.isEmpty(multiplelist.get(position).getComment())  && !multiplelist.get(position).getComment().equalsIgnoreCase("null"))
         {
             holder.lyt_coments.setVisibility(View.VISIBLE);
