@@ -653,7 +653,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
 
     public String getActivityTaskDetails(int Id) {
-        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
+        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
     }
    public static String getTargetDay(String consimentId)
    {

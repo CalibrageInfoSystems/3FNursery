@@ -240,8 +240,8 @@ public class DataSyncHelper {
 //                            if (null != imagesData && !imagesData.isEmpty()) {
 //                                sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
 //                            } else {
-                                ProgressBar.hideProgressBar();
-                                onComplete.execute(true, null, "Sync is success");
+                            ProgressBar.hideProgressBar();
+                            onComplete.execute(true, null, "Sync is success");
                             //}
                         } else {
                             postTransactionsDataToCloud(context, refreshtableNamesList.get(transactionsCheck), dataAccessHandler, onComplete);
@@ -260,9 +260,9 @@ public class DataSyncHelper {
 //                if (null != imagesData && !imagesData.isEmpty()) {
 //                    sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
 //                } else {
-                    ProgressBar.hideProgressBar();
-                    onComplete.execute(true, null, "Sync is success");
-                    Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
+                ProgressBar.hideProgressBar();
+                onComplete.execute(true, null, "Sync is success");
+                Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
 
 //                }
             } else {
@@ -323,7 +323,6 @@ public class DataSyncHelper {
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
 
 
-
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityStatus, saplingActivityStatuslist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SAPLING, saplingsList);
@@ -344,7 +343,7 @@ public class DataSyncHelper {
         SharedPreferences sharedPreferences = context.getSharedPreferences("appprefs", MODE_PRIVATE);
         String date = sharedPreferences.getString(PREVIOUS_SYNC_DATE, null);
 
-        final String finalDate =date;// "2021-07-28 10:28:36";  // date
+        final String finalDate = date;// "2021-07-28 10:28:36";  // date
         Log.v(LOG_TAG, "@@@ Date " + date);
         progressDialogFragment.updateText("Getting total records count");
         final ProgressDialogFragment finalProgressDialogFragment = progressDialogFragment;
@@ -453,8 +452,7 @@ public class DataSyncHelper {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "NurseryCode", saplingslist.getNurseryCode()));
-            } else
-                if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivity)) {
+            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivity)) {
                 SaplingActivity saplingActivity = (SaplingActivity) dataList.get(innerCountCheck);
                 saplingActivity.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId = '" + saplingActivity.getTransactionId() + "'";
@@ -483,8 +481,7 @@ public class DataSyncHelper {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "TransactionId", saplingActivityXredata.getTransactionId()));
-            }
-            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityHistory)) {
+            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityHistory)) {
                 SaplingActivityHistoryModel saplingActivityHistorydata = (SaplingActivityHistoryModel) dataList.get(innerCountCheck);
                 saplingActivityHistorydata.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId= '" + saplingActivityHistorydata.getTransactionId() + "'";
@@ -495,19 +492,18 @@ public class DataSyncHelper {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "TransactionId", saplingActivityHistorydata.getTransactionId()));
-            }
-            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityStatus)) {
+            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityStatus)) {
                 SaplingActivityStatusModel saplingActivityStatusModel = (SaplingActivityStatusModel) dataList.get(innerCountCheck);
                 saplingActivityStatusModel.setServerUpdatedStatus(1);
-                whereCondition = " where  ConsignmentCode= '" + saplingActivityStatusModel.getConsignmentCode() + "'  AND ActivityId = '"+saplingActivityStatusModel.getActivityId()+"'";
+                whereCondition = " where  ConsignmentCode= '" + saplingActivityStatusModel.getConsignmentCode() + "'  AND ActivityId = '" + saplingActivityStatusModel.getActivityId() + "'";
                 try {
                     ccData = new JSONObject(gson.toJson(saplingActivityStatusModel));
                     dataToInsert.add(CommonUtils.toMap(ccData));
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
-                Log.d(DataSyncHelper.LOG_TAG,"===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :"+Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(),"ActivityId",saplingActivityStatusModel.getActivityId()+""));
-                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(),"ActivityId",saplingActivityStatusModel.getActivityId()+""));
+                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
             }
 
             if (dataList.size() != innerCountCheck) {
@@ -782,7 +778,7 @@ public class DataSyncHelper {
                             List<SaplingActivityHistoryModel> SaplingActivityHistoryDataList = gson.fromJson(dataArray.toString(), type);
                             if (null != SaplingActivityHistoryDataList && SaplingActivityHistoryDataList.size() > 0)
                                 dataToUpdate.put(tableName, SaplingActivityHistoryDataList);
-                        }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityStatus)) {
+                        } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityStatus)) {
                             Gson gson = new Gson();
                             Type type = new TypeToken<List<SaplingActivityStatusModel>>() {
                             }.getType();
@@ -819,14 +815,14 @@ public class DataSyncHelper {
 
                         }
                         if (CommonUtils.isNetworkAvailable(context)) {
-                            updateSyncDate(context,  CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                            updateSyncDate(context, CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                             RefreshSyncActivity.allRefreshDataMap = new ArrayList<String>();
                             for (String s : RefreshSyncActivity.allRefreshDataMap) {
                                 dataAccessHandler.executeRawQuery("DELETE FROM " + s);
                                 Log.v(LOG_TAG, "delete table" + s);
                             }
-                          //  progressDialogFragment = new ProgressDialogFragment();
-                           // startTransactionSync(context, progressDialogFragment);
+                            //  progressDialogFragment = new ProgressDialogFragment();
+                            // startTransactionSync(context, progressDialogFragment);
                         } else {
                             UiUtils.showCustomToastMessage("Please check network connection", context, 1);
                         }

@@ -2556,6 +2556,7 @@ f
                     taskDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     taskDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     taskDetails.setDataType(cursor.getString(cursor.getColumnIndex("DataType")));
+                    taskDetails.setGroupId(cursor.getInt(cursor.getColumnIndex("GroupId")));
 
                     activityTaskDetails.add(taskDetails);
                 } while (cursor.moveToNext());

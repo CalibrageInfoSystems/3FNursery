@@ -64,6 +64,10 @@ public class ActivityTasks {
     @Expose
     private String DataType;
 
+    @SerializedName("GroupId")
+    @Expose
+    private Integer GroupId;
+
     public String getDataType() {
         return DataType;
     }
@@ -214,5 +218,13 @@ public class ActivityTasks {
 
     public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public Integer getGroupId() {
+        return GroupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        GroupId = groupId;
     }
 }
