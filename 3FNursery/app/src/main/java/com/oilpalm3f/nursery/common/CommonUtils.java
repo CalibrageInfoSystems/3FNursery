@@ -1400,11 +1400,12 @@ public class CommonUtils {
     }
 
     public static String getTargetDate2(String expecteddate, int targetday) {
-        final SimpleDateFormat sdfq = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        expecteddate ="2021-08-05T19:22:21.597";
+        final SimpleDateFormat sdfq = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        df.setTimeZone(UTC_TIME_ZONE);
+//        df.setTimeZone(UTC_TIME_ZONE);
         sdfq.setLenient(true);
-        sdfq.setTimeZone(TimeZone.getDefault());
+//        sdfq.setTimeZone(TimeZone.getDefault());
         Date date = null;
         try {
             date = df.parse(expecteddate);
@@ -1415,8 +1416,9 @@ public class CommonUtils {
 
         Calendar cal = Calendar.getInstance();
         cal.set(date.getYear(), date.getMonth(), date.getDate());
-        cal.add(Calendar.DATE, targetday);
-        return getProperComplaintsDate(sdfq.format(new Date(cal.getTimeInMillis())));
+        cal.add(Calendar.DATE, 10);
+//        return getProperComplaintsDate(sdfq.format(new Date(cal.getTimeInMillis())));
+        return df.format(new Date(cal.getTimeInMillis()));
 
     }
     public static Date addDays(Date date, int days)

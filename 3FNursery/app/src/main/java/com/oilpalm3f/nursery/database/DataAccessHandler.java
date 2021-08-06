@@ -2132,6 +2132,7 @@ f
 
     public List<NurseryData> getNurseryData(final String query) {
         List<NurseryData> nurseryData = new ArrayList<>();
+        Log.d(LOG_TAG,"=== > Analysis ==> getNurseryData:"+query);
         Cursor cursor = null;
         try {
             cursor = mDatabase.rawQuery(query, null);

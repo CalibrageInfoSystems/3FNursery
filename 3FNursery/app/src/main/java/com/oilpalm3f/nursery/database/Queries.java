@@ -1,5 +1,6 @@
 package com.oilpalm3f.nursery.database;
 
+import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
 
 public class Queries {
@@ -196,7 +197,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         "inner join State st on n.StateId = st.id \n" +
         "inner join District d on n.StateId = d.id \n" +
         "inner join Mandal m on n.StateId = m.id \n" +
-        "where X.UserId='"+Userid+"'  Group By N.Code";
+        "where X.UserId='"+Userid+"' And N.isActive ='true' Group By N.Code";
     }
     public String getConsignmentDataQuery(String Userid, String NurseryCode) {
         return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
@@ -204,7 +205,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +
-        "where X.UserId='"+Userid+"' AND S.NurseryCode = '"+NurseryCode+"' GROUP By S.ConsignmentCode";
+        "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND  S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
     public String getConsignmentStatusQuery(String consignmentcode) {
@@ -355,7 +356,11 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         return "select * from MarketSurveyAndReferrals where FarmerCode = '" + farmerCode + "'";
     }
 
-
+   public static String addDaysToSapling(Integer days,String consinmentCode){
+        String query =  " Select EstimatedDate, date(EstimatedDate, '"+days+" day') as newdate from Sapling where ConsignmentCode = '"+consinmentCode+"'";
+       Log.d("QUERIES", "==> Analysis ==> GetTargetDate :"+query);
+        return  " Select EstimatedDate, date(EstimatedDate, '"+days+" day') as newdate from Sapling where ConsignmentCode = '"+consinmentCode+"'";
+   }
 
     //********************* REFRESH QUERIES****************************************************************************************
 

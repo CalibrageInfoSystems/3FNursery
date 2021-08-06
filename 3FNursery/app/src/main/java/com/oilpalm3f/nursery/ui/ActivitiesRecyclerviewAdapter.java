@@ -40,9 +40,9 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     private DataAccessHandler dataAccessHandler;
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     String ConsignmentCode;
-String targetDatedata ;
+    String targetDatedata;
 
-    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode,String targetDate) {
+    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode, String targetDate) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
         this.ConsignmentCode = ConsignmentCode;
@@ -75,35 +75,34 @@ String targetDatedata ;
         holder.imgShStatus.setImageDrawable(null);
         holder.txtDoneDate.setText("");
 
-        if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate()))
-        {
+        if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
             Log.d("###################", mActivitiesList.get(position).getUpdatedDate());
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate()));
         }
 
-        if(mActivitiesList.get(position).getStatusTypeId() == 346){
+        if (mActivitiesList.get(position).getStatusTypeId() == 346) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
-        }else if(mActivitiesList.get(position).getStatusTypeId() == 347){
+        } else if (mActivitiesList.get(position).getStatusTypeId() == 347) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
-        }else if(mActivitiesList.get(position).getStatusTypeId() == 348){
+        } else if (mActivitiesList.get(position).getStatusTypeId() == 348) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.done);
-        }else if(mActivitiesList.get(position).getStatusTypeId() == 349){
+        } else if (mActivitiesList.get(position).getStatusTypeId() == 349) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.rejected);
             holder.imgShStatus.setImageResource(R.drawable.rejected);
-        }
-        else if(mActivitiesList.get(position).getStatusTypeId() == 352){
+        } else if (mActivitiesList.get(position).getStatusTypeId() == 352) {
             holder.imgStatus.setImageResource(R.drawable.inprogress);
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
         }
-
+        holder.expecteddate.setText(CommonUtils.getProperComplaintsDate( dataAccessHandler.getSingleValue(Queries.addDaysToSapling(mActivitiesList.get(position).getTargetDays(), ConsignmentCode))));
+//        holder.expecteddate.setText(( CommonUtils.getTargetDate2(targetDatedata,mActivitiesList.get(position).getTargetDays())));
 //        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate2("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
 //        holder.expecteddate.setText( ( CommonUtils.getTargetDate2("2021-08-05 17:14:11",mActivitiesList.get(position).getTargetDays())));
 
@@ -157,7 +156,7 @@ String targetDatedata ;
 
         public TextView activityName, expecteddate, saplingExpecteddate, txtStatusTxt, txtDoneDate;
         public LinearLayout mainlyt;
-        public ImageView imgStatus,imgNurStatus,imgShStatus;
+        public ImageView imgStatus, imgNurStatus, imgShStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
