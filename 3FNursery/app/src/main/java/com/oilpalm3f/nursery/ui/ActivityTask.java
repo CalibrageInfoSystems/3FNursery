@@ -29,8 +29,6 @@ import com.oilpalm3f.nursery.dbmodels.DisplayData;
 import com.oilpalm3f.nursery.dbmodels.ExistingData;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -742,30 +740,32 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             saveData();
 
         } else if (view.getId() == yesnoCHeckbox) {
-            if (yesnoCHeckbox > 0) {
-                if (((CheckBox) view).isChecked()) {
-                    for (ActivityTasks widget : activityTasklist) {
-                        findViewById(widget.getId()).setVisibility(View.VISIBLE);
-                        try {
-                            findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-//                    Toast.makeText(ActivityTask.this, "CHECKED", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Need to disble remainign widgets
-                    for (ActivityTasks widget : activityTasklist) {
-                        String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField(widget.getId()));
-                        Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> isOptional :" + optional);
-                        if (optional != null && !StringUtils.isEmpty(optional)) {
-                            findViewById(widget.getId()).setVisibility(View.GONE);
-                            findViewById(widget.getId() + 9000).setVisibility(View.GONE);
-                        }
-                    }
-//                    Toast.makeText(ActivityTask.this, "UN-CHECKED", Toast.LENGTH_SHORT).show();
-                }
-            }
+//            if (yesnoCHeckbox > 0) {
+//
+//                if (((CheckBox) view).isChecked()) {
+//                    for (ActivityTasks widget : activityTasklist) {
+//                        findViewById(widget.getId()).setVisibility(View.VISIBLE);
+//                        try {
+//                            findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+////                    Toast.makeText(ActivityTask.this, "CHECKED", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    // Need to disble remainign widgets
+//                    for (ActivityTasks widget : activityTasklist) {
+//                        String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField(widget.getId()));
+//                        Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> isOptional :" + optional);
+//                        if (optional != null && !StringUtils.isEmpty(optional)) {
+//                            findViewById(widget.getId()).setVisibility(View.GONE);
+//                            findViewById(widget.getId() + 9000).setVisibility(View.GONE);
+//                        }
+//                    }
+////                    Toast.makeText(ActivityTask.this, "UN-CHECKED", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
         }
 
     }
