@@ -23,7 +23,9 @@ public class Queries {
     public static String getCropId(){
         return "SELECT Id FROM LookUp WHERE Name ='Oil Palm' AND LookUpTypeId = '22'";
     }
-
+    public  static  String getGroupIds(String activityTypeId){
+       return  "Select GroupId from NurseryActivityField where ActivityTypeId = "+activityTypeId+" AND GroupId != 'null' GROUP by GroupId";
+    }
     public static String getVillageName(String farmerCode){
         return "Select Name from Village V\n" +
                 "inner join Address A on V.Id=A.VillageId\n" +
@@ -357,9 +359,9 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
 
    public static String addDaysToSapling(Integer days,String consinmentCode){
-        String query =  " Select EstimatedDate, date(EstimatedDate, '"+days+" day') as newdate from Sapling where ConsignmentCode = '"+consinmentCode+"'";
+        String query =  " Select date(EstimatedDate, '"+days+" day') as newdate from Sapling where ConsignmentCode = '"+consinmentCode+"'";
        Log.d("QUERIES", "==> Analysis ==> GetTargetDate :"+query);
-        return  " Select EstimatedDate, date(EstimatedDate, '"+days+" day') as newdate from Sapling where ConsignmentCode = '"+consinmentCode+"'";
+        return  query;
    }
 
     //********************* REFRESH QUERIES****************************************************************************************
@@ -709,6 +711,9 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
 
     public String getSaplingActivityHistoryRefresh() {
         return "select * from SaplingActivityHistory where ServerUpdatedStatus = 0";
+    }
+    public String getNurceryIrrigationHistoryRefresh() {
+        return "select * from NurseryIrrigationLog where ServerUpdatedStatus = 0";
     }
 
     public String getSaplingActivityStatusRefresh() {

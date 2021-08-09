@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,10 +83,25 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Activities.class);
-                intent.putExtra("nurceryId", nurceryId);
-                intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
-                context.startActivity(intent);
+
+                if(CommonConstants.COMMINGFROM != 1){
+
+                    Intent intent = new Intent(context, Activities.class);
+                    intent.putExtra("nurceryId", nurceryId);
+                    intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
+                    context.startActivity(intent);
+
+                } else {
+
+                    Intent intent = new Intent(context, IrrigationActivity.class);
+                    CommonConstants.ConsignmentID = consignmentList.get(position).getId();
+                    context.startActivity(intent);
+
+                }
+//                Intent intent = new Intent(context, Activities.class);
+//                intent.putExtra("nurceryId", nurceryId);
+//                intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
+//                context.startActivity(intent);
             }
         });
 

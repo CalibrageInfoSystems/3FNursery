@@ -65,6 +65,7 @@ import com.oilpalm3f.nursery.dbmodels.NeighbourPlot;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
 import com.oilpalm3f.nursery.dbmodels.Ownershipfilerepository;
@@ -1418,11 +1419,11 @@ f
             for (int i = 0; i < cv.size(); i++) {
                 ContentValues stockResponse = cv.get(i);
 
-                    // Added BY MAHESH - CIS   06082021 SAPLING TABLE ID NOT INCREMENT VALUE
-                    long id = mDatabase.insert(tableName, null, stockResponse);
-                    if (id < 0) {
-                        isError = true;
-                    }
+                // Added BY MAHESH - CIS   06082021 SAPLING TABLE ID NOT INCREMENT VALUE
+                long id = mDatabase.insert(tableName, null, stockResponse);
+                if (id < 0) {
+                    isError = true;
+                }
 
 
             }
@@ -2132,7 +2133,7 @@ f
 
     public List<NurseryData> getNurseryData(final String query) {
         List<NurseryData> nurseryData = new ArrayList<>();
-        Log.d(LOG_TAG,"=== > Analysis ==> getNurseryData:"+query);
+        Log.d(LOG_TAG, "=== > Analysis ==> getNurseryData:" + query);
         Cursor cursor = null;
         try {
             cursor = mDatabase.rawQuery(query, null);
@@ -2527,6 +2528,31 @@ f
         return displayData;
     }
 
+    public List<Integer> getGroupids(final String query) {
+        List<Integer> groupIds = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    Integer groupId = cursor.getInt(cursor.getColumnIndex("GroupId"));
+
+                    groupIds.add(groupId);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return groupIds;
+    }
+
     public List<ActivityTasks> getActivityTasksDetails(final String query) {
         List<ActivityTasks> activityTaskDetails = new ArrayList<>();
         Log.d(DataAccessHandler.class.getSimpleName(), "===> getActivityTasksDetails Query :" + query);
@@ -2718,6 +2744,45 @@ f
         }
         return saplingActivityHistoryDataDetails;
     }
+    public List<NurseryIrrigationLog> getIrrigationDetails(final String query, final int type) {
+        List<NurseryIrrigationLog> NurseryIrrigationLogList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryIrrigationLog nurseryIrrigationLog = new NurseryIrrigationLog();
+                    nurseryIrrigationLog.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    nurseryIrrigationLog.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
+                    nurseryIrrigationLog.setConsignmentId(cursor.getInt(cursor.getColumnIndex("ConsignmentId")));
+                    nurseryIrrigationLog.setRegularMale(cursor.getInt(cursor.getColumnIndex("RegularMale")));
+                    nurseryIrrigationLog.setRegularFemale(cursor.getInt(cursor.getColumnIndex("RegularFemale")));
+                    nurseryIrrigationLog.setContractMale(cursor.getInt(cursor.getColumnIndex("ContractMale")));
+                    nurseryIrrigationLog.setContractFemale(cursor.getInt(cursor.getColumnIndex("ContractFemale")));
+                    nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    nurseryIrrigationLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    nurseryIrrigationLog.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    nurseryIrrigationLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    nurseryIrrigationLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    nurseryIrrigationLog.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+
+                    NurseryIrrigationLogList.add(nurseryIrrigationLog);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return NurseryIrrigationLogList;
+    }
+
 
     public List<SaplingActivityStatusModel> getSaplingActivityStatusDetails(final String query, final int type) {
         List<SaplingActivityStatusModel> saplingActivitystatusDataDetails = new ArrayList<>();

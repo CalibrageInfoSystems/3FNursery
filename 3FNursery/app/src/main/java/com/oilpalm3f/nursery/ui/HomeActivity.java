@@ -35,6 +35,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
+    RelativeLayout irrigation;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -55,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     private void init() {
 
         newactivity = findViewById(R.id.newactivityRel);
+        irrigation = findViewById(R.id.irigationdetails);
         refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
     }
 
@@ -63,11 +65,23 @@ public class HomeActivity extends AppCompatActivity {
         newactivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                CommonConstants.COMMINGFROM = 0;
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
                 startActivity(selectionscreen);
 
               //  showDialog(HomeActivity.this);
+
+            }
+        });
+        irrigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                CommonConstants.COMMINGFROM = 1;
+                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
+                startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
 
             }
         });

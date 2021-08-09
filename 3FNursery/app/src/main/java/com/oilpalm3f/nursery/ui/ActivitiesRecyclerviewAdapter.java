@@ -101,7 +101,9 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
         }
-        holder.expecteddate.setText(CommonUtils.getProperComplaintsDate( dataAccessHandler.getSingleValue(Queries.addDaysToSapling(mActivitiesList.get(position).getTargetDays(), ConsignmentCode))));
+String beforeDate =  dataAccessHandler.getSingleValue(Queries.addDaysToSapling(mActivitiesList.get(position).getTargetDays(), ConsignmentCode));
+  String finalDate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy", beforeDate);
+        holder.expecteddate.setText(finalDate);
 //        holder.expecteddate.setText(( CommonUtils.getTargetDate2(targetDatedata,mActivitiesList.get(position).getTargetDays())));
 //        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate2("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
 //        holder.expecteddate.setText( ( CommonUtils.getTargetDate2("2021-08-05 17:14:11",mActivitiesList.get(position).getTargetDays())));
@@ -130,12 +132,16 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
                 } else {
                     // Todo Check ALready hava data or not.
-
+                    Boolean enableEditing = false;
+                    if (mActivitiesList.get(position).getStatusTypeId() == 349) {
+                        enableEditing = true;
+                    }
                     Intent at = new Intent(context, ActivityTask.class);
                     at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
                     at.putExtra("consignmentcode", ConsignmentCode);
                     at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
                     at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                    at.putExtra("enableEditing", enableEditing);
                     at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
                     context.startActivity(at);
                 }

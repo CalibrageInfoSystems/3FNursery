@@ -94,6 +94,9 @@ public class CommonConstants {
     public static int ActivityTypeId =0;
     public static String ActivityName ="";
     public static String NurseryCode ="";
+    public static String NurseryName ="";
+    public  static int COMMINGFROM = 0;
+
 
     //public static UserData totalFarmerData = new UserData();
     // Bundle Constants
@@ -202,6 +205,8 @@ public class CommonConstants {
     public static int Uprooted_Status_Change = 238;
     public static int Crop_Maintenance_Plantation_Category = 239;
     public static int Crop_Maintenance_No_fo_trees = 240;
+
+
 
     public static String SyncTableName = "Table";
 

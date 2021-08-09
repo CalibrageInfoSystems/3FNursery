@@ -48,7 +48,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -106,6 +106,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         tvsaplingActivity = findViewById(R.id.saplingactivitycount);
         tvsaplingxref = findViewById(R.id.xrefcount);
         tvsaplinghistory = findViewById(R.id.historycount);
+        irrigationLog = findViewById(R.id.irrigationLog);
 
         btnsend = findViewById(R.id.btsynctoserver);
         btnmastersync = findViewById(R.id.btnmastersync);
@@ -197,6 +198,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             tvsaplingActivity.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivity")));
             tvsaplingxref.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityXref")));
             tvsaplinghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityHistory")));
+            irrigationLog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryIrrigationLog")));
 
 //            //getVistLogRecords
 //            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));

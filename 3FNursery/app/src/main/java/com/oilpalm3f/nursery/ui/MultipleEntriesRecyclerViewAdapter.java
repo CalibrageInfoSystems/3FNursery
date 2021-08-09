@@ -75,13 +75,16 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
 
         holder.transactionId.setText(":  " + multiplelist.get(position).getTransactionId());
         holder.consignmentcode.setText(":  " + multiplelist.get(position).getConsignmentCode());
-        holder.status.setText(":  " +status);
+        holder.status.setText(":  " +multiplelist.get(position).getDesc());
         if (multiplelist.get(position).getComment() != null && !StringUtils.isEmpty(multiplelist.get(position).getComment())  && !multiplelist.get(position).getComment().equalsIgnoreCase("null"))
         {
             holder.lyt_coments.setVisibility(View.VISIBLE);
             holder.comment.setText(":  " + multiplelist.get(position).getComment());
         }
 
+        if(multiplelist.get(position).getStatusTypeId() == 346){
+            holder.lyt_coments.setVisibility(View.GONE);
+        }
         holder.createddate.setText(":  " + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
 
         holder.infoicon.setOnClickListener(new View.OnClickListener() {
@@ -94,12 +97,18 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent at = new Intent(context, ActivityTask.class);
 
+                boolean showbutton = false;
+                if(multiplelist.get(position).getStatusTypeId() == 349)
+                {
+                    showbutton = true;
+                }
+                Intent at = new Intent(context, ActivityTask.class);
                 at.putExtra("consignmentcode", ConsignmentCode);
                 at.putExtra("ActivityName", ActivityName);
                 at.putExtra("ActivityTypeId", ActivityTypeId);
                 at.putExtra("transactionId", multiplelist.get(position).getTransactionId());
+                at.putExtra("enableEditing", showbutton);
                 at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA);
                 context.startActivity(at);
             }

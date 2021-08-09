@@ -22,6 +22,7 @@ import com.oilpalm3f.nursery.dbmodels.DataCountModel;
 import com.oilpalm3f.nursery.dbmodels.FarmerHistory;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -321,6 +322,8 @@ public class DataSyncHelper {
         List<SaplingActivity> saplingacityList = (List<SaplingActivity>) dataAccessHandler.getSaplingActivityDetails(Queries.getInstance().getSaplingActivityRefresh(), 1);
         List<SaplingActivityXrefModel> saplingActivityXreflist = (List<SaplingActivityXrefModel>) dataAccessHandler.getSaplingActivityXrefDetails(Queries.getInstance().getSaplingActivityXrefRefresh(), 1);
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
+        List<NurseryIrrigationLog> nurseryIrrigationLog = (List<NurseryIrrigationLog>) dataAccessHandler.getIrrigationDetails(Queries.getInstance().getNurceryIrrigationHistoryRefresh(), 1);
+
 
 
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
@@ -329,6 +332,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivity, saplingacityList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityXref, saplingActivityXreflist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityHistory, saplingActivityHistorylist);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLog, nurseryIrrigationLog);
 
 
 //        allRefreshDataMap.put(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, gpsTrackingList);
@@ -504,6 +508,18 @@ public class DataSyncHelper {
                 }
                 Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
+            }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
+                SaplingActivityXrefModel saplingActivityXrefModel = (SaplingActivityXrefModel) dataList.get(innerCountCheck);
+                saplingActivityXrefModel.setServerUpdatedStatus(1);
+                whereCondition = " where  TransactionId = '" + saplingActivityXrefModel.getTransactionId() + "'  AND FieldId = '" + saplingActivityXrefModel.getFieldId() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(saplingActivityXrefModel));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+//                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "FieldId", saplingActivityXrefModel.getFieldId()+""));
             }
 
             if (dataList.size() != innerCountCheck) {

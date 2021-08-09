@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,6 +29,8 @@ import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
 import com.oilpalm3f.nursery.dbmodels.DisplayData;
 import com.oilpalm3f.nursery.dbmodels.ExistingData;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -60,6 +63,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     ActivityTasks showHideActivity;
     CheckBox chkShowHide;
     int yesnoCHeckbox = -10;
+    int ButtonId = 100000001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +100,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id :" + intentTransactionId);
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
-            int buttonid = 1;
-            Button btn = (Button) findViewById(buttonid);
+
+            Button btn = (Button) findViewById(ButtonId);
             if (enableEditing)
                 btn.setVisibility(View.VISIBLE);
             else
@@ -115,8 +119,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
             String consignmentcode = extras.getString("consignmentcode");
             String activityTypeId = extras.getString("ActivityTypeId");
-            String multipleentry = extras.getString("multipleEntry");
 
+            boolean enableEditing = extras.getBoolean("enableEditing");
+
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
+
+
+
+//            Button btn = (Button) findViewById(ButtonId);
+//            if (enableEditing)
+//                btn.setVisibility(View.VISIBLE);
+//            else
+//                btn.setVisibility(View.GONE);
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
@@ -177,8 +191,19 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private boolean goValidate() {
+        Log.d("##############################", "YESNO CHECK VALUE :" + yesnoCHeckbox);
+//        if(yesnoCHeckbox > 0)
+//            return  validateyesNO();
+//        else
+//            return  validate();
+
+        return validate();
+    }
+
     private void addNewSingleEntryActivity(String _consignmentCode, String _activityId, int _statusTypeId, String _transactionId, boolean isFromMultipleEntry) {
-        if (validate()) {
+
+        if (goValidate()) {
             // DATA Validated next saving data locally
             final List<LinkedHashMap> listKey = new ArrayList<>();
             for (int j = 0; j < dataValue.size(); j++) {
@@ -313,7 +338,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         }
 
-        ll.addView(addButton("Submit", 1));
+        ll.addView(addButton("Submit", ButtonId));
     }
 
     private boolean validate() {
@@ -328,16 +353,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
             }
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+            if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
 
                 EditText et = findViewById(id);
 
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
 
-                if (et.getVisibility() == View.VISIBLE && TextUtils.isEmpty(et.getText().toString())) {
+                if (TextUtils.isEmpty(et.getText().toString())) {
                     //TOdo  need to check already exist or not
-
-                    Toast.makeText(this, "Please Enter"+activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -351,12 +375,109 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 if (spinnner.getSelectedItemPosition() == 0) {
                     //TOdo  need to check already exist or not
 
-                    Toast.makeText(this, "Please Select "+activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please Select " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
             }
 
+
+        }
+
+        return true;
+
+    }
+
+    private boolean validateyesNO() {
+        dataValue = new ArrayList<>();
+        List<KeyValues> groupValue = new ArrayList<>();
+        List<Integer> groupids = dataAccessHandler.getGroupids(Queries.getGroupIds(activityTypeId));
+        for (int k = 0; k < groupids.size(); k++) {
+            groupValue.add(new KeyValues(groupids.get(k), "novalue"));
+        }
+
+        for (int i = 0; i < activityTasklist.size(); i++) {
+            int id = activityTasklist.get(i).getId();
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
+
+                CheckBox chk = (CheckBox) findViewById(id);
+                Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
+
+            }
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox") && activityTasklist.get(i).getGroupId() == null) {
+
+                EditText et = findViewById(id);
+
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
+
+                if (TextUtils.isEmpty(et.getText().toString())) {
+                    //TOdo  need to check already exist or not
+                    Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+
+                EditText et = findViewById(id);
+
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
+
+                for (int g = 0; g < groupids.size(); g++) {
+
+                }
+
+
+            } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+                EditText et = findViewById(id);
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
+                if (TextUtils.isEmpty(et.getText().toString())) {
+                    //TOdo  need to check already exist or not
+                    Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
+
+                Spinner spinnner = findViewById(id);
+                int selectedPo = spinnner.getSelectedItemPosition();
+                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), spinnner.getSelectedItem().toString()));
+                Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString());
+                if (spinnner.getSelectedItemPosition() == 0) {
+                    //TOdo  need to check already exist or not
+
+                    Toast.makeText(this, "Please Select " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
+
+
+        }
+        if (showHideActivity != null && yesnoCHeckbox > 0 && ((CheckBox) findViewById(yesnoCHeckbox)).isChecked()) {
+
+            Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> It is Show Hide Activity ");
+            Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> It is Show Hide Activity ");
+
+            List<KeyValues> groupKeyvalues = new ArrayList<>();
+            for (int i = 0; i < groupids.size(); i++) {
+                String value = "NOVAL";
+                for (int j = 0; j < activityTasklist.size(); i++) {
+                    if (activityTasklist.get(j).getInputType().equalsIgnoreCase("TextBox")) {
+                        EditText edt = findViewById(activityTasklist.get(j).getId());
+                        if (!TextUtils.isEmpty(edt.getText().toString())) {
+                            value = edt.getText().toString();
+                        }
+                    }
+                }
+                if (value.equalsIgnoreCase("NOVAL")) ;
+                {
+                    Toast.makeText(this, "Please Enter atlest one value", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
 
         }
         return true;
@@ -372,7 +493,152 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         sp.setAdapter(spinnerArrayAdapter);
 
         sp.setId(id);
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(ActivityTask.this, "Selected PO :" + i, Toast.LENGTH_SHORT).show();
 
+                if (Integer.parseInt(activityTypeId) == 9) {
+                    if (i == 1) {
+
+                        // HIDE ITEMS
+                        yesnoCHeckbox = 31;
+
+                        for (int f = 21; f < 32; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.VISIBLE);
+                                findViewById(f + 9000).setVisibility(View.VISIBLE);
+//                                if(f < 31 && f > 22){
+//                                    try {
+//                                        ((EditText)findViewById(f)).setText("");
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        for (int f = 31; f < 45; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.GONE);
+                                findViewById(f + 9000).setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+
+                    } else if (i == 2) {
+                        yesnoCHeckbox = 45;
+                        for (int f = 21; f < 34; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.GONE);
+                                findViewById(f + 9000).setVisibility(View.GONE);
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        for (int f = 32; f < 45; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.VISIBLE);
+                                findViewById(f + 9000).setVisibility(View.VISIBLE);
+
+//                                    if(f < 45 && f > 31){
+//                                        try {
+//                                            ((EditText)findViewById(f)).setText("");
+//                                        } catch (Exception e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    }
+
+
+                } else if (Integer.parseInt(activityTypeId) == 91) {
+                    if (i == 1) {
+                        yesnoCHeckbox = 210;
+
+                        for (int f = 200; f < 211; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.VISIBLE);
+                                findViewById(f + 9000).setVisibility(View.VISIBLE);
+//                                if(f < 31 && f > 22){
+//                                    try {
+//                                        ((EditText)findViewById(f)).setText("");
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        for (int f = 211; f < 225; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.GONE);
+                                findViewById(f + 9000).setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    } else if (i == 2) {
+                        yesnoCHeckbox = 224;
+
+
+                        for (int f = 200; f < 211; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.GONE);
+                                findViewById(f + 9000).setVisibility(View.GONE);
+//                                if(f < 31 && f > 22){
+//                                    try {
+//                                        ((EditText)findViewById(f)).setText("");
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        for (int f = 211; f < 225; f++) {
+
+                            try {
+                                findViewById(f).setVisibility(View.VISIBLE);
+                                findViewById(f + 9000).setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return sp;
 
 
@@ -390,12 +656,19 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         cb.setId(id);
 
         cb.setOnClickListener(this::onClick);
-        if (content.contains("Requried?")) {
+        Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:  before Assign :" + id + "And Name :" + content);
+        if (id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
+                || id == 839 || id == 847 || id == 855 || id == 863 || id == 871 || id == 879 || id == 887 || id == 895 || id == 903 || id == 911 || id == 919 || id == 929
+                || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
+                || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
+                || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
+                || id == 2878 || id == 2886 || id == 2930 || id == 2940 || id == 2950 || id == 2960) {
             yesnoCHeckbox = id;
             cb.setChecked(true);
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:" + yesnoCHeckbox);
-
         }
+
+
         return cb;
     }
 
@@ -459,7 +732,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveData() {
-        if (validate()) {
+        if (goValidate()) {
 
             Bundle extras = getIntent().getExtras();
             if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
@@ -468,6 +741,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 String intentTransactionId = extras.getString("transactionId");
                 String consignmentcode = extras.getString("consignmentcode");
                 String ActivityTypeId = extras.getString("ActivityTypeId");
+                boolean enableEditing = extras.getBoolean("enableEditing");
 
                 int statusTypeId;
                 if (isjobDoneId != 0) {
@@ -481,7 +755,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     statusTypeId = 346;
                 }
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
-                updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId);
+
+                updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId, enableEditing);
 
             } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
                 Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
@@ -523,7 +798,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
                 String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
                 if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
-                    updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId);
+                    updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, false);
                 } else {
                     // TODO dont have any Existind data add new activity
                     Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
@@ -648,7 +923,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void updateSingleEntryData(String _consignmentcode, String _activityTypeId, String _transactionId, int _statusTypeId) {
+    private void updateSingleEntryData(String _consignmentcode, String _activityTypeId, String _transactionId, int _statusTypeId, boolean inSertInHistory) {
         displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(_transactionId));
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Count Of DisplayData :" + displayData.size());
         if (displayData != null && displayData.size() > 0) {
@@ -728,6 +1003,27 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     });
                 }
             });
+            if (inSertInHistory) {
+                LinkedHashMap status = new LinkedHashMap();
+                status.put("TransactionId", _transactionId);
+                status.put("StatusTypeId", 346);
+                status.put("Comments", "");
+                status.put("CreatedByUserId", CommonConstants.USER_ID);
+                status.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                status.put("UpdatedByUserId", CommonConstants.USER_ID);
+                status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                status.put("ServerUpdatedStatus", 0);
+
+                final List<LinkedHashMap> historyList = new ArrayList<>();
+                historyList.add(status);
+                dataAccessHandler.insertMyDataa("SaplingActivityHistory", historyList, new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
+                    }
+                });
+            }
+
         }
     }
 
@@ -735,42 +1031,47 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         int btnid = 1;
+        int id = view.getId();
         if (view.getId() == btnid) {
 
             saveData();
 
-        } else if (view.getId() == yesnoCHeckbox) {
-//            if (yesnoCHeckbox > 0) {
-//
-//                if (((CheckBox) view).isChecked()) {
-//                    for (ActivityTasks widget : activityTasklist) {
-//                        findViewById(widget.getId()).setVisibility(View.VISIBLE);
-//                        try {
-//                            findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-////                    Toast.makeText(ActivityTask.this, "CHECKED", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    // Need to disble remainign widgets
-//                    for (ActivityTasks widget : activityTasklist) {
-//                        String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField(widget.getId()));
-//                        Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> isOptional :" + optional);
-//                        if (optional != null && !StringUtils.isEmpty(optional)) {
-//                            findViewById(widget.getId()).setVisibility(View.GONE);
-//                            findViewById(widget.getId() + 9000).setVisibility(View.GONE);
-//                        }
-//                    }
-////                    Toast.makeText(ActivityTask.this, "UN-CHECKED", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
+        }
+        if (id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
+                || id == 839 || id == 847 || id == 855 || id == 863 || id == 871 || id == 879 || id == 887 || id == 895 || id == 903 || id == 911 || id == 919 || id == 929
+                || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
+                || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
+                || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
+                || id == 2878 || id == 2886 || id == 2930 || id == 2940 || id == 2950 || id == 2960) {
+
+            if (((CheckBox) view).isChecked()) {
+                for (ActivityTasks widget : activityTasklist) {
+                    findViewById(widget.getId()).setVisibility(View.VISIBLE);
+                    try {
+                        findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+//                    Toast.makeText(ActivityTask.this, "CHECKED", Toast.LENGTH_SHORT).show();
+            } else {
+                // Need to disble remainign widgets
+                for (ActivityTasks widget : activityTasklist) {
+                    String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField(widget.getId()));
+                    Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> isOptional :" + optional);
+                    if (optional != null && !StringUtils.isEmpty(optional)) {
+                        findViewById(widget.getId()).setVisibility(View.GONE);
+                        findViewById(widget.getId() + 9000).setVisibility(View.GONE);
+                    }
+                }
+//                    Toast.makeText(ActivityTask.this, "UN-CHECKED", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
-}
 
+
+}
 
 class KeyValues {
     int id;
