@@ -657,6 +657,10 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     public String getActivityTaskDetails(int Id) {
         return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
     }
+
+    public String getActivityTaskDetailsUsingGroupId(int activityTypeId, int groupId) {
+        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + activityTypeId + "'   and GroupId ='" + groupId + "' ";
+    }
    public static String getTargetDay(String consimentId)
    {
        return  "Select EstimatedDate from Sapling where ConsignmentCode ='"+consimentId+"'";

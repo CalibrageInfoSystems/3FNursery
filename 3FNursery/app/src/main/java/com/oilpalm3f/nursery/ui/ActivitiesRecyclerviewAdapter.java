@@ -132,18 +132,34 @@ String beforeDate =  dataAccessHandler.getSingleValue(Queries.addDaysToSapling(m
 
                 } else {
                     // Todo Check ALready hava data or not.
-                    Boolean enableEditing = false;
-                    if (mActivitiesList.get(position).getStatusTypeId() == 349) {
-                        enableEditing = true;
-                    }
-                    Intent at = new Intent(context, ActivityTask.class);
-                    at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
-                    at.putExtra("consignmentcode", ConsignmentCode);
-                    at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
-                    at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
-                    at.putExtra("enableEditing", enableEditing);
-                    at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
-                    context.startActivity(at);
+                    // TODO Check Data Exisitng Or Not
+                   if( !StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate()))
+                   {
+                       // EXISTING UI
+                       Boolean enableEditing = false;
+                       if (mActivitiesList.get(position).getStatusTypeId() == 349) {
+                           enableEditing = true;
+                       }
+                       Intent at = new Intent(context, ActivityTask.class);
+                       at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
+                       at.putExtra("consignmentcode", ConsignmentCode);
+                       at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                       at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                       at.putExtra("enableEditing", enableEditing);
+                       at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
+                       context.startActivity(at);
+                   }else{
+//                      NEW ACTIVITY
+                       Intent at = new Intent(context, ActivityTask.class);
+                       at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
+                       at.putExtra("consignmentcode", ConsignmentCode);
+                       at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                       at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                       at.putExtra("enableEditing", true);
+                       at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
+                       context.startActivity(at);
+                   }
+
                 }
 
 
