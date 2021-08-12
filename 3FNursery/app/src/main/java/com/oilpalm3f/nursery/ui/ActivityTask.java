@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ActivityTask extends AppCompatActivity implements View.OnClickListener {
+public class ActivityTask extends AppCompatActivity implements View.OnClickListener ,View.OnFocusChangeListener {
 
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
 
@@ -434,6 +434,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
 
             }
+
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
 
                 Spinner spinnner = findViewById(id);
@@ -466,8 +467,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }else{
                     return  true;
                 }
-
-
 
 
             }
@@ -668,7 +667,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
                 || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
                 || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
-                || id == 2878 || id == 2886 || id == 2930 || id == 2940 || id == 2950 || id == 2960) {
+                || id == 2878 || id == 2886 || id == 2930 || id ==2960 || id == 2940 || id == 2950 || id == 2960) {
             yesnoCHeckbox = id;
             cb.setChecked(true);
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:" + yesnoCHeckbox);
@@ -683,7 +682,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         chkShowHide.setText(content);
         chkShowHide.setId(id);
         chkShowHide.setSelected(true);
-
 
         return chkShowHide;
     }
@@ -710,6 +708,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         }
+
+
+        if(id == 53 || id == 52  || id == 54 || id == 61 || id == 62)
+        {
+            et.setOnFocusChangeListener(this::onFocusChange);
+        }
+
+
         textInputLayout.setHint(content);
         textInputLayout.addView(et);
 
@@ -1034,6 +1040,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
 
+
     @Override
     public void onClick(View view) {
         int btnid = 1;
@@ -1048,7 +1055,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
                 || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
                 || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
-                || id == 2878 || id == 2886 || id == 2930 || id == 2940 || id == 2950 || id == 2960) {
+                || id == 2878 || id == 2886 || id == 2930 || id == 2960 || id == 2940 || id == 2950 || id == 2960) {
 
             if (((CheckBox) view).isChecked()) {
                 for (ActivityTasks widget : activityTasklist) {
@@ -1077,6 +1084,49 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        // SetTextFor formula
+        Log.d(ActivityTask.class.getSimpleName()," ===> Analysis onFocusChange() id : "+view.getId() +"   isView showing :"+b);
+         int id = view.getId();
+        if(id == 53 || id == 52)
+        {
+            try {
+                int int52 = 52, int53 = 53, int54 = 54;
+                EditText edt54 =  findViewById(int54);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int52)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int53)));
+                edt54.setText( finalValue+"");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }else if(id == 52 || id == 54)
+        {
+            try {
+                int int52 = 52,  int54 = 54,int55 = 55,int61 =61;
+                EditText edt55 =  findViewById(int55);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int52)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int54)));
+                edt55.setText( finalValue+"");
+                EditText edt61 =  findViewById(int61);
+                edt61.setText( finalValue+"");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }else if(id == 61 || id == 62)
+        {
+            try {
+                int int61 = 61, int62 = 62, int63 = 63;
+                EditText edt63 =  findViewById(int63);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int61)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int62)));
+                edt63.setText( finalValue+"");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }
 
 class KeyValues {

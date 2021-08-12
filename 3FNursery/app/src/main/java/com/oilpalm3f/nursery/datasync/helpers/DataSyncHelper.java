@@ -477,7 +477,7 @@ public class DataSyncHelper {
                     e.printStackTrace();
                 }
                 saplingActivityXredata.setServerUpdatedStatus(1);
-                whereCondition = " where  TransactionId= '" + saplingActivityXredata.getTransactionId() + "'";
+                whereCondition = " where  TransactionId= '" + saplingActivityXredata.getTransactionId() + "'   AND FieldId = "+saplingActivityXredata.getFieldId();
                 try {
                     ccData = new JSONObject(gson.toJson(saplingActivityXredata));
                     dataToInsert.add(CommonUtils.toMap(ccData));

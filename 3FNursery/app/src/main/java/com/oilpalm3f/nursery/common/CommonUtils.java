@@ -1740,7 +1740,22 @@ public class CommonUtils {
         File file = new File(filePath);
         return file.exists();
     }
+   public  static  int getIntFromEditText(EditText editText)
+    {
+        int value= 0;
 
+        try
+        {
+            int nIntFromET = Integer.parseInt(editText.getText().toString());
+            value = nIntFromET;
+        }
+        catch (NumberFormatException e)
+        {
+            // handle the exception
+            value = 0;
+        }
+        return value;
+    }
     public static void changeLanguage(Context mContext, String languaetype) {
 
         Locale locale = new Locale(languaetype);

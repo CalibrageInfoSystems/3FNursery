@@ -7,7 +7,6 @@ public class Queries {
 
     private static Queries instance;
     private String isActive;
-
     public static Queries getInstance() {
         if (instance == null) {
             instance = new Queries();
