@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ActivityTask extends AppCompatActivity implements View.OnClickListener {
+public class ActivityTask extends AppCompatActivity implements View.OnClickListener ,View.OnFocusChangeListener {
 
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
 
@@ -64,6 +64,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     CheckBox chkShowHide;
     int yesnoCHeckbox = -10;
     int ButtonId = 100000001;
+    String errorMsg ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +87,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         maxnumber = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber());
         Log.d("maxnumber", maxnumber + "");
 
-
+        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
+        CheckMantoryItem();
         createDynamicUI(ll);
 
 
-        CheckMantoryItem();
         if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
             // SCREEN CAME FROM UPDATE CURRENT SCREEN
@@ -125,12 +126,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
 
 
-
-//            Button btn = (Button) findViewById(ButtonId);
-//            if (enableEditing)
-//                btn.setVisibility(View.VISIBLE);
-//            else
-//                btn.setVisibility(View.GONE);
+            Button btn = (Button) findViewById(ButtonId);
+            if (enableEditing)
+                btn.setVisibility(View.VISIBLE);
+            else
+                btn.setVisibility(View.GONE);
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
@@ -193,131 +193,133 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     private boolean goValidate() {
         Log.d("##############################", "YESNO CHECK VALUE :" + yesnoCHeckbox);
-//        if(yesnoCHeckbox > 0)
-//            return  validateyesNO();
-//        else
-//            return  validate();
+        if (yesnoCHeckbox > 0)
+            return GroupValidate();
+        else
+            return validate();
 
-        return validate();
+//       return validate();
     }
 
     private void addNewSingleEntryActivity(String _consignmentCode, String _activityId, int _statusTypeId, String _transactionId, boolean isFromMultipleEntry) {
 
-        if (goValidate()) {
-            // DATA Validated next saving data locally
-            final List<LinkedHashMap> listKey = new ArrayList<>();
-            for (int j = 0; j < dataValue.size(); j++) {
 
-                LinkedHashMap mapXref = new LinkedHashMap();
-                mapXref.put("Id", 0);
-                mapXref.put("TransactionId", _transactionId);
-                mapXref.put("FieldId", dataValue.get(j).id);
-                mapXref.put("Value", dataValue.get(j).value);
-                mapXref.put("FilePath", "");
-                mapXref.put("IsActive", 1);
-                mapXref.put("CreatedByUserId", CommonConstants.USER_ID);
-                mapXref.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                mapXref.put("UpdatedByUserId", CommonConstants.USER_ID);
-                mapXref.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                mapXref.put("ServerUpdatedStatus", 0);
+        // DATA Validated next saving data locally
+        final List<LinkedHashMap> listKey = new ArrayList<>();
+        for (int j = 0; j < dataValue.size(); j++) {
 
-                listKey.add(mapXref);
+            LinkedHashMap mapXref = new LinkedHashMap();
+            mapXref.put("Id", 0);
+            mapXref.put("TransactionId", _transactionId);
+            mapXref.put("FieldId", dataValue.get(j).id);
+            mapXref.put("Value", dataValue.get(j).value);
+            mapXref.put("FilePath", "");
+            mapXref.put("IsActive", 1);
+            mapXref.put("CreatedByUserId", CommonConstants.USER_ID);
+            mapXref.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            mapXref.put("UpdatedByUserId", CommonConstants.USER_ID);
+            mapXref.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            mapXref.put("ServerUpdatedStatus", 0);
+
+            listKey.add(mapXref);
+
+        }
+
+        dataAccessHandler.insertMyDataa("SaplingActivityXref", listKey, new ApplicationThread.OnComplete<String>() {
+            @Override
+            public void execute(boolean success, String result, String msg) {
+                Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
+
 
             }
+        });
 
-            dataAccessHandler.insertMyDataa("SaplingActivityXref", listKey, new ApplicationThread.OnComplete<String>() {
+
+        LinkedHashMap sapling = new LinkedHashMap();
+        sapling.put("TransactionId", _transactionId);
+        sapling.put("ConsignmentCode", _consignmentCode);
+        sapling.put("ActivityId", _activityId);
+        sapling.put("StatusTypeId", 346);  // TODO CHECK DB
+        sapling.put("Comment", "");
+        sapling.put("IsActive", 1);
+        sapling.put("CreatedByUserId", CommonConstants.USER_ID);
+        sapling.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        sapling.put("UpdatedByUserId", CommonConstants.USER_ID);
+        sapling.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        sapling.put("ServerUpdatedStatus", 0);
+        final List<LinkedHashMap> saplingList = new ArrayList<>();
+
+        saplingList.add(sapling);
+        dataAccessHandler.insertMyDataa("SaplingActivity", saplingList, new ApplicationThread.OnComplete<String>() {
+            @Override
+            public void execute(boolean success, String result, String msg) {
+                if (success) {
+                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivity INSERT COMPLETED");
+                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
+                    finish();
+                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        if (isFromMultipleEntry) {
+            // Came from Multiple entry then we can update Status only
+            LinkedHashMap status = new LinkedHashMap();
+
+            status.put("ConsignmentCode", _consignmentCode);
+            status.put("ActivityId", _activityId);
+            status.put("StatusTypeId", _statusTypeId);
+            status.put("CreatedByUserId", CommonConstants.USER_ID);
+            status.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            status.put("UpdatedByUserId", CommonConstants.USER_ID);
+            status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            status.put("ServerUpdatedStatus", 0);
+
+            final List<LinkedHashMap> statusList = new ArrayList<>();
+            statusList.add(status);
+            dataAccessHandler.updateData("SaplingActivityStatus", statusList, true, " where ConsignmentCode = " + "'" + _consignmentCode + "' AND ActivityId ='" + _activityId + "'", new ApplicationThread.OnComplete<String>() {
                 @Override
                 public void execute(boolean success, String result, String msg) {
-                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
-
-
+                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
+                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Update Task Completed");
+                    finish();
+                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                 }
             });
 
+        } else {
+            LinkedHashMap mapStatus = new LinkedHashMap();
+            mapStatus.put("Id", 0);
+            mapStatus.put("ConsignmentCode", _consignmentCode);
+            mapStatus.put("ActivityId", _activityId);
+            mapStatus.put("StatusTypeId", _statusTypeId);
+            mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
+            mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            mapStatus.put("UpdatedByUserId", CommonConstants.USER_ID);
+            mapStatus.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+            mapStatus.put("ServerUpdatedStatus", 0);
 
-            LinkedHashMap sapling = new LinkedHashMap();
-            sapling.put("TransactionId", _transactionId);
-            sapling.put("ConsignmentCode", _consignmentCode);
-            sapling.put("ActivityId", _activityId);
-            sapling.put("StatusTypeId", 346);  // TODO CHECK DB
-            sapling.put("Comment", "");
-            sapling.put("IsActive", 1);
-            sapling.put("CreatedByUserId", CommonConstants.USER_ID);
-            sapling.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-            sapling.put("UpdatedByUserId", CommonConstants.USER_ID);
-            sapling.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-            sapling.put("ServerUpdatedStatus", 0);
-            final List<LinkedHashMap> saplingList = new ArrayList<>();
+            final List<LinkedHashMap> statusArray = new ArrayList<>();
+            statusArray.add(mapStatus);
 
-            saplingList.add(sapling);
-            dataAccessHandler.insertMyDataa("SaplingActivity", saplingList, new ApplicationThread.OnComplete<String>() {
+            dataAccessHandler.insertMyDataa("SaplingActivityStatus", statusArray, new ApplicationThread.OnComplete<String>() {
                 @Override
                 public void execute(boolean success, String result, String msg) {
                     if (success) {
-                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivity INSERT COMPLETED");
-                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
-                        finish();
-                        Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
+
                     }
+
                 }
             });
 
-            if (isFromMultipleEntry) {
-                // Came from Multiple entry then we can update Status only
-                LinkedHashMap status = new LinkedHashMap();
-
-                status.put("ConsignmentCode", _consignmentCode);
-                status.put("ActivityId", _activityId);
-                status.put("StatusTypeId", _statusTypeId);
-                status.put("CreatedByUserId", CommonConstants.USER_ID);
-                status.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                status.put("UpdatedByUserId", CommonConstants.USER_ID);
-                status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                status.put("ServerUpdatedStatus", 0);
-
-                final List<LinkedHashMap> statusList = new ArrayList<>();
-                statusList.add(status);
-                dataAccessHandler.updateData("SaplingActivityStatus", statusList, true, " where ConsignmentCode = " + "'" + _consignmentCode + "' AND ActivityId ='" + _activityId + "'", new ApplicationThread.OnComplete<String>() {
-                    @Override
-                    public void execute(boolean success, String result, String msg) {
-                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
-                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Update Task Completed");
-                        finish();
-                        Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } else {
-                LinkedHashMap mapStatus = new LinkedHashMap();
-                mapStatus.put("Id", 0);
-                mapStatus.put("ConsignmentCode", _consignmentCode);
-                mapStatus.put("ActivityId", _activityId);
-                mapStatus.put("StatusTypeId", _statusTypeId);
-                mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
-                mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                mapStatus.put("UpdatedByUserId", CommonConstants.USER_ID);
-                mapStatus.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                mapStatus.put("ServerUpdatedStatus", 0);
-
-                final List<LinkedHashMap> statusArray = new ArrayList<>();
-                statusArray.add(mapStatus);
-
-                dataAccessHandler.insertMyDataa("SaplingActivityStatus", statusArray, new ApplicationThread.OnComplete<String>() {
-                    @Override
-                    public void execute(boolean success, String result, String msg) {
-                        if (success) {
-                            Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
-
-                        }
-
-                    }
-                });
-            }
         }
     }
 
     private void createDynamicUI(LinearLayout ll) {
-        activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
+
+
+        List<ActivityTasks> groupView = new ArrayList<>();
 
         for (int i = 0; i < activityTasklist.size(); i++) {
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
@@ -335,6 +337,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
                 ll.addView(addSpinner(activityTasklist.get(i).getId()));
             }
+
+            // GetForeachGruoupItems
+
 
         }
 
@@ -388,13 +393,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private boolean validateyesNO() {
+//    private boolean validateyesNO() {
+//        CheckBox chk = findViewById(yesnoCHeckbox);
+//        if(chk.isChecked())
+//        {
+//            if (!GroupValidate()) {
+//                return false;
+//            }
+//        }else
+//        {
+//            validate()
+//        }
+//
+//        return true;
+//
+//    }
+
+    private boolean GroupValidate() {
         dataValue = new ArrayList<>();
-        List<KeyValues> groupValue = new ArrayList<>();
-        List<Integer> groupids = dataAccessHandler.getGroupids(Queries.getGroupIds(activityTypeId));
-        for (int k = 0; k < groupids.size(); k++) {
-            groupValue.add(new KeyValues(groupids.get(k), "novalue"));
-        }
 
         for (int i = 0; i < activityTasklist.size(); i++) {
             int id = activityTasklist.get(i).getId();
@@ -405,37 +421,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
             }
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox") && activityTasklist.get(i).getGroupId() == null) {
+            if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
 
                 EditText et = findViewById(id);
 
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
 
-                if (TextUtils.isEmpty(et.getText().toString())) {
+                if (activityTasklist.get(i).getGroupId() == 0 && TextUtils.isEmpty(et.getText().toString())) {
                     //TOdo  need to check already exist or not
                     Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-            } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
-
-                EditText et = findViewById(id);
-
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
-
-                for (int g = 0; g < groupids.size(); g++) {
-
-                }
-
-
-            } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
-                EditText et = findViewById(id);
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
-                if (TextUtils.isEmpty(et.getText().toString())) {
-                    //TOdo  need to check already exist or not
-                    Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
-                    return false;
-                }
             }
 
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
@@ -455,33 +452,41 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
         }
-        if (showHideActivity != null && yesnoCHeckbox > 0 && ((CheckBox) findViewById(yesnoCHeckbox)).isChecked()) {
 
-            Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> It is Show Hide Activity ");
-            Log.d(ActivityTask.class.getSimpleName(), "===> analysis ==> It is Show Hide Activity ");
+        CheckBox chk = findViewById(yesnoCHeckbox);
+        if(chk.isChecked()) {
 
-            List<KeyValues> groupKeyvalues = new ArrayList<>();
+            List<Integer> groupids = dataAccessHandler.getGroupids(Queries.getGroupIds(activityTypeId));
+
             for (int i = 0; i < groupids.size(); i++) {
-                String value = "NOVAL";
-                for (int j = 0; j < activityTasklist.size(); i++) {
-                    if (activityTasklist.get(j).getInputType().equalsIgnoreCase("TextBox")) {
-                        EditText edt = findViewById(activityTasklist.get(j).getId());
-                        if (!TextUtils.isEmpty(edt.getText().toString())) {
-                            value = edt.getText().toString();
-                        }
-                    }
-                }
-                if (value.equalsIgnoreCase("NOVAL")) ;
-                {
-                    Toast.makeText(this, "Please Enter atlest one value", Toast.LENGTH_SHORT).show();
+                List<ActivityTasks> groupedField = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetailsUsingGroupId(Integer.parseInt(activityTypeId), groupids.get(i)));
+
+                if (!validateGroup(groupedField)){
+                    Toast.makeText(this, "Please Enter Atlest One value for Following \n " + errorMsg, Toast.LENGTH_SHORT).show();
                     return false;
+                }else{
+                    return  true;
                 }
+
 
             }
-
         }
         return true;
+    }
 
+    private boolean validateGroup(List<ActivityTasks> groupFields) {
+         errorMsg ="";
+        for (int i = 0; i < groupFields.size(); i++) {
+
+
+            EditText editText = (EditText) findViewById(groupFields.get(i).getId());
+            errorMsg = errorMsg + "\n" +groupFields.get(i).getField();
+            if (editText != null & editText.getText() != null & !StringUtils.isEmpty(editText.getText())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Spinner addSpinner(int id) {
@@ -657,12 +662,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         cb.setOnClickListener(this::onClick);
         Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:  before Assign :" + id + "And Name :" + content);
-        if (id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
+        if (id == 164 || id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id ==551  || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
                 || id == 839 || id == 847 || id == 855 || id == 863 || id == 871 || id == 879 || id == 887 || id == 895 || id == 903 || id == 911 || id == 919 || id == 929
                 || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
                 || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
                 || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
-                || id == 2878 || id == 2886 || id == 2930 || id == 2940 || id == 2950 || id == 2960) {
+                || id == 2878 || id == 2886 || id == 2930 || id ==2960 || id == 2940 || id == 2950 || id == 2960) {
             yesnoCHeckbox = id;
             cb.setChecked(true);
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:" + yesnoCHeckbox);
@@ -677,7 +682,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         chkShowHide.setText(content);
         chkShowHide.setId(id);
         chkShowHide.setSelected(true);
-
 
         return chkShowHide;
     }
@@ -704,6 +708,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             et.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         }
+
+
+        if(id == 53 || id == 52  || id == 54 || id == 61 || id == 62)
+        {
+            et.setOnFocusChangeListener(this::onFocusChange);
+        }
+
+
         textInputLayout.setHint(content);
         textInputLayout.addView(et);
 
@@ -732,7 +744,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveData() {
-        if (goValidate()) {
+
 
             Bundle extras = getIntent().getExtras();
             if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
@@ -813,7 +825,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 //                    setSaplingActivity();
 //                    finish();
 //                    Toast.makeText(ActivityTask.this, "Task Completed Successfully", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     private void CheckMantoryItem() {
@@ -1028,21 +1040,22 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
 
+
     @Override
     public void onClick(View view) {
         int btnid = 1;
         int id = view.getId();
-        if (view.getId() == btnid) {
-
-            saveData();
+        if (view.getId() == ButtonId) {
+            if (goValidate())
+                saveData();
 
         }
-        if (id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
+        if (id == 164 || id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id ==551 || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
                 || id == 839 || id == 847 || id == 855 || id == 863 || id == 871 || id == 879 || id == 887 || id == 895 || id == 903 || id == 911 || id == 919 || id == 929
                 || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
                 || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
                 || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
-                || id == 2878 || id == 2886 || id == 2930 || id == 2940 || id == 2950 || id == 2960) {
+                || id == 2878 || id == 2886 || id == 2930 || id == 2960 || id == 2940 || id == 2950 || id == 2960) {
 
             if (((CheckBox) view).isChecked()) {
                 for (ActivityTasks widget : activityTasklist) {
@@ -1071,6 +1084,49 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        // SetTextFor formula
+        Log.d(ActivityTask.class.getSimpleName()," ===> Analysis onFocusChange() id : "+view.getId() +"   isView showing :"+b);
+         int id = view.getId();
+        if(id == 53 || id == 52)
+        {
+            try {
+                int int52 = 52, int53 = 53, int54 = 54;
+                EditText edt54 =  findViewById(int54);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int52)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int53)));
+                edt54.setText( finalValue+"");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }else if(id == 52 || id == 54)
+        {
+            try {
+                int int52 = 52,  int54 = 54,int55 = 55,int61 =61;
+                EditText edt55 =  findViewById(int55);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int52)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int54)));
+                edt55.setText( finalValue+"");
+                EditText edt61 =  findViewById(int61);
+                edt61.setText( finalValue+"");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }else if(id == 61 || id == 62)
+        {
+            try {
+                int int61 = 61, int62 = 62, int63 = 63;
+                EditText edt63 =  findViewById(int63);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int61)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int62)));
+                edt63.setText( finalValue+"");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }
 
 class KeyValues {
