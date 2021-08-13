@@ -24,12 +24,12 @@
 
 
             <TextView
-                android:gravity="center"
-                android:layout_weight="0.26"
-                android:textColor="@color/black"
                 android:id="@+id/activityName"
                 android:layout_width="0dp"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_weight="0.26"
+                android:gravity="center"
+                android:textColor="@color/black" />
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"
