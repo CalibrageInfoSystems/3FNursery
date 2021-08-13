@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ActivityTask extends AppCompatActivity implements View.OnClickListener ,View.OnFocusChangeListener {
+public class ActivityTask extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
 
@@ -64,7 +64,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     CheckBox chkShowHide;
     int yesnoCHeckbox = -10;
     int ButtonId = 100000001;
-    String errorMsg ="";
+    String errorMsg = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +72,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_task);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            activityTypeId = extras.getString("ActivityTypeId");
-            activityName = extras.getString("ActivityName");
-            SCREEN_FROM = extras.getInt(CommonConstants.SCREEN_CAME_FROM);
+            try {
+                activityTypeId = extras.getString("ActivityTypeId");
+                activityName = extras.getString("ActivityName");
 
+                SCREEN_FROM = extras.getInt(CommonConstants.SCREEN_CAME_FROM);
+                consignmentCode = extras.getString("consignmentcode");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         // SETUP title For Activity
         textView5 = findViewById(R.id.textView5);
@@ -102,11 +107,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
 
-            Button btn = (Button) findViewById(ButtonId);
-            if (enableEditing)
-                btn.setVisibility(View.VISIBLE);
-            else
-                btn.setVisibility(View.GONE);
+//            Button btn = (Button) findViewById(ButtonId);
+//            if (enableEditing)
+//                btn.setVisibility(View.VISIBLE);
+//            else
+//                btn.setVisibility(View.GONE);
             // TODO Bind DATA UsingTransactionID
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
@@ -126,11 +131,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
 
 
-            Button btn = (Button) findViewById(ButtonId);
-            if (enableEditing)
-                btn.setVisibility(View.VISIBLE);
-            else
-                btn.setVisibility(View.GONE);
+//            Button btn = (Button) findViewById(ButtonId);
+//            if (enableEditing)
+//                btn.setVisibility(View.VISIBLE);
+//            else
+//                btn.setVisibility(View.GONE);
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
@@ -454,18 +459,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         }
 
         CheckBox chk = findViewById(yesnoCHeckbox);
-        if(chk.isChecked()) {
+        if (chk.isChecked()) {
 
             List<Integer> groupids = dataAccessHandler.getGroupids(Queries.getGroupIds(activityTypeId));
 
             for (int i = 0; i < groupids.size(); i++) {
                 List<ActivityTasks> groupedField = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetailsUsingGroupId(Integer.parseInt(activityTypeId), groupids.get(i)));
 
-                if (!validateGroup(groupedField)){
+                if (!validateGroup(groupedField)) {
                     Toast.makeText(this, "Please Enter Atlest One value for Following \n " + errorMsg, Toast.LENGTH_SHORT).show();
                     return false;
-                }else{
-                    return  true;
+                } else {
+                    return true;
                 }
 
 
@@ -475,12 +480,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean validateGroup(List<ActivityTasks> groupFields) {
-         errorMsg ="";
+        errorMsg = "";
         for (int i = 0; i < groupFields.size(); i++) {
 
 
             EditText editText = (EditText) findViewById(groupFields.get(i).getId());
-            errorMsg = errorMsg + "\n" +groupFields.get(i).getField();
+            errorMsg = errorMsg + "\n" + groupFields.get(i).getField();
             if (editText != null & editText.getText() != null & !StringUtils.isEmpty(editText.getText())) {
                 return true;
             }
@@ -662,12 +667,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         cb.setOnClickListener(this::onClick);
         Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:  before Assign :" + id + "And Name :" + content);
-        if (id == 164 || id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id ==551  || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
-                || id == 839 || id == 847 || id == 855 || id == 863 || id == 871 || id == 879 || id == 887 || id == 895 || id == 903 || id == 911 || id == 919 || id == 929
-                || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
-                || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
-                || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
-                || id == 2878 || id == 2886 || id == 2930 || id ==2960 || id == 2940 || id == 2950 || id == 2960) {
+        if (id == 72 || id == 79 || id == 95 || id == 101 || id == 112 || id == 121 || id == 130 || id == 139 || id == 149 || id == 164 || id == 181 || id == 253 || id == 259 || id == 269 || id == 280 || id == 289 || id == 298 || id == 307 || id == 317 || id == 332 || id == 341 || id == 368  || id == 385 || id == 391 || id == 397 || id == 403 || id == 414 || id == 423 || id == 432 || id == 611 || id == 626 || id == 641 || id ==  656 || id == 671 || id == 686 || id == 701 || id == 716 || id == 731 || id == 746 || id == 761 || id == 776 || id == 1079 || id == 1088 || id == 1097 || id == 1106 || id == 1115 || id == 1124 || id == 1133 || id == 1142 || id == 1151 || id == 1160 || id == 1169 || id == 1178 || id == 1178 || id == 1187  || id == 1196 || id == 1205 || id == 1214 || id == 1223 || id == 1230 || id == 1236 || id == 1242 || id == 1249 || id == 1255 || id == 1261 || id == 1268  || id == 1274 || id == 1280 || id == 1287 || id == 1293 || id == 1299 || id == 1305 || id == 1311 || id == 1317 || id == 1323 || id == 1329 || id ==  1335 || id == 1341 || id == 1347 || id == 1353 || id == 1359 || id == 1365 || id == 1371 || id == 1382 || id == 1393 || id == 1402 || id == 1411 || id == 1420 || id == 1429 || id == 1438 || id == 1447 || id == 1457 || id == 1470 || id == 1476 || id == 1482 || id == 1488 || id == 1494 || id == 1500 || id == 1506 || id == 1512|| id == 1518 || id == 1524 || id == 1530 || id == 1536 || id == 1542 || id == 1548 || id == 1554 || id == 1560 || id ==  1566 || id == 1572 || id == 1578 || id == 1584 || id == 1590 || id == 1596 || id == 1602 || id == 1617 || id == 1632 || id == 1647 || id == 1662 || id == 1677 || id ==  1692 || id == 1707 || id == 1722 || id == 1737 || id == 1832 || id == 1841 || id == 1850 || id == 1859 || id == 1868 || id == 1877 || id == 1886 || id == 1895 || id == 1904 || id == 1913 || id == 2022 || id == 2031 || id == 2040 || id == 2049 || id == 2058 || id == 2067 || id == 2076 || id == 2085 || id == 1187  || id == 1196 || id == 1205 || id == 1214 || id == 1223 || id == 1230 || id == 1236 || id == 1242 || id == 1249 || id == 2094 || id == 2103 || id == 2112 || id == 2123 || id == 2145 || id == 2156 || id == 2167 || id == 2178 || id == 2189 || id == 2200 || id == 2211 || id == 2222 || id == 2231 || id ==  2240 || id == 2249 || id == 2258 || id == 2267 || id == 2276 || id == 2285 || id == 2294 || id == 2303 || id == 2312 || id == 2321 || id == 2330 || id == 2339 || id == 2348 || id == 2357 || id == 2366 || id == 2375 || id == 2384 || id == 2393 || id == 2402 || id == 2411 || id == 2420 || id == 2429 || id == 2438 || id == 2447 || id == 2456 || id == 2465 || id == 2474 || id == 2483 || id == 2492 || id == 2502 || id == 2512 || id == 2522 || id == 2532 || id == 2542 || id == 2552 || id == 2562 || id == 2572 || id == 2582 || id == 2592 || id == 2598 || id == 2604 || id == 2610 || id == 2621 || id == 2632 || id ==  2643 || id == 2654 || id == 2663 || id == 2672 || id == 2681 || id == 2690 || id == 2699 || id == 2708 || id == 2717 || id == 2726 || id == 2735 || id == 2744 || id == 2753 || id == 2762 || id == 2772 || id == 2782 || id == 2792 || id == 2802 || id == 2817 || id == 2832 || id == 2847 || id == 2894 || id == 2903 || id == 2912 || id == 2921 || id == 2970 || id == 2979 || id == 3006 || id == 3012 || id == 3018 || id == 3024 || id == 3030 || id == 3036 || id == 3042 || id == 3048 || id == 3054 || id == 3062 || id == 3077 ) {
             yesnoCHeckbox = id;
             cb.setChecked(true);
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:" + yesnoCHeckbox);
@@ -710,12 +710,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        if(id == 53 || id == 52  || id == 54 || id == 61 || id == 62)
+        et.setOnFocusChangeListener(this::onFocusChange);
+
+        if(id ==54 || id == 55 || id == 61 || id == 63 || id == 523 || id == 527 || id == 531 || id == 535 || id == 539 || id == 542 || id == 553)
         {
-            et.setOnFocusChangeListener(this::onFocusChange);
+            et.setFocusable(false);
+            et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            et.setClickable(false);
         }
-
-
         textInputLayout.setHint(content);
         textInputLayout.addView(et);
 
@@ -746,82 +748,82 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     private void saveData() {
 
 
-            Bundle extras = getIntent().getExtras();
-            if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
-                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
-                // SCREEN CAME FROM UPDATE CURRENT SCREEN
-                String intentTransactionId = extras.getString("transactionId");
-                String consignmentcode = extras.getString("consignmentcode");
-                String ActivityTypeId = extras.getString("ActivityTypeId");
-                boolean enableEditing = extras.getBoolean("enableEditing");
+        Bundle extras = getIntent().getExtras();
+        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
+            // SCREEN CAME FROM UPDATE CURRENT SCREEN
+            String intentTransactionId = extras.getString("transactionId");
+            String consignmentcode = extras.getString("consignmentcode");
+            String ActivityTypeId = extras.getString("ActivityTypeId");
+            boolean enableEditing = extras.getBoolean("enableEditing");
 
-                int statusTypeId;
-                if (isjobDoneId != 0) {
-                    CheckBox chk = findViewById(isjobDoneId);
-                    if (chk.isChecked()) {
-                        statusTypeId = 346;
-                    } else {
-                        statusTypeId = 352;
-                    }
-                } else {
+            int statusTypeId;
+            if (isjobDoneId != 0) {
+                CheckBox chk = findViewById(isjobDoneId);
+                if (chk.isChecked()) {
                     statusTypeId = 346;
-                }
-                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
-
-                updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId, enableEditing);
-
-            } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
-                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
-                String activityTypeId = extras.getString("ActivityTypeId");
-                String consignmentcode = extras.getString("consignmentcode");
-                boolean Ismultipleentry = extras.getBoolean("Ismultipleentry");
-                int statusTypeId;
-                if (isjobDoneId != 0) {
-                    CheckBox chk = findViewById(isjobDoneId);
-                    if (chk.isChecked()) {
-                        statusTypeId = 346;
-                    } else {
-                        statusTypeId = 352;
-                    }
                 } else {
-                    statusTypeId = 346;
+                    statusTypeId = 352;
                 }
+            } else {
+                statusTypeId = 346;
+            }
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
+
+            updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId, enableEditing);
+
+        } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
+            String activityTypeId = extras.getString("ActivityTypeId");
+            String consignmentcode = extras.getString("consignmentcode");
+            boolean Ismultipleentry = extras.getBoolean("Ismultipleentry");
+            int statusTypeId;
+            if (isjobDoneId != 0) {
+                CheckBox chk = findViewById(isjobDoneId);
+                if (chk.isChecked()) {
+                    statusTypeId = 346;
+                } else {
+                    statusTypeId = 352;
+                }
+            } else {
+                statusTypeId = 346;
+            }
+            String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
+            addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, true);
+
+        } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
+            String consignmentcode = extras.getString("consignmentcode");
+            String activityTypeId = extras.getString("ActivityTypeId");
+            String multipleentry = extras.getString("multipleEntry");
+
+            int statusTypeId;
+            if (isjobDoneId != 0) {
+                CheckBox chk = findViewById(isjobDoneId);
+                if (chk.isChecked()) {
+                    statusTypeId = 346;
+                } else {
+                    statusTypeId = 352;
+                }
+            } else {
+                statusTypeId = 346;
+            }
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
+            String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
+            if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+                updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, false);
+            } else {
+                // TODO dont have any Existind data add new activity
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
                 String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
-                addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, true);
 
-            } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
-                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
-                String consignmentcode = extras.getString("consignmentcode");
-                String activityTypeId = extras.getString("ActivityTypeId");
-                String multipleentry = extras.getString("multipleEntry");
-
-                int statusTypeId;
-                if (isjobDoneId != 0) {
-                    CheckBox chk = findViewById(isjobDoneId);
-                    if (chk.isChecked()) {
-                        statusTypeId = 346;
-                    } else {
-                        statusTypeId = 352;
-                    }
-                } else {
-                    statusTypeId = 346;
-                }
-                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
-                String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
-                if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
-                    updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, false);
-                } else {
-                    // TODO dont have any Existind data add new activity
-                    Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                    String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
-                    Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
-
-                    addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, false);
-                }
-
-
+                addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, false);
             }
+
+
+        }
 //                    setSaplingActivity();
 //                    finish();
 //                    Toast.makeText(ActivityTask.this, "Task Completed Successfully", Toast.LENGTH_SHORT).show();
@@ -1040,7 +1042,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     @Override
     public void onClick(View view) {
         int btnid = 1;
@@ -1050,12 +1051,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 saveData();
 
         }
-        if (id == 164 || id == 173 || id == 181 || id == 350 || id == 358 || id == 484 || id == 492 || id == 536 || id ==551 || id == 791 || id == 799 || id == 807 || id == 815 || id == 823 || id == 831
-                || id == 839 || id == 847 || id == 855 || id == 863 || id == 871 || id == 879 || id == 887 || id == 895 || id == 903 || id == 911 || id == 919 || id == 929
-                || id == 939 || id == 949 || id == 959 || id == 969 || id == 979 || id == 989 || id == 999 || id == 1009 || id == 1019 || id == 1029 || id == 1039 || id == 1049
-                || id == 1059 || id == 1069 || id == 1752 || id == 1760 || id == 1768 || id == 1776 || id == 1784 || id == 1792 || id == 1800 || id == 1808 || id == 1816 || id == 1824
-                || id == 1922 || id == 1932 || id == 1942 || id == 1952 || id == 1962 || id == 1972 || id == 1982 || id == 1992 || id == 2002 || id == 2012 || id == 2862 || id == 2870
-                || id == 2878 || id == 2886 || id == 2930 || id == 2960 || id == 2940 || id == 2950 || id == 2960) {
+        if (id == 72 || id == 79 || id == 95 || id == 101 || id == 112 || id == 121 || id == 130 || id == 139 || id == 149 || id == 164 || id == 181  || id == 253 || id == 259 || id == 269 || id == 280 || id == 289 || id == 298 || id == 307 || id == 317 || id == 332 || id == 341 || id == 368  || id == 385 || id == 391 || id == 397 || id == 403 || id == 414 || id == 423 || id == 432 || id == 611 || id == 626 || id == 641 || id ==  656 || id == 671 || id == 686 || id == 701 || id == 716 || id == 731 || id == 746 || id == 761 || id == 776 || id == 1079 || id == 1088 || id == 1097 || id == 1106 || id == 1115 || id == 1124 || id == 1133 || id == 1142 || id == 1151 || id == 1160 || id == 1169 || id == 1178 || id == 1178 || id == 1187  || id == 1196 || id == 1205 || id == 1214 || id == 1223 || id == 1230 || id == 1236 || id == 1242 || id == 1249 || id == 1255 || id == 1261 || id == 1268  || id == 1274 || id == 1280 || id == 1287 || id == 1293 || id == 1299 || id == 1305 || id == 1311 || id == 1317 || id == 1323 || id == 1329 || id ==  1335 || id == 1341 || id == 1347 || id == 1353 || id == 1359 || id == 1365 || id == 1371 || id == 1382 || id == 1393 || id == 1402 || id == 1411 || id == 1420 || id == 1429 || id == 1438 || id == 1447 || id == 1457 || id == 1470 || id == 1476 || id == 1482 || id == 1488 || id == 1494 || id == 1500 || id == 1506 || id == 1512|| id == 1518 || id == 1524 || id == 1530 || id == 1536 || id == 1542 || id == 1548 || id == 1554 || id == 1560 || id ==  1566 || id == 1572 || id == 1578 || id == 1584 || id == 1590 || id == 1596 || id == 1602 || id == 1617 || id == 1632 || id == 1647 || id == 1662 || id == 1677 || id ==  1692 || id == 1707 || id == 1722 || id == 1737 || id == 1832 || id == 1841 || id == 1850 || id == 1859 || id == 1868 || id == 1877 || id == 1886 || id == 1895 || id == 1904 || id == 1913 || id == 2022 || id == 2031 || id == 2040 || id == 2049 || id == 2058 || id == 2067 || id == 2076 || id == 2085 || id == 1187  || id == 1196 || id == 1205 || id == 1214 || id == 1223 || id == 1230 || id == 1236 || id == 1242 || id == 1249 || id == 2094 || id == 2103 || id == 2112 || id == 2123 || id == 2145 || id == 2156 || id == 2167 || id == 2178 || id == 2189 || id == 2200 || id == 2211 || id == 2222 || id == 2231 || id ==  2240 || id == 2249 || id == 2258 || id == 2267 || id == 2276 || id == 2285 || id == 2294 || id == 2303 || id == 2312 || id == 2321 || id == 2330 || id == 2339 || id == 2348 || id == 2357 || id == 2366 || id == 2375 || id == 2384 || id == 2393 || id == 2402 || id == 2411 || id == 2420 || id == 2429 || id == 2438 || id == 2447 || id == 2456 || id == 2465 || id == 2474 || id == 2483 || id == 2492 || id == 2502 || id == 2512 || id == 2522 || id == 2532 || id == 2542 || id == 2552 || id == 2562 || id == 2572 || id == 2582 || id == 2592 || id == 2598 || id == 2604 || id == 2610 || id == 2621 || id == 2632 || id ==  2643 || id == 2654 || id == 2663 || id == 2672 || id == 2681 || id == 2690 || id == 2699 || id == 2708 || id == 2717 || id == 2726 || id == 2735 || id == 2744 || id == 2753 || id == 2762 || id == 2772 || id == 2782 || id == 2792 || id == 2802 || id == 2817 || id == 2832 || id == 2847 || id == 2894 || id == 2903 || id == 2912 || id == 2921 || id == 2970 || id == 2979 || id == 3006 || id == 3012 || id == 3018 || id == 3024 || id == 3030 || id == 3036 || id == 3042 || id == 3048 || id == 3054 || id == 3062 || id == 3077 ) {
 
             if (((CheckBox) view).isChecked()) {
                 for (ActivityTasks widget : activityTasklist) {
@@ -1087,44 +1083,95 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onFocusChange(View view, boolean b) {
         // SetTextFor formula
-        Log.d(ActivityTask.class.getSimpleName()," ===> Analysis onFocusChange() id : "+view.getId() +"   isView showing :"+b);
-         int id = view.getId();
-        if(id == 53 || id == 52)
-        {
+        Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis onFocusChange() id : " + view.getId() + "   isView showing :" + b);
+        int id = view.getId();
+        if (id == 53 || id == 52) {
             try {
                 int int52 = 52, int53 = 53, int54 = 54;
-                EditText edt54 =  findViewById(int54);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int52)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int53)));
-                edt54.setText( finalValue+"");
+                EditText edt54 = findViewById(int54);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int52))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int53)));
+                edt54.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }else if(id == 52 || id == 54)
-        {
+        } else if (id == 52 || id == 54) {
             try {
-                int int52 = 52,  int54 = 54,int55 = 55,int61 =61;
-                EditText edt55 =  findViewById(int55);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int52)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int54)));
-                edt55.setText( finalValue+"");
-                EditText edt61 =  findViewById(int61);
-                edt61.setText( finalValue+"");
+                int int52 = 52, int54 = 54, int55 = 55, int61 = 61;
+                EditText edt55 = findViewById(int55);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int52))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int54)));
+                edt55.setText(finalValue + "");
+                EditText edt61 = findViewById(int61);
+                edt61.setText(finalValue + "");
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }else if(id == 61 || id == 62)
-        {
+        } else if (id == 61 || id == 62) {
             try {
                 int int61 = 61, int62 = 62, int63 = 63;
-                EditText edt63 =  findViewById(int63);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText)findViewById(int61)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int62)));
-                edt63.setText( finalValue+"");
+                EditText edt63 = findViewById(int63);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int61))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int62)));
+                edt63.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+        } else if (id == 526) {
+            try {
+                int int523 = 523, int527 = 527;
+                EditText edt527 = findViewById(int527);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode,54))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
+                edt527.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == 530) {
+            try {
+                int int530 = 530, int531 = 531;
+                EditText edt531 = findViewById(int531);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode,527))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int530)));
+                edt531.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (id == 534) {
+            try {
+                int int534 = 534, int535 = 535;
+                EditText edt535 = findViewById(int535);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode,527))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int534)));
+                edt535.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (id == 538) {
+            try {
+                int int538 = 538, int539 = 539;
+                EditText edt539 = findViewById(int539);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode,535))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int538)));
+                edt539.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (id == 541) {
+            try {
+                int int526 = 526, int541 = 541, int542 = 542;
+                EditText edt542 = findViewById(int542);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode,526))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int541)));
+                edt542.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if (id == 546) {
+            try {
+                int int546 = 546, int553 = 553;
+                EditText edt553 = findViewById(int553);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode,542))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int546)));
+                edt553.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
