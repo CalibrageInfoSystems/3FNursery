@@ -170,12 +170,14 @@
 
             <View
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="2dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -238,8 +240,8 @@
                 android:layout_height="400dp"
                 android:layout_weight="1"
                 android:weightSum="2"
+                android:layout_gravity="center"
                 android:orientation="horizontal">
-
                 <RelativeLayout
                     android:id="@+id/irigationdetails"
                     android:layout_width="0dp"
@@ -250,18 +252,10 @@
                         android:id="@+id/irigation_Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/conversion_homelogo_new"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/area_extension_homelogo_new"
                         android:visibility="visible" />
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:id="@+id/irigation_title_txt"-->
-<!--                        style="@style/moduleHomeBtnStyle"-->
-<!--                        android:layout_below="@+id/irigation_Icon"-->
-<!--                        android:text="@string/irigation"-->
-<!--                        android:textAlignment="center"-->
-<!--                        android:visibility="visible" />-->
                     <TextView
                         android:id="@+id/irigation_title_txt"
                         style="@style/moduleHomeBtnStyle"
@@ -271,6 +265,37 @@
 
 
                 </RelativeLayout>
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/irigationdetails"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/irigation_Icon"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:src="@drawable/conversion_homelogo_new"-->
+<!--                        android:visibility="visible" />-->
+
+<!--&lt;!&ndash;                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:id="@+id/irigation_title_txt"&ndash;&gt;-->
+<!--&lt;!&ndash;                        style="@style/moduleHomeBtnStyle"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_below="@+id/irigation_Icon"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:text="@string/irigation"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:textAlignment="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:visibility="visible" />&ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/irigation_title_txt"-->
+<!--                        style="@style/moduleHomeBtnStyle"-->
+<!--                        android:layout_below="@+id/irigation_Icon"-->
+<!--                        android:text="@string/irigation"-->
+<!--                        android:visibility="visible" />-->
+
+
+<!--                </RelativeLayout>-->
 
                 <View
                     android:layout_width="2dp"
