@@ -1756,6 +1756,7 @@ public class CommonUtils {
         }
         return value;
     }
+
     public static void changeLanguage(Context mContext, String languaetype) {
 
         Locale locale = new Locale(languaetype);

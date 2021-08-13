@@ -41,8 +41,11 @@ public class Queries {
     public String getSaplingVerirty(String verityId) {
         return "Select Desc from TypeCdDmt where TypeCdId = "+verityId;
     }
-
-
+    public static String sproutsforSowing(String ConsignmentCode){
+        return  "Select sx.Value from SaplingActivity s\n" +
+                "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "\t\t where sx.FieldId = 54 AND ConsignmentCode = '"+ConsignmentCode+"'";
+    }
     public static String getAlertsPlotFollowUpQuery(int limit, int offset) {
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
                 "  m.Name as MandalName,\n" +

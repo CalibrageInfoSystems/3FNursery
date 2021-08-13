@@ -72,10 +72,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_task);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            activityTypeId = extras.getString("ActivityTypeId");
-            activityName = extras.getString("ActivityName");
-            SCREEN_FROM = extras.getInt(CommonConstants.SCREEN_CAME_FROM);
+            try {
+                activityTypeId = extras.getString("ActivityTypeId");
+                activityName = extras.getString("ActivityName");
 
+                SCREEN_FROM = extras.getInt(CommonConstants.SCREEN_CAME_FROM);
+                consignmentCode = extras.getString("consignmentcode");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         // SETUP title For Activity
         textView5 = findViewById(R.id.textView5);
@@ -102,11 +107,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
 
-            Button btn = (Button) findViewById(ButtonId);
-            if (enableEditing)
-                btn.setVisibility(View.VISIBLE);
-            else
-                btn.setVisibility(View.GONE);
+//            Button btn = (Button) findViewById(ButtonId);
+//            if (enableEditing)
+//                btn.setVisibility(View.VISIBLE);
+//            else
+//                btn.setVisibility(View.GONE);
             // TODO Bind DATA UsingTransactionID
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
@@ -126,11 +131,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
 
 
-            Button btn = (Button) findViewById(ButtonId);
-            if (enableEditing)
-                btn.setVisibility(View.VISIBLE);
-            else
-                btn.setVisibility(View.GONE);
+//            Button btn = (Button) findViewById(ButtonId);
+//            if (enableEditing)
+//                btn.setVisibility(View.VISIBLE);
+//            else
+//                btn.setVisibility(View.GONE);
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
@@ -1125,6 +1130,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
 
+        }else if(id == 527){
+            try {
+                int int523 = 523, int527 = 527;
+                EditText edt527 =  findViewById(int527);
+                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValueInt(Queries.sproutsforSowing(consignmentCode)))  -CommonUtils.getIntFromEditText(((EditText)findViewById(int523)));
+                edt527.setText( finalValue+"");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
