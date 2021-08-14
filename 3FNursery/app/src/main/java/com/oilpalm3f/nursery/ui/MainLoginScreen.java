@@ -215,7 +215,7 @@ public class MainLoginScreen extends AppCompatActivity {
 //                                dataAccessHandler.updateMasterSync();
 //                            }
 
-                            dataAccessHandler.updateMasterSync();
+//                            dataAccessHandler.updateMasterSync();
 
                         }
                     });
