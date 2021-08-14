@@ -23,6 +23,7 @@ import com.oilpalm3f.nursery.dbmodels.FarmerHistory;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -323,6 +324,7 @@ public class DataSyncHelper {
         List<SaplingActivityXrefModel> saplingActivityXreflist = (List<SaplingActivityXrefModel>) dataAccessHandler.getSaplingActivityXrefDetails(Queries.getInstance().getSaplingActivityXrefRefresh(), 1);
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
         List<NurseryIrrigationLog> nurseryIrrigationLog = (List<NurseryIrrigationLog>) dataAccessHandler.getIrrigationDetails(Queries.getInstance().getNurceryIrrigationHistoryRefresh(), 1);
+        List<NurseryIrrigationLogXref> nurseryIrrigationLogXref = (List<NurseryIrrigationLogXref>) dataAccessHandler.getIrrigationDetailsXref(Queries.getInstance().getNurceryIrrigationXrefHistoryRefresh(), 1);
 
 
 
@@ -333,6 +335,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityXref, saplingActivityXreflist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityHistory, saplingActivityHistorylist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLog, nurseryIrrigationLog);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLogXREF, nurseryIrrigationLogXref);
 
 
 //        allRefreshDataMap.put(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, gpsTrackingList);
@@ -520,6 +523,30 @@ public class DataSyncHelper {
                 }
 //                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "FieldId", saplingActivityXrefModel.getFieldId()+""));
+            }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLog)) {
+                NurseryIrrigationLog nurseryIrrigationLog = (NurseryIrrigationLog) dataList.get(innerCountCheck);
+                nurseryIrrigationLog.setServerUpdatedStatus(1);
+                whereCondition = " where  IrrigationCode = '" + nurseryIrrigationLog.getIrrigationCode() ;
+                try {
+                    ccData = new JSONObject(gson.toJson(nurseryIrrigationLog));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+//                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "IrrigationCode", nurseryIrrigationLog.getIrrigationCode()+""));
+            }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLogXREF)) {
+                NurseryIrrigationLogXref nurseryIrrigationLogXref = (NurseryIrrigationLogXref) dataList.get(innerCountCheck);
+                nurseryIrrigationLogXref.setServerUpdatedStatus(1);
+                whereCondition = " where  IrrigationCode = '" + nurseryIrrigationLogXref.getIrrigationCode() + "'  AND ConsignmentCode = '" + nurseryIrrigationLogXref.getConsignmentCode() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(nurseryIrrigationLogXref));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+//                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", nurseryIrrigationLogXref.getConsignmentCode(), "IrrigationCode", nurseryIrrigationLogXref.getIrrigationCode() + ""));
             }
 
             if (dataList.size() != innerCountCheck) {
@@ -801,6 +828,13 @@ public class DataSyncHelper {
                             List<SaplingActivityStatusModel> saplingActivityStatusModel = gson.fromJson(dataArray.toString(), type);
                             if (null != saplingActivityStatusModel && saplingActivityStatusModel.size() > 0)
                                 dataToUpdate.put(tableName, saplingActivityStatusModel);
+                        } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLog)) {  // TODO need to check
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<NurseryIrrigationLog>>() {
+                            }.getType();
+                            List<NurseryIrrigationLog> irrigationLogs = gson.fromJson(dataArray.toString(), type);
+                            if (null != irrigationLogs && irrigationLogs.size() > 0)
+                                dataToUpdate.put(tableName, irrigationLogs);
                         }
                     }
                     resultMessage = "success";

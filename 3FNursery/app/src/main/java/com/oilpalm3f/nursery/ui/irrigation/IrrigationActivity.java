@@ -16,6 +16,7 @@ import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
+import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.HomeActivity;
 
@@ -25,7 +26,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 public class IrrigationActivity extends AppCompatActivity {
+    public static final String LOG_TAG = IrrigationActivity.class.getSimpleName();
 
     private TextView date, nursaryname, consignment_num;
     private EditText manregular_edt, femalereg_edt, manout_edt, femaleout_edt, labourt_edt;
@@ -34,13 +37,12 @@ public class IrrigationActivity extends AppCompatActivity {
     int manreg_int, femalereg_int, manout_int, femaleout_int;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_irrigation);
-        dataAccessHandler = new DataAccessHandler(this);
 
+        dataAccessHandler = new DataAccessHandler(this);
 
         date = findViewById(R.id.textView_date);
         nursaryname = findViewById(R.id.nurseryname);
@@ -69,11 +71,13 @@ public class IrrigationActivity extends AppCompatActivity {
 
                 if (manregular_edt.length() != 0 || femalereg_edt.length() != 0 ||
                         manout_edt.length() != 0 || femaleout_edt.length() != 0) {
+                    String IrrigationCode = "IRR" + CommonConstants.TAB_ID + CommonConstants.ConsignmentCode + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getIrrigationMaxNumber()) + 1);
+                    Log.d(LOG_TAG, "==> Analysis ==> Irrigation Code ==> "+IrrigationCode);
 
                     LinkedHashMap mapStatus = new LinkedHashMap();
                     mapStatus.put("Id", 0);
                     mapStatus.put("LogDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                    mapStatus.put("ConsignmentId", CommonConstants.ConsignmentID );
+                    mapStatus.put("IrrigationCode", IrrigationCode);
                     if (manregular_edt.length() != 0) {
                         mapStatus.put("RegularMale", manregular_edt.getText().toString());
                     }
@@ -90,16 +94,14 @@ public class IrrigationActivity extends AppCompatActivity {
 
                     }
 
-
                     mapStatus.put("StatusTypeId", 346);
                     mapStatus.put("Comments", "");
-                    mapStatus.put("IsActive",true);
+                    mapStatus.put("IsActive", true);
                     mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
                     mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     mapStatus.put("UpdatedByUserId", CommonConstants.USER_ID);
-                    mapStatus.put("UpdatedDate",  CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                    mapStatus.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     mapStatus.put("ServerUpdatedStatus", 0);
-
 
 
                     final List<LinkedHashMap> irrigationArray = new ArrayList<>();
@@ -111,15 +113,42 @@ public class IrrigationActivity extends AppCompatActivity {
                                 @Override
                                 public void execute(boolean success, String result, String msg) {
                                     if (success) {
-                                        Toast.makeText(IrrigationActivity.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-                                        Intent newIntent = new Intent(IrrigationActivity.this, HomeActivity.class);
-                                        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(newIntent);
+
+                                        LinkedHashMap mapStatusXref = new LinkedHashMap();
+                                        mapStatusXref.put("IrrigationCode", IrrigationCode);
+                                        mapStatusXref.put("ConsignmentCode", CommonConstants.ConsignmentCode);
+                                        mapStatusXref.put("IsActive", true);
+                                        mapStatusXref.put("CreatedByUserId", CommonConstants.USER_ID);
+                                        mapStatusXref.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                                        mapStatusXref.put("UpdatedByUserId", CommonConstants.USER_ID);
+                                        mapStatusXref.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                                        mapStatusXref.put("ServerUpdatedStatus", 0);
+
+                                        final List<LinkedHashMap> mapStatusXrefArray = new ArrayList<>();
+                                        mapStatusXrefArray.add(mapStatusXref);
+
+                                        dataAccessHandler.insertMyDataa("NurseryIrrigationLogXref",
+                                                mapStatusXrefArray, new ApplicationThread.OnComplete<String>() {
+                                                    @Override
+                                                    public void execute(boolean success, String result, String msg) {
+                                                        if (success) {
+                                                            Toast.makeText(IrrigationActivity.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                                            Intent newIntent = new Intent(IrrigationActivity.this, HomeActivity.class);
+                                                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                            startActivity(newIntent);
+
+                                                        }else{
+
+                                                            Toast.makeText(IrrigationActivity.this, "Data Saved Failed try again :"+msg, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
 
                                     }
                                     Log.d(ActivityTask.class.getSimpleName(),
-                                            "==>  Analysis ==> irrigationlog details INSERT COMPLETED :"+success);
+                                            "==>  Analysis ==> irrigationlog details INSERT COMPLETED :" + success);
 
                                 }
                             });

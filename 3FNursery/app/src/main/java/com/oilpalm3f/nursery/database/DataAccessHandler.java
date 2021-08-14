@@ -66,6 +66,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
 import com.oilpalm3f.nursery.dbmodels.Ownershipfilerepository;
@@ -2755,11 +2756,11 @@ f
                     NurseryIrrigationLog nurseryIrrigationLog = new NurseryIrrigationLog();
                     nurseryIrrigationLog.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     nurseryIrrigationLog.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
-                    nurseryIrrigationLog.setConsignmentId(cursor.getInt(cursor.getColumnIndex("ConsignmentId")));
-                    nurseryIrrigationLog.setRegularMale(cursor.getInt(cursor.getColumnIndex("RegularMale")));
-                    nurseryIrrigationLog.setRegularFemale(cursor.getInt(cursor.getColumnIndex("RegularFemale")));
-                    nurseryIrrigationLog.setContractMale(cursor.getInt(cursor.getColumnIndex("ContractMale")));
-                    nurseryIrrigationLog.setContractFemale(cursor.getInt(cursor.getColumnIndex("ContractFemale")));
+                    nurseryIrrigationLog.setIrrigationCode(cursor.getString(cursor.getColumnIndex("IrrigationCode")));
+                    nurseryIrrigationLog.setRegularMale(cursor.getDouble(cursor.getColumnIndex("RegularMale")));
+                    nurseryIrrigationLog.setRegularFemale(cursor.getDouble(cursor.getColumnIndex("RegularFemale")));
+                    nurseryIrrigationLog.setContractMale(cursor.getDouble(cursor.getColumnIndex("ContractMale")));
+                    nurseryIrrigationLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
                     nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
                     nurseryIrrigationLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
@@ -2782,7 +2783,38 @@ f
         }
         return NurseryIrrigationLogList;
     }
+    public List<NurseryIrrigationLogXref> getIrrigationDetailsXref(final String query, final int type) {
+        List<NurseryIrrigationLogXref> NurseryIrrigationLogList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
 
+                    NurseryIrrigationLogXref nurseryIrrigationLogXref = new NurseryIrrigationLogXref();
+                    nurseryIrrigationLogXref.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    nurseryIrrigationLogXref.setIrrigationCode(cursor.getString(cursor.getColumnIndex("IrrigationCode")));
+                    nurseryIrrigationLogXref.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    nurseryIrrigationLogXref.setActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    nurseryIrrigationLogXref.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    nurseryIrrigationLogXref.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    nurseryIrrigationLogXref.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    nurseryIrrigationLogXref.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+
+                    NurseryIrrigationLogList.add(nurseryIrrigationLogXref);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return NurseryIrrigationLogList;
+    }
 
     public List<SaplingActivityStatusModel> getSaplingActivityStatusDetails(final String query, final int type) {
         List<SaplingActivityStatusModel> saplingActivitystatusDataDetails = new ArrayList<>();

@@ -186,7 +186,10 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
 {
     return  "SELECT TransactionId from SaplingActivity where ConsignmentCode ='"+consignmentCode+"' and ActivityId = '"+activityId+"'";
 }
-
+    public  String getIrrigationLastCode(String consignmentCode,String activityId)
+    {
+        return  "SELECT TransactionId from SaplingActivity where ConsignmentCode ='"+consignmentCode+"' and ActivityId = '"+activityId+"'";
+    }
     public String getSaplingActivityCounttQuery(String CCode, String activityTypeId) {
         return "select * from SaplingActivity where ActivityId = '"+activityTypeId+"' and ConsignmentCode ='"+CCode+"'";
     }
@@ -354,6 +357,9 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
 
     public String getSaplingActivityMaxNumber() {
         return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";
+    }
+    public String getIrrigationMaxNumber() {
+        return "select MAX(cast(substr(IrrigationCode, INSTR(IrrigationCode,'-') + 1, length(IrrigationCode)) as INTEGER)) as Maxnumber from NurseryIrrigationLog";
     }
 
     public String marketSurveyDataCheck(String farmerCode) {
@@ -721,7 +727,9 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     public String getNurceryIrrigationHistoryRefresh() {
         return "select * from NurseryIrrigationLog where ServerUpdatedStatus = 0";
     }
-
+    public String getNurceryIrrigationXrefHistoryRefresh() {
+        return "select * from NurseryIrrigationLogXref where ServerUpdatedStatus = 0";
+    }
     public String getSaplingActivityStatusRefresh() {
         return "select * from SaplingActivityStatus where ServerUpdatedStatus = 0";
     }

@@ -95,6 +95,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
                     Intent intent = new Intent(context, IrrigationActivity.class);
                     CommonConstants.ConsignmentID = consignmentList.get(position).getId();
+                    CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
                     context.startActivity(intent);
 
                 }

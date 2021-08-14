@@ -98,6 +98,7 @@ public class CommonConstants {
     public  static int COMMINGFROM = 0;
 
 
+
     //public static UserData totalFarmerData = new UserData();
     // Bundle Constants
     public static String REFERRAL_DATA_MODEL = "referral_data_model";

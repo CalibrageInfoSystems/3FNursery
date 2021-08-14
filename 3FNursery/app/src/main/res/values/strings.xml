@@ -780,7 +780,8 @@
 
     <string name="expected_tree_count_in_this_visit">Expected Tree Count in This Visit</string>
     <string name="vist_logs">Vist Logs</string>
-    <string name="irigation">Irrigation</string>
+    <string name="irigation">Irrigation-Log Pre Nursery</string>
+    <string name="irigationPost">Irrigation-Log Post Pre Nursery</string>
 
     <string-array name="Month">
         <item>None</item>

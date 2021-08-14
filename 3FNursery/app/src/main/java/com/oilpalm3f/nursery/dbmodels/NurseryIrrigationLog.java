@@ -2,13 +2,15 @@ package com.oilpalm3f.nursery.dbmodels;
 
 public class NurseryIrrigationLog {
 
+
+
     int Id;
     String LogDate;
-    int ConsignmentId;
-    int RegularMale;
-    int RegularFemale;
-    int ContractMale;
-    int ContractFemale;
+    String IrrigationCode;
+    double RegularMale;
+    double RegularFemale;
+    double ContractMale;
+    double ContractFemale;
     int StatusTypeId;
     String Comments;
     int IsActive;
@@ -17,6 +19,16 @@ public class NurseryIrrigationLog {
     int UpdatedByUserId;
     String UpdatedDate;
     int ServerUpdatedStatus;
+
+    public String getIrrigationCode() {
+        return IrrigationCode;
+    }
+
+    public void setIrrigationCode(String irrigationCode) {
+        IrrigationCode = irrigationCode;
+    }
+
+
 
     public int getId() {
         return Id;
@@ -34,43 +46,37 @@ public class NurseryIrrigationLog {
         LogDate = logDate;
     }
 
-    public int getConsignmentId() {
-        return ConsignmentId;
-    }
 
-    public void setConsignmentId(int consignmentId) {
-        ConsignmentId = consignmentId;
-    }
 
-    public int getRegularMale() {
+    public double getRegularMale() {
         return RegularMale;
     }
 
-    public void setRegularMale(int regularMale) {
+    public void setRegularMale(double regularMale) {
         RegularMale = regularMale;
     }
 
-    public int getRegularFemale() {
+    public double getRegularFemale() {
         return RegularFemale;
     }
 
-    public void setRegularFemale(int regularFemale) {
+    public void setRegularFemale(double regularFemale) {
         RegularFemale = regularFemale;
     }
 
-    public int getContractMale() {
+    public double getContractMale() {
         return ContractMale;
     }
 
-    public void setContractMale(int contractMale) {
+    public void setContractMale(double contractMale) {
         ContractMale = contractMale;
     }
 
-    public int getContractFemale() {
+    public double getContractFemale() {
         return ContractFemale;
     }
 
-    public void setContractFemale(int contractFemale) {
+    public void setContractFemale(double contractFemale) {
         ContractFemale = contractFemale;
     }
 

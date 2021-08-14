@@ -16,6 +16,7 @@ public class DatabaseKeys {
     public static String TABLE_SaplingActivityHistory = "SaplingActivityHistory";
     public static String TABLE_SaplingActivityStatus = "SaplingActivityStatus";
     public static String TABLE_NurseryIrrigationLog = "NurseryIrrigationLog";
+    public static String TABLE_NurseryIrrigationLogXREF = "NurseryIrrigationLogXref";
 
 
 
