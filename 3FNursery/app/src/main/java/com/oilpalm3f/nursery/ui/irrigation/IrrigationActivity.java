@@ -75,18 +75,18 @@ public class IrrigationActivity extends AppCompatActivity {
                     mapStatus.put("LogDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     mapStatus.put("ConsignmentId", CommonConstants.ConsignmentID );
                     if (manregular_edt.length() != 0) {
-                        mapStatus.put("RegularMale", Integer.parseInt(manregular_edt.getText().toString()));
+                        mapStatus.put("RegularMale", manregular_edt.getText().toString());
                     }
                     if (femalereg_edt.length() != 0) {
-                        mapStatus.put("RegularFemale", Integer.parseInt(femalereg_edt.getText().toString()));
+                        mapStatus.put("RegularFemale", femalereg_edt.getText().toString());
 
                     }
                     if (manout_edt.length() != 0) {
-                        mapStatus.put("ContractMale", Integer.parseInt(manout_edt.getText().toString()));
+                        mapStatus.put("ContractMale", manout_edt.getText().toString());
 
                     }
                     if (femaleout_edt.length() != 0) {
-                        mapStatus.put("ContractFemale", Integer.parseInt(femaleout_edt.getText().toString()));
+                        mapStatus.put("ContractFemale", femaleout_edt.getText().toString());
 
                     }
 
