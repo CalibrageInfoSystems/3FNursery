@@ -195,7 +195,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
 
     public String getNurseryDataQuery(String Userid) {
         return "select N.Code as Code, N.name as name, N.VillageId as VillageId, N.DistrictId as DistrictId , N.MandalId as MandalId, N.StateId as StateId, v.name as Villagename, st.name as Statename,d.name as DistrictName, m.name as MandalName,N.PinCode as PinCode from  UserConsignmentXref X \n" +
-        "inner join sapling S ON X.ConsignmentId = S.id \n" +
+        "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode \n" +
         "inner join Nursery N ON N.Code = S.NurseryCode \n" +
         "inner join Village v on n.VillageId = v.id \n" +
         "inner join State st on n.StateId = st.id \n" +
@@ -205,7 +205,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
     public String getConsignmentDataQuery(String Userid, String NurseryCode) {
         return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
-        "inner join sapling S ON X.ConsignmentId = S.id \n" +
+        "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +

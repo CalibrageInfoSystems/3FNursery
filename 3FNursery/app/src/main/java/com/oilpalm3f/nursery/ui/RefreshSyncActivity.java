@@ -288,7 +288,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 //                                    } else {
 //                                        dataAccessHandler.updateMasterSync();
 //                                    }
-                                    dataAccessHandler.updateMasterSync();
+//                                    dataAccessHandler.updateMasterSync();
                                     // DataAccessHandler dataAccessHandler = new DataAccessHandler(RefreshSyncActivity.this);
                                     // dataAccessHandler.updateMasterSyncDate(false, CommonConstants.USER_ID);
                                 } else {
