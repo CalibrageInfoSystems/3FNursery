@@ -22,7 +22,7 @@
         <activity android:name=".ConsignmentmultiSelectionScreen"
 
             android:label="@string/title_activity_consignment_multi_selection_screen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+          ></activity>
 
         <activity android:name=".ui.irrigation.IrrigationActivity" />
         <activity android:name=".ui.MultipleEntryScreen" />

@@ -32,7 +32,7 @@ public class ConsignmentmultiSelectionScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_consignmentmulti_selection_screen2);
+        setContentView(R.layout.activity_consignment_multi_selection_screen);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
