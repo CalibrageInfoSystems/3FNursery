@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
                 startActivity(selectionscreen);
 
-              //  showDialog(HomeActivity.this);
+                //  showDialog(HomeActivity.this);
 
             }
         });
@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-              //  CommonConstants.COMMINGFROM = 2;
+                //  CommonConstants.COMMINGFROM = 2;
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen_new.class);
                 startActivity(selectionscreen);
 
@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //  CommonConstants.COMMINGFROM = 2;
-                Intent selectionscreen = new Intent(HomeActivity.this, IrrigationStatusActivity.class);
+                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen_new.class);
                 startActivity(selectionscreen);
 
                 //  showDialog(HomeActivity.this);
@@ -138,7 +138,7 @@ public class HomeActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog);
-         final DataAccessHandler dataAccessHandler;
+        final DataAccessHandler dataAccessHandler;
         final LinearLayout detailslyt, consignmentdetailslyt;
         final TextView nurseryname, nurserycode, nurserypin;
         final TextView consignmentname, consignmentcode, consignmentpin;

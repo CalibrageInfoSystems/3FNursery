@@ -190,9 +190,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
                 Spinner sp = (Spinner) findViewById(displayData.get(i).getFieldId());
                 sp.setSelection(position);
-
             }
-
         }
     }
 
@@ -426,13 +424,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
             }
-            if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+//            if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
+            if ( activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
 
                 EditText et = findViewById(id);
 
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
 
-                if (activityTasklist.get(i).getGroupId() == 0 && TextUtils.isEmpty(et.getText().toString())) {
+                if (findViewById(id).getVisibility() == View.VISIBLE &&  activityTasklist.get(i).getGroupId() == 0 && TextUtils.isEmpty(et.getText().toString())) {
                     //TOdo  need to check already exist or not
                     Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
