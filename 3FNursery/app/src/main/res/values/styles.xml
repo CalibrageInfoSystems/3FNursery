@@ -11,7 +11,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textColor">@color/header_txt</item>
-        <item name="android:textSize">20dp</item>
+<!--        <item name="android:textSize">20dp</item>-->
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">Roboto_Regular</item>
     </style>
@@ -27,7 +27,7 @@
         <item name="android:paddingTop">11dp</item>
         <item name="android:singleLine">false</item>
         <item name="android:textColor">@color/header_txt</item>
-        <item name="android:textSize">20dp</item>
+<!--        <item name="android:textSize">20dp</item>-->
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">Roboto_Regular</item>
     </style>
