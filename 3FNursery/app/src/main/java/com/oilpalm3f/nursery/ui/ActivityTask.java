@@ -190,9 +190,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
                 Spinner sp = (Spinner) findViewById(displayData.get(i).getFieldId());
                 sp.setSelection(position);
-
             }
-
         }
     }
 
