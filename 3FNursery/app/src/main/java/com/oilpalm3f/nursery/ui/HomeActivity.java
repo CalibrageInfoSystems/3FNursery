@@ -35,7 +35,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
-    RelativeLayout irrigation;
+    RelativeLayout irrigation,irigationdetails_post;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -57,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
         newactivity = findViewById(R.id.newactivityRel);
         irrigation = findViewById(R.id.irigationdetails);
+        irigationdetails_post = findViewById(R.id.irigationdetailspost);
         refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
     }
 
@@ -85,6 +86,21 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+
+        irigationdetails_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                CommonConstants.COMMINGFROM = 2;
+                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
+                startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
+
+            }
+        });
+
 
         refreshRel.setOnClickListener(view -> {
             resetPrevRegData();

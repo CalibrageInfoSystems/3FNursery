@@ -265,11 +265,16 @@
 
 
                 </RelativeLayout>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent" />
+
                 <RelativeLayout
-                    android:id="@+id/irigationdetails_post"
+                    android:id="@+id/irigationdetailspost"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
+
 
                     <ImageView
                         android:id="@+id/irigation_Icon_post"
@@ -281,6 +286,7 @@
 
                     <TextView
                         android:id="@+id/irigation_title_txt_post"
+
                         style="@style/moduleHomeBtnStyle"
                         android:layout_below="@+id/irigation_Icon_post"
                         android:text="@string/irigationPost"
@@ -288,6 +294,29 @@
 
 
                 </RelativeLayout>
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/irigationdetails_post"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/irigation_Icon_post"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_centerInParent="true"-->
+<!--                        android:src="@drawable/conversion_homelogo_new"-->
+<!--                        android:visibility="visible" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/irigation_title_txt_post"-->
+<!--                        style="@style/moduleHomeBtnStyle"-->
+<!--                        android:layout_below="@+id/irigation_Icon_post"-->
+<!--                        android:text="@string/irigationPost"-->
+<!--                        android:visibility="visible" />-->
+
+
+<!--                </RelativeLayout>-->
 
                 <View
                     android:layout_width="2dp"
