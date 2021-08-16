@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //  CommonConstants.COMMINGFROM = 2;
-                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen_new.class);
+                Intent selectionscreen = new Intent(HomeActivity.this, IrrigationStatusActivity.class);
                 startActivity(selectionscreen);
 
                 //  showDialog(HomeActivity.this);

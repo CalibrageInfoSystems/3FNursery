@@ -241,7 +241,7 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:id="@+id/conversionRell"
+                    android:id="@+id/IrrigationRel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -258,7 +258,7 @@
                         android:id="@+id/conversion_title_txt"
                         style="@style/moduleHomeBtnStyle"
                         android:layout_below="@+id/conversion_logo"
-                        android:text="Saplings"
+                        android:text="Irrigation Status info"
                         android:visibility="visible" />
 
 
@@ -271,6 +271,7 @@
                 <RelativeLayout
                     android:id="@+id/cropMaintenanceRel"
                     android:layout_width="0dp"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
