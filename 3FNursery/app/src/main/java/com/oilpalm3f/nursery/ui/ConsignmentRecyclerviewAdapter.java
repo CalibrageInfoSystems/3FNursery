@@ -2,6 +2,7 @@ package com.oilpalm3f.nursery.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,9 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
     @Override
     public void onBindViewHolder(@NonNull ConsignmentRecyclerviewAdapter.ViewHolder holder, int position) {
 
+
+        final ConsignmentData model = consignmentList.get(position);
+
         holder.consignmentcode.setText(":  " + consignmentList.get(position).getConsignmentCode());
         holder.originname.setText(":  " + consignmentList.get(position).getOriginname());
         holder.vendorname.setText(":  " + consignmentList.get(position).getVendorname());
@@ -92,6 +96,8 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
                     context.startActivity(intent);
 
                 } else {
+//                    model.setSelected(!model.isSelected());
+//                    holder.mainlyt.setBackgroundColor(model.isSelected() ? Color.CYAN : Color.WHITE);
 
                     Intent intent = new Intent(context, IrrigationActivity.class);
                     CommonConstants.ConsignmentID = consignmentList.get(position).getId();

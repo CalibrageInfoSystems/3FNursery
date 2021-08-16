@@ -34,7 +34,6 @@ public class IrrigationActivity extends AppCompatActivity {
     private EditText manregular_edt, femalereg_edt, manout_edt, femaleout_edt, labourt_edt;
     private Button save_btn;
     private DataAccessHandler dataAccessHandler;
-    int manreg_int, femalereg_int, manout_int, femaleout_int;
 
 
     @Override
