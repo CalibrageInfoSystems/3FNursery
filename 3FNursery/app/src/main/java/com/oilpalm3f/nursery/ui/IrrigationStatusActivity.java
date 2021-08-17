@@ -168,7 +168,7 @@ public class IrrigationStatusActivity extends AppCompatActivity {
     private void displayActivityData() {
 
 
-        irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(sendcurrentDate,sendweekdate));
+        irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(sendweekdate,sendcurrentDate));
         irrigationstatusRecyclerview.setLayoutManager(new LinearLayoutManager(IrrigationStatusActivity.this));
         irrigationstatusRecyclerviewAdapter = new IrrigationstatusRecyclerviewAdapter(IrrigationStatusActivity.this, irrigationloglist);
         irrigationstatusRecyclerview.setAdapter(irrigationstatusRecyclerviewAdapter);
