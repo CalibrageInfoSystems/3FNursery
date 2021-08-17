@@ -94,8 +94,9 @@ public class IrrigationActivity extends AppCompatActivity {
                     }
 
                     mapStatus.put("StatusTypeId", 346);
+
                     mapStatus.put("Comments", "");
-                    mapStatus.put("IsActive", true);
+                    mapStatus.put("IsActive", 1);
                     mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
                     mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     mapStatus.put("UpdatedByUserId", CommonConstants.USER_ID);
@@ -116,7 +117,7 @@ public class IrrigationActivity extends AppCompatActivity {
                                         LinkedHashMap mapStatusXref = new LinkedHashMap();
                                         mapStatusXref.put("IrrigationCode", IrrigationCode);
                                         mapStatusXref.put("ConsignmentCode", CommonConstants.ConsignmentCode);
-                                        mapStatusXref.put("IsActive", true);
+                                        mapStatusXref.put("IsActive", 1);
                                         mapStatusXref.put("CreatedByUserId", CommonConstants.USER_ID);
                                         mapStatusXref.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                                         mapStatusXref.put("UpdatedByUserId", CommonConstants.USER_ID);
