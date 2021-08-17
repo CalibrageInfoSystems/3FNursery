@@ -23,7 +23,7 @@
 
             <TextView
                 android:gravity="center"
-                android:layout_weight="0.15"
+                android:layout_weight="0.17"
                 android:id="@+id/irrigationcode"
                 android:textColor="@color/black"
                 android:text="Irrigation Code "
@@ -88,14 +88,15 @@
                 android:background="@color/black"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"/>
-            <TextView
-                android:gravity="center"
-                android:text="Status "
-                android:layout_weight="0.1"
+            <ImageView
+                android:padding="10dp"
+                android:src="@drawable/done"
+                android:layout_weight="0.08"
                 android:textColor="@color/black"
-                android:id="@+id/txtSatusText"
+                android:id="@+id/imgNurStatus"
                 android:layout_width="0dp"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:background="@color/black"
                 android:layout_width="1dp"

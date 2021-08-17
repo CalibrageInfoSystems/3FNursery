@@ -4808,6 +4808,47 @@ f
     }
 
 
+    public List<NurseryIrrigationLog> getirigationlogs(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET Irrigation :" + query);
+        List<NurseryIrrigationLog> irrigationlogDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryIrrigationLog nurseryIrrigationLog  = new NurseryIrrigationLog();
+                    nurseryIrrigationLog.setIrrigationCode(cursor.getString(cursor.getColumnIndex("IrrigationCode")));
+                    nurseryIrrigationLog.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
+                    nurseryIrrigationLog.setRegularMale(cursor.getDouble(cursor.getColumnIndex("RegularMale")));
+                    nurseryIrrigationLog.setRegularFemale(cursor.getDouble(cursor.getColumnIndex("RegularFemale")));
+                    nurseryIrrigationLog.setContractMale(cursor.getDouble(cursor.getColumnIndex("ContractMale")));
+                    nurseryIrrigationLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
+                    nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+//                    nurseryIrrigationLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+//                    nurseryIrrigationLog.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+//                    nurseryIrrigationLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+//                    nurseryIrrigationLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+//                    nurseryIrrigationLog.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+//                    nurseryIrrigationLog.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    irrigationlogDetails.add(nurseryIrrigationLog);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return irrigationlogDetails;
+    }
+
+
     public ArrayList<Farmer> getFarmerList(final String query) {
         ArrayList<Farmer> farmerDetails = new ArrayList<>();
         Cursor cursor = null;

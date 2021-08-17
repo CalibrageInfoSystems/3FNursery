@@ -24,6 +24,7 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
@@ -37,18 +38,17 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
 
     public Context context;
 
-    List<NurseryAcitivity> mActivitiesList;
+    List<NurseryIrrigationLog> IrrigationlogList;
     private List<MutipleData> multiplelist;
     private DataAccessHandler dataAccessHandler;
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     String ConsignmentCode;
     String targetDatedata;
 
-    public IrrigationstatusRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode, String targetDate) {
+    public IrrigationstatusRecyclerviewAdapter(Context context, List<NurseryIrrigationLog> IrrigationlogList) {
         this.context = context;
-        this.mActivitiesList = mActivitiesList;
-        this.ConsignmentCode = ConsignmentCode;
-        this.targetDatedata = targetDate;
+        this.IrrigationlogList = IrrigationlogList;
+
     }
 
     @NonNull
@@ -63,15 +63,46 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
+
+
         dataAccessHandler = new DataAccessHandler(context);
 
+        holder.irrigationcode.setText(IrrigationlogList.get(position).getIrrigationCode());
+        String beforeDate =  IrrigationlogList.get(position).getLogDate();
+        String finalDate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy", beforeDate);
+        holder.logdate.setText(finalDate);
+        holder.regularlabourmale.setText(IrrigationlogList.get(position).getRegularMale()+"");
 
+        holder.regularlabourfemale.setText(IrrigationlogList.get(position).getRegularFemale()+"");
+
+        holder.contractlabourmale.setText(IrrigationlogList.get(position).getContractMale()+"");
+
+        holder.contractlabourfemale.setText(IrrigationlogList.get(position).getContractFemale()+"");
+        if (IrrigationlogList.get(position).getStatusTypeId() == 346) {
+            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
+
+        } else if (IrrigationlogList.get(position).getStatusTypeId() == 347) {
+            holder.imgNurStatus.setImageResource(R.drawable.done);
+
+        } else if (IrrigationlogList.get(position).getStatusTypeId() == 348) {
+
+            holder.imgNurStatus.setImageResource(R.drawable.done);
+
+        } else if (IrrigationlogList.get(position).getStatusTypeId() == 349) {
+
+            holder.imgNurStatus.setImageResource(R.drawable.rejected);
+
+        } else if (IrrigationlogList.get(position).getStatusTypeId() == 352) {
+
+            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
+
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return mActivitiesList.size();
+        return IrrigationlogList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -91,7 +122,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
             this.mainlyt = (LinearLayout) itemView.findViewById(R.id.mainlyt);
             this.contractlabourmale = itemView.findViewById(R.id.contractlabourmale);
             this.contractlabourfemale = itemView.findViewById(R.id.contractlabourfemale);
-            this.txtSatusText = itemView.findViewById(R.id.txtSatusText);
+            this.imgNurStatus = itemView.findViewById(R.id.imgNurStatus);
         }
     }
 

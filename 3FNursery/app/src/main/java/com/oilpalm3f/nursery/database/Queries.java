@@ -1508,4 +1508,11 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     {
         return "select TypeCdId from TypeCdDmt where ClassTypeId = '"+typeID+"' and Desc = '"+des+"'";
     }
+
+    public String getIrrigationStatus(String fromDate, String todate) {
+        return "SELECT n.IrrigationCode, n.LogDate,n.RegularMale,n.RegularFemale,n.ContractMale,n.ContractFemale,n.StatusTypeId, n.Comments , t.Desc\n" +
+                "from NurseryIrrigationLog n\n" +
+                "Inner Join TypeCdDmt t on t.TypeCdId = n.StatusTypeId\n" +
+                "where   date(LogDate) BETWEEN  '"+fromDate+"'  and '"+todate+"'";
+    }
 }
