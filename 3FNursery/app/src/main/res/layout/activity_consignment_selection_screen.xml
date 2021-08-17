@@ -15,6 +15,13 @@
         android:textSize="20dp"
         android:padding="10dp"
         android:layout_marginTop="10dp"/>
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btnGetSelected"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="8dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="Get Selected" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/consignmentRecyclerview"

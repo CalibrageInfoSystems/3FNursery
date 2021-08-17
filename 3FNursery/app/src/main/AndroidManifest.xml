@@ -15,9 +15,15 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.ConsignmentMultiSelectionScreen"
+
+            android:name=".ui.IrrigationStatusActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.NurserySelectionScreen_new" />
+        <activity android:name=".ConsignmentmultiSelectionScreen"
+
             android:label="@string/title_activity_consignment_multi_selection_screen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+          ></activity>
+
         <activity android:name=".ui.irrigation.IrrigationActivity" />
         <activity android:name=".ui.MultipleEntryScreen" />
         <activity android:name=".ConsignmentSelectionScreen" />
@@ -58,6 +64,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".MainActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -67,11 +74,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
     <uses-feature android:name="android.hardware.camera" />
+
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -86,10 +96,12 @@
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
