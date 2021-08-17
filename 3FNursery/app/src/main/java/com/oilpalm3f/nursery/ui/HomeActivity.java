@@ -35,7 +35,8 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
-    RelativeLayout irrigation,irigationdetails_post;
+    RelativeLayout irrigation;
+    RelativeLayout irrigation_post,IrrigationRel;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -57,8 +58,9 @@ public class HomeActivity extends AppCompatActivity {
 
         newactivity = findViewById(R.id.newactivityRel);
         irrigation = findViewById(R.id.irigationdetails);
-        irigationdetails_post = findViewById(R.id.irigationdetailspost);
+        irrigation_post = findViewById(R.id.irigationdetails_post);
         refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
+        IrrigationRel =findViewById(R.id.IrrigationRel);
     }
 
     private void setviews() {
@@ -70,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
                 startActivity(selectionscreen);
 
-              //  showDialog(HomeActivity.this);
+                //  showDialog(HomeActivity.this);
 
             }
         });
@@ -87,13 +89,24 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-        irigationdetails_post.setOnClickListener(new View.OnClickListener() {
+        irrigation_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                CommonConstants.COMMINGFROM = 2;
-                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
+                //  CommonConstants.COMMINGFROM = 2;
+                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen_new.class);
+                startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
+
+            }
+        });
+        IrrigationRel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //  CommonConstants.COMMINGFROM = 2;
+                Intent selectionscreen = new Intent(HomeActivity.this, IrrigationStatusActivity.class);
                 startActivity(selectionscreen);
 
                 //  showDialog(HomeActivity.this);
@@ -101,11 +114,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         refreshRel.setOnClickListener(view -> {
             resetPrevRegData();
             startActivity(new Intent(HomeActivity.this, RefreshSyncActivity.class));
         });
+
+
     }
 
     public static void resetPrevRegData() {
@@ -124,7 +138,7 @@ public class HomeActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog);
-         final DataAccessHandler dataAccessHandler;
+        final DataAccessHandler dataAccessHandler;
         final LinearLayout detailslyt, consignmentdetailslyt;
         final TextView nurseryname, nurserycode, nurserypin;
         final TextView consignmentname, consignmentcode, consignmentpin;

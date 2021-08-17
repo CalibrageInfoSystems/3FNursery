@@ -2,11 +2,11 @@ package com.oilpalm3f.nursery.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,13 +17,14 @@ import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
+import com.oilpalm3f.nursery.dbmodels.NurseryData;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<ConsignmentRecyclerviewAdapter.ViewHolder> {
+public class MultiConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<MultiConsignmentRecyclerviewAdapter.ViewHolder> {
 
     public Context context;
 
@@ -33,7 +34,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
     SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
     String convertedcreatedDate, nurceryId;
 
-    public ConsignmentRecyclerviewAdapter(Context context, List<ConsignmentData> consignmentList, String nurceryId) {
+    public MultiConsignmentRecyclerviewAdapter(Context context, List<ConsignmentData> consignmentList, String nurceryId) {
         this.context = context;
         this.consignmentList = consignmentList;
         this.nurceryId = nurceryId;
@@ -49,10 +50,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ConsignmentRecyclerviewAdapter.ViewHolder holder, int position) {
-
-
-        final ConsignmentData model = consignmentList.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         holder.consignmentcode.setText(":  " + consignmentList.get(position).getConsignmentCode());
         holder.originname.setText(":  " + consignmentList.get(position).getOriginname());
@@ -87,24 +85,13 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                consignmentList.get(position).setChecked(!   consignmentList.get(position).isChecked());
+                holder.imageView.setVisibility(   consignmentList.get(position).isChecked() ? View.VISIBLE : View.GONE);
 
-                if(CommonConstants.COMMINGFROM != 1){
-
-                    Intent intent = new Intent(context, Activities.class);
-                    intent.putExtra("nurceryId", nurceryId);
-                    intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
-                    context.startActivity(intent);
-
-                } else {
-                   model.setSelected(!model.isSelected());
-                    holder.mainlyt.setBackgroundColor(model.isSelected() ? Color.CYAN : Color.WHITE);
-
-                    Intent intent = new Intent(context, IrrigationActivity.class);
-                    CommonConstants.ConsignmentID = consignmentList.get(position).getId();
-                    CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
-                    context.startActivity(intent);
-
-                }
+//                Intent intent = new Intent(context, Activities.class);
+//                intent.putExtra("nurceryId", nurceryId);
+//                intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
+//                context.startActivity(intent);
             }
         });
 
@@ -119,6 +106,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
         public TextView consignmentcode, originname, vendorname, varietyname, estimatedqty, ordereddate, arrivaldate, arrivedqty;
         LinearLayout mainlyt, lytarrivaldate, lytarrivedqty;
+         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -134,9 +122,18 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
             this.arrivedqty = (TextView) itemView.findViewById(R.id.arrivedqty);
             this.lytarrivaldate = itemView.findViewById(R.id.lytarrivaldate);
             this.lytarrivedqty = itemView.findViewById(R.id.lytarrivedqty);
-
+            this.imageView = itemView.findViewById(R.id.imageView);
             mainlyt = (LinearLayout) itemView.findViewById(R.id.mainnlyt);
 
         }
+    }
+    public ArrayList<ConsignmentData> getSelected() {
+        ArrayList<ConsignmentData> selected = new ArrayList<>();
+        for (int i = 0; i < consignmentList.size(); i++) {
+            if (consignmentList.get(i).isChecked()) {
+                selected.add(consignmentList.get(i));
+            }
+        }
+        return selected;
     }
 }
