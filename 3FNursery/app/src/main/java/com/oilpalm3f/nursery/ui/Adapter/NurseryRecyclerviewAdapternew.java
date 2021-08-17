@@ -53,7 +53,8 @@ public class NurseryRecyclerviewAdapternew extends RecyclerView.Adapter<NurseryR
             @Override
             public void onClick(View view) {
                 CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-                Intent intent = new Intent(context, ConsignmentmultiSelectionScreen.class);
+               // Intent intent = new Intent(context, ConsignmentmultiSelectionScreen.class);
+                Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
                 intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
                 CommonConstants.NurseryCode = nurserysList.get(position).getCode();
                 CommonConstants.NurseryName = nurserysList.get(position).getName();

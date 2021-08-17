@@ -5,8 +5,10 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -14,7 +16,13 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
+
 import com.oilpalm3f.nursery.ui.Adapter.MultiConsignmentRecyclerviewAdapter;
+
+import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
+import com.oilpalm3f.nursery.ui.IrrigationStatusActivity;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +35,11 @@ public class ConsignmentmultiSelectionScreen extends AppCompatActivity {
     private MultiConsignmentRecyclerviewAdapter consignmentRecyclerviewAdapter;
     String nurserycode;
     private ArrayList<ConsignmentData> selectedconsignmentList = new ArrayList<>();
-    private AppCompatButton btnGetSelected;
+    // private AppCompatButton btnGetSelected;
+
+    Button select_btn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +56,9 @@ public class ConsignmentmultiSelectionScreen extends AppCompatActivity {
         setViews();
         String UserId = CommonConstants.USER_ID;
         Log.d("UserId Is : ", UserId);
-        btnGetSelected.setOnClickListener(new View.OnClickListener() {
+
+
+        select_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (consignmentRecyclerviewAdapter.getSelected().size() > 0) {
@@ -52,11 +66,21 @@ public class ConsignmentmultiSelectionScreen extends AppCompatActivity {
                     for (int i = 0; i < consignmentRecyclerviewAdapter.getSelected().size(); i++) {
                         stringBuilder.append(consignmentRecyclerviewAdapter.getSelected().get(i).getConsignmentCode());
                         stringBuilder.append("\n");
+
+                        Intent intent = new Intent(getBaseContext(), IrrigationActivity.class);
+//                         CommonConstants.ConsignmentID = consignmentList
+//                        CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
+                        startActivity(intent);
+//                        intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
+
+
                     }
                     showToast(stringBuilder.toString().trim());
                 } else {
                     showToast("No Selection");
                 }
+
+
             }
         });
     }
@@ -64,19 +88,21 @@ public class ConsignmentmultiSelectionScreen extends AppCompatActivity {
     private void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
     private void init() {
 
         consignmentRecyclerview = findViewById(R.id.consignmentRecyclerview);
-        this.btnGetSelected = (AppCompatButton) findViewById(R.id.btnGetSelected);
+        select_btn = findViewById(R.id.select_btn);
     }
 
     private void setViews() {
 
         //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID,nurserycode));
+        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        consignmentRecyclerviewAdapter = new MultiConsignmentRecyclerviewAdapter(ConsignmentmultiSelectionScreen.this, consignmentList,nurserycode);
+        consignmentRecyclerviewAdapter = new MultiConsignmentRecyclerviewAdapter(ConsignmentmultiSelectionScreen.this, consignmentList, nurserycode);
         consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
+
     }
 }
