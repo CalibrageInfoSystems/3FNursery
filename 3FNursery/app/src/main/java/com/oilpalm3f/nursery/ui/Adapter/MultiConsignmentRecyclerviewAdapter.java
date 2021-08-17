@@ -1,7 +1,6 @@
-package com.oilpalm3f.nursery.ui;
+package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
-import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
-import com.oilpalm3f.nursery.dbmodels.NurseryData;
-import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

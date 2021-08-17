@@ -1,4 +1,4 @@
-package com.oilpalm3f.nursery.ui;
+package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,24 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.ConsignmentmultiSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
-import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecyclerviewAdapter.ViewHolder> {
+public class NurseryRecyclerviewAdapternew extends RecyclerView.Adapter<NurseryRecyclerviewAdapternew.ViewHolder> {
 
     public Context context;
 
     List<NurseryData> nurserysList = new ArrayList<>();
 
 
-    public NurseryRecyclerviewAdapter(Context context, List<NurseryData> nurserysList) {
+    public NurseryRecyclerviewAdapternew(Context context, List<NurseryData> nurserysList) {
         this.context = context;
         this.nurserysList = nurserysList;
 
@@ -44,58 +42,24 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NurseryRecyclerviewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         holder.nurseryName.setText(":  " +nurserysList.get(position).getName());
         holder.nurserycode.setText(":  "+nurserysList.get(position).getCode());
         holder.nurseryaddress.setText(":  "+nurserysList.get(position).getVillagename());
         holder.pincode.setText(":  "+nurserysList.get(position).getPinCode() + "");
 
-
-
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-                Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
+                Intent intent = new Intent(context, ConsignmentmultiSelectionScreen.class);
                 intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
                 CommonConstants.NurseryCode = nurserysList.get(position).getCode();
                 CommonConstants.NurseryName = nurserysList.get(position).getName();
                 context.startActivity(intent);
             }
         });
-
-
-//        holder.mainlyt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if(CommonConstants.COMMINGFROM != 1){
-//
-//                    CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-//                    Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
-//                    intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
-//                    CommonConstants.NurseryCode = nurserysList.get(position).getCode();
-//                    CommonConstants.NurseryName = nurserysList.get(position).getName();
-//                    context.startActivity(intent);
-//
-//                } else {
-//
-//                    CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-//                    Intent intent = new Intent(context, ConsignmentMultiSelectionScreen.class);
-//                    intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
-//                    CommonConstants.NurseryCode = nurserysList.get(position).getCode();
-//                    CommonConstants.NurseryName = nurserysList.get(position).getName();
-//                    context.startActivity(intent);
-//
-//                }
-////                Intent intent = new Intent(context, Activities.class);
-////                intent.putExtra("nurceryId", nurceryId);
-////                intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
-////                context.startActivity(intent);
-//            }
-//        });
-
     }
 
     @Override
@@ -118,4 +82,6 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
             mainlyt = (LinearLayout ) itemView.findViewById(R.id.mainlyt);
         }
     }
+
+
 }

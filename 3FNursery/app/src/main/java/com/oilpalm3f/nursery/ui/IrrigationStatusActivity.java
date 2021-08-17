@@ -17,6 +17,8 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentStatuData;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
+import com.oilpalm3f.nursery.ui.Adapter.ActivitiesRecyclerviewAdapter;
+import com.oilpalm3f.nursery.ui.Adapter.IrrigationstatusRecyclerviewAdapter;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,8 +30,10 @@ public class IrrigationStatusActivity extends AppCompatActivity {
     private DataAccessHandler dataAccessHandler;
     private List<ConsignmentStatuData> consignmentstatusList = new ArrayList<>();
     private RecyclerView irrigationstatusRecyclerview;
+    private List<NurseryAcitivity> mActivitiesList = new ArrayList<>();
 
-
+    private String NURCERYCODE,CONSINEMENTCODE;
+    private IrrigationstatusRecyclerviewAdapter irrigationstatusRecyclerviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class IrrigationStatusActivity extends AppCompatActivity {
     private void init() {
         dataAccessHandler = new DataAccessHandler(this);
 
-
+        irrigationstatusRecyclerview = findViewById(R.id.irrigationstatusRecyclerview);
 
         txtSatus = findViewById(R.id.txtSatus);
 
@@ -59,10 +63,20 @@ public class IrrigationStatusActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-
+        displayActivityData();
 
 
     }
+
+    private void displayActivityData() {
+        String targetDate = dataAccessHandler.getSingleValue(Queries.getTargetDay(CONSINEMENTCODE));
+
+        mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities(CONSINEMENTCODE));
+        irrigationstatusRecyclerview.setLayoutManager(new LinearLayoutManager(IrrigationStatusActivity.this));
+        irrigationstatusRecyclerviewAdapter = new IrrigationstatusRecyclerviewAdapter(IrrigationStatusActivity.this, mActivitiesList, CONSINEMENTCODE,targetDate);
+        irrigationstatusRecyclerview.setAdapter(irrigationstatusRecyclerviewAdapter);
+    }
+
 
     @Override
     protected void onResume() {

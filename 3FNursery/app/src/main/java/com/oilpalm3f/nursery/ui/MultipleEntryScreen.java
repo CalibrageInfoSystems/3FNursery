@@ -17,6 +17,7 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
+import com.oilpalm3f.nursery.ui.Adapter.MultipleEntriesRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

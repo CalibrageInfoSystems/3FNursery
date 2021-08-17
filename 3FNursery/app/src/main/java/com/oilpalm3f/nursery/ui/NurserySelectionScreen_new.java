@@ -1,13 +1,10 @@
 package com.oilpalm3f.nursery.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -15,6 +12,7 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
+import com.oilpalm3f.nursery.ui.Adapter.NurseryRecyclerviewAdapternew;
 
 import java.util.ArrayList;
 import java.util.List;

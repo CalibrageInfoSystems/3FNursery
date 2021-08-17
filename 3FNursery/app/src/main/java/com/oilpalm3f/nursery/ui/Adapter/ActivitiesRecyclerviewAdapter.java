@@ -1,4 +1,4 @@
-package com.oilpalm3f.nursery.ui;
+package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -25,6 +25,8 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
+import com.oilpalm3f.nursery.ui.ActivityTask;
+import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
 
 import org.apache.commons.lang3.StringUtils;
 

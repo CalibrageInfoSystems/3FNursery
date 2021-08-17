@@ -1,4 +1,4 @@
-package com.oilpalm3f.nursery.ui;
+package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,6 +21,7 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
+import com.oilpalm3f.nursery.ui.ActivityTask;
 
 import org.apache.commons.lang3.StringUtils;
 

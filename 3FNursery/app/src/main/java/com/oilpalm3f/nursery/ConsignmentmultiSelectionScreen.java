@@ -14,8 +14,7 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
-import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
-import com.oilpalm3f.nursery.ui.MultiConsignmentRecyclerviewAdapter;
+import com.oilpalm3f.nursery.ui.Adapter.MultiConsignmentRecyclerviewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

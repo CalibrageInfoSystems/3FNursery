@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.oilpalm3f.nursery.R;
@@ -12,9 +11,8 @@ import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
-import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
-import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
+import com.oilpalm3f.nursery.ui.Adapter.NurseryRecyclerviewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
