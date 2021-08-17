@@ -52,7 +52,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
     public void onBindViewHolder(@NonNull ConsignmentRecyclerviewAdapter.ViewHolder holder, int position) {
 
 
-        final ConsignmentData model = consignmentList.get(position);
+        //final ConsignmentData model = consignmentList.get(position);
 
         holder.consignmentcode.setText(":  " + consignmentList.get(position).getConsignmentCode());
         holder.originname.setText(":  " + consignmentList.get(position).getOriginname());
@@ -96,8 +96,8 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
                     context.startActivity(intent);
 
                 } else {
-                   model.setSelected(!model.isSelected());
-                    holder.mainlyt.setBackgroundColor(model.isSelected() ? Color.CYAN : Color.WHITE);
+//                   model.setSelected(!model.isSelected());
+//                    holder.mainlyt.setBackgroundColor(model.isSelected() ? Color.CYAN : Color.WHITE);
 
                     Intent intent = new Intent(context, IrrigationActivity.class);
                     CommonConstants.ConsignmentID = consignmentList.get(position).getId();

@@ -28,7 +28,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
     private List<ConsignmentData> consignmentList = new ArrayList<>();
     private ConsignmentRecyclerviewAdapter consignmentRecyclerviewAdapter;
     String nurserycode;
-    Button select_btn;
+   // Button select_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +47,12 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
         String UserId = CommonConstants.USER_ID;
         Log.d("UserId Is : ", UserId);
 
-        select_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-            }
+//        select_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//            }
 
 
 //                if (consignmentRecyclerviewAdapter.getSelected().size() > 0) {
@@ -75,7 +75,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 //                }
 
 
-        });
+      //  });
 
     }
 
@@ -84,7 +84,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
     private void init() {
 
         consignmentRecyclerview = findViewById(R.id.consignmentRecyclerview);
-        select_btn              = findViewById(R.id.selectbtn);
+       // select_btn              = findViewById(R.id.selectbtn);
 
     }
 

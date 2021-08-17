@@ -12,15 +12,15 @@ public class ConsignmentData {
     private String ArrivedDate;
     private int ArrivedQuantity;
 
-    private boolean isSelected = false;
+//    private boolean isSelected = false;
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
+//    public boolean isSelected() {
+//        return isSelected;
+//    }
+//
+//    public void setSelected(boolean selected) {
+//        isSelected = selected;
+//    }
 
     private boolean isChecked = false;
 
