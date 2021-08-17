@@ -28,22 +28,7 @@ allprojects {
     }
 }
 
-<<<<<<< HEAD
-//allprojects {
-//    buildDir = "C:/tmp/${rootProject.name}/${project.name}"
-//    repositories {
-//        jcenter()
-//    }
-//}
 
-=======
-allprojects {
-    buildDir = "C:/tmp/${rootProject.name}/${project.name}"
-    repositories {
-        jcenter()
-    }
-}
->>>>>>> ecaabdcb93ace28005a3e4521729ae961bce7c02
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
