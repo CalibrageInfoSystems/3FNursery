@@ -78,25 +78,28 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
         holder.contractlabourmale.setText(IrrigationlogList.get(position).getContractMale()+"");
 
         holder.contractlabourfemale.setText(IrrigationlogList.get(position).getContractFemale()+"");
-        if (IrrigationlogList.get(position).getStatusTypeId() == 346) {
-            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
 
-        } else if (IrrigationlogList.get(position).getStatusTypeId() == 347) {
-            holder.imgNurStatus.setImageResource(R.drawable.done);
+        holder.txtSatusText.setText(IrrigationlogList.get(position).getDesc());
 
-        } else if (IrrigationlogList.get(position).getStatusTypeId() == 348) {
-
-            holder.imgNurStatus.setImageResource(R.drawable.done);
-
-        } else if (IrrigationlogList.get(position).getStatusTypeId() == 349) {
-
-            holder.imgNurStatus.setImageResource(R.drawable.rejected);
-
-        } else if (IrrigationlogList.get(position).getStatusTypeId() == 352) {
-
-            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
-
-        }
+//        if (IrrigationlogList.get(position).getStatusTypeId() == 346) {
+//            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
+//
+//        } else if (IrrigationlogList.get(position).getStatusTypeId() == 347) {
+//            holder.imgNurStatus.setImageResource(R.drawable.done);
+//
+//        } else if (IrrigationlogList.get(position).getStatusTypeId() == 348) {
+//
+//            holder.imgNurStatus.setImageResource(R.drawable.done);
+//
+//        } else if (IrrigationlogList.get(position).getStatusTypeId() == 349) {
+//
+//            holder.imgNurStatus.setImageResource(R.drawable.rejected);
+//
+//        } else if (IrrigationlogList.get(position).getStatusTypeId() == 352) {
+//
+//            holder.imgNurStatus.setImageResource(R.drawable.inprogress);
+//
+//        }
 
     }
 
@@ -118,7 +121,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
             this.regularlabourmale = (TextView) itemView.findViewById(R.id.regularlabourmale);
             this.regularlabourfemale = (TextView) itemView.findViewById(R.id.regularlabourfemale);
             this.logdate = (TextView) itemView.findViewById(R.id.logdate);
-//            this.saplingExpecteddate = (TextView )itemView.findViewById(R.id.saplingExpecteddate);
+       this.txtSatusText = (TextView )itemView.findViewById(R.id.txtSatusText);
             this.mainlyt = (LinearLayout) itemView.findViewById(R.id.mainlyt);
             this.contractlabourmale = itemView.findViewById(R.id.contractlabourmale);
             this.contractlabourfemale = itemView.findViewById(R.id.contractlabourfemale);

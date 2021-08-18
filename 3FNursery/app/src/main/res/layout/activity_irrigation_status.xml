@@ -163,7 +163,7 @@ android:textColorHint="@color/black"
 
                         <TextView
                             android:gravity="center"
-                            android:layout_weight="0.17"
+                            android:layout_weight="0.15"
                             android:textColor="@color/black"
                             android:text="Irrigation Code "
                             android:layout_width="0dp"
@@ -230,7 +230,7 @@ android:textColorHint="@color/black"
                         <TextView
                             android:gravity="center"
                             android:text="Status "
-                            android:layout_weight="0.08"
+                            android:layout_weight="0.15"
                             android:textColor="@color/black"
                             android:id="@+id/txtSatusText"
                             android:layout_width="0dp"

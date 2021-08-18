@@ -13,8 +13,18 @@ public class NurseryIrrigationLog {
     double ContractFemale;
     int StatusTypeId;
     String Comments;
+    String desc;
     int IsActive;
     int CreatedByUserId;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     String CreatedDate;
     int UpdatedByUserId;
     String UpdatedDate;

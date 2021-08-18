@@ -4826,7 +4826,7 @@ f
                     nurseryIrrigationLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
                     nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
-//                    nurseryIrrigationLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                  nurseryIrrigationLog.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
 //                    nurseryIrrigationLog.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
 //                    nurseryIrrigationLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
 //                    nurseryIrrigationLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
