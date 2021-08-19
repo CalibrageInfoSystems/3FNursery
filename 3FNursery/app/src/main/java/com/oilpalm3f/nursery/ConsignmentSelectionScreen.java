@@ -1,6 +1,5 @@
 package com.oilpalm3f.nursery;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +14,8 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
+import com.oilpalm3f.nursery.ui.Adapter.MultiConsignmentRecyclerviewAdapter;
 import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
-import com.oilpalm3f.nursery.ui.MultiConsignmentRecyclerviewAdapter;
-import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +52,12 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(consignmentRecyclerviewAdapterMultiple.getItemCount() > 0){
-                    String[] codes = consignmentRecyclerviewAdapterMultiple.getSelectedCodes().toArray(new String[0]);
-
-                    Intent i =new Intent(ConsignmentSelectionScreen.this, IrrigationActivity.class);
-                    i.putExtra("SeelctedConsignments", codes);
-                    startActivity(i);
+                if(consignmentRecyclerviewAdapterMultiple.getSelected().size() > 0){
+//                    String[] codes = consignmentRecyclerviewAdapterMultiple.getItemCount().toArray(new String[0]);
+//
+//                    Intent i =new Intent(ConsignmentSelectionScreen.this, IrrigationActivity.class);
+//                    i.putExtra("SeelctedConsignments", codes);
+//                    startActivity(i);
 
                 }else{
                     Toast.makeText(ConsignmentSelectionScreen.this, "Please Select Atlest One Consignment", Toast.LENGTH_SHORT).show();
