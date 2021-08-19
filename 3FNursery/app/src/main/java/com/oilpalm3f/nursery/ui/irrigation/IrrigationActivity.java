@@ -19,6 +19,7 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.HomeActivity;
+import com.oilpalm3f.nursery.ui.IrrigationpostActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class IrrigationActivity extends AppCompatActivity {
     private Button save_btn;
     private DataAccessHandler dataAccessHandler;
 
-
+String CONSINEMENTCODES;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,11 @@ public class IrrigationActivity extends AppCompatActivity {
         date.setText("  : " + formattedDate);
         nursaryname.setText(" : " + CommonConstants.NurseryName);
         consignment_num.setText(" : " + CommonConstants.ConsignmentID);
+if(getIntent()!=null) {
+    CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
 
+    Toast.makeText(IrrigationActivity.this, CONSINEMENTCODES, Toast.LENGTH_SHORT).show();
+}
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

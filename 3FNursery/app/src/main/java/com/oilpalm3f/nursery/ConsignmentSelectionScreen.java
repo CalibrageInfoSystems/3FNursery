@@ -1,5 +1,6 @@
 package com.oilpalm3f.nursery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
 import com.oilpalm3f.nursery.ui.Adapter.MultiConsignmentRecyclerviewAdapter;
 import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
+import com.oilpalm3f.nursery.ui.IrrigationpostActivity;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,33 +54,33 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
         select_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (consignmentRecyclerviewAdapterMultiple.getSelected().size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < consignmentRecyclerviewAdapterMultiple.getSelected().size(); i++) {
+                        stringBuilder.append(consignmentRecyclerviewAdapterMultiple.getSelected().get(i).getConsignmentCode());
+                        stringBuilder.append("\n");
 
-                if(consignmentRecyclerviewAdapterMultiple.getSelected().size() > 0){
-//                    String[] codes = consignmentRecyclerviewAdapterMultiple.getItemCount().toArray(new String[0]);
+                    }
+                    Intent intent = new Intent(getBaseContext(), IrrigationActivity.class);
+                    intent.putExtra("consignmentCode",stringBuilder.toString().trim());
+                    startActivity(intent);
 //
-//                    Intent i =new Intent(ConsignmentSelectionScreen.this, IrrigationActivity.class);
-//                    i.putExtra("SeelctedConsignments", codes);
-//                    startActivity(i);
+                    Toast.makeText(ConsignmentSelectionScreen.this, stringBuilder.toString().trim(), Toast.LENGTH_SHORT).show();
 
-                }else{
+                } else {
                     Toast.makeText(ConsignmentSelectionScreen.this, "Please Select Atlest One Consignment", Toast.LENGTH_SHORT).show();
                 }
 
+
             }
-
-
-
-
-
-          });
-
+        });
     }
 
 
     private void init() {
 
         consignmentRecyclerview = findViewById(R.id.consignmentRecyclerview);
-         select_btn              = findViewById(R.id.selectbtn);
+         select_btn = findViewById(R.id.selectbtn);
         if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
            select_btn.setVisibility(View.VISIBLE);
         }else{
@@ -93,7 +96,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
             consignmentRecyclerviewAdapterMultiple = new MultiConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
-            consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
+            consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapterMultiple);
         } else {
             consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);

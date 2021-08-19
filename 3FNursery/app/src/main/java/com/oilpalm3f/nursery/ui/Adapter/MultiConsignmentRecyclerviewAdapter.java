@@ -82,7 +82,7 @@ public class MultiConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Mu
             @Override
             public void onClick(View view) {
                 consignmentList.get(position).setChecked(!   consignmentList.get(position).isChecked());
-                holder.imageView.setVisibility(   consignmentList.get(position).isChecked() ? View.VISIBLE : View.GONE);
+                holder.imageView.setVisibility(consignmentList.get(position).isChecked() ? View.VISIBLE : View.GONE);
 
 //                Intent intent = new Intent(context, Activities.class);
 //                intent.putExtra("nurceryId", nurceryId);
