@@ -1,10 +1,10 @@
 package com.oilpalm3f.nursery;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +16,7 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
 import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
+import com.oilpalm3f.nursery.ui.MultiConsignmentRecyclerviewAdapter;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
     private List<ConsignmentData> consignmentList = new ArrayList<>();
     private ConsignmentRecyclerviewAdapter consignmentRecyclerviewAdapter;
     String nurserycode;
-   // Button select_btn;
+    private  Button select_btn;
+       private MultiConsignmentRecyclerviewAdapter consignmentRecyclerviewAdapterMultiple;
+    // Button select_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,54 +50,56 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
         String UserId = CommonConstants.USER_ID;
         Log.d("UserId Is : ", UserId);
 
-//        select_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
+        select_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(consignmentRecyclerviewAdapterMultiple.getItemCount() > 0){
+                    String[] codes = consignmentRecyclerviewAdapterMultiple.getSelectedCodes().toArray(new String[0]);
+
+                    Intent i =new Intent(ConsignmentSelectionScreen.this, IrrigationActivity.class);
+                    i.putExtra("SeelctedConsignments", codes);
+                    startActivity(i);
+
+                }else{
+                    Toast.makeText(ConsignmentSelectionScreen.this, "Please Select Atlest One Consignment", Toast.LENGTH_SHORT).show();
+                }
+
+            }
 
 
-//                if (consignmentRecyclerviewAdapter.getSelected().size() > 0) {
-//                    StringBuilder stringBuilder = new StringBuilder();
-//                    for (int i = 0; i < consignmentRecyclerviewAdapter.getSelected().size(); i++) {
-//                        stringBuilder.append(consignmentRecyclerviewAdapter.getSelected().get(i).getConsignmentCode());
-//                        stringBuilder.append("\n");
-//
-//                        Intent intent = new Intent(getBaseContext(), IrrigationActivity.class);
-//                        CommonConstants.ConsignmentID = consignmentList.get(0).getId();
-//                       CommonConstants.ConsignmentCode = consignmentList.get(0).getConsignmentCode();
-//                        startActivity(intent);
-//                       intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
-//
-//
-//                    }
-//                    showToast(stringBuilder.toString().trim());
-//                } else {
-//                    showToast("No Selection");
-//                }
 
 
-      //  });
+
+          });
 
     }
-
 
 
     private void init() {
 
         consignmentRecyclerview = findViewById(R.id.consignmentRecyclerview);
-       // select_btn              = findViewById(R.id.selectbtn);
-
+         select_btn              = findViewById(R.id.selectbtn);
+        if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
+           select_btn.setVisibility(View.VISIBLE);
+        }else{
+            select_btn.setVisibility(View.GONE);
+        }
     }
 
     private void setViews() {
 
         //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID,nurserycode));
+        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList,nurserycode);
-        consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
+        if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
+            consignmentRecyclerviewAdapterMultiple = new MultiConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
+            consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
+        } else {
+            consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
+            consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
+        }
+
     }
 }

@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         newactivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommonConstants.COMMINGFROM = 0;
+                CommonConstants.COMMINGFROM = CommonConstants.NEWACTIVITYSCREEEN;
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
                 startActivity(selectionscreen);
 
@@ -80,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                CommonConstants.COMMINGFROM = 1;
+                CommonConstants.COMMINGFROM = CommonConstants.PRE_CONSIGNMENT;
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
                 startActivity(selectionscreen);
 
@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //  CommonConstants.COMMINGFROM = 2;
+                CommonConstants.COMMINGFROM = CommonConstants.POST_CONSIGNMENT;
                 Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen_new.class);
                 startActivity(selectionscreen);
 
