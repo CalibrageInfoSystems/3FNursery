@@ -16,7 +16,7 @@ public class NurseryIrrigationLog {
     String desc;
     int IsActive;
     int CreatedByUserId;
-
+    private boolean expanded;
     public String getDesc() {
         return desc;
     }
@@ -152,5 +152,12 @@ public class NurseryIrrigationLog {
 
     public void setServerUpdatedStatus(int serverUpdatedStatus) {
         ServerUpdatedStatus = serverUpdatedStatus;
+    }
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 }

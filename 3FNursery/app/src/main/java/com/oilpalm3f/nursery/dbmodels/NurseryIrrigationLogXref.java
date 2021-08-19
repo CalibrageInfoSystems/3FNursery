@@ -12,6 +12,16 @@ public class NurseryIrrigationLogXref {
     String UpdatedDate;
     int ServerUpdatedStatus;
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    String desc;
+
     public int getId() {
         return Id;
     }

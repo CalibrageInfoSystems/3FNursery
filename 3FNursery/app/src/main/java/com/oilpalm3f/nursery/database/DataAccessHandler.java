@@ -4849,6 +4849,37 @@ f
     }
 
 
+    public List<NurseryIrrigationLogXref> getirigationlogxref(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET Irrigation :" + query);
+        List<NurseryIrrigationLogXref> irrigationlogxrefDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryIrrigationLogXref nurseryIrrigationLogxref  = new NurseryIrrigationLogXref();
+                    nurseryIrrigationLogxref.setIrrigationCode(cursor.getString(cursor.getColumnIndex("IrrigationCode")));
+                    nurseryIrrigationLogxref.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    nurseryIrrigationLogxref.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
+//                    nurseryIrrigationLog.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+//
+
+                    irrigationlogxrefDetails.add(nurseryIrrigationLogxref);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return irrigationlogxrefDetails;
+    }
+
     public ArrayList<Farmer> getFarmerList(final String query) {
         ArrayList<Farmer> farmerDetails = new ArrayList<>();
         Cursor cursor = null;

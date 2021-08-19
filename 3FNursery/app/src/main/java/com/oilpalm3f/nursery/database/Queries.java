@@ -1515,4 +1515,11 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "Inner Join TypeCdDmt t on t.TypeCdId = n.StatusTypeId\n" +
                 "where   date(LogDate) BETWEEN  '"+fromDate+"'  and '"+todate+"'";
     }
+
+
+    public String getIrrigationlogxref(String irrigationCode) {
+        return "select x.IrrigationCode,x.ConsignmentCode,s.Statustypeid,t.Desc from NurseryIrrigationLogXref x\n" +
+                "inner join Sapling S on x.ConsignmentCode=S.ConsignmentCode\n" +
+                "Inner join typecddmt t on t.typecdid = s.statustypeid  WHERE IrrigationCode='"+irrigationCode+"'";
+    }
 }

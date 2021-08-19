@@ -64,35 +64,6 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
         });
 
 
-//        holder.mainlyt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if(CommonConstants.COMMINGFROM != 1){
-//
-//                    CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-//                    Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
-//                    intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
-//                    CommonConstants.NurseryCode = nurserysList.get(position).getCode();
-//                    CommonConstants.NurseryName = nurserysList.get(position).getName();
-//                    context.startActivity(intent);
-//
-//                } else {
-//
-//                    CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-//                    Intent intent = new Intent(context, ConsignmentMultiSelectionScreen.class);
-//                    intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
-//                    CommonConstants.NurseryCode = nurserysList.get(position).getCode();
-//                    CommonConstants.NurseryName = nurserysList.get(position).getName();
-//                    context.startActivity(intent);
-//
-//                }
-////                Intent intent = new Intent(context, Activities.class);
-////                intent.putExtra("nurceryId", nurceryId);
-////                intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
-////                context.startActivity(intent);
-//            }
-//        });
 
     }
 

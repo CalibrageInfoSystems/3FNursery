@@ -159,7 +159,20 @@ android:textColorHint="@color/black"
                         android:layout_height="80dp"
                         android:orientation="horizontal"
                         android:weightSum="1">
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/image_more"
+                            android:visibility="invisible"
+                            android:src="@drawable/ic_expand_more_black_24dp">
 
+                        </ImageView>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:visibility="gone"
+                            android:id="@+id/image_less"
+                            android:src="@drawable/ic_expand_less_black_24dp"></ImageView>
 
                         <TextView
                             android:gravity="center"
@@ -242,7 +255,7 @@ android:textColorHint="@color/black"
                         <TextView
                             android:gravity="center"
                             android:text="Log Date"
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.1"
                             android:textColor="@color/black"
                             android:layout_width="0dp"
                             android:layout_height="match_parent" />
