@@ -2,7 +2,6 @@ package com.oilpalm3f.nursery.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +87,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
             @Override
             public void onClick(View view) {
 
-                if(CommonConstants.COMMINGFROM != 1){
+                if(CommonConstants.COMMINGFROM == CommonConstants.NEWACTIVITYSCREEEN){
 
                     Intent intent = new Intent(context, Activities.class);
                     intent.putExtra("nurceryId", nurceryId);
@@ -102,6 +101,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
                     Intent intent = new Intent(context, IrrigationActivity.class);
                     CommonConstants.ConsignmentID = consignmentList.get(position).getId();
                     CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
+                    intent.putExtra("consignmentCode", consignmentList.get(position).getConsignmentCode());
                     context.startActivity(intent);
 
                 }

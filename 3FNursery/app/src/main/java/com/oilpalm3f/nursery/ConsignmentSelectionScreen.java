@@ -17,7 +17,6 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentData;
 import com.oilpalm3f.nursery.ui.Adapter.MultiConsignmentRecyclerviewAdapter;
 import com.oilpalm3f.nursery.ui.ConsignmentRecyclerviewAdapter;
-import com.oilpalm3f.nursery.ui.IrrigationpostActivity;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
@@ -58,9 +57,10 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
                     StringBuilder stringBuilder = new StringBuilder();
                     for (int i = 0; i < consignmentRecyclerviewAdapterMultiple.getSelected().size(); i++) {
                         stringBuilder.append(consignmentRecyclerviewAdapterMultiple.getSelected().get(i).getConsignmentCode());
-                        stringBuilder.append("\n");
+                        stringBuilder.append(",");
 
                     }
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     Intent intent = new Intent(getBaseContext(), IrrigationActivity.class);
                     intent.putExtra("consignmentCode",stringBuilder.toString().trim());
                     startActivity(intent);
@@ -92,12 +92,14 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         //mActivitiesList= dataAccessHandler.getNurseryActivities(Queries.getInstance().getNurseryActivities(selectedFarmer.getCode(), 193));
 
-        consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
+
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentPostPreeDataQuery(CommonConstants.USER_ID, nurserycode));
             consignmentRecyclerviewAdapterMultiple = new MultiConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapterMultiple);
         } else {
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
             consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
         }

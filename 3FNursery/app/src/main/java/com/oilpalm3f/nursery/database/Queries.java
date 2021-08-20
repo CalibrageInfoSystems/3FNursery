@@ -212,8 +212,18 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +
-        "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND  S.isActive ='1' GROUP By S.ConsignmentCode";
+        "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId ='338' AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
+
+    public String getConsignmentPostPreeDataQuery(String Userid, String NurseryCode) {
+        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
+                "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
+                "inner join LookUp L ON S.OriginId = L.Id \n" +
+                "inner join LookUp O ON S.VendorId = O.Id \n" +
+                "inner join LookUp K ON S.VarietyId = K.Id \n" +
+                "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId !='338' AND S.isActive ='1' GROUP By S.ConsignmentCode";
+    }
+
 
     public String getConsignmentStatusQuery(String consignmentcode) {
         return "select S.SowingDate,S.CreatedDate, S.ConsignmentCode, L.name as Originname,K.name as Varietyname, T.Desc as StatusType  from  UserConsignmentXref X \n" +

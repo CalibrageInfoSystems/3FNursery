@@ -755,12 +755,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         et.setOnFocusChangeListener(this::onFocusChange);
 
-//        if(id ==54 || id == 55 || id == 61 || id == 63 || id == 523 || id == 527 || id == 531 || id == 535 || id == 539 || id == 542 || id == 553)
-//        {
-//            et.setFocusable(false);
-//            et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-//            et.setClickable(false);
-//        }
+        if(id ==60 || id == 506 || id == 510 || id == 514 || id == 518 || id == 522 )
+        {
+            et.setFocusable(false);
+            et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            et.setClickable(false);
+        }
 
 
         if (id == 60) {
@@ -1243,11 +1243,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int508 = 508, int509 = 509;
+                int  int507 = 507, int508 = 508, int509 = 509;
 
 
                 EditText edt509 = findViewById(int509);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 62))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int508)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int507))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int508)));
 
                 edt509.setText(finalValue + "");
             } catch (Exception e) {
@@ -1259,11 +1259,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int512 = 512, int513 = 513;
+                int int511 = 511, int512 = 512, int513 = 513;
 
 
                 EditText edt513 = findViewById(int513);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int512)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int511))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int512)));
 
                 edt513.setText(finalValue + "");
             } catch (Exception e) {
@@ -1275,11 +1275,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int516 = 516, int517 = 517;
+                int int515 = 515, int516 = 516, int517 = 517;
 
 
                 EditText edt513 = findViewById(int517);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 513))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int516)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int515))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int516)));
 
                 edt513.setText(finalValue + "");
             } catch (Exception e) {
@@ -1292,11 +1292,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int520 = 520, int521 = 521;
-
-
+                int int519 = 519, int520 = 520, int521 = 521;
                 EditText edt521 = findViewById(int521);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 517))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int520)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int519))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int520)));
 
                 edt521.setText(finalValue + "");
             } catch (Exception e) {
