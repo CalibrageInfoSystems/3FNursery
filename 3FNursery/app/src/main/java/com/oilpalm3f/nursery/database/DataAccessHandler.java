@@ -2761,10 +2761,6 @@ f
                     nurseryIrrigationLog.setRegularFemale(cursor.getDouble(cursor.getColumnIndex("RegularFemale")));
                     nurseryIrrigationLog.setContractMale(cursor.getDouble(cursor.getColumnIndex("ContractMale")));
                     nurseryIrrigationLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
-                    nurseryIrrigationLog.setRegularMalecost(cursor.getDouble(cursor.getColumnIndex("RegularMaleCost")));
-                    nurseryIrrigationLog.setRegularFemalecost(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleCost")));
-                    nurseryIrrigationLog.setContractMalecost(cursor.getDouble(cursor.getColumnIndex("ContractMaleCost")));
-                    nurseryIrrigationLog.setContractFemalecost(cursor.getDouble(cursor.getColumnIndex("ContractFeMaleCost")));
                     nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
                     nurseryIrrigationLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive") ));
@@ -2772,6 +2768,10 @@ f
                     nurseryIrrigationLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     nurseryIrrigationLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     nurseryIrrigationLog.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    nurseryIrrigationLog.setRegularMalecost(cursor.getDouble(cursor.getColumnIndex("RegularMaleRate")));
+                    nurseryIrrigationLog.setRegularFemalecost(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleRate")));
+                    nurseryIrrigationLog.setContractMalecost(cursor.getDouble(cursor.getColumnIndex("ContractMaleRate")));
+                    nurseryIrrigationLog.setContractFemalecost(cursor.getDouble(cursor.getColumnIndex("ContractFeMaleRate")));
 
                     NurseryIrrigationLogList.add(nurseryIrrigationLog);
                 } while (cursor.moveToNext());

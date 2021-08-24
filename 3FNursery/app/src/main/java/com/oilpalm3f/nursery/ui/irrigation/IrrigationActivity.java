@@ -106,18 +106,18 @@ public class IrrigationActivity extends AppCompatActivity {
                     }
 
                     if (mancostregular_edt.length() != 0) {
-                        mapStatus.put("RegularMaleCost", mancostregular_edt.getText().toString());
+                        mapStatus.put("RegularMaleRate", mancostregular_edt.getText().toString());
                     }
                     if (femalecostreg_edt.length() != 0) {
-                        mapStatus.put("RegularFeMaleCost", femalecostreg_edt.getText().toString());
+                        mapStatus.put("RegularFeMaleRate", femalecostreg_edt.getText().toString());
 
                     }
                     if (mancostout_edt.length() != 0) {
-                        mapStatus.put("ContractMaleCost", mancostout_edt.getText().toString());
+                        mapStatus.put("ContractMaleRate", mancostout_edt.getText().toString());
 
                     }
                     if (femalecostout_edt.length() != 0) {
-                        mapStatus.put("ContractFeMaleCost", femaleout_edt.getText().toString());
+                        mapStatus.put("ContractFeMaleRate", femalecostout_edt.getText().toString());
 
                     }
 

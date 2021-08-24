@@ -142,13 +142,14 @@
                     android:weightSum="1">
 
                     <TextView
-                        android:layout_weight="0.3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text=" Regular Male Cost"
-                        android:textSize="18dp"
+                        android:layout_weight="0.3"
+                        android:text="Regular Male Cost"
                         android:textColor="@color/black"
-                        android:textStyle="bold"/>
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/mancostreg_edt"
                         android:layout_weight="0.7"
@@ -198,7 +199,7 @@
                         android:layout_weight="0.3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text=" Regular Female Cost"
+                        android:text="Regular Female Cost"
                         android:textSize="18dp"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>

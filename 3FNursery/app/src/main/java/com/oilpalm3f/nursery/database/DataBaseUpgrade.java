@@ -59,16 +59,18 @@ public class DataBaseUpgrade {
 
        // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
 
+        String  IrrigationLog1 =  "Alter Table NurseryIrrigationLog Add RegularMaleRate FLOAT";
+        String  IrrigationLog2 =  "Alter Table NurseryIrrigationLog Add RegularFeMaleRate FLOAT";
+        String  IrrigationLog3 =  "Alter Table NurseryIrrigationLog Add ContractMaleRate FLOAT";
+        String  IrrigationLog4 =  "Alter Table NurseryIrrigationLog Add ContractFeMaleRate FLOAT";
+
+
         String column1 = "Alter Table Sapling Add StatusTypeId int";
         String column2 = "Alter Table Sapling Add ArrivedDate datetime";
         String column3 = "Alter Table Sapling Add ArrivedQuantity int";
         String column4 = "Alter Table Sapling Add SowingDate datetime";
         String column5 = "Alter Table Sapling Add TransplantingDate datetime";
 
-        String  IrrigationLog1 =  "Alter Table NurseryIrrigationLog Add RegularMaleRate FLOAT";
-        String  IrrigationLog2 =  "Alter Table NurseryIrrigationLog Add RegularFeMaleRate FLOAT";
-        String  IrrigationLog3 =  "Alter Table NurseryIrrigationLog Add ContractMaleRate FLOAT";
-        String  IrrigationLog4 =  "Alter Table NurseryIrrigationLog Add ContractFeMaleRate FLOAT";
 
 
         String CREATE_LABOUR_RATE = "CREATE TABLE LabourRate(\n" +
@@ -83,16 +85,16 @@ public class DataBaseUpgrade {
 
 
         try {
-
+            db.execSQL(IrrigationLog1);
+            db.execSQL(IrrigationLog2);
+            db.execSQL(IrrigationLog3);
+            db.execSQL(IrrigationLog4);
               db.execSQL(column1);
             db.execSQL(column2);
             db.execSQL(column3);
             db.execSQL(column4);
             db.execSQL(column5);
-            db.execSQL(IrrigationLog1);
-            db.execSQL(IrrigationLog2);
-            db.execSQL(IrrigationLog3);
-            db.execSQL(IrrigationLog4);
+
             db.execSQL(CREATE_LABOUR_RATE);
 
         } catch (Exception e) {
