@@ -2761,6 +2761,10 @@ f
                     nurseryIrrigationLog.setRegularFemale(cursor.getDouble(cursor.getColumnIndex("RegularFemale")));
                     nurseryIrrigationLog.setContractMale(cursor.getDouble(cursor.getColumnIndex("ContractMale")));
                     nurseryIrrigationLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
+                    nurseryIrrigationLog.setRegularMalecost(cursor.getDouble(cursor.getColumnIndex("RegularMaleCost")));
+                    nurseryIrrigationLog.setRegularFemalecost(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleCost")));
+                    nurseryIrrigationLog.setContractMalecost(cursor.getDouble(cursor.getColumnIndex("ContractMaleCost")));
+                    nurseryIrrigationLog.setContractFemalecost(cursor.getDouble(cursor.getColumnIndex("ContractFeMaleCost")));
                     nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
                     nurseryIrrigationLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive") ));

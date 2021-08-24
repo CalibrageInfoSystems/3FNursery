@@ -11,6 +11,10 @@ public class NurseryIrrigationLog {
     double RegularFemale;
     double ContractMale;
     double ContractFemale;
+   double RegularMalecost;
+    double RegularFemalecost;
+    double ContractMalecost;
+    double ContractFemalecost;
     int StatusTypeId;
     String Comments;
     String desc;
@@ -159,5 +163,36 @@ public class NurseryIrrigationLog {
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+    public double getRegularMalecost() {
+        return RegularMalecost;
+    }
+
+    public void setRegularMalecost(double regularMalecost) {
+        RegularMalecost = regularMalecost;
+    }
+
+    public double getRegularFemalecost() {
+        return RegularFemalecost;
+    }
+
+    public void setRegularFemalecost(double regularFemalecost) {
+        RegularFemalecost = regularFemalecost;
+    }
+
+    public double getContractMalecost() {
+        return ContractMalecost;
+    }
+
+    public void setContractMalecost(double contractMalecost) {
+        ContractMalecost = contractMalecost;
+    }
+
+    public double getContractFemalecost() {
+        return ContractFemalecost;
+    }
+
+    public void setContractFemalecost(double contractFemalecost) {
+        ContractFemalecost = contractFemalecost;
     }
 }

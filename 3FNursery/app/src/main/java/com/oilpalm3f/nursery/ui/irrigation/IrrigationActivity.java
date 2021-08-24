@@ -32,7 +32,7 @@ public class IrrigationActivity extends AppCompatActivity {
     public static final String LOG_TAG = IrrigationActivity.class.getSimpleName();
 
     private TextView date, nursaryname, consignment_num;
-    private EditText manregular_edt, femalereg_edt, manout_edt, femaleout_edt, labourt_edt;
+    private EditText manregular_edt, femalereg_edt, manout_edt, femaleout_edt, mancostregular_edt, femalecostreg_edt, mancostout_edt, femalecostout_edt;
     private Button save_btn;
     private DataAccessHandler dataAccessHandler;
 
@@ -53,7 +53,10 @@ public class IrrigationActivity extends AppCompatActivity {
         femalereg_edt = findViewById(R.id.Femalereg_edt);
         manout_edt = findViewById(R.id.manout_edt);
         femaleout_edt = findViewById(R.id.femaleout_edt);
-        //labourt_edt        = findViewById(R.id.labourt_edt);
+        mancostregular_edt  = findViewById(R.id.mancostreg_edt);
+        femalecostreg_edt  = findViewById(R.id.Femalecostreg_edt);
+        mancostout_edt  = findViewById(R.id.mancostout_edt);
+        femalecostout_edt  = findViewById(R.id.femalecostout_edt);
         save_btn = findViewById(R.id.save_btn);
 
 
@@ -101,6 +104,23 @@ public class IrrigationActivity extends AppCompatActivity {
                         mapStatus.put("ContractFemale", femaleout_edt.getText().toString());
 
                     }
+
+                    if (mancostregular_edt.length() != 0) {
+                        mapStatus.put("RegularMaleCost", mancostregular_edt.getText().toString());
+                    }
+                    if (femalecostreg_edt.length() != 0) {
+                        mapStatus.put("RegularFeMaleCost", femalecostreg_edt.getText().toString());
+
+                    }
+                    if (mancostout_edt.length() != 0) {
+                        mapStatus.put("ContractMaleCost", mancostout_edt.getText().toString());
+
+                    }
+                    if (femalecostout_edt.length() != 0) {
+                        mapStatus.put("ContractFeMaleCost", femaleout_edt.getText().toString());
+
+                    }
+
 
                     mapStatus.put("StatusTypeId", 346);
 
