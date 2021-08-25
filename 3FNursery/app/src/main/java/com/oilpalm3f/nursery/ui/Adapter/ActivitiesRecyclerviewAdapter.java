@@ -31,7 +31,9 @@ import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTimeUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +51,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     String ConsignmentCode;
     String targetDatedata;
-
+    String  finaldate,targetdate;
     public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode, String targetDate) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
@@ -84,40 +86,69 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         holder.imgNurStatus.setImageDrawable(null);
         holder.imgShStatus.setImageDrawable(null);
         holder.txtDoneDate.setText("");
-
+        String beforeDate =  dataAccessHandler.getSingleValue(Queries.addDaysToSapling(mActivitiesList.get(position).getTargetDays(), ConsignmentCode));
+        finaldate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy hh:mm a", beforeDate);
+      String   expecteddate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy", beforeDate);
+        holder.expecteddate.setText(expecteddate);
         if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
-            Log.d("###################", mActivitiesList.get(position).getUpdatedDate());
+
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate()));
-            String  date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.getDefault()).format(new Date());
-            String date2 = CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate());
 
-            Log.d("#############===date1", date1);
-            Log.d("#############===date2",date2);
-            if (date1.compareTo(date2) > 0)
-            {
-                Log.i("app", "Date1 is after Date2");
+            targetdate = CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate());
 
-                holder.activityName.setTextColor(context.getColor(R.color.green));
+            Log.d("###################", finaldate  + "=== "+targetdate);
+            Date date1;
+            Date date2;
+
+            SimpleDateFormat dates = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+
+         //   SimpleDateFormat dates = new SimpleDateFormat("MM/dd/yyyy");
+            try {
+                date1 = dates.parse(finaldate);
+                date2 = dates.parse(targetdate);
+
+                long difference = Math.abs(date2.getTime() - date1.getTime());
+                long  differenceDates = difference / (24 * 60 * 60 * 1000);
+         int dayDifference = (int) differenceDates;
+                Log.i("day diff","The difference between two dates is " + dayDifference + " days");
+
+                if (dayDifference == 1)
+                {
+                    Log.i("app", "Date1 is after Date2");
+
+                    holder.activityName.setTextColor(context.getColor(R.color.yellow));
+                }
+                else if (dayDifference >= 1 )
+                {
+                    Log.i("app", "Date2 is before Date1");
+                    holder.activityName.setTextColor(context.getColor(R.color.green));
+
+                }
+
+                else if (dayDifference < 0)
+                {
+                    Log.i("app", "Date1 is equal to Date2");
+                    holder.activityName.setTextColor(context.getColor(R.color.green));
+                }
+                else
+                {
+
+                    holder.activityName.setTextColor(context.getColor(R.color.red));
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            else if (date1.compareTo(date2) < 0)
-            {
-                Log.i("app", "Date1 is before Date2");
-                holder.activityName.setTextColor(context.getColor(R.color.red));
 
-            }
 
-            else if (date1.compareTo(date2) == 0)
-            {
-                Log.i("app", "Date1 is equal to Date2");
-                holder.activityName.setTextColor(context.getColor(R.color.black));
-            }
+
         }
 
 //        if () {
 //            holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
 //        }
 //        else
-//            ((ViewHolder) holder).txtStatusTxt.setTextColor(context.getColor(R.color.red));
+////            ((ViewHolder) holder).txtStatusTxt.setTextColor(context.getColor(R.color.red));
 
 
         if (mActivitiesList.get(position).getStatusTypeId() == 346) {
@@ -141,9 +172,9 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
         }
-String beforeDate =  dataAccessHandler.getSingleValue(Queries.addDaysToSapling(mActivitiesList.get(position).getTargetDays(), ConsignmentCode));
-  String finalDate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy", beforeDate);
-        holder.expecteddate.setText(finalDate);
+
+
+
 //        holder.expecteddate.setText(( CommonUtils.getTargetDate2(targetDatedata,mActivitiesList.get(position).getTargetDays())));
 //        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate2("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
 //        holder.expecteddate.setText( ( CommonUtils.getTargetDate2("2021-08-05 17:14:11",mActivitiesList.get(position).getTargetDays())));
