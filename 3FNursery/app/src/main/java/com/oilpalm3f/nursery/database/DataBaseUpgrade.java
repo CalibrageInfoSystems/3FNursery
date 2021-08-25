@@ -70,6 +70,7 @@ public class DataBaseUpgrade {
         String column3 = "Alter Table Sapling Add ArrivedQuantity int";
         String column4 = "Alter Table Sapling Add SowingDate datetime";
         String column5 = "Alter Table Sapling Add TransplantingDate datetime";
+        String column6 = "Alter Table nurseryactivity  Add DependentActivityCode VARCHAR(10)";
 
 
 
@@ -89,11 +90,12 @@ public class DataBaseUpgrade {
             db.execSQL(IrrigationLog2);
             db.execSQL(IrrigationLog3);
             db.execSQL(IrrigationLog4);
-              db.execSQL(column1);
+            db.execSQL(column1);
             db.execSQL(column2);
             db.execSQL(column3);
             db.execSQL(column4);
             db.execSQL(column5);
+            db.execSQL(column6);
 
             db.execSQL(CREATE_LABOUR_RATE);
 
