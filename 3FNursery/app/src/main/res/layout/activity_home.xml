@@ -120,8 +120,8 @@
 
                     <ImageView
                         android:id="@+id/extension_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/area_extension_homelogo_new"
                         android:visibility="visible" />
@@ -149,10 +149,10 @@
 
                     <ImageView
                         android:id="@+id/pf_farmers_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/view_prosepective_plots_homelogo_new"
+                        android:src="@drawable/checkactivity"
                         android:visibility="visible" />
 
                     <TextView
@@ -188,10 +188,10 @@
 
                     <ImageView
                         android:id="@+id/irigation_Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/conversion_homelogo_new"
+                        android:src="@drawable/primaryirrigation"
                         android:visibility="visible" />
 
                     <TextView
@@ -211,10 +211,10 @@
 
                     <ImageView
                         android:id="@+id/irigation_Icon_post"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/conversion_homelogo_new"
+                        android:src="@drawable/secondaryirrigation"
                         android:visibility="visible" />
 
                     <TextView
@@ -248,10 +248,10 @@
 
                     <ImageView
                         android:id="@+id/conversion_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/conversion_homelogo_new"
+                        android:src="@drawable/nurseryactivity"
                         android:visibility="visible" />
 
                     <TextView
@@ -281,7 +281,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/crop_maintenance_homelogo_new"
+                        android:src="@drawable/nurseryactivity"
                         android:visibility="visible" />
 
                     <TextView

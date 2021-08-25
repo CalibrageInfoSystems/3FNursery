@@ -99,41 +99,29 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             Log.d("###################", finaldate  + "=== "+targetdate);
             Date date1;
             Date date2;
-
             SimpleDateFormat dates = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 
-         //   SimpleDateFormat dates = new SimpleDateFormat("MM/dd/yyyy");
             try {
                 date1 = dates.parse(finaldate);
                 date2 = dates.parse(targetdate);
-
-                long difference = Math.abs(date2.getTime() - date1.getTime());
+                long difference = date1.getTime() - date2.getTime();
                 long  differenceDates = difference / (24 * 60 * 60 * 1000);
-         int dayDifference = (int) differenceDates;
+                int dayDifference = (int) differenceDates;
                 Log.i("day diff","The difference between two dates is " + dayDifference + " days");
 
-                if (dayDifference == 1)
-                {
-                    Log.i("app", "Date1 is after Date2");
-
-                    holder.activityName.setTextColor(context.getColor(R.color.yellow));
-                }
-                else if (dayDifference >= 1 )
-                {
-                    Log.i("app", "Date2 is before Date1");
-                    holder.activityName.setTextColor(context.getColor(R.color.green));
-
-                }
-
-                else if (dayDifference < 0)
-                {
-                    Log.i("app", "Date1 is equal to Date2");
-                    holder.activityName.setTextColor(context.getColor(R.color.green));
-                }
-                else
+                if (dayDifference < -1)
                 {
 
                     holder.activityName.setTextColor(context.getColor(R.color.red));
+                }
+                else if (dayDifference == -1 )
+                {
+                    holder.activityName.setTextColor(context.getColor(R.color.yellow));
+
+                }
+                else
+                {
+                    holder.activityName.setTextColor(context.getColor(R.color.green));
                 }
 
             } catch (ParseException e) {
@@ -143,13 +131,6 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
 
         }
-
-//        if () {
-//            holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
-//        }
-//        else
-////            ((ViewHolder) holder).txtStatusTxt.setTextColor(context.getColor(R.color.red));
-
 
         if (mActivitiesList.get(position).getStatusTypeId() == 346) {
             holder.imgStatus.setImageResource(R.drawable.done);

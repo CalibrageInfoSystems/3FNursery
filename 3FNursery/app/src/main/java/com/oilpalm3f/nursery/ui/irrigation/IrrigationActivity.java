@@ -81,7 +81,11 @@ public class IrrigationActivity extends AppCompatActivity {
                         manout_edt.length() != 0 || femaleout_edt.length() != 0) {
                     String IrrigationCode = "IRR" + CommonConstants.TAB_ID + CommonConstants.NurseryCode + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getIrrigationMaxNumber()) + 1);
                     Log.d(LOG_TAG, "==> Analysis ==> Irrigation Code ==> " + IrrigationCode);
-
+                    String male_reg =  dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
+                    String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
+                    String male_contract =  dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
+                    String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+                    Log.d(LOG_TAG, "==> Analysis ==>  lobour rates ==> " + male_reg + femmale_reg +male_contract +female_contract);
                     LinkedHashMap mapStatus = new LinkedHashMap();
                     mapStatus.put("Id", 0);
                     mapStatus.put("LogDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -103,18 +107,18 @@ public class IrrigationActivity extends AppCompatActivity {
                     }
 
 
-                        mapStatus.put("RegularMaleRate", "200");
+                        mapStatus.put("RegularMaleRate", male_reg);
 
 
-                        mapStatus.put("RegularFeMaleRate", "150");
-
-
-
-                        mapStatus.put("ContractMaleRate", "250");
+                        mapStatus.put("RegularFeMaleRate", femmale_reg);
 
 
 
-                        mapStatus.put("ContractFeMaleRate", "200");
+                        mapStatus.put("ContractMaleRate",male_contract);
+
+
+
+                        mapStatus.put("ContractFeMaleRate",female_contract);
 
 
 

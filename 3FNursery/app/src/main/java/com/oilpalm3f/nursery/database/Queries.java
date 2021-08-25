@@ -1532,4 +1532,22 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "inner join Sapling S on x.ConsignmentCode=S.ConsignmentCode\n" +
                 "Inner join typecddmt t on t.typecdid = s.statustypeid  WHERE IrrigationCode='"+irrigationCode+"'";
     }
+
+    public static String getregmalerate(String NurseryCode)
+    {
+        return  "select Value from LabourRate where key = 'Regular Male per Man Day' and NurseryCode ='"+NurseryCode+"'";
+    }
+    public static String getregfemalerate(String NurseryCode)
+    {
+        return  "select Value from LabourRate where key = 'Regular Male per Man Day' and NurseryCode ='"+NurseryCode+"'";
+    }
+    public static String getcontractmalerate(String NurseryCode)
+    {
+        return  "select Value from LabourRate where key = 'Contract Male per Man Day' and NurseryCode ='"+NurseryCode+"'";
+    }
+    public static String getcontractfemalerate(String NurseryCode)
+    {
+        return  "select Value from LabourRate where key = 'Contract Female per Man Day' and NurseryCode ='"+NurseryCode+"'";
+    }
+
 }
