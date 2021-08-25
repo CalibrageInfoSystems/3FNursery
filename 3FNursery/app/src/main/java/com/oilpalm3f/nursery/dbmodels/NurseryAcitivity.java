@@ -53,10 +53,20 @@ public class NurseryAcitivity {
     @Expose
     private String Desc;
 
+    public String getDependentActivityCode() {
+        return DependentActivityCode;
+    }
+
+    public void setDependentActivityCode(String dependentActivityCode) {
+        DependentActivityCode = dependentActivityCode;
+    }
+
     @SerializedName("ConsignmentCode")
     @Expose
     private String ConsignmentCode;
-
+    @SerializedName("DependentActivityCode")
+    @Expose
+    private String DependentActivityCode;
     @SerializedName("UpdatedDate")
     @Expose
     private String UpdatedDate;

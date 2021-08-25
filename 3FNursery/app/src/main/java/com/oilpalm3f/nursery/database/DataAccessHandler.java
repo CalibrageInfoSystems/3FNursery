@@ -2387,7 +2387,7 @@ f
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
                     nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
-//                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDays")));
+                  nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
                     nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
                     nurseryActivityyDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("StatusType")));
