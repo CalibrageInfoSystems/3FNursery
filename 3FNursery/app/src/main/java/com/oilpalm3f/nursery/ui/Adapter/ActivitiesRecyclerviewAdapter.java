@@ -88,8 +88,11 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
             Log.d("###################", mActivitiesList.get(position).getUpdatedDate());
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate()));
-            String  date1 = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String  date1 = new SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.getDefault()).format(new Date());
             String date2 = CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate());
+
+            Log.d("#############===date1", date1);
+            Log.d("#############===date2",date2);
             if (date1.compareTo(date2) > 0)
             {
                 Log.i("app", "Date1 is after Date2");
