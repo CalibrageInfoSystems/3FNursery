@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
@@ -30,8 +32,12 @@ import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<ActivitiesRecyclerviewAdapter.ViewHolder> {
 
@@ -60,6 +66,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         return viewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
@@ -71,6 +78,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.txtStatusTxt.setText("");
         } else {
             holder.txtStatusTxt.setText(mActivitiesList.get(position).getDesc());
+        //    holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
         }
         holder.imgStatus.setImageDrawable(null);
         holder.imgNurStatus.setImageDrawable(null);
@@ -80,7 +88,34 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
             Log.d("###################", mActivitiesList.get(position).getUpdatedDate());
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate()));
+            String  date1 = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String date2 = CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate());
+            if (date1.compareTo(date2) > 0)
+            {
+                Log.i("app", "Date1 is after Date2");
+
+                holder.activityName.setTextColor(context.getColor(R.color.green));
+            }
+            else if (date1.compareTo(date2) < 0)
+            {
+                Log.i("app", "Date1 is before Date2");
+                holder.activityName.setTextColor(context.getColor(R.color.red));
+
+            }
+
+            else if (date1.compareTo(date2) == 0)
+            {
+                Log.i("app", "Date1 is equal to Date2");
+                holder.activityName.setTextColor(context.getColor(R.color.black));
+            }
         }
+
+//        if () {
+//            holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
+//        }
+//        else
+//            ((ViewHolder) holder).txtStatusTxt.setTextColor(context.getColor(R.color.red));
+
 
         if (mActivitiesList.get(position).getStatusTypeId() == 346) {
             holder.imgStatus.setImageResource(R.drawable.done);
