@@ -53,10 +53,7 @@ public class IrrigationActivity extends AppCompatActivity {
         femalereg_edt = findViewById(R.id.Femalereg_edt);
         manout_edt = findViewById(R.id.manout_edt);
         femaleout_edt = findViewById(R.id.femaleout_edt);
-        mancostregular_edt  = findViewById(R.id.mancostreg_edt);
-        femalecostreg_edt  = findViewById(R.id.Femalecostreg_edt);
-        mancostout_edt  = findViewById(R.id.mancostout_edt);
-        femalecostout_edt  = findViewById(R.id.femalecostout_edt);
+
         save_btn = findViewById(R.id.save_btn);
 
 
@@ -105,21 +102,21 @@ public class IrrigationActivity extends AppCompatActivity {
 
                     }
 
-                    if (mancostregular_edt.length() != 0) {
-                        mapStatus.put("RegularMaleRate", mancostregular_edt.getText().toString());
-                    }
-                    if (femalecostreg_edt.length() != 0) {
-                        mapStatus.put("RegularFeMaleRate", femalecostreg_edt.getText().toString());
 
-                    }
-                    if (mancostout_edt.length() != 0) {
-                        mapStatus.put("ContractMaleRate", mancostout_edt.getText().toString());
+                        mapStatus.put("RegularMaleRate", "200");
 
-                    }
-                    if (femalecostout_edt.length() != 0) {
-                        mapStatus.put("ContractFeMaleRate", femalecostout_edt.getText().toString());
 
-                    }
+                        mapStatus.put("RegularFeMaleRate", "150");
+
+
+
+                        mapStatus.put("ContractMaleRate", "250");
+
+
+
+                        mapStatus.put("ContractFeMaleRate", "200");
+
+
 
 
                     mapStatus.put("StatusTypeId", 346);
