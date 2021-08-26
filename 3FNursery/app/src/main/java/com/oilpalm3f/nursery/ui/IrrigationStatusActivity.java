@@ -51,6 +51,7 @@ public class IrrigationStatusActivity extends AppCompatActivity {
     DatePickerDialog picker;
     String currentDate,last_weekday,sendcurrentDate,sendweekdate;
     Button buttonSubmit;
+    TextView nodata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class IrrigationStatusActivity extends AppCompatActivity {
         fromText = (EditText) findViewById(R.id.from_date);
         toText = (EditText) findViewById(R.id.to_date);
         buttonSubmit =(Button)findViewById(R.id.buttonSubmit);
+        nodata = findViewById( R.id.nodata);
 
     }
 
@@ -158,9 +160,18 @@ public class IrrigationStatusActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(Fromdate,Todate));
-                irrigationstatusRecyclerview.setLayoutManager(new LinearLayoutManager(IrrigationStatusActivity.this));
-                irrigationstatusRecyclerviewAdapter = new IrrigationstatusRecyclerviewAdapter(IrrigationStatusActivity.this, irrigationloglist);
-                irrigationstatusRecyclerview.setAdapter(irrigationstatusRecyclerviewAdapter);
+
+                if(irrigationloglist.size() != 0){
+                    irrigationstatusRecyclerview.setVisibility(View.VISIBLE);
+                    nodata.setVisibility(View.GONE);
+                    irrigationstatusRecyclerview.setLayoutManager(new LinearLayoutManager(IrrigationStatusActivity.this));
+                    irrigationstatusRecyclerviewAdapter = new IrrigationstatusRecyclerviewAdapter(IrrigationStatusActivity.this, irrigationloglist);
+                    irrigationstatusRecyclerview.setAdapter(irrigationstatusRecyclerviewAdapter);
+                }else{
+                    irrigationstatusRecyclerview.setVisibility(View.GONE);
+                    nodata.setVisibility(View.VISIBLE);
+                }
+
             }
         });
     }
@@ -169,9 +180,16 @@ public class IrrigationStatusActivity extends AppCompatActivity {
 
 
         irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(sendweekdate,sendcurrentDate));
+        if(irrigationloglist.size() != 0){
+            irrigationstatusRecyclerview.setVisibility(View.VISIBLE);
+            nodata.setVisibility(View.GONE);
         irrigationstatusRecyclerview.setLayoutManager(new LinearLayoutManager(IrrigationStatusActivity.this));
         irrigationstatusRecyclerviewAdapter = new IrrigationstatusRecyclerviewAdapter(IrrigationStatusActivity.this, irrigationloglist);
-        irrigationstatusRecyclerview.setAdapter(irrigationstatusRecyclerviewAdapter);
+        irrigationstatusRecyclerview.setAdapter(irrigationstatusRecyclerviewAdapter);}
+        else{
+            irrigationstatusRecyclerview.setVisibility(View.GONE);
+            nodata.setVisibility(View.VISIBLE);
+        }
     }
 
 

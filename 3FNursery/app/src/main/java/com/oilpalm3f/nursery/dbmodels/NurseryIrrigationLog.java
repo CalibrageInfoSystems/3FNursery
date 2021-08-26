@@ -11,10 +11,10 @@ public class NurseryIrrigationLog {
     double RegularFemale;
     double ContractMale;
     double ContractFemale;
-   double RegularMalecost;
-    double RegularFemalecost;
-    double ContractMalecost;
-    double ContractFemalecost;
+    double RegularMaleRate;
+    double RegularFeMaleRate;
+    double ContractMaleRate;
+    double ContractFeMaleRate;
     int StatusTypeId;
     String Comments;
     String desc;
@@ -164,35 +164,36 @@ public class NurseryIrrigationLog {
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
-    public double getRegularMalecost() {
-        return RegularMalecost;
+
+    public double getRegularMaleRate() {
+        return RegularMaleRate;
     }
 
-    public void setRegularMalecost(double regularMalecost) {
-        RegularMalecost = regularMalecost;
+    public void setRegularMaleRate(double regularMaleRate) {
+        RegularMaleRate = regularMaleRate;
     }
 
-    public double getRegularFemalecost() {
-        return RegularFemalecost;
+    public double getRegularFeMaleRate() {
+        return RegularFeMaleRate;
     }
 
-    public void setRegularFemalecost(double regularFemalecost) {
-        RegularFemalecost = regularFemalecost;
+    public void setRegularFeMaleRate(double regularFeMaleRate) {
+        RegularFeMaleRate = regularFeMaleRate;
     }
 
-    public double getContractMalecost() {
-        return ContractMalecost;
+    public double getContractMaleRate() {
+        return ContractMaleRate;
     }
 
-    public void setContractMalecost(double contractMalecost) {
-        ContractMalecost = contractMalecost;
+    public void setContractMaleRate(double contractMaleRate) {
+        ContractMaleRate = contractMaleRate;
     }
 
-    public double getContractFemalecost() {
-        return ContractFemalecost;
+    public double getContractFeMaleRate() {
+        return ContractFeMaleRate;
     }
 
-    public void setContractFemalecost(double contractFemalecost) {
-        ContractFemalecost = contractFemalecost;
+    public void setContractFeMaleRate(double contractFeMaleRate) {
+        ContractFeMaleRate = contractFeMaleRate;
     }
 }

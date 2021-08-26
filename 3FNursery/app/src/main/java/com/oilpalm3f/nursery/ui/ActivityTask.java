@@ -790,7 +790,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 506)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 509)));
                 et.setText(finalValueold + "");
 
 
@@ -1207,11 +1207,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         // SetTextFor formula
         Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis onFocusChange() id : " + view.getId() + "   isView showing :" + b);
         int id = view.getId();
-        if (id == 53 || id == 52) {
+
+        if (id == 51 || id == 52) {
             try {
-                int int52 = 52, int53 = 53, int54 = 54;
+                int int52 = 52, int53 = 53, int51 = 51;
+                EditText edt53 = findViewById(int53);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int52)));
+//                edt53.setFocusable(false);
+                edt53.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        if (id == 53 || id == 51) {
+            try {
+                int int51 = 51, int53 = 53, int54 = 54;
                 EditText edt54 = findViewById(int54);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int52))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int53)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int53)));
                 edt54.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1222,7 +1235,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 int int52 = 52, int54 = 54, int55 = 55, int61 = 61;
                 EditText edt55 = findViewById(int55);
                 int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int52))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int54)));
-                edt55.setText(finalValue + "");
+            //    edt55.setText(finalValue + "");
                 EditText edt61 = findViewById(int61);
                 edt61.setText(finalValue + "");
 
@@ -1240,15 +1253,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
 
-        } else if (id == 508 || id == 507) {
+        } else if (id == 508 ) {
 
             try {
 
-                int  int507 = 507, int508 = 508, int509 = 509;
+                int  int506 = 506, int508 = 508, int509 = 509;
 
 
                 EditText edt509 = findViewById(int509);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int507))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int508)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) -  CommonUtils.getIntFromEditText(((EditText) findViewById(int508)));
 
                 edt509.setText(finalValue + "");
             } catch (Exception e) {
@@ -1260,11 +1273,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int511 = 511, int512 = 512, int513 = 513;
+                int int510 = 510, int512 = 512, int513 = 513;
 
 
                 EditText edt513 = findViewById(int513);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int511))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int512)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int510))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int512)));
 
                 edt513.setText(finalValue + "");
             } catch (Exception e) {
@@ -1276,13 +1289,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int515 = 515, int516 = 516, int517 = 517;
+                int int514 = 514, int516 = 516, int517 = 517;
 
 
-                EditText edt513 = findViewById(int517);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int515))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int516)));
+                EditText edt517 = findViewById(int517);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int516)));
 
-                edt513.setText(finalValue + "");
+                edt517.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1293,9 +1306,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int519 = 519, int520 = 520, int521 = 521;
+                int int518 = 518, int520 = 520, int521 = 521;
                 EditText edt521 = findViewById(int521);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int519))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int520)));
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int518))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int520)));
 
                 edt521.setText(finalValue + "");
             } catch (Exception e) {

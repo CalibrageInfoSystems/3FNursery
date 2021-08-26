@@ -159,12 +159,13 @@ android:textColorHint="@color/black"
                         android:layout_height="80dp"
                         android:orientation="horizontal"
                         android:weightSum="1">
+
                         <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
                             android:id="@+id/image_more"
-                            android:visibility="invisible"
-                            android:src="@drawable/ic_expand_more_black_24dp">
+                            android:layout_width="42dp"
+                            android:layout_height="41dp"
+                            android:src="@drawable/ic_expand_more_black_24dp"
+                            android:visibility="invisible">
 
                         </ImageView>
                         <ImageView
@@ -176,7 +177,7 @@ android:textColorHint="@color/black"
 
                         <TextView
                             android:gravity="center"
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.1"
                             android:textColor="@color/black"
                             android:text="Irrigation Code "
                             android:layout_width="0dp"
@@ -190,11 +191,23 @@ android:textColorHint="@color/black"
                             android:id="@+id/regularlabourmale"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.09"
                             android:gravity="center"
                             android:text="Regular Labour(Male)"
                             android:textColor="@color/black" />
+                        <LinearLayout
+                            android:background="@color/black"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
 
+                        <TextView
+                            android:id="@+id/regularlabourmalecost"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.09"
+                            android:gravity="center"
+                            android:text="Regular Male Cost"
+                            android:textColor="@color/black" />
                         <LinearLayout
                             android:background="@color/black"
                             android:layout_width="1dp"
@@ -203,7 +216,7 @@ android:textColorHint="@color/black"
                             android:id="@+id/regularlabourfemale"
                             android:gravity="center"
                             android:text="Regular Labour(Female)"
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.09"
                             android:textColor="@color/black"
 
                             android:layout_width="0dp"
@@ -214,13 +227,40 @@ android:textColorHint="@color/black"
                             android:layout_height="match_parent"/>
 
                         <TextView
+                            android:id="@+id/regularlabourfemalecost"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.09"
+                            android:gravity="center"
+                            android:text="Regular FeMale Cost"
+                            android:textColor="@color/black" />
+                        <LinearLayout
+                            android:background="@color/black"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+
+                        <TextView
                             android:id="@+id/contractlabourmale"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.09"
                             android:gravity="center"
                             android:text="Contract Labour(Male)"
                             android:textColor="@color/black" />
+                        <LinearLayout
+                            android:background="@color/black"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+
+                        <TextView
+                            android:id="@+id/contractlabourmalecost"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.09"
+                            android:gravity="center"
+                            android:text="Contract Male Cost"
+                            android:textColor="@color/black" />
+
 
                         <LinearLayout
                             android:background="@color/black"
@@ -230,7 +270,20 @@ android:textColorHint="@color/black"
                             android:gravity="center"
                             android:id="@+id/contractlabourfemale"
                             android:text="Contract Labour(Female)"
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.09"
+                            android:textColor="@color/black"
+
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+                        <LinearLayout
+                            android:background="@color/black"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:gravity="center"
+                            android:id="@+id/contractlabourfemalecost"
+                            android:text="Contract Female Cost"
+                            android:layout_weight="0.09"
                             android:textColor="@color/black"
 
                             android:layout_width="0dp"
@@ -243,7 +296,7 @@ android:textColorHint="@color/black"
                         <TextView
                             android:gravity="center"
                             android:text="Status "
-                            android:layout_weight="0.15"
+                            android:layout_weight="0.09"
                             android:textColor="@color/black"
                             android:id="@+id/txtSatusText"
                             android:layout_width="0dp"
@@ -255,7 +308,7 @@ android:textColorHint="@color/black"
                         <TextView
                             android:gravity="center"
                             android:text="Log Date"
-                            android:layout_weight="0.1"
+                            android:layout_weight="0.09"
                             android:textColor="@color/black"
                             android:layout_width="0dp"
                             android:layout_height="match_parent" />
@@ -270,7 +323,20 @@ android:textColorHint="@color/black"
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/irrigationstatusRecyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                       android:layout_height="match_parent"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nodata"
+                    android:visibility="gone"
+                    android:textAlignment="center"
+                    android:layout_marginTop="20dp"
+                    android:text="No Data Found"
+                    android:textSize="16dp"
+                    android:textColor="@color/colorAccent"
+                    android:layout_centerInParent="true"
+                    />
             </LinearLayout>
 
 

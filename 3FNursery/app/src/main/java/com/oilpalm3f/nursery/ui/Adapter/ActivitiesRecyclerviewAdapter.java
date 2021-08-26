@@ -119,10 +119,12 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     holder.activityName.setTextColor(context.getColor(R.color.yellow));
 
                 }
-                else
+                  else if (dayDifference >= 1)
                 {
+
                     holder.activityName.setTextColor(context.getColor(R.color.green));
                 }
+
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -130,6 +132,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
 
 
+        }
+        else
+        {
+            holder.activityName.setTextColor(context.getColor(R.color.black));
         }
 
         if (mActivitiesList.get(position).getStatusTypeId() == 346) {

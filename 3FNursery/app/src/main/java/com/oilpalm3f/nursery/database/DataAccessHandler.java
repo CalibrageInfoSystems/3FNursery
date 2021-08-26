@@ -2768,10 +2768,10 @@ f
                     nurseryIrrigationLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     nurseryIrrigationLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     nurseryIrrigationLog.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
-                    nurseryIrrigationLog.setRegularMalecost(cursor.getDouble(cursor.getColumnIndex("RegularMaleRate")));
-                    nurseryIrrigationLog.setRegularFemalecost(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleRate")));
-                    nurseryIrrigationLog.setContractMalecost(cursor.getDouble(cursor.getColumnIndex("ContractMaleRate")));
-                    nurseryIrrigationLog.setContractFemalecost(cursor.getDouble(cursor.getColumnIndex("ContractFeMaleRate")));
+                    nurseryIrrigationLog.setRegularMaleRate(cursor.getDouble(cursor.getColumnIndex("RegularMaleRate")));
+                    nurseryIrrigationLog.setRegularFeMaleRate(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleRate")));
+                    nurseryIrrigationLog.setContractMaleRate(cursor.getDouble(cursor.getColumnIndex("ContractMaleRate")));
+                    nurseryIrrigationLog.setContractFeMaleRate(cursor.getDouble(cursor.getColumnIndex("ContractFeMaleRate")));
 
                     NurseryIrrigationLogList.add(nurseryIrrigationLog);
                 } while (cursor.moveToNext());
@@ -4831,6 +4831,10 @@ f
                     nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
                   nurseryIrrigationLog.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
+                    nurseryIrrigationLog.setRegularMaleRate(cursor.getDouble(cursor.getColumnIndex("RegularMaleRate")));
+                    nurseryIrrigationLog.setContractFeMaleRate(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleRate")));
+                    nurseryIrrigationLog.setContractMaleRate(cursor.getDouble(cursor.getColumnIndex("ContractMaleRate")));
+                    nurseryIrrigationLog.setContractFeMaleRate(cursor.getDouble(cursor.getColumnIndex("ContractFeMaleRate")));
 //                    nurseryIrrigationLog.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
 //                    nurseryIrrigationLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
 //                    nurseryIrrigationLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));

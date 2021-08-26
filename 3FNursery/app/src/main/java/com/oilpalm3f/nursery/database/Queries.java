@@ -1520,7 +1520,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
 
     public String getIrrigationStatus(String fromDate, String todate) {
-        return "SELECT n.IrrigationCode, n.LogDate,n.RegularMale,n.RegularFemale,n.ContractMale,n.ContractFemale,n.StatusTypeId, n.Comments , t.Desc\n" +
+        return "SELECT n.IrrigationCode, n.LogDate,n.RegularMale,n.RegularFemale,n.ContractMale,n.ContractFemale,n.StatusTypeId,n.Comments ,n.RegularMaleRate ,n.RegularFeMaleRate , n.ContractMaleRate , n.ContractFeMaleRate, t.Desc\n" +
                 "from NurseryIrrigationLog n\n" +
                 "Inner Join TypeCdDmt t on t.TypeCdId = n.StatusTypeId\n" +
                 "where   date(LogDate) BETWEEN  '"+fromDate+"'  and '"+todate+"'";

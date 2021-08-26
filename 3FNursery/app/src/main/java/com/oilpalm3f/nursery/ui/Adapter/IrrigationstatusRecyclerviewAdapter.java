@@ -86,6 +86,14 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
 
         holder.contractlabourfemale.setText(IrrigationlogList.get(position).getContractFemale()+"");
 
+        holder.regularlabourmalecost.setText(IrrigationlogList.get(position).getRegularMaleRate()+"");
+
+        holder.regularlabourfemalecost.setText(IrrigationlogList.get(position).getRegularFeMaleRate()+"");
+
+        holder.contractlabourmalecost.setText(IrrigationlogList.get(position).getContractMaleRate()+"");
+
+        holder.contractlabourfemalecost.setText(IrrigationlogList.get(position).getContractFeMaleRate()+"");
+
         holder.txtSatusText.setText(IrrigationlogList.get(position).getDesc());
 
 
@@ -150,7 +158,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView irrigationcode, regularlabourmale, regularlabourfemale, contractlabourmale, contractlabourfemale, txtSatusText, logdate;
+        public TextView irrigationcode, regularlabourmale, regularlabourfemale, contractlabourmale, contractlabourfemale, txtSatusText, logdate,regularlabourmalecost,regularlabourfemalecost,contractlabourmalecost,contractlabourfemalecost;
         public LinearLayout mainlyt,sublinear;
         public ImageView imgStatus, imgNurStatus, imgShStatus;
         private RecyclerView rvSubItem;
@@ -171,6 +179,10 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
             this.sublinear = itemView.findViewById(R.id.sublinearlayout);
             this.image_less = itemView.findViewById(R.id.image_less);
             this.image_more = itemView.findViewById(R.id.image_more);
+            this.regularlabourmalecost = (TextView) itemView.findViewById(R.id.regularlabourmalecost);
+            this.regularlabourfemalecost = (TextView) itemView.findViewById(R.id.regularlabourfemalecost);
+            this.contractlabourmalecost = (TextView) itemView.findViewById(R.id.contractlabourmalecost);
+            this.contractlabourfemalecost = (TextView) itemView.findViewById(R.id.contractlabourfemalecost);
         }
 
 
