@@ -97,6 +97,21 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
         holder.txtSatusText.setText(IrrigationlogList.get(position).getDesc());
 
 
+        if (row_index == position) {
+            holder.sublinear.setVisibility(View.VISIBLE);
+
+            holder.image_more.setVisibility(View.GONE);
+            holder.image_less.setVisibility(View.VISIBLE);
+           holder.bind(irrigation);
+            // holder.createdDateTextView.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.sublinear.setVisibility(View.GONE);
+            holder.image_more.setVisibility(View.VISIBLE);
+            holder.image_less.setVisibility(View.GONE);
+            //  holder.createdDateTextView.setVisibility(View.GONE);
+        }
+
 //        if(IrrigationlogList.size()== 0){
 //            holder.rvSubItem.setVisibility(View.GONE);
 //
@@ -120,7 +135,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
 
                 boolean expanded = irrigation.isExpanded();
                 irrigation.setExpanded(!expanded);
-                //  notifyIte`35w2qs3mChanged(position);
+
                 int oldindex=  row_index;
                 row_index = position;
                 notifyItemChanged(oldindex);
@@ -134,20 +149,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
         });
 
 
-        if (row_index == position) {
-            holder.sublinear.setVisibility(View.VISIBLE);
 
-            holder.image_more.setVisibility(View.GONE);
-            holder.image_less.setVisibility(View.VISIBLE);
-            holder.bind(irrigation);
-            // holder.createdDateTextView.setVisibility(View.VISIBLE);
-
-        } else {
-            holder.sublinear.setVisibility(View.GONE);
-            holder.image_more.setVisibility(View.VISIBLE);
-            holder.image_less.setVisibility(View.GONE);
-            //  holder.createdDateTextView.setVisibility(View.GONE);
-        }
 
     }
 
@@ -197,26 +199,34 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
                     LinearLayoutManager.VERTICAL,
                     false
             );
-            if (IrrigationLogXreflist.size() != 0) {
-                sublinear.setVisibility(View.VISIBLE);
-
-                subItemAdapter = new IrrigationlogxrefAdapter(context, IrrigationLogXreflist);
-
-                ((SimpleItemAnimator) rvSubItem.getItemAnimator()).setSupportsChangeAnimations(false);
-                rvSubItem.setLayoutManager(layoutManager);
-                rvSubItem.setAdapter(subItemAdapter);
-                rvSubItem.setRecycledViewPool(viewPool);
-            }
-
 
             if( sublinear.getVisibility() == View.VISIBLE) {
                 image_less.setVisibility(View.VISIBLE);
                 image_more.setVisibility(View.GONE);
             }
             else {
+
                 image_less.setVisibility(View.GONE);
                 image_more.setVisibility(View.VISIBLE);
             }
+            if (IrrigationLogXreflist.size() != 0) {
+             //   sublinear.setVisibility(View.VISIBLE);
+                subItemAdapter = new IrrigationlogxrefAdapter(context, IrrigationLogXreflist);
+                ((SimpleItemAnimator) rvSubItem.getItemAnimator()).setSupportsChangeAnimations(false);
+                rvSubItem.setLayoutManager(layoutManager);
+                rvSubItem.setAdapter(subItemAdapter);
+                rvSubItem.setRecycledViewPool(viewPool);
+
+
+            }
+//            if( sublinear.getVisibility() == View.VISIBLE) {
+//                image_less.setVisibility(View.VISIBLE);
+//                image_more.setVisibility(View.GONE);
+//            }
+//            else {
+//                image_less.setVisibility(View.GONE);
+//                image_more.setVisibility(View.VISIBLE);
+//            }
         }
     }
 }

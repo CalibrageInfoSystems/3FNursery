@@ -119,7 +119,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     holder.activityName.setTextColor(context.getColor(R.color.yellow));
 
                 }
-                  else if (dayDifference >= 1)
+                  else if (dayDifference >= 0)
                 {
 
                     holder.activityName.setTextColor(context.getColor(R.color.green));
