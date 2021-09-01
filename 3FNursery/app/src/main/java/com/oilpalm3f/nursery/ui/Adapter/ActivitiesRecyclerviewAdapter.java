@@ -13,11 +13,13 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
@@ -52,6 +54,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     String ConsignmentCode;
     String targetDatedata;
     String  finaldate,targetdate;
+    String dependencyname,  dependecyCode;
+
     public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode, String targetDate) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
@@ -162,6 +166,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
 
 
+
+
+
+
 //        holder.expecteddate.setText(( CommonUtils.getTargetDate2(targetDatedata,mActivitiesList.get(position).getTargetDays())));
 //        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate2("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
 //        holder.expecteddate.setText( ( CommonUtils.getTargetDate2("2021-08-05 17:14:11",mActivitiesList.get(position).getTargetDays())));
@@ -174,57 +182,116 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                 saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(ConsignmentCode, mActivitiesList.get(position).getId() + ""));
                 Log.d("saplingActivitiesListSize", saplingActivitiesList.size() + "");
 
-                if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true") && saplingActivitiesList.size() != 0) {
+                if (validations(position )) {
+                    if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true") && saplingActivitiesList.size() != 0) {
 
-                    Intent met = new Intent(context, MultipleEntryScreen.class);
-                    met.putExtra("consignmentcode", ConsignmentCode);
-                    met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
-                    met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
-                    met.putExtra("Ismultipleentry1", mActivitiesList.get(position).getIsMultipleEntries());
-                    met.putExtra("status", mActivitiesList.get(position).getDesc());
-                    met.putExtra("statusId", mActivitiesList.get(position).getStatusTypeId());
-                    met.putExtra("addActivity", false);
+                        Intent met = new Intent(context, MultipleEntryScreen.class);
+                        met.putExtra("consignmentcode", ConsignmentCode);
+                        met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
+                        met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
+                        met.putExtra("Ismultipleentry1", mActivitiesList.get(position).getIsMultipleEntries());
+                        met.putExtra("status", mActivitiesList.get(position).getDesc());
+                        met.putExtra("statusId", mActivitiesList.get(position).getStatusTypeId());
+                        met.putExtra("addActivity", false);
 
-                    Log.d("consignmentcode1", ConsignmentCode);
-                    context.startActivity(met);
+                        Log.d("consignmentcode1", ConsignmentCode);
+                        context.startActivity(met);
 
-                } else {
-                    // Todo Check ALready hava data or not.
-                    // TODO Check Data Exisitng Or Not
-                   if( !StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate()))
-                   {
-                       // EXISTING UI
-                       Boolean enableEditing = false;
-                       if (mActivitiesList.get(position).getStatusTypeId() == 349) {
-                           enableEditing = true;
-                       }
-                       Intent at = new Intent(context, ActivityTask.class);
-                       at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
-                       at.putExtra("consignmentcode", ConsignmentCode);
-                       at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
-                       at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
-                       at.putExtra("enableEditing", enableEditing);
-                       at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
-                       context.startActivity(at);
-                   }else{
+                    } else {
+                        // Todo Check ALready hava data or not.
+                        // TODO Check Data Exisitng Or Not
+                        if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
+                            // EXISTING UI
+                            Boolean enableEditing = false;
+                            if (mActivitiesList.get(position).getStatusTypeId() == 349) {
+                                enableEditing = true;
+                            }
+                            Intent at = new Intent(context, ActivityTask.class);
+                            at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
+                            at.putExtra("consignmentcode", ConsignmentCode);
+                            at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                            at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                            at.putExtra("Code", mActivitiesList.get(position).getCode());
+                            at.putExtra("DependentActivityCode", mActivitiesList.get(position).getDependentActivityCode() + "");
+                            at.putExtra("enableEditing", enableEditing);
+                            at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
+                            context.startActivity(at);
+                        } else {
 //                      NEW ACTIVITY
-                       Intent at = new Intent(context, ActivityTask.class);
-                       at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
-                       at.putExtra("consignmentcode", ConsignmentCode);
-                       at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
-                       at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
-                       at.putExtra("enableEditing", true);
-                       at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
-                       context.startActivity(at);
-                   }
+                            Intent at = new Intent(context, ActivityTask.class);
+                            at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
+                            at.putExtra("consignmentcode", ConsignmentCode);
+                            at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
+                            at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                            at.putExtra("enableEditing", true);
+                            at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
+                            context.startActivity(at);
+                        }
+
+                    }
+                }
+                else{
+
+                     dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
+                    Log.d("dependencyname=============",dependencyname);
+                    Toast.makeText(context, "   Please Complete  "+dependencyname + "   Activity " , Toast.LENGTH_LONG).show();
 
                 }
-
 
             }
         });
 
 
+    }
+
+    private boolean validations(int position) {
+      boolean issuces = false;
+       dependecyCode =  mActivitiesList.get(position).getDependentActivityCode();
+
+      Log.d("dependecyCode=============",dependecyCode);
+      if(StringUtils.isEmpty(dependecyCode) || dependecyCode == null || dependecyCode.equalsIgnoreCase("null") || dependecyCode ==""){
+          issuces  =  true;
+      }else {
+
+      Integer statuscode =  dataAccessHandler.getSingleIntValue(Queries.dependencystatus(ConsignmentCode,dependecyCode));
+
+        if(statuscode != null){
+            issuces = true;
+        }
+      }
+
+//        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A012") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
+//
+//            Toast.makeText(context, mActivitiesList.get(position).getDependentActivityCode() +"dependency " + mActivitiesList.get(position).getName() , Toast.LENGTH_LONG).show();
+//            return false;
+//        }
+//        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A013") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
+//
+//
+//            Toast.makeText(context, mActivitiesList.get(position).getDependentActivityCode() + " dependency" + mActivitiesList.get(position).getName(), Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+//        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A014") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
+//            dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyvalue(ConsignmentCode,mActivitiesList.get(position).getDependentActivityCode()));
+//            dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyvalue(ConsignmentCode,mActivitiesList.get(position).getDependentActivityCode()));
+//
+//            if(dependencyname!=null){
+//                Toast.makeText(context, mActivitiesList.get(position).getDependentActivityCode() +"dependency " + mActivitiesList.get(position).getName() , Toast.LENGTH_LONG).show();
+//                return true;
+//            }
+//
+//            Toast.makeText(context, "", Toast.LENGTH_LONG).show();
+//
+//            return false;
+//        }
+//        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A015") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
+//
+//
+//            Toast.makeText(context, mActivitiesList.get(position).getDependentActivityCode() + " dependency" + mActivitiesList.get(position).getName(), Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+//
+        return issuces;
     }
 
     @Override
@@ -253,7 +320,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         }
     }
 
-    public void showDialog(Activity activity) {
+    public void showDialog(Context activity) {
 
         final Dialog dialog = new Dialog(activity, R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

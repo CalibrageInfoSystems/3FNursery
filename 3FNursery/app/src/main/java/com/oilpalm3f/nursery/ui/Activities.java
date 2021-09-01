@@ -104,7 +104,6 @@ public class Activities extends AppCompatActivity {
     }
     private void displayActivityData() {
         String targetDate = dataAccessHandler.getSingleValue(Queries.getTargetDay(CONSINEMENTCODE));
-        
         mActivitiesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getNurseryActivities(CONSINEMENTCODE));
         activitiesRecyclerview.setLayoutManager(new LinearLayoutManager(Activities.this));
         activitiesRecyclerviewAdapter = new ActivitiesRecyclerviewAdapter(Activities.this, mActivitiesList, CONSINEMENTCODE,targetDate);

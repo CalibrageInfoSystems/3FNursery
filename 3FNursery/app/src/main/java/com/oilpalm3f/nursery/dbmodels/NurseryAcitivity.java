@@ -14,6 +14,7 @@ public class NurseryAcitivity {
     @SerializedName("Code")
     @Expose
     private String code;
+
     @SerializedName("Name")
     @Expose
     private String name;
