@@ -212,7 +212,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +
-        "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId ='338' AND S.isActive ='1' GROUP By S.ConsignmentCode";
+        "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId < 340 AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
     public String getAllConsignmentDataQuery(String Userid, String NurseryCode) {
         return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
@@ -228,7 +228,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "inner join LookUp L ON S.OriginId = L.Id \n" +
                 "inner join LookUp O ON S.VendorId = O.Id \n" +
                 "inner join LookUp K ON S.VarietyId = K.Id \n" +
-                "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId !='338' AND S.isActive ='1' GROUP By S.ConsignmentCode";
+                "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId > 339 AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
 
@@ -1546,7 +1546,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
     public static String getregfemalerate(String NurseryCode)
     {
-        return  "select Value from LabourRate where key = 'Regular Male per Man Day' and NurseryCode ='"+NurseryCode+"'";
+        return  "select Value from LabourRate where key = 'Regular Female per Man Day' and NurseryCode ='"+NurseryCode+"'";
     }
     public static String getcontractmalerate(String NurseryCode)
     {
@@ -1555,6 +1555,15 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     public static String getcontractfemalerate(String NurseryCode)
     {
         return  "select Value from LabourRate where key = 'Contract Female per Man Day' and NurseryCode ='"+NurseryCode+"'";
+    }
+
+    public static String getsmallPolyBag(String NurseryCode)
+    {
+        return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
+    }
+    public static String getBigBag(String NurseryCode)
+    {
+        return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
     }
 
 }
