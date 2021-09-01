@@ -371,7 +371,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     ll.addView(addCheckbox(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
                 }
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Display") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Formula")) {
-                ll.addView(addEdittext(activityTasklist.get(i).getField(), activityTasklist.get(i).getId(), activityTasklist.get(i).getDataType()));
+                {
+                    String UOm = activityTasklist.get(i).getUom().equalsIgnoreCase("null") ? "" : "( "+activityTasklist.get(i).getUom()+")";
+                    String content =activityTasklist.get(i).getField() + UOm;
+                    ll.addView(addEdittext(content, activityTasklist.get(i).getId(), activityTasklist.get(i).getDataType()));
+                }
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Display")) {
                 ll.addView(addTexView(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {

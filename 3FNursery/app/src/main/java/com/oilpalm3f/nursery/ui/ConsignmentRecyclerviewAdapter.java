@@ -71,7 +71,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
         } else {
             holder.lytarrivaldate.setVisibility(View.VISIBLE);
-            holder.arrivaldate.setText(":  " + consignmentList.get(position).getArrivedDate());
+            holder.arrivaldate.setText(":  " + CommonUtils.getProperComplaintsDate2(consignmentList.get(position).getArrivedDate()));
 
         }
 
