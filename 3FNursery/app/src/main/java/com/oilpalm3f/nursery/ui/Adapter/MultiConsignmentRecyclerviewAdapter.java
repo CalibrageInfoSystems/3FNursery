@@ -54,7 +54,7 @@ public class MultiConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Mu
         holder.varietyname.setText(":  " + consignmentList.get(position).getVarietyname());
 
         holder.estimatedqty.setText(":  " + consignmentList.get(position).getEstimatedQuantity() + "");
-        holder.ordereddate.setText(":  " + CommonUtils.getProperComplaintsDate(consignmentList.get(position).getCreatedDate()));
+        holder.ordereddate.setText(":  " + CommonUtils.getProperComplaintsDate2(consignmentList.get(position).getCreatedDate()));
 //        Log.d("ArrivedDate", consignmentList.get(position).getArrivedDate());
 
         holder.lytarrivaldate.setVisibility(View.GONE);

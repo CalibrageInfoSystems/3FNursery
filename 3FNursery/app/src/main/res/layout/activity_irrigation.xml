@@ -39,7 +39,7 @@
                         android:layout_weight="0.3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Select Date"
+                        android:text="Date"
                         android:textSize="18dp"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
@@ -65,7 +65,7 @@
                         android:layout_weight="0.3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Select Nursery"
+                        android:text="Nursery"
                         android:textSize="18dp"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
@@ -92,7 +92,7 @@
                         android:layout_weight="0.3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Consigment No"
+                        android:text="Consigment Code(s)"
                         android:textSize="18dp"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
@@ -108,7 +108,21 @@
                         android:text="Consignment No"/>
 
                 </LinearLayout>
+                <TextView
+                    android:layout_marginTop="40dp"
 
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Regular"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/gray"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -116,16 +130,17 @@
                     android:weightSum="1">
 
                     <TextView
-                        android:layout_weight="0.3"
+                        android:gravity="center_vertical"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Labour Man Days(Male) - Regular"
-                        android:textSize="18dp"
+                        android:text="Labour Man Days(Male)"
+                        android:textSize="16dp"
                         android:textColor="@color/black"
-                        android:textStyle="bold"/>
+                        />
                     <EditText
                         android:id="@+id/manreg_edt"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:textSize="20dp"
                         android:inputType="numberDecimal"
@@ -144,16 +159,17 @@
                     android:weightSum="1">
 
                     <TextView
-                        android:layout_weight="0.3"
+                        android:gravity="center_vertical"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Labour Man Days(Female) - Regular"
-                        android:textSize="18dp"
+                        android:text="Labour Man Days(Female)"
+                        android:textSize="16dp"
                         android:textColor="@color/black"
-                        android:textStyle="bold"/>
+                        />
                     <EditText
                         android:id="@+id/Femalereg_edt"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:textSize="20dp"
                         android:inputType="numberDecimal"
@@ -164,6 +180,21 @@
                         android:hint="Man Days - Female"/>
                 </LinearLayout>
 
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Outside"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/gray"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -171,16 +202,17 @@
                     android:weightSum="1">
 
                     <TextView
-                        android:layout_weight="0.3"
+                        android:gravity="center_vertical"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Labour Man Days(Male) - Outside"
-                        android:textSize="18dp"
+                        android:text="Labour Man Days(Male)"
+                        android:textSize="16dp"
                         android:textColor="@color/black"
-                        android:textStyle="bold"/>
+                       />
                     <EditText
                         android:id="@+id/manout_edt"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:textSize="20dp"
                         android:inputType="numberDecimal"
@@ -199,16 +231,17 @@
                     android:weightSum="1">
 
                     <TextView
-                        android:layout_weight="0.3"
+                       android:gravity="center_vertical"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Labour Man Days(Female) - Outside"
-                        android:textSize="18dp"
+                        android:text="Labour Man Days(Female)"
+                        android:textSize="16dp"
                         android:textColor="@color/black"
-                        android:textStyle="bold"/>
+                        />
                     <EditText
                         android:id="@+id/femaleout_edt"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.5"
                         android:layout_width="0dp"
                         android:textAlignment="textStart"
                         android:inputType="numberDecimal"

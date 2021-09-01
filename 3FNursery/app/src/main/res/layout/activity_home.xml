@@ -198,7 +198,7 @@
                         android:id="@+id/irigation_title_txt"
                         style="@style/moduleHomeBtnStyle"
                         android:layout_below="@+id/irigation_Icon"
-                        android:text="@string/irigation"
+                        android:text="Primary Irrigation"
                         android:visibility="visible" />
 
 
@@ -221,7 +221,7 @@
                         android:id="@+id/irigation_title_txt_post"
                         style="@style/moduleHomeBtnStyle"
                         android:layout_below="@+id/irigation_Icon_post"
-                        android:text="@string/irigationPost"
+                        android:text="Secondary Irrigation"
                         android:visibility="visible" />
 
 

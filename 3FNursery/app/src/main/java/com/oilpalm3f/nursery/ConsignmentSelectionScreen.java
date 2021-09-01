@@ -95,10 +95,16 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
-            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentPostPreeDataQuery(CommonConstants.USER_ID, nurserycode));
             consignmentRecyclerviewAdapterMultiple = new MultiConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapterMultiple);
-        } else {
+        }else if( CommonConstants.COMMINGFROM == CommonConstants.NEWACTIVITYSCREEEN)
+        {
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getAllConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
+            consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
+            consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
+        }
+        else {
             consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
             consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);

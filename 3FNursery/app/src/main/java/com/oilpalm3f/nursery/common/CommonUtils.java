@@ -1624,6 +1624,26 @@ public class CommonUtils {
             return "" + dt1.format(date) + " " + dateTime.split("T")[1];
         }
     }
+    public static String getProperDate3(final String dateTime) {
+
+        final SimpleDateFormat sdfq = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH);
+        sdfq.setLenient(true);
+        sdfq.setTimeZone(TimeZone.getDefault());
+        Date date = null;
+        try {
+            date = sdfq.parse(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
+        System.out.println(dt1.format(date));
+        String s = "" + dt1.format(date);
+        try {
+            return "" + dt1.format(date) + " " + dateTime.split("T")[1].split(".")[0];
+        } catch (Exception ex) {
+            return "" + dt1.format(date) + " " + dateTime.split("T")[1];
+        }
+    }
     public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate){
 
         Date parsed = null;
@@ -1655,6 +1675,21 @@ public class CommonUtils {
             e.printStackTrace();
         }
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+        System.out.println(dt1.format(date));
+        return "" + dt1.format(date);
+    }
+    public static String getProperComplaintsDate2(final String dateTime) {
+
+        final SimpleDateFormat sdfq = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        sdfq.setLenient(true);
+        sdfq.setTimeZone(TimeZone.getDefault());
+        Date date = null;
+        try {
+            date = sdfq.parse(parseAsIso8601_2((dateTime)).toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
         System.out.println(dt1.format(date));
         return "" + dt1.format(date);
     }

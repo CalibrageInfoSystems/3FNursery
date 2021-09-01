@@ -1,15 +1,9 @@
 package com.oilpalm3f.nursery.ui.Adapter;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,19 +15,13 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
-import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
-import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
-import com.oilpalm3f.nursery.ui.ActivityTask;
-import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,13 +74,13 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
 
         holder.contractlabourfemale.setText(IrrigationlogList.get(position).getContractFemale()+"");
 
-        holder.regularlabourmalecost.setText(IrrigationlogList.get(position).getRegularMaleRate()+"");
-
-        holder.regularlabourfemalecost.setText(IrrigationlogList.get(position).getRegularFeMaleRate()+"");
-
-        holder.contractlabourmalecost.setText(IrrigationlogList.get(position).getContractMaleRate()+"");
-
-        holder.contractlabourfemalecost.setText(IrrigationlogList.get(position).getContractFeMaleRate()+"");
+//        holder.regularlabourmalecost.setText(IrrigationlogList.get(position).getRegularMaleRate()+"");
+//
+//        holder.regularlabourfemalecost.setText(IrrigationlogList.get(position).getRegularFeMaleRate()+"");
+//
+//        holder.contractlabourmalecost.setText(IrrigationlogList.get(position).getContractMaleRate()+"");
+//
+//        holder.contractlabourfemalecost.setText(IrrigationlogList.get(position).getContractFeMaleRate()+"");
 
         holder.txtSatusText.setText(IrrigationlogList.get(position).getDesc());
 
@@ -181,10 +169,10 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
             this.sublinear = itemView.findViewById(R.id.sublinearlayout);
             this.image_less = itemView.findViewById(R.id.image_less);
             this.image_more = itemView.findViewById(R.id.image_more);
-            this.regularlabourmalecost = (TextView) itemView.findViewById(R.id.regularlabourmalecost);
-            this.regularlabourfemalecost = (TextView) itemView.findViewById(R.id.regularlabourfemalecost);
-            this.contractlabourmalecost = (TextView) itemView.findViewById(R.id.contractlabourmalecost);
-            this.contractlabourfemalecost = (TextView) itemView.findViewById(R.id.contractlabourfemalecost);
+//            this.regularlabourmalecost = (TextView) itemView.findViewById(R.id.regularlabourmalecost);
+//            this.regularlabourfemalecost = (TextView) itemView.findViewById(R.id.regularlabourfemalecost);
+//            this.contractlabourmalecost = (TextView) itemView.findViewById(R.id.contractlabourmalecost);
+//            this.contractlabourfemalecost = (TextView) itemView.findViewById(R.id.contractlabourfemalecost);
         }
 
 

@@ -13,6 +13,15 @@ public class SaplingActivityXrefModel {
     private int UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
+    private  double LabourRate;
+
+    public double getLabourRate() {
+        return LabourRate;
+    }
+
+    public void setLabourRate(double labourRate) {
+        LabourRate = labourRate;
+    }
 
     public Integer getId() {
         return Id;

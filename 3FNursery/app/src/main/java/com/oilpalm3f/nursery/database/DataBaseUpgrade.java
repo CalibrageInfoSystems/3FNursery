@@ -70,7 +70,7 @@ public class DataBaseUpgrade {
         String column3 = "Alter Table Sapling Add ArrivedQuantity int";
         String column4 = "Alter Table Sapling Add SowingDate datetime";
         String column5 = "Alter Table Sapling Add TransplantingDate datetime";
-        String column6 = "Alter Table NurseryActivity Add DependentActivityCode VARCHAR(10)";
+       String column6 = "Alter Table NurseryActivity Add DependentActivityCode VARCHAR(10)";
 
 
 

@@ -52,17 +52,13 @@ public class Activities extends AppCompatActivity {
             CONSINEMENTCODE = getIntent().getStringExtra("ConsignmentCode");
 
 
-
         init();
         setViews();
     }
 
     private void init() {
         dataAccessHandler = new DataAccessHandler(this);
-
-
         Log.d(LOG_TAG, " ==> Analysis NURCERYCODE :"+NURCERYCODE+"  ====> CONSINEMENTCODE :"+CONSINEMENTCODE);
-
 
         txtSatus = findViewById(R.id.txtSatus);
         txtSlectedConsiment = findViewById(R.id.txtSlectedConsiment);
@@ -79,18 +75,18 @@ public class Activities extends AppCompatActivity {
     }
 
     private void setViews() {
-
-        consignmentstatusList = dataAccessHandler.getConsignmentStatus(Queries.getInstance().getConsignmentStatusQuery(CONSINEMENTCODE));
+         txtSlectedConsiment.setText(": " +CONSINEMENTCODE);
+         txtAge.setText(": " + "");
+         txtDateOfJoining.setText(": " + "");
+         consignmentstatusList = dataAccessHandler.getConsignmentStatus(Queries.getInstance().getConsignmentStatusQuery(CONSINEMENTCODE));
         if(consignmentstatusList != null & consignmentstatusList.size() > 0){
             txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
-            txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
+             txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
         }
         displayActivityData();
 
 
-        txtSlectedConsiment.setText(": " +CONSINEMENTCODE);
-        txtAge.setText(": " + "");
-        txtDateOfJoining.setText(": " + "");
+
 
     }
 

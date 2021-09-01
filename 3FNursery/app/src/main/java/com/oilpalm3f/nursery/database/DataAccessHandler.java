@@ -66,6 +66,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
@@ -2698,6 +2699,7 @@ f
                     saplingsactivityxrefDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     saplingsactivityxrefDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     saplingsactivityxrefDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+                    saplingsactivityxrefDetails.setLabourRate(cursor.getDouble(cursor.getColumnIndex("LabourRate")));
 
                     saplingActivityXrefDataDetails.add(saplingsactivityxrefDetails);
                 } while (cursor.moveToNext());
@@ -2745,15 +2747,15 @@ f
         }
         return saplingActivityHistoryDataDetails;
     }
-    public List<NurseryIrrigationLog> getIrrigationDetails(final String query, final int type) {
-        List<NurseryIrrigationLog> NurseryIrrigationLogList = new ArrayList<>();
+    public List<NurseryIrrigationLogForDb> getIrrigationDetails(final String query, final int type) {
+        List<NurseryIrrigationLogForDb> NurseryIrrigationLogList = new ArrayList<>();
         Cursor cursor = null;
         try {
             cursor = mDatabase.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
 
-                    NurseryIrrigationLog nurseryIrrigationLog = new NurseryIrrigationLog();
+                    NurseryIrrigationLogForDb nurseryIrrigationLog = new NurseryIrrigationLogForDb();
                     nurseryIrrigationLog.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     nurseryIrrigationLog.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
                     nurseryIrrigationLog.setIrrigationCode(cursor.getString(cursor.getColumnIndex("IrrigationCode")));
@@ -4830,7 +4832,7 @@ f
                     nurseryIrrigationLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
                     nurseryIrrigationLog.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryIrrigationLog.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
-                  nurseryIrrigationLog.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
+                    nurseryIrrigationLog.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
                     nurseryIrrigationLog.setRegularMaleRate(cursor.getDouble(cursor.getColumnIndex("RegularMaleRate")));
                     nurseryIrrigationLog.setContractFeMaleRate(cursor.getDouble(cursor.getColumnIndex("RegularFeMaleRate")));
                     nurseryIrrigationLog.setContractMaleRate(cursor.getDouble(cursor.getColumnIndex("ContractMaleRate")));

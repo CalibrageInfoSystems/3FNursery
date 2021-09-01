@@ -80,6 +80,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap = new ArrayList<>();
         allRefreshDataMap.add(DatabaseKeys.TABLE_SAPLING);
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivity);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityStatus);
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityXref);
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityHistory);
         allRefreshDataMap.add(DatabaseKeys.TABLE_NurseryIrrigationLog);
@@ -544,6 +545,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 //                    Log.v("@@@MM","mas");
 //                    addUserResetSyncDetails();
 //                }
+//                addUserResetSyncDetails();
                 if (CommonUtils.isNetworkAvailable(RefreshSyncActivity.this)) {
                     dialog.dismiss();
                     if (fromReset) {

@@ -19,10 +19,9 @@ import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.DatabaseKeys;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.DataCountModel;
-import com.oilpalm3f.nursery.dbmodels.FarmerHistory;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
-import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
@@ -323,7 +322,7 @@ public class DataSyncHelper {
         List<SaplingActivity> saplingacityList = (List<SaplingActivity>) dataAccessHandler.getSaplingActivityDetails(Queries.getInstance().getSaplingActivityRefresh(), 1);
         List<SaplingActivityXrefModel> saplingActivityXreflist = (List<SaplingActivityXrefModel>) dataAccessHandler.getSaplingActivityXrefDetails(Queries.getInstance().getSaplingActivityXrefRefresh(), 1);
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
-        List<NurseryIrrigationLog> nurseryIrrigationLog = (List<NurseryIrrigationLog>) dataAccessHandler.getIrrigationDetails(Queries.getInstance().getNurceryIrrigationHistoryRefresh(), 1);
+        List<NurseryIrrigationLogForDb> nurseryIrrigationLog = (List<NurseryIrrigationLogForDb>) dataAccessHandler.getIrrigationDetails(Queries.getInstance().getNurceryIrrigationHistoryRefresh(), 1);
         List<NurseryIrrigationLogXref> nurseryIrrigationLogXref = (List<NurseryIrrigationLogXref>) dataAccessHandler.getIrrigationDetailsXref(Queries.getInstance().getNurceryIrrigationXrefHistoryRefresh(), 1);
 
 
@@ -524,9 +523,9 @@ public class DataSyncHelper {
 //                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "FieldId", saplingActivityXrefModel.getFieldId()+""));
             }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLog)) {
-                NurseryIrrigationLog nurseryIrrigationLog = (NurseryIrrigationLog) dataList.get(innerCountCheck);
+                NurseryIrrigationLogForDb nurseryIrrigationLog = (NurseryIrrigationLogForDb) dataList.get(innerCountCheck);
                 nurseryIrrigationLog.setServerUpdatedStatus(1);
-                whereCondition = " where  IrrigationCode = '" + nurseryIrrigationLog.getIrrigationCode() ;
+                whereCondition = " where  IrrigationCode = '" + nurseryIrrigationLog.getIrrigationCode()+"'" ;
                 try {
                     ccData = new JSONObject(gson.toJson(nurseryIrrigationLog));
                     dataToInsert.add(CommonUtils.toMap(ccData));
@@ -534,7 +533,7 @@ public class DataSyncHelper {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
 //                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
-                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "IrrigationCode", nurseryIrrigationLog.getIrrigationCode()+""));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "IrrigationCode", nurseryIrrigationLog.getIrrigationCode()));
             }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLogXREF)) {
                 NurseryIrrigationLogXref nurseryIrrigationLogXref = (NurseryIrrigationLogXref) dataList.get(innerCountCheck);
                 nurseryIrrigationLogXref.setServerUpdatedStatus(1);
@@ -816,7 +815,7 @@ public class DataSyncHelper {
                                 dataToUpdate.put(tableName, saplingActivityXrefList);
                         } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityHistory)) {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<FarmerHistory>>() {
+                            Type type = new TypeToken<List<SaplingActivityHistoryModel>>() {
                             }.getType();
                             List<SaplingActivityHistoryModel> SaplingActivityHistoryDataList = gson.fromJson(dataArray.toString(), type);
                             if (null != SaplingActivityHistoryDataList && SaplingActivityHistoryDataList.size() > 0)
@@ -830,9 +829,9 @@ public class DataSyncHelper {
                                 dataToUpdate.put(tableName, saplingActivityStatusModel);
                         } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLog)) {  // TODO need to check
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<NurseryIrrigationLog>>() {
+                            Type type = new TypeToken<List<NurseryIrrigationLogForDb>>() {
                             }.getType();
-                            List<NurseryIrrigationLog> irrigationLogs = gson.fromJson(dataArray.toString(), type);
+                            List<NurseryIrrigationLogForDb> irrigationLogs = gson.fromJson(dataArray.toString(), type);
                             if (null != irrigationLogs && irrigationLogs.size() > 0)
                                 dataToUpdate.put(tableName, irrigationLogs);
                         }
