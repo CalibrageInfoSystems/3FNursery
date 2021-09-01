@@ -668,7 +668,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
 
     public String getNurseryActivities(String consinmentCode) {
-        return "Select DISTINCT na.Id, na.ActivityTypeId,na.IsMultipleEntries, t.Desc ActivityType,na.Code,na.name,s.StatusTypeId, ts.Desc StatusType, s.CreatedDate,na.TargetDays\n" +
+        return "Select DISTINCT na.Id, na.ActivityTypeId,na.IsMultipleEntries, t.Desc ActivityType,na.Code,na.DependentActivityCode,na.name,s.StatusTypeId, ts.Desc StatusType, s.CreatedDate,na.TargetDays\n" +
                 "\n" +
                 "  from NurseryActivity na \n" +
                 "       INNER JOIN TypeCdDmt t ON na.ActivityTypeId = t.TypeCdId\n" +
@@ -1557,6 +1557,15 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         return  "select Value from LabourRate where key = 'Contract Female per Man Day' and NurseryCode ='"+NurseryCode+"'";
     }
 
+    public static String dependencystatus(String ConsignmentCode,String dependencyCode){
+        return  "SELECT  S.StatusTypeId from NurseryActivity na \n" +
+                "\tInner Join  SaplingActivityStatus  S On S.ActivityId = na.id \n" +
+                "\twhere na.Code = '"+dependencyCode+"' and  S.ConsignmentCode = '"+ConsignmentCode+"'";
+    }
+    public static String dependencyname(String dependencyCode){
+        return  "Select name from NurseryActivity where code= '"+ dependencyCode+"'";
+    }
+
     public static String getsmallPolyBag(String NurseryCode)
     {
         return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
@@ -1565,5 +1574,6 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     {
         return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
     }
+
 
 }

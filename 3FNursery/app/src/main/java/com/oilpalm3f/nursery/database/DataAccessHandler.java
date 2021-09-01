@@ -180,6 +180,27 @@ public class DataAccessHandler<T> {
         return "";
     }
 
+    public Integer getSingleIntValue(String query) {
+        Log.v(LOG_TAG, "@@@ query=======int " + query);
+        Cursor mOprQuery = null;
+        try {
+            mOprQuery = mDatabase.rawQuery(query, null);
+            if (mOprQuery != null && mOprQuery.moveToFirst()) {
+                return mOprQuery.getInt(0);
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != mOprQuery)
+                mOprQuery.close();
+
+            closeDataBase();
+        }
+        return null;
+    }
     public String getSingleValueInt(String query) {
         Log.v(LOG_TAG, "@@@ query " + query);
         Cursor mOprQuery = null;
@@ -2388,7 +2409,7 @@ f
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
                     nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
-//                  nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
+                nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
                     nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
                     nurseryActivityyDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("StatusType")));

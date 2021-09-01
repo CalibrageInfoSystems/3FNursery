@@ -65,6 +65,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int yesnoCHeckbox = -10;
     int ButtonId = 100000001;
     String errorMsg = "";
+    String Code , dependency_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                 SCREEN_FROM = extras.getInt(CommonConstants.SCREEN_CAME_FROM);
                 consignmentCode = extras.getString("consignmentcode");
+                dependency_code = extras.getString("DependentActivityCode");
+                Code = extras.getString("Code");
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -149,7 +153,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
             }
+if(dependency_code != null){
+    if(Code.equalsIgnoreCase("A012")){
 
+    }
+
+}
 
         }
 
@@ -1239,6 +1248,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 //                    Toast.makeText(ActivityTask.this, "UN-CHECKED", Toast.LENGTH_SHORT).show();
             }
         }
+
 
     }
 
