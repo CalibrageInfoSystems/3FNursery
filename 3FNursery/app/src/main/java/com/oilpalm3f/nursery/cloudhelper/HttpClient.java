@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
-import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.Palm3FoilDatabase;
 
 import org.apache.http.HttpResponse;
@@ -171,7 +170,7 @@ public class HttpClient {
                 } else {
                     final String postResponse = EntityUtils.toString(response.getEntity(), "UTF-8");
 
-                    palm3FoilDatabase.insertErrorLogs(CommonConstants.SyncTableName,postResponse);
+//                    palm3FoilDatabase.insertErrorLogs(CommonConstants.SyncTableName,postResponse);
                     if (null != onComplete) onComplete.execute(false, postResponse, postResponse);
 
 

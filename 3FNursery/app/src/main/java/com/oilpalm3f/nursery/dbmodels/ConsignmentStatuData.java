@@ -9,6 +9,7 @@ public class ConsignmentStatuData {
     private String StatusType;
     private String Varietyname;
 
+
     public String getVarietyname() {
         return Varietyname;
     }

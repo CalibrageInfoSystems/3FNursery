@@ -2264,6 +2264,7 @@ f
 
 
     public List<ConsignmentStatuData> getConsignmentStatus(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(),"@@Query :"+query);
         List<ConsignmentStatuData> consignmentStatusData = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -2278,6 +2279,7 @@ f
                     consignmentstatusdetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     consignmentstatusdetails.setStatusType(cursor.getString(cursor.getColumnIndex("StatusType")));
                     consignmentstatusdetails.setVarietyname(cursor.getString(cursor.getColumnIndex("Varietyname")));
+
 
                     consignmentStatusData.add(consignmentstatusdetails);
                 } while (cursor.moveToNext());

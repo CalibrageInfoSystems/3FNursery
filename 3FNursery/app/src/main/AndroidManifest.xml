@@ -24,7 +24,7 @@
             android:name=".ConsignmentmultiSelectionScreen"
             android:label="@string/title_activity_consignment_multi_selection_screen" />
         <activity android:name=".ui.irrigation.IrrigationActivity" />
-        <activity android:name=".ui.MultipleEntryScreen" />
+        <activity android:name=".ui.MultipleEntryScreen"  android:noHistory="true"/>
         <activity android:name=".ConsignmentSelectionScreen" />
         <activity android:name=".ui.NurserySelectionScreen" />
         <activity android:name=".ui.ActivityTask" />
