@@ -4943,4 +4943,34 @@ f
         return farmerDetails;
     }
 
+    public List<SaplingActivity> getSaplingActivityDataa(final String query) {
+        List<SaplingActivity> sapactivitydata = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivity saplingsactivityDetails = new SaplingActivity();
+
+                    saplingsactivityDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+
+
+
+                    sapactivitydata.add(saplingsactivityDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return sapactivitydata;
+    }
+
+
 }

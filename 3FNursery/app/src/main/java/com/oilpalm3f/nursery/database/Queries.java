@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 package com.oilpalm3f.nursery.database;
 
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -1574,6 +1585,8 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     {
         return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
     }
-
+    public String getupdateddates() {
+        return "SELECT UpdatedDate from SaplingActivity";
+    }
 
 }

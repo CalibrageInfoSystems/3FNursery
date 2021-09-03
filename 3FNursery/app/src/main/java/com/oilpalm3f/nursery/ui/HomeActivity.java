@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
     RelativeLayout irrigation;
-    RelativeLayout irrigation_post,IrrigationRel;
+    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -61,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         irrigation_post = findViewById(R.id.irigationdetails_post);
         refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
         IrrigationRel =findViewById(R.id.IrrigationRel);
+        checkactivityRel = findViewById(R.id.checkactivityRel);
     }
 
     private void setviews() {
@@ -113,7 +114,18 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+        checkactivityRel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                //  CommonConstants.COMMINGFROM = 2;
+                Intent selectionscreen = new Intent(HomeActivity.this, CheckActivity.class);
+                startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
+
+            }
+        });
         refreshRel.setOnClickListener(view -> {
             resetPrevRegData();
             startActivity(new Intent(HomeActivity.this, RefreshSyncActivity.class));
