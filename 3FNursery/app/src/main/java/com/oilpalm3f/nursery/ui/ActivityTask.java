@@ -153,12 +153,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
             }
-            if (dependency_code != null) {
-                if (Code.equalsIgnoreCase("A012")) {
-
-                }
-
-            }
 
         }
 
