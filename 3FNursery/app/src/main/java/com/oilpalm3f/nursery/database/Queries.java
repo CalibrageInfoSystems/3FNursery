@@ -53,7 +53,7 @@ public class Queries {
         return "Select Desc from TypeCdDmt where TypeCdId = "+verityId;
     }
     public static String sproutsforSowing(String ConsignmentCode, int filedId){
-        return  "Select sx.Value from SaplingActivity s\n" +
+        return  "Select sum(sx.Value) from SaplingActivity s\n" +
                 "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
                 "\t\t where sx.FieldId = "+filedId+" AND ConsignmentCode = '"+ConsignmentCode+"'";
     }
@@ -1561,11 +1561,11 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
     public static String getcontractmalerate(String NurseryCode)
     {
-        return  "select Value from LabourRate where key = 'Contract Male per Man Day' and NurseryCode ='"+NurseryCode+"'";
+        return  "select Value from LabourRate where key = 'Outside Male per Man Day' and NurseryCode ='"+NurseryCode+"'";
     }
     public static String getcontractfemalerate(String NurseryCode)
     {
-        return  "select Value from LabourRate where key = 'Contract Female per Man Day' and NurseryCode ='"+NurseryCode+"'";
+        return  "select Value from LabourRate where key = 'Outside Female per Man Day' and NurseryCode ='"+NurseryCode+"'";
     }
 
     public static String dependencystatus(String ConsignmentCode,String dependencyCode){

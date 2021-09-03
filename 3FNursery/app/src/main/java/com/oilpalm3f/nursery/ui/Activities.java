@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
+import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentStatuData;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class Activities extends AppCompatActivity {
     private static final String LOG_TAG =  Activities.class.getSimpleName();
-    private TextView txtSatus,txtType,txtAge,txtDateOfJoining,txtSlectedConsiment;
+    private TextView txtSatus,txtType,txtAge,txtDateOfsowing,txtSlectedConsiment;
     private RecyclerView activitiesRecyclerview;
     private ActivitiesRecyclerviewAdapter activitiesRecyclerviewAdapter;
     private List<NurseryAcitivity> mActivitiesList = new ArrayList<>();
@@ -64,7 +65,7 @@ public class Activities extends AppCompatActivity {
         txtSlectedConsiment = findViewById(R.id.txtSlectedConsiment);
         txtType = findViewById(R.id.txtType);
         txtAge = findViewById(R.id.txtAge);
-        txtDateOfJoining = findViewById(R.id.txtDateOfJoining);
+        txtDateOfsowing = findViewById(R.id.txtDateOfsowing);
 
         activitiesRecyclerview = findViewById(R.id.activitiesRecyclerview);
 
@@ -77,11 +78,15 @@ public class Activities extends AppCompatActivity {
     private void setViews() {
          txtSlectedConsiment.setText(": " +CONSINEMENTCODE);
          txtAge.setText(": " + "");
-         txtDateOfJoining.setText(": " + "");
+        txtDateOfsowing.setText(": " + "");
          consignmentstatusList = dataAccessHandler.getConsignmentStatus(Queries.getInstance().getConsignmentStatusQuery(CONSINEMENTCODE));
         if(consignmentstatusList != null & consignmentstatusList.size() > 0){
-            txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
+             txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
              txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
+             String dateofsowing = consignmentstatusList.get(0).getSowingDate();
+            if ((dateofsowing != null && !dateofsowing.isEmpty() && !dateofsowing.equals("null")))
+                txtDateOfsowing.setText(":  "+CommonUtils.getProperComplaintsDate2(dateofsowing));
+
         }
         displayActivityData();
 

@@ -27,7 +27,7 @@ public class MultipleEntryScreen extends AppCompatActivity {
     RecyclerView multipleentryrcv;
     private DataAccessHandler dataAccessHandler;
     Button addBtn;
-    String activityTypeId, activityName, ismultipleentry, consignmentcode,status;
+    String activityTypeId, activityName, ismultipleentry, consignmentcode, status;
     int statusId;
     MultipleEntriesRecyclerViewAdapter multipleEntriesRecyclerViewAdapter;
     private List<MutipleData> multiplelist = new ArrayList<>();
@@ -67,6 +67,14 @@ public class MultipleEntryScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(ismultipleentry != null && !ismultipleentry.isEmpty())
+            setViews();
+    }
+
     private void setViews() {
 
 
@@ -77,7 +85,7 @@ public class MultipleEntryScreen extends AppCompatActivity {
 
         Log.d("multiplelist", multiplelist.size() + "");
         multipleentryrcv.setLayoutManager(new LinearLayoutManager(this));
-        multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist, activityName, activityTypeId, ismultipleentry, consignmentcode,status);
+        multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist, activityName, activityTypeId, ismultipleentry, consignmentcode, status);
         multipleentryrcv.setAdapter(multipleEntriesRecyclerViewAdapter);
 
 //        int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
