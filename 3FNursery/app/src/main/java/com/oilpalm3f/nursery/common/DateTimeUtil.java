@@ -229,7 +229,7 @@ public class DateTimeUtil {
         Date date = null;
         String dtStart = datestring;
         Log.d(TAG, "mahesh:");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             date = format.parse(dtStart);
             System.out.println(date);
