@@ -198,8 +198,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
 
         currentCalender.setTime(new Date());
         currentCalender.set(Calendar.DAY_OF_MONTH, 1);
-        //for (SyncRequestHeaderResponse.ListResult data:databaseQueryClass.getCurrentMonthRequests(DateTimeUtil.onGetCurrentDate(getContext()))) {
-        //String date=DateTimeUtil.onGetCurrentDate(getContext()).substring(0,7);
+
         String date = Date;
         Log.d(TAG, "final Month :" + date);
 
