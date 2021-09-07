@@ -679,15 +679,67 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
     }
 
     public String getNurseryActivities(String consinmentCode) {
-        return "Select DISTINCT na.Id, na.ActivityTypeId,na.IsMultipleEntries, t.Desc ActivityType,na.Code,na.DependentActivityCode,na.name,s.StatusTypeId, ts.Desc StatusType, s.CreatedDate,na.TargetDays\n" +
+        return "SELECT     \n" +
+                "  ActivityId,    \n" +
+                "  ActivityTypeId,    \n" +
+                "  IsMultipleEntries,    \n" +
+                "  ActicityType,    \n" +
+                "  ActivityCode,    \n" +
+                "  ActivityName,    \n" +
+                "  StatusTypeId,    \n" +
+                "  ActivityStatus,    \n" +
+                "  ActivityDoneDate,    \n" +
+                "  ConsignmentCode,    \n" +
+                "  TargetDate ,\n" +
+                "   Buffer1Date , \n" +
+                "  Buffer2Date,\n" +
+                "    CASE WHEN ActivityDoneDate IS NULL THEN 0 --No Color    \n" +
+                "        WHEN DATE(Buffer1Date)>DATE(ActivityDoneDate) THEN 1 --Green Color    \n" +
+                "       WHEN DATE(ActivityDoneDate) BETWEEN DATE(Buffer1Date) AND DATE(Buffer2Date) THEN 2--Yellow Color    \n" +
+                "        ELSE 3 END  as ColorIndicator--Red Color    \n" +
+                "  FROM (    \n" +
+                "   SELECT            \n" +
+                "     NA.Id AS 'ActivityId',        \n" +
+                "     NA.ActivityTypeId,          \n" +
+                "     NA.IsMultipleEntries,          \n" +
+                "     T.[DESC] AS 'ActicityType',          \n" +
+                "     NA.Code AS 'ActivityCode',          \n" +
+                "     NA.Name AS 'ActivityName',        \n" +
+                "     S.StatusTypeId,         \n" +
+                "     S.StatusType AS 'ActivityStatus',        \n" +
+                "     S.JobCompletedDate AS 'ActivityDoneDate',      \n" +
+                "     S.ConsignmentCode,\n" +
+                "\tCASE WHEN NA.TargetActivityCode = 'null' THEN --DATEADD(DAY, TargetedDays, S.EstimatedDate)\n" +
+                "\t\t\tdate([EstimatedDate], CAST([TargetedDays] AS TEXT) || ' day')\n" +
+                "        WHEN S.DependencyDoneDate IS NULL THEN NULL ELSE DATE(DependencyDoneDate, CAST([TargetedDays] AS TEXT) || ' day') END  as TargetDate,\n" +
+                "\t\t\n" +
+                "     CASE WHEN NA.TargetActivityCode = 'null' THEN DATE(EstimatedDate, CAST(TargetedDays + DeadLine1 AS TEXT) || ' day')    \n" +
+                "       WHEN S.DependencyDoneDate IS NULL THEN NULL ELSE DATE(DependencyDoneDate, CAST(TargetedDays + DeadLine1 AS TEXT) || ' day') END as Buffer1Date,\n" +
                 "\n" +
-                "  from NurseryActivity na \n" +
-                "       INNER JOIN TypeCdDmt t ON na.ActivityTypeId = t.TypeCdId\n" +
-                "\t   LEFT JOIN  SaplingActivityStatus s ON s.ConsignmentCode = '"+consinmentCode+"' and s.ActivityId = na.id \n" +
-                "\t   LEFT JOIN TypeCdDmt ts ON s.StatusTypeId = ts.TypeCdId\n" +
-                "\t   LEFT JOIN SaplingActivity sa ON sa.ConsignmentCode = '"+consinmentCode+"' and sa.ActivityId = s.ActivityId\n" +
-                "\t   LEFT JOIN SaplingActivityHistory sh ON sh.TransactionId = sa.TransactionId \n" +
-                "\t   ORDER BY na.id";
+                "\t  \n" +
+                "    CASE WHEN NA.TargetActivityCode = 'null' THEN DATE(EstimatedDate, CAST(TargetedDays + DeadLine2 AS TEXT) || ' day')    \n" +
+                "       WHEN S.DependencyDoneDate IS NULL THEN NULL ELSE DATE(DependencyDoneDate, CAST(TargetedDays + DeadLine2 AS TEXT) || ' day') END as Buffer2Date\n" +
+                "\t \n" +
+                "    FROM NurseryActivity  NA       \n" +
+                "    INNER JOIN TypeCdDmt  T ON T.TypeCdId = NA.  ActivityTypeId       \n" +
+                "    left join (    \n" +
+                "    SELECT \n" +
+                "\tS.ActivityId,     \n" +
+                "     S.StatusTypeId,         \n" +
+                "     TS.[DESC] AS 'StatusType',    \n" +
+                "     S.JobCompletedDate,    \n" +
+                "     S.ConsignmentCode,    \n" +
+                "     T.JobCompletedDate AS 'DependencyDoneDate',    \n" +
+                "     SP.EstimatedDate      \n" +
+                "    FROM Sapling SP    \n" +
+                "    INNER JOIN SaplingActivityStatus s ON SP.ConsignmentCode = S.ConsignmentCode    \n" +
+                "    INNER JOIN NurseryActivity N ON S.ActivityId = N.Id     \n" +
+                "    LEFT JOIN TypeCdDmt  TS ON S.StatusTypeId = TS.TypeCdId    \n" +
+                "\tleft join NurseryActivity NF ON NF.Code = N.TargetActivityCode\n" +
+                "    LEFT JOIN (SELECT ConsignmentCode,JobCompletedDate,ActivityId FROM SaplingActivityStatus S\n" +
+                "       WHERE ConsignmentCode = 'AP/123AP' AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = S.ConsignmentCode   \n" +
+                "    WHERE S.ConsignmentCode = 'AP/123AP'   \n" +
+                "    )S on S.ActivityId  = NA.Id)R";
     }
 
     public String getActivityTaskDetails(int Id) {
@@ -1586,7 +1638,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
     }
     public String getupdateddates() {
-        return "select UpdatedDate from SaplingActivity";
+        return "select Date(CreatedDate) from SaplingActivity";
     }
     public String getdata(String date ) {
         return "select TransactionId,ConsignmentCode,StatusTypeId from SaplingActivity where UpdatedDate ='"+date+"'";

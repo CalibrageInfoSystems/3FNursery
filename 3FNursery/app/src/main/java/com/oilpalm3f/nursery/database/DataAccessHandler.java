@@ -2407,18 +2407,16 @@ f
                 do {
 
                     NurseryAcitivity nurseryActivityyDetails = new NurseryAcitivity();
-                    nurseryActivityyDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    nurseryActivityyDetails.setId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
-                    nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("Code")));
-                    nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("Name")));
-                nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
                     nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
+                    nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("ActivityCode")));
+                    nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("ActivityName")));
                     nurseryActivityyDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
-                    nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("StatusType")));
-
-                    nurseryActivityyDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
-                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDays")));
-
+//                    nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
+                    nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("ActivityStatus")));
+                    nurseryActivityyDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("ActivityDoneDate")));
+                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDate")));
                     nurseryActivityDetails.add(nurseryActivityyDetails);
                 } while (cursor.moveToNext());
 
@@ -4973,7 +4971,32 @@ f
         }
         return sapactivitydata;
     }
+    public List<String> getSaplingActivityDates(final String query) {
+        List<String> sapactivitydata = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
 
+
+
+
+
+                    sapactivitydata.add(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return sapactivitydata;
+    }
 
     public List<SaplingActivity> getSaplingActivityDatadetails(final String query) {
         List<SaplingActivity> sapactivitydata = new ArrayList<>();

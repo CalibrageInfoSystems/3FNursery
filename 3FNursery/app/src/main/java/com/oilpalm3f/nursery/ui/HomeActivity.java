@@ -118,9 +118,9 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //  CommonConstants.COMMINGFROM = 2;
-//                Intent selectionscreen = new Intent(HomeActivity.this, CheckActivity.class);
-//                startActivity(selectionscreen);
+                  CommonConstants.COMMINGFROM = 2;
+                Intent selectionscreen = new Intent(HomeActivity.this, CheckActivity.class);
+                startActivity(selectionscreen);
 
                 //  showDialog(HomeActivity.this);
 
