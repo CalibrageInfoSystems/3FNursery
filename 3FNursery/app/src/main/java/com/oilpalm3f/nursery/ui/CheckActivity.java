@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.ui.Adapter.RecyclerAdapter;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,11 +36,11 @@ import java.util.Locale;
 
 import static com.oilpalm3f.nursery.common.DateTimeUtil.stringTodate;
 
-public class CheckActivity extends AppCompatActivity {
+public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.ClickListner {
     public static String TAG = CheckActivity.class.getSimpleName();
     private CompactCalendarView compactCalendarView;
     RecyclerAdapter recyclerAdapter;
-    ListView recyclerView;
+    RecyclerView recyclerView;
     TextView emptyView;
     private TextView textView;
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
@@ -48,6 +50,7 @@ public class CheckActivity extends AppCompatActivity {
      ImageButton showPreviousMonthBut,showNextMonthBut;
     final List<String> mutableBookings = new ArrayList<>();
      List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
+    List<SaplingActivity> saplingActivitiesdatesList = new ArrayList<>();
      DataAccessHandler dataAccessHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class CheckActivity extends AppCompatActivity {
         dataAccessHandler = new DataAccessHandler(this);
         emptyView = findViewById(R.id.empty_view);
         recyclerView = findViewById(R.id.event_listview);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
         showPreviousMonthBut = findViewById(R.id.prev_button);
@@ -77,8 +80,8 @@ public class CheckActivity extends AppCompatActivity {
 //        loadEvents();
 //        loadEventsForYear(2017);
         compactCalendarView.invalidate();
-        saplingActivitiesList = dataAccessHandler.getSaplingActivityDataa(Queries.getInstance().getupdateddates());
-        Log.e("==>listsize",   saplingActivitiesList.size()+"" );
+   saplingActivitiesdatesList = dataAccessHandler.getSaplingActivityDataa(Queries.getInstance().getupdateddates());
+        Log.e("==>listsize",   saplingActivitiesdatesList.size()+"" );
 
         logEventsByMonth(compactCalendarView, DateTimeUtil.onGetCurrentDate(this).substring(0, 7));
         toolbar = ((AppCompatActivity) this).getSupportActionBar();
@@ -139,39 +142,28 @@ public class CheckActivity extends AppCompatActivity {
         calendar.set(Calendar.MILLISECOND, 0);
     }
     private void setview() {
-         ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mutableBookings);
-        recyclerView.setAdapter(adapter);
+
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 textView.setText(dateFormatForMonth.format(dateClicked));
                 Log.d(TAG, "OnDate Selected :" + DateTimeUtil.DateToString(dateClicked));
-                List<Event> bookingsFromMap = compactCalendarView.getEvents(dateClicked);
-                Log.d(TAG, "inside onclick " + dateFormatForDisplaying.format(dateClicked));
-                if (bookingsFromMap != null) {
-                    Log.d(TAG, bookingsFromMap.toString());
-                    mutableBookings.clear();
-                    for (Event booking : bookingsFromMap) {
-                        mutableBookings.add((String) booking.getData());
-                    }
-                    adapter.notifyDataSetChanged();
+//
+
+                saplingActivitiesList = dataAccessHandler.getSaplingActivityDatadetails(Queries.getInstance().getdata("2021-09-03T00:00:00"));
+                Log.e("==>listsize",   saplingActivitiesList.size()+"" );
+//
+                if (saplingActivitiesList.size() > 0) {
+
+                    recyclerAdapter = new RecyclerAdapter(CheckActivity.this, saplingActivitiesList, CheckActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    emptyView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+
                 }
-
-
-//                selecteddate = dateClicked;
-//                List<RequestCompleteModel> data2 = databaseQueryClass.getRequestsSpecificDate(DateTimeUtil.DateToString(dateClicked));
-//
-//                if (data2.size() > 0) {
-//
-//                    recyclerAdapter = new RecyclerAdapter(getActivity(), data2, HomeFragment.this,databaseQueryClass);
-//                    recyclerView.setAdapter(recyclerAdapter);
-//                    emptyView.setVisibility(View.GONE);
-//                    recyclerView.setVisibility(View.VISIBLE);
-//                } else {
-//                    emptyView.setVisibility(View.VISIBLE);
-//                    recyclerView.setVisibility(View.GONE);
-//
-//                }
 
 
             }
@@ -211,15 +203,15 @@ public class CheckActivity extends AppCompatActivity {
         String date = Date;
         Log.d(TAG, "final Month :" + date);
 
-      for(int i = 0; i < saplingActivitiesList.size(); i ++) {
+      for(int i = 0; i < saplingActivitiesdatesList.size(); i ++) {
 //            //Event ev1 = new Event(Color.GREEN, stringTodate(data.getReqCreatedDate()).getTime(),"mallem");
 
-          saplingActivitiesList = dataAccessHandler.getSaplingActivityDataa(Queries.getInstance().getupdateddates());
-          Log.e("==>listsize",   saplingActivitiesList.size()+"" );
-          String updateddate = saplingActivitiesList.get(i).getUpdatedDate();
+          saplingActivitiesdatesList = dataAccessHandler.getSaplingActivityDataa(Queries.getInstance().getupdateddates());
+          Log.e("==>listsize",   saplingActivitiesdatesList.size()+"" );
+          String updateddate = saplingActivitiesdatesList.get(i).getUpdatedDate();
 
           Log.d(TAG, "Each Event :" + updateddate);
-            Event ev1 = new Event(Color.RED, stringTodate(updateddate).getTime(), "Test data");
+            Event ev1 = new Event(Color.RED, stringTodate("2021-09-03T00:00:00").getTime(), "Test data");
             try {
                 compactCalendarView.removeEvent(ev1);
             } catch (Exception e) {
@@ -237,4 +229,8 @@ public class CheckActivity extends AppCompatActivity {
         textView.setText(dateFormatForMonth.format(new Date()));
     }
 
+    @Override
+    public void onNotificationClick(int po, SaplingActivity saplings) {
+
+    }
 }
