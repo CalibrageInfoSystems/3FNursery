@@ -21,6 +21,7 @@ public class DataBaseUpgrade {
             boolean isFreshInstall = sharedPreferences.getBoolean(CommonConstants.IS_FRESH_INSTALL, true);
             if (isFreshInstall) {
                 upgradeDb1(db);
+                upgradeDB2(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -31,7 +32,10 @@ public class DataBaseUpgrade {
 //                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             upgradeDb1(db);
                             break;
-
+                        case 3:
+//                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            upgradeDB2(db);
+                            break;
 
                     }
                 } else {
@@ -104,7 +108,20 @@ public class DataBaseUpgrade {
             e.printStackTrace();
         }
     }
+    public static  void  upgradeDB2(final  SQLiteDatabase db){
+        Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
+        // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
+
+        String  column1 =  "Alter table Saplingactivitystatus add JobCompletedDate DATETIME";
+        try {
+
+            db.execSQL(column1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private static void checkTheColumnIsThere(String tableName, String columnName, String dataType, final SQLiteDatabase db) {

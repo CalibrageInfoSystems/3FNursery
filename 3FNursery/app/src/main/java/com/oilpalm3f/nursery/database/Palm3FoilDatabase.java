@@ -22,7 +22,7 @@ import java.sql.SQLException;
 public class Palm3FoilDatabase extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = Palm3FoilDatabase.class.getName();
-    public final static int DATA_VERSION = 1;
+    public final static int DATA_VERSION = 3;
     private final static String DATABASE_NAME = "3foilpalm.sqlite";
     public static String Lock = "dblock";
     private static Palm3FoilDatabase palm3FoilDatabase;

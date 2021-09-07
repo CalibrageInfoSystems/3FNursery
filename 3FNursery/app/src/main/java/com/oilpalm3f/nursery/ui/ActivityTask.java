@@ -155,7 +155,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
         }
-
+        if(Integer.parseInt(activityTypeId) == 1 || Integer.parseInt(activityTypeId) == 2 || Integer.parseInt(activityTypeId) == 4){
+            Button btn = (Button) findViewById(ButtonId);
+            btn.setVisibility(View.GONE);
+        }
 
     }
 
@@ -671,8 +674,16 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             return isvalid;
         }
 
+        // write validation
+        // get first edit text and second one validate
+
         return true;
     }
+
+
+
+
+
 
     private void addorupdate() {
 
