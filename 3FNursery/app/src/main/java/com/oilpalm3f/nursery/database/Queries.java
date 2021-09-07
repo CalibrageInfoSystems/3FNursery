@@ -49,7 +49,7 @@ public class Queries {
     public String getCollectionCenterMaster() {
         return "select Code, Name  from CollectionCenter ORDER BY Name Asc";
     }
-    public String getSaplingVerirty(String verityId) {
+    public static String getSaplingVerirty(String verityId) {
         return "Select Desc from TypeCdDmt where TypeCdId = "+verityId;
     }
     public static String sproutsforSowing(String ConsignmentCode, int filedId){
@@ -1586,7 +1586,13 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         return  "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='"+NurseryCode+"'";
     }
     public String getupdateddates() {
-        return "SELECT UpdatedDate from SaplingActivity";
+        return "select UpdatedDate from SaplingActivity";
+    }
+    public String getdata(String date ) {
+        return "select TransactionId,ConsignmentCode,StatusTypeId from SaplingActivity where UpdatedDate ='"+date+"'";
     }
 
+    public static String getField(String Id) {
+        return "Select Field from NurseryActivityField where Id = "+Id;
+    }
 }

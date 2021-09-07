@@ -4954,7 +4954,7 @@ f
                 do {
 
                     SaplingActivity saplingsactivityDetails = new SaplingActivity();
-
+//
                     saplingsactivityDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
 
 
@@ -4975,4 +4975,33 @@ f
     }
 
 
+    public List<SaplingActivity> getSaplingActivityDatadetails(final String query) {
+        List<SaplingActivity> sapactivitydata = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    SaplingActivity saplingsactivityDetails = new SaplingActivity();
+                    saplingsactivityDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    saplingsactivityDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
+                    saplingsactivityDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+
+
+
+                    sapactivitydata.add(saplingsactivityDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return sapactivitydata;
+    }
 }
