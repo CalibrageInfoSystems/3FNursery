@@ -218,27 +218,30 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
         "where X.UserId='"+Userid+"' And N.isActive ='true' Group By N.Code";
     }
     public String getConsignmentDataQuery(String Userid, String NurseryCode) {
-        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
+        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname ,T.Desc as Status from  UserConsignmentXref X \n" +
         "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
         "inner join LookUp L ON S.OriginId = L.Id \n" +
         "inner join LookUp O ON S.VendorId = O.Id \n" +
         "inner join LookUp K ON S.VarietyId = K.Id \n" +
+                "inner join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId "+
         "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId < 340 AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
     public String getAllConsignmentDataQuery(String Userid, String NurseryCode) {
-        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
+        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname, T.Desc as Status from  UserConsignmentXref X \n" +
                 "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
                 "inner join LookUp L ON S.OriginId = L.Id \n" +
                 "inner join LookUp O ON S.VendorId = O.Id \n" +
                 "inner join LookUp K ON S.VarietyId = K.Id \n" +
+                "inner join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId "+
                 "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"'  AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
     public String getConsignmentPostPreeDataQuery(String Userid, String NurseryCode) {
-        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname from  UserConsignmentXref X \n" +
+        return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname,T.Desc as Status from  UserConsignmentXref X \n" +
                 "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
                 "inner join LookUp L ON S.OriginId = L.Id \n" +
                 "inner join LookUp O ON S.VendorId = O.Id \n" +
                 "inner join LookUp K ON S.VarietyId = K.Id \n" +
+                "inner join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId "+
                 "where X.UserId='"+Userid+"'  AND S.NurseryCode = '"+NurseryCode+"' AND StatusTypeId > 339 AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
@@ -249,6 +252,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "inner join LookUp L ON S.OriginId = L.Id \n" +
                 "inner join TypeCdDmt T ON S.StatusTypeId = T.TypeCdId \n" +
                 "inner join LookUp K ON S.VarietyId = K.Id \n" +
+
                 "where ConsignmentCode = '"+consignmentcode+"'";
     }
 
@@ -689,9 +693,10 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "  StatusTypeId,    \n" +
                 "  ActivityStatus,    \n" +
                 "  ActivityDoneDate,    \n" +
-                "  ConsignmentCode,    \n" +
+                "  ConsignmentCode, \n" +
+                "  DependentActivityCode,\n" +
                 "  TargetDate ,\n" +
-                "   Buffer1Date , \n" +
+                "  Buffer1Date , \n" +
                 "  Buffer2Date,\n" +
                 "    CASE WHEN ActivityDoneDate IS NULL THEN 0 --No Color    \n" +
                 "        WHEN DATE(Buffer1Date)>DATE(ActivityDoneDate) THEN 1 --Green Color    \n" +
@@ -707,7 +712,8 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "     NA.Name AS 'ActivityName',        \n" +
                 "     S.StatusTypeId,         \n" +
                 "     S.StatusType AS 'ActivityStatus',        \n" +
-                "     S.JobCompletedDate AS 'ActivityDoneDate',      \n" +
+                "     S.JobCompletedDate AS 'ActivityDoneDate',  \n" +
+                "    NA.DependentActivityCode,\n" +
                 "     S.ConsignmentCode,\n" +
                 "\tCASE WHEN NA.TargetActivityCode = 'null' THEN --DATEADD(DAY, TargetedDays, S.EstimatedDate)\n" +
                 "\t\t\tdate([EstimatedDate], CAST([TargetedDays] AS TEXT) || ' day')\n" +
@@ -729,17 +735,20 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "     TS.[DESC] AS 'StatusType',    \n" +
                 "     S.JobCompletedDate,    \n" +
                 "     S.ConsignmentCode,    \n" +
-                "     T.JobCompletedDate AS 'DependencyDoneDate',    \n" +
-                "     SP.EstimatedDate      \n" +
+                "     Date(S.JobCompletedDate) AS 'DependencyDoneDate',    \n" +
+                "     SP.EstimatedDate,\n" +
+                "      CASE WHEN S.StatusTypeId=348 AND NAF.Bucket != 'Loss' THEN 'Activity Closed'\n" +
+                "\tWHEN S.StatusTypeId=354 THEN 'Activity Closed' ELSE TS.[Desc] END as StatusType\n" +
                 "    FROM Sapling SP    \n" +
                 "    INNER JOIN SaplingActivityStatus s ON SP.ConsignmentCode = S.ConsignmentCode    \n" +
                 "    INNER JOIN NurseryActivity N ON S.ActivityId = N.Id     \n" +
                 "    LEFT JOIN TypeCdDmt  TS ON S.StatusTypeId = TS.TypeCdId    \n" +
                 "\tleft join NurseryActivity NF ON NF.Code = N.TargetActivityCode\n" +
+                "    Left Join NurseryActivityField NAF ON NAF.activitytypeid = NF.id\n" +
                 "    LEFT JOIN (SELECT ConsignmentCode,JobCompletedDate,ActivityId FROM SaplingActivityStatus S\n" +
-                "       WHERE ConsignmentCode = 'AP/123AP' AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = S.ConsignmentCode   \n" +
-                "    WHERE S.ConsignmentCode = 'AP/123AP'   \n" +
-                "    )S on S.ActivityId  = NA.Id)R";
+                "       WHERE ConsignmentCode = '"+consinmentCode+"' AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = S.ConsignmentCode   \n" +
+                "    WHERE S.ConsignmentCode = '"+consinmentCode+"'   \n" +
+                "    )S on S.ActivityId  = NA.Id)R    ";
     }
 
     public String getActivityTaskDetails(int Id) {

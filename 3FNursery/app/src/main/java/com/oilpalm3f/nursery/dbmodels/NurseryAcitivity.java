@@ -1,58 +1,20 @@
 package com.oilpalm3f.nursery.dbmodels;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class NurseryAcitivity {
+    int ActivityId,
+            ActivityTypeId, ColorIndicator,  StatusTypeId;
+    String IsMultipleEntries,
+            ActicityType,
+            ActivityCode,
+            ActivityName,
 
-    @SerializedName("Id")
-    @Expose
-    private Integer id;
-    @SerializedName("ActivityTypeId")
-    @Expose
-    private Integer activityTypeId;
-    @SerializedName("Code")
-    @Expose
-    private String code;
-
-    @SerializedName("Name")
-    @Expose
-    private String name;
-    @SerializedName("TargetDays")
-    @Expose
-    private Integer targetDays;
-
-    @SerializedName("IsMultipleEntries")
-    @Expose
-    private String IsMultipleEntries;
-
-    @SerializedName("IsActive")
-    @Expose
-    private int isActive;
-    @SerializedName("CreatedByUserId")
-    @Expose
-    private Integer createdByUserId;
-    @SerializedName("CreatedDate")
-    @Expose
-    private String createdDate;
-    @SerializedName("UpdatedByUserId")
-    @Expose
-    private Integer updatedByUserId;
-    @SerializedName("UpdatedDate")
-    @Expose
-    private String updatedDate;
-    @SerializedName("ServerUpdatedStatus")
-    @Expose
-    private int serverUpdatedStatus;
-
-
-    @SerializedName("StatusTypeId")
-    @Expose
-    private int StatusTypeId;
-
-    @SerializedName("Desc")
-    @Expose
-    private String Desc;
+            ActivityStatus,
+            ActivityDoneDate,
+            ConsignmentCode,
+            TargetDate,
+            Buffer1Date,
+            Buffer2Date,
+                    DependentActivityCode;
 
     public String getDependentActivityCode() {
         return DependentActivityCode;
@@ -62,38 +24,28 @@ public class NurseryAcitivity {
         DependentActivityCode = dependentActivityCode;
     }
 
-    @SerializedName("ConsignmentCode")
-    @Expose
-    private String ConsignmentCode;
-    @SerializedName("DependentActivityCode")
-    @Expose
-    private String DependentActivityCode;
-    @SerializedName("UpdatedDate")
-    @Expose
-    private String UpdatedDate;
-
-    public String getConsignmentCode() {
-        return ConsignmentCode;
+    public int getActivityId() {
+        return ActivityId;
     }
 
-    public void setConsignmentCode(String consignmentCode) {
-        ConsignmentCode = consignmentCode;
+    public void setActivityId(int activityId) {
+        ActivityId = activityId;
     }
 
-    public int getStatusTypeId() {
-        return StatusTypeId;
+    public int getActivityTypeId() {
+        return ActivityTypeId;
     }
 
-    public void setStatusTypeId(int statusTypeId) {
-        StatusTypeId = statusTypeId;
+    public void setActivityTypeId(int activityTypeId) {
+        ActivityTypeId = activityTypeId;
     }
 
-    public String getDesc() {
-        return Desc;
+    public int getColorIndicator() {
+        return ColorIndicator;
     }
 
-    public void setDesc(String desc) {
-        Desc = desc;
+    public void setColorIndicator(int colorIndicator) {
+        ColorIndicator = colorIndicator;
     }
 
     public String getIsMultipleEntries() {
@@ -104,91 +56,83 @@ public class NurseryAcitivity {
         IsMultipleEntries = isMultipleEntries;
     }
 
-    public Integer getId() {
-        return id;
+    public String getActicityType() {
+        return ActicityType;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setActicityType(String acticityType) {
+        ActicityType = acticityType;
     }
 
-    public Integer getActivityTypeId() {
-        return activityTypeId;
+    public String getActivityCode() {
+        return ActivityCode;
     }
 
-    public void setActivityTypeId(Integer activityTypeId) {
-        this.activityTypeId = activityTypeId;
+    public void setActivityCode(String activityCode) {
+        ActivityCode = activityCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getActivityName() {
+        return ActivityName;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setActivityName(String activityName) {
+        ActivityName = activityName;
     }
 
-    public String getName() {
-        return name;
+    public int getStatusTypeId() {
+        return StatusTypeId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStatusTypeId(int statusTypeId) {
+        StatusTypeId = statusTypeId;
     }
 
-    public Integer getTargetDays() {
-        return targetDays;
+    public String getActivityStatus() {
+        return ActivityStatus;
     }
 
-    public void setTargetDays(Integer targetDays) {
-        this.targetDays = targetDays;
+    public void setActivityStatus(String activityStatus) {
+        ActivityStatus = activityStatus;
     }
 
-    public int getIsActive() {
-        return isActive;
+    public String getActivityDoneDate() {
+        return ActivityDoneDate;
     }
 
-    public void setIsActive(int isActive) {
-        this.isActive = isActive;
+    public void setActivityDoneDate(String activityDoneDate) {
+        ActivityDoneDate = activityDoneDate;
     }
 
-    public Integer getCreatedByUserId() {
-        return createdByUserId;
+    public String getConsignmentCode() {
+        return ConsignmentCode;
     }
 
-    public void setCreatedByUserId(Integer createdByUserId) {
-        this.createdByUserId = createdByUserId;
+    public void setConsignmentCode(String consignmentCode) {
+        ConsignmentCode = consignmentCode;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
+    public String getTargetDate() {
+        return TargetDate;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public void setTargetDate(String targetDate) {
+        TargetDate = targetDate;
     }
 
-    public Integer getUpdatedByUserId() {
-        return updatedByUserId;
+    public String getBuffer1Date() {
+        return Buffer1Date;
     }
 
-    public void setUpdatedByUserId(Integer updatedByUserId) {
-        this.updatedByUserId = updatedByUserId;
+    public void setBuffer1Date(String buffer1Date) {
+        Buffer1Date = buffer1Date;
     }
 
-    public String getUpdatedDate() {
-        return updatedDate;
+    public String getBuffer2Date() {
+        return Buffer2Date;
     }
 
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public int getServerUpdatedStatus() {
-        return serverUpdatedStatus;
-    }
-
-    public void setServerUpdatedStatus(int serverUpdatedStatus) {
-        this.serverUpdatedStatus = serverUpdatedStatus;
+    public void setBuffer2Date(String buffer2Date) {
+        Buffer2Date = buffer2Date;
     }
 }

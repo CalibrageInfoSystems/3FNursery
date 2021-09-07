@@ -57,6 +57,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
         holder.originname.setText(":  " + consignmentList.get(position).getOriginname());
         holder.vendorname.setText(":  " + consignmentList.get(position).getVendorname());
         holder.varietyname.setText(":  " + consignmentList.get(position).getVarietyname());
+        holder.txtStatusTxt.setText(":  " + consignmentList.get(position).getStatus());
 
         holder.estimatedqty.setText(":  " + consignmentList.get(position).getEstimatedQuantity() + "");
 //        holder.ordereddate.setText(":  " +  CommonUtils.getProperComplaintsDate(consignmentList.get(position).getCreatedDate()));
@@ -118,7 +119,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView consignmentcode, originname, vendorname, varietyname, estimatedqty, ordereddate, arrivaldate, arrivedqty;
+        public TextView consignmentcode, originname, vendorname, varietyname, estimatedqty, ordereddate, arrivaldate, arrivedqty, txtStatusTxt;
         LinearLayout mainlyt, lytarrivaldate, lytarrivedqty;
 
         public ViewHolder(@NonNull View itemView) {
@@ -135,6 +136,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
             this.arrivedqty = (TextView) itemView.findViewById(R.id.arrivedqty);
             this.lytarrivaldate = itemView.findViewById(R.id.lytarrivaldate);
             this.lytarrivedqty = itemView.findViewById(R.id.lytarrivedqty);
+            this.txtStatusTxt = itemView.findViewById(R.id.txtStatusTxt);
 
             mainlyt = (LinearLayout) itemView.findViewById(R.id.mainnlyt);
 

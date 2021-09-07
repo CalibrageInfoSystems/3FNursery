@@ -47,6 +47,31 @@
                     android:text="NurseryName"/>
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Status"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtStatusTxt"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:textSize="20dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:text="NurseryName"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

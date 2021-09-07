@@ -11,6 +11,15 @@ public class SaplingActivityStatusModel {
     private int UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
+    private String JobCompletedDate;
+
+    public String getJobCompletedDate() {
+        return JobCompletedDate;
+    }
+
+    public void setJobCompletedDate(String jobCompletedDate) {
+        JobCompletedDate = jobCompletedDate;
+    }
 
     public int getServerUpdatedStatus() {
         return ServerUpdatedStatus;

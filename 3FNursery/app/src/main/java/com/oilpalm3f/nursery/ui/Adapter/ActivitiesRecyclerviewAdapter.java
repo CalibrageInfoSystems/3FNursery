@@ -1,6 +1,5 @@
 package com.oilpalm3f.nursery.ui.Adapter;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
 import com.oilpalm3f.nursery.common.CommonConstants;
@@ -33,15 +31,9 @@ import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTimeUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<ActivitiesRecyclerviewAdapter.ViewHolder> {
 
@@ -52,15 +44,15 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     private DataAccessHandler dataAccessHandler;
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     String ConsignmentCode;
-    String targetDatedata;
-    String  finaldate,targetdate;
+
+
     String dependencyname,  dependecyCode;
 
-    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode, String targetDate) {
+    public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode) {
         this.context = context;
         this.mActivitiesList = mActivitiesList;
         this.ConsignmentCode = ConsignmentCode;
-        this.targetDatedata = targetDate;
+
     }
 
     @NonNull
@@ -78,69 +70,28 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         dataAccessHandler = new DataAccessHandler(context);
 
-        holder.activityName.setText(mActivitiesList.get(position).getName());
+        holder.activityName.setText(mActivitiesList.get(position).getActivityName());
         String status = "";
-        if (mActivitiesList.get(position).getDesc() == null || mActivitiesList.get(position).getDesc().isEmpty() || mActivitiesList.get(position).toString() == "") {
+        if (mActivitiesList.get(position).getActivityStatus() == null || mActivitiesList.get(position).getActivityStatus().isEmpty() ) {
             holder.txtStatusTxt.setText("");
         } else {
-            holder.txtStatusTxt.setText(mActivitiesList.get(position).getDesc());
+            holder.txtStatusTxt.setText(mActivitiesList.get(position).getActivityStatus());
         //    holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
         }
         holder.imgStatus.setImageDrawable(null);
         holder.imgNurStatus.setImageDrawable(null);
         holder.imgShStatus.setImageDrawable(null);
         holder.txtDoneDate.setText("");
-        String beforeDate =  dataAccessHandler.getSingleValue(Queries.addDaysToSapling(mActivitiesList.get(position).getTargetDays(), ConsignmentCode));
-        finaldate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy hh:mm a", beforeDate);
-      String   expecteddate =   CommonUtils.formateDateFromstring("yyyy-MM-dd", "dd-MM-yyyy", beforeDate);
-        holder.expecteddate.setText(expecteddate);
-        if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
-
-            holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate()));
-
-            targetdate = CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getUpdatedDate());
-
-            Log.d("###################", finaldate  + "=== "+targetdate);
-            Date date1;
-            Date date2;
-            SimpleDateFormat dates = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
-
-            try {
-                date1 = dates.parse(finaldate);
-                date2 = dates.parse(targetdate);
-                long difference = date1.getTime() - date2.getTime();
-                long  differenceDates = difference / (24 * 60 * 60 * 1000);
-                int dayDifference = (int) differenceDates;
-                Log.i("day diff","The difference between two dates is " + dayDifference + " days");
-
-                if (dayDifference < -1)
-                {
-
-                    holder.activityName.setTextColor(context.getColor(R.color.red));
-                }
-                else if (dayDifference == -1 )
-                {
-                    holder.activityName.setTextColor(context.getColor(R.color.yellow));
-
-                }
-                  else if (dayDifference >= 0)
-                {
-
-                    holder.activityName.setTextColor(context.getColor(R.color.green));
-                }
 
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        if (!StringUtils.isEmpty(mActivitiesList.get(position).getActivityDoneDate())) {
 
+            holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getActivityDoneDate()));
 
 
         }
-        else
-        {
-            holder.activityName.setTextColor(context.getColor(R.color.black));
-        }
+
+
 
         if (mActivitiesList.get(position).getStatusTypeId() == 346) {
             holder.imgStatus.setImageResource(R.drawable.done);
@@ -170,16 +121,24 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
 
 
-//        holder.expecteddate.setText(( CommonUtils.getTargetDate2(targetDatedata,mActivitiesList.get(position).getTargetDays())));
-//        holder.expecteddate.setText( ( "( "+mActivitiesList.get(position).getTargetDays()+" Days )   ") + CommonUtils.getTargetDate2("2021-11-25T05:25:35.643",mActivitiesList.get(position).getTargetDays()));
-//        holder.expecteddate.setText( ( CommonUtils.getTargetDate2("2021-08-05 17:14:11",mActivitiesList.get(position).getTargetDays())));
+        holder.expecteddate.setText(mActivitiesList.get(position).getTargetDate());
+        Log.d("getColorIndicator :", mActivitiesList.get(position).getColorIndicator() + "");
 
+        if(mActivitiesList.get(position).getColorIndicator() == 0){
+            holder.activityName.setTextColor(context.getColor(R.color.black));
+        }else if(mActivitiesList.get(position).getColorIndicator() == 1){
+            holder.activityName.setTextColor(context.getColor(R.color.green));
+        }else if(mActivitiesList.get(position).getColorIndicator() == 2){
+            holder.activityName.setTextColor(context.getColor(R.color.yellow));
+        }else if(mActivitiesList.get(position).getColorIndicator() == 3){
+            holder.activityName.setTextColor(context.getColor(R.color.red));
+        }
 
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(ConsignmentCode, mActivitiesList.get(position).getId() + ""));
+                saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(ConsignmentCode, mActivitiesList.get(position).getActivityId() + ""));
                 Log.d("saplingActivitiesListSize", saplingActivitiesList.size() + "");
 
                 if (validations(position )) {
@@ -187,10 +146,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
                         Intent met = new Intent(context, MultipleEntryScreen.class);
                         met.putExtra("consignmentcode", ConsignmentCode);
-                        met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getId() + "");
-                        met.putExtra("ActivityName1", mActivitiesList.get(position).getName() + "");
+                        met.putExtra("ActivityTypeId1", mActivitiesList.get(position).getActivityTypeId() + "");
+                        met.putExtra("ActivityName1", mActivitiesList.get(position).getActivityName() + "");
                         met.putExtra("Ismultipleentry1", mActivitiesList.get(position).getIsMultipleEntries());
-                        met.putExtra("status", mActivitiesList.get(position).getDesc());
+                        met.putExtra("status", mActivitiesList.get(position).getActivityStatus());
                         met.putExtra("statusId", mActivitiesList.get(position).getStatusTypeId());
                         met.putExtra("addActivity", false);
 
@@ -200,7 +159,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                     } else {
                         // Todo Check ALready hava data or not.
                         // TODO Check Data Exisitng Or Not
-                        if (!StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())) {
+                        if (!StringUtils.isEmpty(mActivitiesList.get(position).getActivityDoneDate())) {
                             // EXISTING UI
                             Boolean enableEditing = false;
                             if (mActivitiesList.get(position).getStatusTypeId() == 349) {
@@ -209,10 +168,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                             Intent at = new Intent(context, ActivityTask.class);
                             at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
                             at.putExtra("consignmentcode", ConsignmentCode);
-                            at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
-                            at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
-                            at.putExtra("Code", mActivitiesList.get(position).getCode());
-                            at.putExtra("DependentActivityCode", mActivitiesList.get(position).getDependentActivityCode() + "");
+                            at.putExtra("ActivityTypeId", mActivitiesList.get(position).getActivityTypeId() + "");
+                            at.putExtra("ActivityName", mActivitiesList.get(position).getActivityName() + "");
+                            at.putExtra("Code", mActivitiesList.get(position).getActivityCode());
+//                            at.putExtra("DependentActivityCode", mActivitiesList.get(position).get() + "");
                             at.putExtra("enableEditing", enableEditing);
                             at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
                             context.startActivity(at);
@@ -221,8 +180,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                             Intent at = new Intent(context, ActivityTask.class);
                             at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
                             at.putExtra("consignmentcode", ConsignmentCode);
-                            at.putExtra("ActivityTypeId", mActivitiesList.get(position).getId() + "");
-                            at.putExtra("ActivityName", mActivitiesList.get(position).getName() + "");
+                            at.putExtra("ActivityTypeId", mActivitiesList.get(position).getActivityTypeId() + "");
+                            at.putExtra("ActivityName", mActivitiesList.get(position).getActivityName() + "");
                             at.putExtra("enableEditing", true);
                             at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_SINGLE_ENTRY_EDITDATA);
                             context.startActivity(at);

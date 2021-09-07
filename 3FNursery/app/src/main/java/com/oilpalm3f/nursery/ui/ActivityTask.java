@@ -79,7 +79,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                 SCREEN_FROM = extras.getInt(CommonConstants.SCREEN_CAME_FROM);
                 consignmentCode = extras.getString("consignmentcode");
-                dependency_code = extras.getString("DependentActivityCode");
+//                dependency_code = extras.getString("DependentActivityCode");
                 Code = extras.getString("Code");
 
             } catch (Exception e) {
@@ -314,6 +314,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         status.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         status.put("UpdatedByUserId", CommonConstants.USER_ID);
                         status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                        status.put("JobCompletedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         status.put("ServerUpdatedStatus", 0);
 
                         final List<LinkedHashMap> statusList = new ArrayList<>();
@@ -338,6 +339,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         mapStatus.put("UpdatedByUserId", CommonConstants.USER_ID);
                         mapStatus.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                        mapStatus.put("JobCompletedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         mapStatus.put("ServerUpdatedStatus", 0);
 
                         final List<LinkedHashMap> statusArray = new ArrayList<>();
@@ -1173,6 +1175,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     status.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     status.put("UpdatedByUserId", CommonConstants.USER_ID);
                     status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                    status.put("JobCompletedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     status.put("ServerUpdatedStatus", 0);
 
                     final List<LinkedHashMap> statusList = new ArrayList<>();

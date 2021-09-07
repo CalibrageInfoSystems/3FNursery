@@ -22,6 +22,7 @@ public class DataBaseUpgrade {
             if (isFreshInstall) {
                 upgradeDb1(db);
                 upgradeDB2(db);
+                upgradeDB3(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -36,6 +37,7 @@ public class DataBaseUpgrade {
 //                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             upgradeDB2(db);
                             break;
+
 
                     }
                 } else {
@@ -114,6 +116,20 @@ public class DataBaseUpgrade {
         // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
 
         String  column1 =  "Alter table Saplingactivitystatus add JobCompletedDate DATETIME";
+        try {
+
+            db.execSQL(column1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static  void  upgradeDB3(final  SQLiteDatabase db){
+        Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
+
+        // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
+
+        String  column1 =  "Alter table NurseryActivity add Bucket VARCHAR(50)";
         try {
 
             db.execSQL(column1);

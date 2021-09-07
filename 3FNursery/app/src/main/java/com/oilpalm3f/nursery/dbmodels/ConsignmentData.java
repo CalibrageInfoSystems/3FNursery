@@ -11,8 +11,16 @@ public class ConsignmentData {
     private String CreatedDate;
     private String ArrivedDate;
     private int ArrivedQuantity;
+    private String Status;
 
-//    private boolean isSelected = false;
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
+    //    private boolean isSelected = false;
 
 //    public boolean isSelected() {
 //        return isSelected;
