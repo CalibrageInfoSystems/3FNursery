@@ -18,6 +18,7 @@ import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.DateTimeUtil;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.ui.Adapter.RecyclerAdapter;
 
@@ -46,8 +47,9 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
      ImageButton showPreviousMonthBut,showNextMonthBut;
     final List<String> mutableBookings = new ArrayList<>();
      List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
-    List<String> saplingActivitiesdatesList = new ArrayList<>();
+    List<NurseryAcitivity> saplingActivitiesdatesList = new ArrayList<>();
      DataAccessHandler dataAccessHandler;
+    String updateddate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +78,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
 //        loadEvents();
 //        loadEventsForYear(2017);
         compactCalendarView.invalidate();
-        saplingActivitiesdatesList = dataAccessHandler.getSaplingActivityDates(Queries.getInstance().getupdateddates());
-        Log.e("==>listsize",   saplingActivitiesdatesList.size()+"" );
+
 
         logEventsByMonth(compactCalendarView, DateTimeUtil.onGetCurrentDate(this).substring(0, 7));
         toolbar = ((AppCompatActivity) this).getSupportActionBar();
@@ -198,15 +199,17 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         String date = Date;
         Log.d(TAG, "final Month :" + date);
 
+        saplingActivitiesdatesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getTargetdatesActivities());
+        Log.e("==>listsize======202",   saplingActivitiesdatesList.size()+"" );
       for(int i = 0; i < saplingActivitiesdatesList.size(); i ++) {
 //            //Event ev1 = new Event(Color.GREEN, stringTodate(data.getReqCreatedDate()).getTime(),"mallem");
 
-          saplingActivitiesdatesList = dataAccessHandler.getSaplingActivityDataa(Queries.getInstance().getupdateddates());
-          Log.e("==>listsize",   saplingActivitiesdatesList.size()+"" );
-          String updateddate = saplingActivitiesdatesList.get(i);
+    //      saplingActivitiesdatesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getTargetdatesActivities());
+
+           updateddate = saplingActivitiesdatesList.get(i).getTargetDate();
 
           Log.d(TAG, "Each Event :" + updateddate);
-            Event ev1 = new Event(Color.RED, stringTodate("2021-09-03T00:00:00").getTime(), "Test data");
+            Event ev1 = new Event(Color.RED, stringTodate(updateddate).getTime(), "Test data");
             try {
                 compactCalendarView.removeEvent(ev1);
             } catch (Exception e) {

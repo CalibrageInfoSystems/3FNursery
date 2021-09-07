@@ -26,6 +26,18 @@ public class NurseryAcitivity {
     @Expose
     private String IsMultipleEntries;
 
+    @SerializedName("ActicityType")
+    @Expose
+    private String ActicityType;
+
+    public String getActicityType() {
+        return ActicityType;
+    }
+
+    public void setActicityType(String acticityType) {
+        ActicityType = acticityType;
+    }
+
     @SerializedName("IsActive")
     @Expose
     private int isActive;
@@ -44,7 +56,6 @@ public class NurseryAcitivity {
     @SerializedName("ServerUpdatedStatus")
     @Expose
     private int serverUpdatedStatus;
-
 
     @SerializedName("StatusTypeId")
     @Expose
@@ -71,6 +82,29 @@ public class NurseryAcitivity {
     @SerializedName("UpdatedDate")
     @Expose
     private String UpdatedDate;
+    @SerializedName("ActivityDoneDate")
+    @Expose
+    private String ActivityDoneDate;
+
+    @SerializedName("TargetDate")
+    @Expose
+    private String TargetDate;
+
+    public String getTargetDate() {
+        return TargetDate;
+    }
+
+    public void setTargetDate(String targetDate) {
+        TargetDate = targetDate;
+    }
+
+    public String getActivityDoneDate() {
+        return ActivityDoneDate;
+    }
+
+    public void setActivityDoneDate(String activityDoneDate) {
+        ActivityDoneDate = activityDoneDate;
+    }
 
     public String getConsignmentCode() {
         return ConsignmentCode;
