@@ -63,10 +63,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         dataAccessHandler = new DataAccessHandler(ctx);
-        holder.transactionid.setText("" + saplingActivities_List.get(position).getName());
-        holder.consignmentcode.setText("" + saplingActivities_List.get(position).getConsignmentCode());
+        holder.transactionid.setText(" :   " + saplingActivities_List.get(position).getName());
+        holder.consignmentcode.setText(" :   " + saplingActivities_List.get(position).getConsignmentCode());
+     if( saplingActivities_List.get(position).getDesc()!=null){
+        holder.status.setText(" :   " +saplingActivities_List.get(position).getDesc());}
+     else{
+         holder.Status_linear.setVisibility(View.GONE);
 
-        holder.status.setText("" +saplingActivities_List.get(position).getDesc());
+     }
 
 //
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +104,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView transactionid,consignmentcode,status;
+        LinearLayout Status_linear;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-         // LinearLayout  linearLayout = itemView.findViewById(R.id.consignmentcode);
+          Status_linear = itemView.findViewById(R.id.Status_linear);
 
             ctx = itemView.getContext();
 

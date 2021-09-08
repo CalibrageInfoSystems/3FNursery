@@ -81,7 +81,7 @@
                 android:weightSum="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lyt_startDate">
+                android:id="@+id/Status_linear">
                 <TextView
 
                     android:layout_weight="0.4"

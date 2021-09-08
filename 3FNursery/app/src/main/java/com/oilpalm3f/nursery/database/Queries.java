@@ -1751,33 +1751,39 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "     S.StatusTypeId,         \n" +
                 "     S.StatusType AS 'ActivityStatus',        \n" +
                 "     S.JobCompletedDate AS 'ActivityDoneDate',      \n" +
-                "     S.ConsignmentCode,\n" +
+                "     NA.ConsignmentCode,\n" +
                 "\tCASE WHEN NA.TargetActivityCode = 'null' THEN --DATEADD(DAY, TargetedDays, S.EstimatedDate)\n" +
                 "\t\t\tdate([EstimatedDate], CAST([TargetedDays] AS TEXT) || ' day')\n" +
                 "        WHEN S.DependencyDoneDate IS NULL THEN NULL ELSE DATE(DependencyDoneDate, CAST([TargetedDays] AS TEXT) || ' day') END  as TargetDate\t\t\n" +
                 "   \n" +
-                "    FROM (select consignmentcode,na.id,NA.ActivityTypeId,IsMultipleEntries,Code,Name,TargetActivityCode,TargetedDays, \n" +
+                "    FROM (select consignmentcode,na.id,NA.ActivityTypeId,IsMultipleEntries,Code,Name,TargetActivityCode,TargetedDays,EstimatedDate,\n" +
                 "          deadline1,deadline2 from Sapling s \n" +
                 "\t\t\tcross join NurseryActivity na) NA     \n" +
                 "    INNER JOIN TypeCdDmt  T ON T.TypeCdId = NA.  ActivityTypeId       \n" +
-                "    left join (    \n" +
-                "    SELECT \n" +
-                "\tS.ActivityId,     \n" +
+                "    left join (   \n" +
+                "SELECT\t\n" +
+                "    N.Id as ActivityId,\t\n" +
                 "     S.StatusTypeId,         \n" +
                 "     TS.[DESC] AS 'StatusType',    \n" +
                 "     S.JobCompletedDate,    \n" +
-                "     S.ConsignmentCode,    \n" +
-                "     T.JobCompletedDate AS 'DependencyDoneDate',    \n" +
-                "     SP.EstimatedDate      \n" +
-                "    FROM Sapling SP    \n" +
-                "    INNER JOIN SaplingActivityStatus s ON SP.ConsignmentCode = S.ConsignmentCode    \n" +
-                "    INNER JOIN NurseryActivity N ON S.ActivityId = N.Id     \n" +
+                "     N.ConsignmentCode,    \n" +
+                "     T.JobCompletedDate AS 'DependencyDoneDate'    \n" +
+                "--      SP.EstimatedDate      \n" +
+                "    FROM (select consignmentcode,na.id,NA.ActivityTypeId,IsMultipleEntries,Code,Name,TargetActivityCode,TargetedDays, \n" +
+                "          deadline1,deadline2 from Sapling s \n" +
+                "\t\t\tcross join NurseryActivity na) N   \n" +
+                "    LEFT JOIN SaplingActivityStatus s  ON S.ActivityId = N.Id  AND S.ConsignmentCode = N.ConsignmentCode\n" +
+                "-- \tAND  N.ConsignmentCode = S.ConsignmentCode   \n" +
+                "--     LEFT JOIN Sapling SP ON SP.ConsignmentCode = S.ConsignmentCode    \n" +
                 "    LEFT JOIN TypeCdDmt  TS ON S.StatusTypeId = TS.TypeCdId    \n" +
                 "\tleft join NurseryActivity NF ON NF.Code = N.TargetActivityCode\n" +
                 "    LEFT JOIN (SELECT ConsignmentCode,JobCompletedDate,ActivityId FROM SaplingActivityStatus S\n" +
-                "       WHERE ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1) AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = S.ConsignmentCode   \n" +
-                "    WHERE S.ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1)    \n" +
-                "    )S on S.ActivityId  = NA.Id)R WHERE TargetDate IS NOT NULL";
+                "       WHERE ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1) AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = N.ConsignmentCode   \n" +
+                "    WHERE N.ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1)  \n" +
+                "    )S on S.ActivityId  = NA.Id AND S.ConsignmentCode = NA.ConsignmentCode)R \n" +
+                "\t\n" +
+                "\tWHERE \n" +
+                "\tTargetDate is not null ";
     }
     public String getdata( String date ) {
         return "SELECT \n" +
@@ -1802,32 +1808,38 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                 "     S.StatusTypeId,         \n" +
                 "     S.StatusType AS 'ActivityStatus',        \n" +
                 "     S.JobCompletedDate AS 'ActivityDoneDate',      \n" +
-                "     S.ConsignmentCode,\n" +
+                "     NA.ConsignmentCode,\n" +
                 "\tCASE WHEN NA.TargetActivityCode = 'null' THEN --DATEADD(DAY, TargetedDays, S.EstimatedDate)\n" +
                 "\t\t\tdate([EstimatedDate], CAST([TargetedDays] AS TEXT) || ' day')\n" +
                 "        WHEN S.DependencyDoneDate IS NULL THEN NULL ELSE DATE(DependencyDoneDate, CAST([TargetedDays] AS TEXT) || ' day') END  as TargetDate\t\t\n" +
                 "   \n" +
-                "    FROM (select consignmentcode,na.id,NA.ActivityTypeId,IsMultipleEntries,Code,Name,TargetActivityCode,TargetedDays, \n" +
+                "    FROM (select consignmentcode,na.id,NA.ActivityTypeId,IsMultipleEntries,Code,Name,TargetActivityCode,TargetedDays,EstimatedDate,\n" +
                 "          deadline1,deadline2 from Sapling s \n" +
                 "\t\t\tcross join NurseryActivity na) NA     \n" +
                 "    INNER JOIN TypeCdDmt  T ON T.TypeCdId = NA.  ActivityTypeId       \n" +
-                "    left join (    \n" +
-                "    SELECT \n" +
-                "\tS.ActivityId,     \n" +
+                "    left join (   \n" +
+                "SELECT\t\n" +
+                "    N.Id as ActivityId,\t\n" +
                 "     S.StatusTypeId,         \n" +
                 "     TS.[DESC] AS 'StatusType',    \n" +
                 "     S.JobCompletedDate,    \n" +
-                "     S.ConsignmentCode,    \n" +
-                "     T.JobCompletedDate AS 'DependencyDoneDate',    \n" +
-                "     SP.EstimatedDate      \n" +
-                "    FROM Sapling SP    \n" +
-                "    INNER JOIN SaplingActivityStatus s ON SP.ConsignmentCode = S.ConsignmentCode    \n" +
-                "    INNER JOIN NurseryActivity N ON S.ActivityId = N.Id     \n" +
+                "     N.ConsignmentCode,    \n" +
+                "     T.JobCompletedDate AS 'DependencyDoneDate'    \n" +
+                "--      SP.EstimatedDate      \n" +
+                "    FROM (select consignmentcode,na.id,NA.ActivityTypeId,IsMultipleEntries,Code,Name,TargetActivityCode,TargetedDays, \n" +
+                "          deadline1,deadline2 from Sapling s \n" +
+                "\t\t\tcross join NurseryActivity na) N   \n" +
+                "    LEFT JOIN SaplingActivityStatus s  ON S.ActivityId = N.Id  AND S.ConsignmentCode = N.ConsignmentCode\n" +
+                "-- \tAND  N.ConsignmentCode = S.ConsignmentCode   \n" +
+                "--     LEFT JOIN Sapling SP ON SP.ConsignmentCode = S.ConsignmentCode    \n" +
                 "    LEFT JOIN TypeCdDmt  TS ON S.StatusTypeId = TS.TypeCdId    \n" +
                 "\tleft join NurseryActivity NF ON NF.Code = N.TargetActivityCode\n" +
                 "    LEFT JOIN (SELECT ConsignmentCode,JobCompletedDate,ActivityId FROM SaplingActivityStatus S\n" +
-                "       WHERE ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1) AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = S.ConsignmentCode   \n" +
-                "    WHERE S.ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1)    \n" +
-                "    )S on S.ActivityId  = NA.Id)R WHERE TargetDate ='"+date+"'";
+                "       WHERE ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1) AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = N.ConsignmentCode   \n" +
+                "    WHERE N.ConsignmentCode in (SELECT ConsignmentCode FROM UserConsignmentXref WHERE UserId = 1)  \n" +
+                "    )S on S.ActivityId  = NA.Id AND S.ConsignmentCode = NA.ConsignmentCode)R \n" +
+                "\t\n" +
+                "\tWHERE \n" +
+                "\tTargetDate ='"+date+"'";
     }
 }
