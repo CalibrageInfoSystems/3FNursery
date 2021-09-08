@@ -45,11 +45,11 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private ActionBar toolbar;
-     ImageButton showPreviousMonthBut,showNextMonthBut;
+    ImageButton showPreviousMonthBut,showNextMonthBut;
     final List<String> mutableBookings = new ArrayList<>();
-     List<CheckNurseryAcitivity> saplingActivitiesList = new ArrayList<>();
+    List<CheckNurseryAcitivity> saplingActivitiesList = new ArrayList<>();
     List<CheckNurseryAcitivity> saplingActivitiesdatesList = new ArrayList<>();
-     DataAccessHandler dataAccessHandler;
+    DataAccessHandler dataAccessHandler;
     String updateddate;
     TextView date;
     @Override
@@ -70,7 +70,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
 
 
         showPreviousMonthBut = findViewById(R.id.prev_button);
-          showNextMonthBut = findViewById(R.id.next_button);
+        showNextMonthBut = findViewById(R.id.next_button);
         textView = findViewById(R.id.month_title);
 
         compactCalendarView = findViewById(R.id.compactcalendar_view);
@@ -143,10 +143,10 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         calendar.set(Calendar.MILLISECOND, 0);
     }
     private void setview() {
-       String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         saplingActivitiesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getdata(currentDate));
 
-        date.setText("Selected Date :  "+ dateFormatForDisplaying.format(new Date()));
+        date.setText(dateFormatForDisplaying.format(new Date()));
         Log.e("==>listsize",   saplingActivitiesList.size()+"" );
 //
         if (saplingActivitiesList.size() > 0) {
@@ -164,7 +164,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
             @Override
             public void onDayClick(Date dateClicked) {
                 textView.setText(dateFormatForMonth.format(dateClicked));
-                date.setText("Selected Date :  "+ dateFormatForDisplaying.format(dateClicked));
+                date.setText(dateFormatForDisplaying.format(dateClicked));
                 Log.d(TAG, "OnDate Selected :" + DateTimeUtil.DateToString(dateClicked));
 //
 
@@ -220,16 +220,16 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         String date = Date;
         Log.d(TAG, "final Month :" + date);
 
-        saplingActivitiesdatesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getTargetdatesActivities());
+        saplingActivitiesdatesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getTargetdatesActivities());
         Log.e("==>listsize======202",   saplingActivitiesdatesList.size()+"" );
-      for(int i = 0; i < saplingActivitiesdatesList.size(); i ++) {
+        for(int i = 0; i < saplingActivitiesdatesList.size(); i ++) {
 //            //Event ev1 = new Event(Color.GREEN, stringTodate(data.getReqCreatedDate()).getTime(),"mallem");
 
-    //      saplingActivitiesdatesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getTargetdatesActivities());
+            //      saplingActivitiesdatesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getTargetdatesActivities());
 
-           updateddate = saplingActivitiesdatesList.get(i).getTargetDate();
+            updateddate = saplingActivitiesdatesList.get(i).getTargetDate();
 
-          Log.d(TAG, "Each Event :" + updateddate);
+            Log.d(TAG, "Each Event :" + updateddate);
             Event ev1 = new Event(Color.RED, stringTodate(updateddate).getTime(), "Test data");
             try {
                 compactCalendarView.removeEvent(ev1);
@@ -239,7 +239,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
             compactCalendarView.addEvent(ev1);
         }
 
-  }
+    }
     @Override
     public void onResume() {
         super.onResume();
