@@ -644,7 +644,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         }
 
-        if (yesnoCHeckbox > 0) {
+        if (yesnoCHeckbox > 0 && Integer.parseInt(activityTypeId) != 9) {
             CheckBox chk = findViewById(yesnoCHeckbox);
             if (chk.isChecked()) {
                 boolean isvalid = true;
