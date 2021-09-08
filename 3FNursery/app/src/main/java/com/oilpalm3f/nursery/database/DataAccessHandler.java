@@ -2208,6 +2208,7 @@ f
                     consignmentdetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     consignmentdetails.setArrivedDate(cursor.getString(cursor.getColumnIndex("ArrivedDate")));
                     consignmentdetails.setArrivedQuantity(cursor.getInt(cursor.getColumnIndex("ArrivedQuantity")));
+                    consignmentdetails.setStatus(cursor.getString(cursor.getColumnIndex("Status")));
 
 
                     consignmentData.add(consignmentdetails);
@@ -2411,16 +2412,18 @@ f
 
 
                     NurseryAcitivity nurseryActivityyDetails = new NurseryAcitivity();
-                    nurseryActivityyDetails.setId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
-                    nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
+                    nurseryActivityyDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
                     nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
-                    nurseryActivityyDetails.setCode(cursor.getString(cursor.getColumnIndex("ActivityCode")));
-                    nurseryActivityyDetails.setName(cursor.getString(cursor.getColumnIndex("ActivityName")));
+                    nurseryActivityyDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ActivityCode")));
+                    nurseryActivityyDetails.setActivityName(cursor.getString(cursor.getColumnIndex("ActivityName")));
                     nurseryActivityyDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
-//                    nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
-                    nurseryActivityyDetails.setDesc(cursor.getString(cursor.getColumnIndex("ActivityStatus")));
-                    nurseryActivityyDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("ActivityDoneDate")));
-                    nurseryActivityyDetails.setTargetDays(cursor.getInt(cursor.getColumnIndex("TargetDate")));
+                    nurseryActivityyDetails.setActivityStatus(cursor.getString(cursor.getColumnIndex("ActivityStatus")));
+                    nurseryActivityyDetails.setActivityDoneDate(cursor.getString(cursor.getColumnIndex("ActivityDoneDate")));
+                    nurseryActivityyDetails.setTargetDate(cursor.getString(cursor.getColumnIndex("TargetDate")));
+                    nurseryActivityyDetails.setDependentActivityCode(cursor.getString(cursor.getColumnIndex("DependentActivityCode")));
+                    nurseryActivityyDetails.setColorIndicator(cursor.getInt(cursor.getColumnIndex("ColorIndicator")));
+
                     nurseryActivityDetails.add(nurseryActivityyDetails);
                 } while (cursor.moveToNext());
 

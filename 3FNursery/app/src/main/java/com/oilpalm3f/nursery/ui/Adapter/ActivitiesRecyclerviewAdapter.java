@@ -46,7 +46,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     String ConsignmentCode;
 
 
-    String dependencyname,  dependecyCode;
+    String dependencyname, dependecyCode;
 
     public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode) {
         this.context = context;
@@ -72,11 +72,11 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         holder.activityName.setText(mActivitiesList.get(position).getActivityName());
         String status = "";
-        if (mActivitiesList.get(position).getActivityStatus() == null || mActivitiesList.get(position).getActivityStatus().isEmpty() ) {
+        if (mActivitiesList.get(position).getActivityStatus() == null || mActivitiesList.get(position).getActivityStatus().isEmpty()) {
             holder.txtStatusTxt.setText("");
         } else {
             holder.txtStatusTxt.setText(mActivitiesList.get(position).getActivityStatus());
-        //    holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
+            //    holder.txtStatusTxt.setTextColor(context.getColor(R.color.green));
         }
         holder.imgStatus.setImageDrawable(null);
         holder.imgNurStatus.setImageDrawable(null);
@@ -84,13 +84,12 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         holder.txtDoneDate.setText("");
 
 
-        if (!StringUtils.isEmpty(mActivitiesList.get(position).getActivityDoneDate())) {
+        if (mActivitiesList.get(position).getActivityDoneDate() != null && !mActivitiesList.get(position).getActivityDoneDate().isEmpty() && !mActivitiesList.get(position).getActivityDoneDate().equals("null"))  {
 
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getActivityDoneDate()));
 
 
         }
-
 
 
         if (mActivitiesList.get(position).getStatusTypeId() == 346) {
@@ -116,21 +115,16 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         }
 
 
-
-
-
-
-
         holder.expecteddate.setText(mActivitiesList.get(position).getTargetDate());
         Log.d("getColorIndicator :", mActivitiesList.get(position).getColorIndicator() + "");
 
-        if(mActivitiesList.get(position).getColorIndicator() == 0){
+        if (mActivitiesList.get(position).getColorIndicator() == 0) {
             holder.activityName.setTextColor(context.getColor(R.color.black));
-        }else if(mActivitiesList.get(position).getColorIndicator() == 1){
+        } else if (mActivitiesList.get(position).getColorIndicator() == 1) {
             holder.activityName.setTextColor(context.getColor(R.color.green));
-        }else if(mActivitiesList.get(position).getColorIndicator() == 2){
+        } else if (mActivitiesList.get(position).getColorIndicator() == 2) {
             holder.activityName.setTextColor(context.getColor(R.color.yellow));
-        }else if(mActivitiesList.get(position).getColorIndicator() == 3){
+        } else if (mActivitiesList.get(position).getColorIndicator() == 3) {
             holder.activityName.setTextColor(context.getColor(R.color.red));
         }
 
@@ -141,7 +135,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                 saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(ConsignmentCode, mActivitiesList.get(position).getActivityId() + ""));
                 Log.d("saplingActivitiesListSize", saplingActivitiesList.size() + "");
 
-                if (validations(position )) {
+                if (validations(position)) {
                     if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true") && saplingActivitiesList.size() != 0) {
 
                         Intent met = new Intent(context, MultipleEntryScreen.class);
@@ -188,12 +182,11 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                         }
 
                     }
-                }
-                else{
+                } else {
 
-                     dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
-                    Log.d("dependencyname=============",dependencyname);
-                    Toast.makeText(context, "   Please Complete  "+dependencyname + "   Activity " , Toast.LENGTH_LONG).show();
+                    dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
+                    Log.d("dependencyname=============", dependencyname);
+                    Toast.makeText(context, "   Please Complete  " + dependencyname + "   Activity ", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -204,20 +197,20 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     }
 
     private boolean validations(int position) {
-      boolean issuces = false;
-       dependecyCode =  mActivitiesList.get(position).getDependentActivityCode();
+        boolean issuces = false;
+        dependecyCode = mActivitiesList.get(position).getDependentActivityCode();
 
-      Log.d("dependecyCode=============",dependecyCode);
-      if(StringUtils.isEmpty(dependecyCode) || dependecyCode == null || dependecyCode.equalsIgnoreCase("null") || dependecyCode ==""){
-          issuces  =  true;
-      }else {
-
-      Integer statuscode =  dataAccessHandler.getSingleIntValue(Queries.dependencystatus(ConsignmentCode,dependecyCode));
-
-        if(statuscode != null){
+        Log.d("dependecyCode=============", dependecyCode);
+        if (StringUtils.isEmpty(dependecyCode) || dependecyCode == null || dependecyCode.equalsIgnoreCase("null") || dependecyCode == "") {
             issuces = true;
+        } else {
+
+            Integer statuscode = dataAccessHandler.getSingleIntValue(Queries.dependencystatus(ConsignmentCode, dependecyCode));
+
+            if (statuscode != null) {
+                issuces = true;
+            }
         }
-      }
 
 //        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A012") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
 //
