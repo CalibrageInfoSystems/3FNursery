@@ -32,8 +32,12 @@ import com.oilpalm3f.nursery.ui.MultipleEntryScreen;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<ActivitiesRecyclerviewAdapter.ViewHolder> {
 
@@ -45,7 +49,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     String ConsignmentCode;
 
-
+    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
     String dependencyname, dependecyCode;
 
     public ActivitiesRecyclerviewAdapter(Context context, List<NurseryAcitivity> mActivitiesList, String ConsignmentCode) {
@@ -86,7 +91,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         if (mActivitiesList.get(position).getActivityDoneDate() != null && !mActivitiesList.get(position).getActivityDoneDate().isEmpty() && !mActivitiesList.get(position).getActivityDoneDate().equals("null"))  {
 
-            holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate(mActivitiesList.get(position).getActivityDoneDate()));
+            holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate2(mActivitiesList.get(position).getActivityDoneDate()));
 
 
         }
@@ -113,9 +118,19 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
         }
+        if(mActivitiesList.get(position).getTargetDate()!= null) {
+            try {
+                Date oneWayTripDate = input.parse(mActivitiesList.get(position).getTargetDate());
+                String datetimevaluereq = output.format(oneWayTripDate);
+                holder.expecteddate.setText(datetimevaluereq);
+
+                android.util.Log.e("===============", "======currentData======" + output.format(oneWayTripDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
 
-        holder.expecteddate.setText(mActivitiesList.get(position).getTargetDate());
         Log.d("getColorIndicator :", mActivitiesList.get(position).getColorIndicator() + "");
 
         if (mActivitiesList.get(position).getColorIndicator() == 0) {

@@ -146,7 +146,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         saplingActivitiesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getdata(currentDate));
 
-        date.setText(dateFormatForDisplaying.format(new Date()));
+        date.setText("Selected Date :  "+dateFormatForDisplaying.format(new Date()));
         Log.e("==>listsize",   saplingActivitiesList.size()+"" );
 //
         if (saplingActivitiesList.size() > 0) {
@@ -164,7 +164,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
             @Override
             public void onDayClick(Date dateClicked) {
                 textView.setText(dateFormatForMonth.format(dateClicked));
-                date.setText(dateFormatForDisplaying.format(dateClicked));
+                date.setText("Selected Date :  "+ dateFormatForDisplaying.format(dateClicked));
                 Log.d(TAG, "OnDate Selected :" + DateTimeUtil.DateToString(dateClicked));
 //
 
