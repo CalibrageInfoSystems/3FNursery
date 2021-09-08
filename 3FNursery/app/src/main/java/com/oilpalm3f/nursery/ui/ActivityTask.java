@@ -169,7 +169,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < displayData.size(); i++) {
             if (displayData.get(i).getInputType().equalsIgnoreCase("Check box")) {
                 CheckBox chk = (CheckBox) findViewById(displayData.get(i).getFieldId());
-                if (displayData.get(i).getValue().equalsIgnoreCase("true")) {
+                if ( displayData.get(i).getValue().equalsIgnoreCase("true")) {
                     chk.setChecked(true);
                 } else
                     chk.setChecked(false);
@@ -381,7 +381,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Display") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Formula")) {
                 {
                     String UOm = activityTasklist.get(i).getUom().equalsIgnoreCase("null") ? "" : "( " + activityTasklist.get(i).getUom() + ")";
-                    String content = activityTasklist.get(i).getField() + UOm;
+                    String isoptional = activityTasklist.get(i).getIsOptional() == 1 ? "" : " * ";
+                    String content = activityTasklist.get(i).getField() +isoptional+ UOm ;
                     ll.addView(addEdittext(content, activityTasklist.get(i).getId(), activityTasklist.get(i).getDataType()));
                 }
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Display")) {
@@ -481,8 +482,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 EditText et = findViewById(id);
 
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
-
-                if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getGroupId() == 0 && TextUtils.isEmpty(et.getText().toString())) {
+                Log.d("Groupvalidation ", " Field Id :" + activityTasklist.get(i).getField() + "IS OPTIONAL :"+activityTasklist.get(i).getIsOptional());
+                if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getIsOptional() == 0 && activityTasklist.get(i).getGroupId() == 0 && TextUtils.isEmpty(et.getText().toString())) {
                     //TOdo  need to check already exist or not
                     Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
                     return false;
