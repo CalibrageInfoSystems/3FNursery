@@ -199,7 +199,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         String date = Date;
         Log.d(TAG, "final Month :" + date);
 
-        saplingActivitiesdatesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getTargetdatesActivities());
+        saplingActivitiesdatesList = dataAccessHandler.getNurseryActivityDetails(Queries.getInstance().getTargetdatesActivities());
         Log.e("==>listsize======202",   saplingActivitiesdatesList.size()+"" );
       for(int i = 0; i < saplingActivitiesdatesList.size(); i ++) {
 //            //Event ev1 = new Event(Color.GREEN, stringTodate(data.getReqCreatedDate()).getTime(),"mallem");
