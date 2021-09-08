@@ -18,6 +18,7 @@ import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.DateTimeUtil;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.CheckNurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.ui.Adapter.RecyclerAdapter;
@@ -41,15 +42,16 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
     TextView emptyView;
     private TextView textView;
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
+    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private ActionBar toolbar;
      ImageButton showPreviousMonthBut,showNextMonthBut;
     final List<String> mutableBookings = new ArrayList<>();
-     List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
-    List<NurseryAcitivity> saplingActivitiesdatesList = new ArrayList<>();
+     List<CheckNurseryAcitivity> saplingActivitiesList = new ArrayList<>();
+    List<CheckNurseryAcitivity> saplingActivitiesdatesList = new ArrayList<>();
      DataAccessHandler dataAccessHandler;
     String updateddate;
+    TextView date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         dataAccessHandler = new DataAccessHandler(this);
         emptyView = findViewById(R.id.empty_view);
         recyclerView = findViewById(R.id.event_listview);
+        date = findViewById(R.id.date);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -81,6 +84,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
 
 
         logEventsByMonth(compactCalendarView, DateTimeUtil.onGetCurrentDate(this).substring(0, 7));
+
         toolbar = ((AppCompatActivity) this).getSupportActionBar();
         textView.setText(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
 
@@ -139,15 +143,32 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         calendar.set(Calendar.MILLISECOND, 0);
     }
     private void setview() {
+       String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        saplingActivitiesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getdata(currentDate));
 
+        date.setText("Selected Date :  "+ dateFormatForDisplaying.format(new Date()));
+        Log.e("==>listsize",   saplingActivitiesList.size()+"" );
+//
+        if (saplingActivitiesList.size() > 0) {
+
+            recyclerAdapter = new RecyclerAdapter(CheckActivity.this, saplingActivitiesList, CheckActivity.this);
+            recyclerView.setAdapter(recyclerAdapter);
+            emptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+
+        }
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 textView.setText(dateFormatForMonth.format(dateClicked));
+                date.setText("Selected Date :  "+ dateFormatForDisplaying.format(dateClicked));
                 Log.d(TAG, "OnDate Selected :" + DateTimeUtil.DateToString(dateClicked));
 //
 
-                saplingActivitiesList = dataAccessHandler.getSaplingActivityDatadetails(Queries.getInstance().getdata("2021-09-03T00:00:00"));
+                saplingActivitiesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getdata( DateTimeUtil.DateToString(dateClicked)));
                 Log.e("==>listsize",   saplingActivitiesList.size()+"" );
 //
                 if (saplingActivitiesList.size() > 0) {

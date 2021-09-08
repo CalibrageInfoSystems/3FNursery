@@ -20,6 +20,7 @@ import com.oilpalm3f.nursery.dbmodels.Alerts;
 import com.oilpalm3f.nursery.dbmodels.AlertsPlotInfo;
 import com.oilpalm3f.nursery.dbmodels.AlertsVisitsInfo;
 import com.oilpalm3f.nursery.dbmodels.BasicFarmerDetails;
+import com.oilpalm3f.nursery.dbmodels.CheckNurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.ComplaintRepository;
 import com.oilpalm3f.nursery.dbmodels.ComplaintRepositoryRefresh;
 import com.oilpalm3f.nursery.dbmodels.ComplaintStatusHistory;
@@ -4974,9 +4975,9 @@ f
         }
         return sapactivitydata;
     }
-    public List<NurseryAcitivity> getNurseryCheckActivityDetails(final String query) {
+    public List<CheckNurseryAcitivity> getNurseryCheckActivityDetails(final String query) {
         Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET ACTIVITIES :" + query);
-        List<NurseryAcitivity> nurseryActivityDetails = new ArrayList<>();
+        List<CheckNurseryAcitivity> nurseryActivityDetails = new ArrayList<>();
         Cursor cursor = null;
         try {
             cursor = mDatabase.rawQuery(query, null);
@@ -4985,7 +4986,7 @@ f
 
 
 
-                    NurseryAcitivity nurseryActivityyDetails = new NurseryAcitivity();
+                    CheckNurseryAcitivity nurseryActivityyDetails = new CheckNurseryAcitivity();
                     nurseryActivityyDetails.setId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
                     nurseryActivityyDetails.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     nurseryActivityyDetails.setIsMultipleEntries(cursor.getString(cursor.getColumnIndex("IsMultipleEntries")));
