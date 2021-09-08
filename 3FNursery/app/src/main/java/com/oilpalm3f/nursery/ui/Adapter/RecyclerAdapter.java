@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.CheckNurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.ui.TransactionDataActivity;
 
@@ -35,13 +36,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     private LayoutInflater layoutInflater;
-    List<SaplingActivity> saplingActivities_List = new ArrayList<>();
+    List<CheckNurseryAcitivity> saplingActivities_List = new ArrayList<>();
    // private List<RequestCompleteModel> allrequests;
     private Context ctx;
     private DataAccessHandler dataAccessHandler;
      ClickListner listner;
     DecimalFormat dec = new DecimalFormat("####0.00");
-    public RecyclerAdapter(Context ctx,  List<SaplingActivity> saplingActivities_List, ClickListner listner) {
+    public RecyclerAdapter(Context ctx,  List<CheckNurseryAcitivity> saplingActivities_List, ClickListner listner) {
         this.layoutInflater = LayoutInflater.from(ctx);
         this.ctx = ctx;
         this.saplingActivities_List =saplingActivities_List;
@@ -62,27 +63,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         dataAccessHandler = new DataAccessHandler(ctx);
-        holder.transactionid.setText("" + saplingActivities_List.get(position).getTransactionId());
+        holder.transactionid.setText("" + saplingActivities_List.get(position).getName());
         holder.consignmentcode.setText("" + saplingActivities_List.get(position).getConsignmentCode());
-        String Status_Id = "" + saplingActivities_List.get(position).getStatusTypeId();
 
-String Status =  dataAccessHandler.getSingleValue(Queries.getSaplingVerirty(Status_Id));
-        holder.status.setText("" +Status);
+        holder.status.setText("" +saplingActivities_List.get(position).getDesc());
 
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                    listner.onNotificationClick(position, saplingActivities_List.get(position));
-                    Intent intent = new Intent(ctx, TransactionDataActivity.class);
-                    intent.putExtra("transactionId", saplingActivities_List.get(position).getTransactionId());
-
-                    ctx.startActivity(intent);
-
-            }
-        });
+//
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//                    listner.onNotificationClick(position, saplingActivities_List.get(position));
+//                    Intent intent = new Intent(ctx, TransactionDataActivity.class);
+//                    intent.putExtra("transactionId", saplingActivities_List.get(position).getTransactionId());
+//
+//                    ctx.startActivity(intent);
+//
+//            }
+//        });
 
 
     }
