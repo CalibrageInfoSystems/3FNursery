@@ -732,7 +732,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(ActivityTask.this, "Selected PO :" + i, Toast.LENGTH_SHORT).show();
 
                 if (Integer.parseInt(activityTypeId) == 9) {
-                    if (i == 2) {
+                    if (i == 1) {
 
                         // HIDE ITEMS
                         yesnoCHeckbox = 31;
@@ -765,7 +765,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                         }
 
-                    } else if (i == 1) {
+                    } else if (i == 2) {
                         yesnoCHeckbox = 45;
                         for (int f = 21; f < 34; f++) {
 
