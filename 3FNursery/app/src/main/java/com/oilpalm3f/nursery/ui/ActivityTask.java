@@ -482,6 +482,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 EditText et = findViewById(id);
 
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
+
+
                 Log.d("Groupvalidation ", " Field Id :" + activityTasklist.get(i).getField() + "IS OPTIONAL :"+activityTasklist.get(i).getIsOptional());
                 if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getIsOptional() == 0 && activityTasklist.get(i).getGroupId() == 0 && TextUtils.isEmpty(et.getText().toString())) {
                     //TOdo  need to check already exist or not
@@ -507,10 +509,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
             if(activityTasklist.get(i).getActivityTypeId() == 12){
                 try {
-                    int int52 = 52, int51 = 51;
+                    int int52 = 52, int51 = 51,int53 = 53;
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int52)));
                     Log.d("TESTING  finalValue", + finalValue + "");
+              //      dataValue.add(new KeyValues(int53, finalValue+ ""));
                     if(finalValue < 0){
                         Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
                         return false;
@@ -523,10 +526,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
             if(activityTasklist.get(i).getActivityTypeId() == 13){
                 try {
-                    int int60 = 60, int61 = 61;
+                    int int60 = 60, int61 = 61, int62 = 62;;
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int60))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
                     Log.d("TESTING  finalValue", + finalValue + "");
+
+                 //   dataValue.add(new KeyValues(int62, finalValue + ""));
+
                     if(finalValue < 0){
                         Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
                         return false;
@@ -544,6 +550,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int507)));
                     Log.d("TESTING  finalValue", + finalValue + "");
+
+                //    dataValue.add(new KeyValues(int62, finalValue + ""));
                     if(finalValue < 0){
                         Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
                         return false;
@@ -582,7 +590,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             if(activityTasklist.get(i).getActivityTypeId() == 63){
                 try {
-                    int int514 = 514, int515 = 51, int516 = 516;
+                    int int514 = 514, int515 = 515, int516 = 516;
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int515)));
                     Log.d("TESTING  finalValue", + finalValue + "");
@@ -620,27 +628,27 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     }
 
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            }
+    }
             if(activityTasklist.get(i).getActivityTypeId() == 126){
-                try {
-                    int int522 = 522, int523 = 523;
+        try {
+            int int522 = 522, int523 = 523;
 
-                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int522))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
-                    Log.d("TESTING  finalValue", + finalValue + "");
-                    if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+            int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int522))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
+            Log.d("TESTING  finalValue", + finalValue + "");
+            if(finalValue < 0){
+                Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                return false;
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
         }
 

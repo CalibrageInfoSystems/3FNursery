@@ -86,7 +86,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         holder.imgStatus.setImageDrawable(null);
         holder.imgNurStatus.setImageDrawable(null);
         holder.imgShStatus.setImageDrawable(null);
-        holder.txtDoneDate.setText("");
+     //   holder.txtDoneDate.setText("");
 
 
         if (mActivitiesList.get(position).getActivityDoneDate() != null && !mActivitiesList.get(position).getActivityDoneDate().isEmpty() && !mActivitiesList.get(position).getActivityDoneDate().equals("null"))  {
@@ -94,6 +94,9 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate2(mActivitiesList.get(position).getActivityDoneDate()));
 
 
+        }
+        else{
+            holder.txtDoneDate.setText("");
         }
 
 
