@@ -2869,6 +2869,8 @@ f
                     saplingsactivitystatusDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     saplingsactivitystatusDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
 
+                    saplingsactivitystatusDetails.setJobCompletedDate(cursor.getString(cursor.getColumnIndex("JobCompletedDate")));
+
                     saplingActivitystatusDataDetails.add(saplingsactivitystatusDetails);
                 } while (cursor.moveToNext());
 
