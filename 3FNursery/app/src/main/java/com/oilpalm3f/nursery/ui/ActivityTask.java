@@ -732,10 +732,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(ActivityTask.this, "Selected PO :" + i, Toast.LENGTH_SHORT).show();
 
                 if (Integer.parseInt(activityTypeId) == 9) {
-                    if (i == 1) {
+                    if (i == 2) {
 
                         // HIDE ITEMS
-                        yesnoCHeckbox = 31;
+
 
                         for (int f = 21; f < 32; f++) {
 
@@ -765,7 +765,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                         }
 
-                    } else if (i == 2) {
+                    } else if (i == 1) {
                         yesnoCHeckbox = 45;
                         for (int f = 21; f < 34; f++) {
 
@@ -1409,7 +1409,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis onFocusChange() id : " + view.getId() + "   isView showing :" + b);
         int id = view.getId();
 
-        if (id == 51 || id == 52) {
+        if (id == 51 || id == 52 || id == 53) {
             try {
                 int int52 = 52, int53 = 53, int51 = 51;
                 EditText edt53 = findViewById(int53);
@@ -1421,7 +1421,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
         }
-        if (id == 53 || id == 51) {
+        if (id == 53 || id == 51|| id == 54) {
             try {
                 int int51 = 51, int53 = 53, int54 = 54;
                 EditText edt54 = findViewById(int54);
@@ -1454,7 +1454,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
 
-        } else if (id == 508) {
+        } else if (id == 508 || id == 507 || id == 509) {
 
             try {
 
@@ -1470,7 +1470,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 512) {
+        } else if (id == 512 || id == 513) {
 
             try {
 
@@ -1486,7 +1486,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 516) {
+        } else if (id == 516 || id == 517 || id == 515) {
 
             try {
 
@@ -1502,7 +1502,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 520) {
+        } else if (id == 520 || id == 521 || id == 519) {
 
             try {
 
@@ -1516,17 +1516,17 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 523) {
+        } else if (id == 523 || id == 524) {
 
             try {
 
                 int int523 = 523, int524 = 524;
 
 
-                EditText edt521 = findViewById(int524);
+                EditText edt524= findViewById(int524);
                 int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 521))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
 
-                edt521.setText(finalValue + "");
+                edt524.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
