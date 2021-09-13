@@ -53,6 +53,8 @@
                 android:textColor="@color/black"
                 android:id="@+id/txtStatusTxt"
                 android:layout_width="0dp"
+                android:layout_gravity="center"
+
                 android:layout_height="wrap_content" />
             <LinearLayout
                 android:background="@color/black"
@@ -77,6 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_weight="0.17"
                 android:text=" "
                 android:textColor="@color/black" />
