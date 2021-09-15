@@ -714,7 +714,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             EditText editText = (EditText) findViewById(groupFields.get(i).getId());
             errorMsg = errorMsg + "\n" + groupFields.get(i).getField();
-            if (editText != null & editText.getText() != null & !StringUtils.isEmpty(editText.getText())) {
+            if (editText.getVisibility() == View.GONE || editText != null & editText.getText() != null & !StringUtils.isEmpty(editText.getText())) {
                 return true;
             }
         }
