@@ -60,6 +60,7 @@ public class CloudDataHandler {
     }
 
 
+
     public static synchronized void getKrasDataFromCloud(final JSONObject values, final String url, final ApplicationThread.OnComplete<String> onComplete) {
         ApplicationThread.bgndPost(CloudDataHandler.class.getName(), "placeDataInCloud..", new Runnable() {
             @Override
@@ -105,6 +106,8 @@ public class CloudDataHandler {
         } catch (JSONException e) {
             Log.e(LOG_TAG, "" + e.getMessage());
         }
+
+        
         getKrasDataFromCloud( requestObject, Config.live_url + Config.GETMONTHLYTARGETSBYUSERIDANDFINANCIALYEAR, new ApplicationThread.OnComplete<String>() {
             @Override
             public void execute(boolean success, String result, String msg) {
