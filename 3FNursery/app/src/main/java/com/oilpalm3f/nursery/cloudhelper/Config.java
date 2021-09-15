@@ -45,5 +45,5 @@ public class Config {
 
     public static final String GETMONTHLYTARGETSBYUSERIDANDFINANCIALYEAR = "/KRA/GetMonthlyTargetsByUserIdandFinancialYear";
     public static final String GETTARGETSBYUSERIDANDFINANCIALYEAR = "/KRA/GetTargetsByUserIdandFinancialYear";
-    public static final String GET_ALERTS = "/SyncTransactions/SyncAlertDetails/";//{UserId}
+    public static final String GET_ALERTS = "/SyncTransactions/SyncNurseryAlertDetails";//{UserId}
 }

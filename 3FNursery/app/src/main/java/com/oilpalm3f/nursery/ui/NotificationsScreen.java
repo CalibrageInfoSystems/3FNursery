@@ -1,13 +1,13 @@
 package com.oilpalm3f.nursery.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
@@ -18,7 +18,6 @@ import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.Alerts;
 import com.oilpalm3f.nursery.ui.Adapter.NotificationDisplayAdapter;
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
-import com.oilpalm3f.nursery.utils.UiUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,16 +46,16 @@ public class NotificationsScreen extends AppCompatActivity {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataSyncHelper.getAlertsData(NotificationsScreen.this, new ApplicationThread.OnComplete<String>() {
-                    @Override
-                    public void execute(boolean success, String result, String msg) {
-                        if (success) {
-                            renderNotifications();
-                        } else {
-                            UiUtils.showCustomToastMessage("Error while getting alerts Data", NotificationsScreen.this, 1);
-                        }
-                    }
-                });
+//                DataSyncHelper.getAlertsData(NotificationsScreen.this, new ApplicationThread.OnComplete<String>() {
+//                    @Override
+//                    public void execute(boolean success, String result, String msg) {
+//                        if (success) {
+//                            renderNotifications();
+//                        } else {
+//                            UiUtils.showCustomToastMessage("Error while getting alerts Data", NotificationsScreen.this, 1);
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -64,7 +63,7 @@ public class NotificationsScreen extends AppCompatActivity {
 
         renderNotifications();
 
-      updateNotificationStatus();
+        updateNotificationStatus();
     }
 
     @Override
@@ -93,15 +92,17 @@ public class NotificationsScreen extends AppCompatActivity {
         refreshtableNamesList.add(DatabaseKeys.TABLE_ALERTS);
         refreshtransactionsDataMap.put(DatabaseKeys.TABLE_ALERTS, dataToSendCloud);
 
-        DataSyncHelper.postTransactionsDataToCloud(this, DatabaseKeys.TABLE_ALERTS, dataAccessHandler, new ApplicationThread.OnComplete() {
-            @Override
-            public void execute(boolean success, Object result, String msg) {
-                super.execute(success, result, msg);
-                refreshtableNamesList.clear();
-                refreshtransactionsDataMap.clear();
-            }
-        });
-
+//        DataSyncHelper.postTransactionsDataToCloud(this, DatabaseKeys.TABLE_ALERTS, dataAccessHandler, new ApplicationThread.OnComplete() {
+//            @Override
+//            public void execute(boolean success, Object result, String msg) {
+//                super.execute(success, result, msg);
+//                refreshtableNamesList.clear();
+//                refreshtransactionsDataMap.clear();
+//            }
+//        });
+// TODO No need update status
+        refreshtableNamesList.clear();
+        refreshtransactionsDataMap.clear();
     }
 
     private void renderNotifications()    {
