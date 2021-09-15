@@ -102,14 +102,17 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setImageResource(R.drawable.inprogress);
         } else if (mActivitiesList.get(position).getStatusTypeId() == 347) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setImageResource(R.drawable.inprogress);
         } else if (mActivitiesList.get(position).getStatusTypeId() == 348) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.done);
+            holder.imglossStatus.setImageResource(R.drawable.inprogress);
         } else if (mActivitiesList.get(position).getStatusTypeId() == 349) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.rejected);
@@ -118,6 +121,13 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgStatus.setImageResource(R.drawable.inprogress);
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setImageResource(R.drawable.inprogress);
+        }else if (mActivitiesList.get(position).getStatusTypeId() == 354) {
+            holder.imglossStatus.setImageResource(R.drawable.done);
+
+        }
+        else{
+            holder.imglossStatus.setImageDrawable(null);
         }
         if(mActivitiesList.get(position).getTargetDate()!= null) {
             try {
@@ -130,13 +140,8 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                 e.printStackTrace();
             }
         }
-        if (mActivitiesList.get(position).getStatusTypeId() == 354) {
-            holder.imglossStatus.setImageResource(R.drawable.done);
 
-        }
-        else{
-            holder.imglossStatus.setImageResource(R.drawable.inprogress);
-        }
+
 
         Log.d("getColorIndicator :", mActivitiesList.get(position).getColorIndicator() + "");
 
