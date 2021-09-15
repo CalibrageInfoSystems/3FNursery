@@ -202,7 +202,7 @@ public class MainLoginScreen extends AppCompatActivity {
                     ApplicationThread.uiPost(LOG_TAG, "master sync message", new Runnable() {
                         @Override
                         public void run() {
-                            UiUtils.showCustomToastMessage("Data syncing success", MainLoginScreen.this, 1);
+                            UiUtils.showCustomToastMessage("Data syncing success", MainLoginScreen.this, 0);
                             ProgressBar.hideProgressBar();
 //                            List<UserSync> userSyncList;
 ////                                userSyncList = (List<UserSync>)dataAccessHandler.getUserSyncData(Queries.getInstance().countOfMasterSync());
