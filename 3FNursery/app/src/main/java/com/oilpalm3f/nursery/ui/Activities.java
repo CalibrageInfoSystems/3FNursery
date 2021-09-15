@@ -76,9 +76,9 @@ public class Activities extends AppCompatActivity {
     }
 
     private void setViews() {
-         txtSlectedConsiment.setText(": " +CONSINEMENTCODE);
-         txtAge.setText(": " + "");
-        txtDateOfsowing.setText(": " + "");
+         txtSlectedConsiment.setText(":  " +CONSINEMENTCODE);
+         txtAge.setText(":  " + "");
+        txtDateOfsowing.setText(":  " + "");
          consignmentstatusList = dataAccessHandler.getConsignmentStatus(Queries.getInstance().getConsignmentStatusQuery(CONSINEMENTCODE));
         if(consignmentstatusList != null & consignmentstatusList.size() > 0){
              txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");

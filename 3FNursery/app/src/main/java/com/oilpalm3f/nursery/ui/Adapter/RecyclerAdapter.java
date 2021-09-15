@@ -29,7 +29,9 @@ import com.oilpalm3f.nursery.ui.TransactionDataActivity;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
@@ -41,6 +43,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private Context ctx;
     private DataAccessHandler dataAccessHandler;
      ClickListner listner;
+
+    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
     DecimalFormat dec = new DecimalFormat("####0.00");
     public RecyclerAdapter(Context ctx,  List<CheckNurseryAcitivity> saplingActivities_List, ClickListner listner) {
         this.layoutInflater = LayoutInflater.from(ctx);
@@ -71,6 +76,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
          holder.Status_linear.setVisibility(View.GONE);
 
      }
+
+
+        if(saplingActivities_List.get(position).getActivityDoneDate()!= null) {
+            try {
+                Date oneWayTripDate = input.parse(saplingActivities_List.get(position).getActivityDoneDate());
+                String datetimevaluereq = output.format(oneWayTripDate);
+
+                holder.jobdonedate.setText(" :   " +datetimevaluereq);
+                android.util.Log.e("===============", "======currentData======" + output.format(oneWayTripDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            holder.jobdone_linear.setVisibility(View.GONE);
+        }
+
 
 //
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -103,20 +125,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView transactionid,consignmentcode,status;
-        LinearLayout Status_linear;
+        TextView transactionid,consignmentcode,status,jobdonedate;
+        LinearLayout Status_linear,jobdone_linear;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
           Status_linear = itemView.findViewById(R.id.Status_linear);
+            jobdone_linear = itemView.findViewById(R.id.jobdone_linear);
 
             ctx = itemView.getContext();
 
             transactionid = itemView.findViewById(R.id.transactionid);
             consignmentcode = itemView.findViewById(R.id.consignmentcode);
             status = itemView.findViewById(R.id.status);
+            jobdonedate = itemView.findViewById(R.id.jobdonedate);
         }
     }
 }

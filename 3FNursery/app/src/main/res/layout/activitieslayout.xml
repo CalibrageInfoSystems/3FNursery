@@ -26,7 +26,7 @@
                 android:id="@+id/activityName"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.26"
+                android:layout_weight="0.22"
                 android:gravity="center"
                 android:textColor="@color/black" />
             <LinearLayout
@@ -36,7 +36,7 @@
             <TextView
                 android:gravity="center"
                 android:text=""
-                android:layout_weight="0.19"
+                android:layout_weight="0.15"
                 android:textColor="@color/black"
                 android:id="@+id/expecteddate"
                 android:layout_gravity="center"
@@ -49,7 +49,7 @@
             <TextView
                 android:gravity="center"
                 android:text="partially approved"
-                android:layout_weight="0.12"
+                android:layout_weight="0.1"
                 android:textColor="@color/black"
                 android:id="@+id/txtStatusTxt"
                 android:layout_width="0dp"
@@ -108,7 +108,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
 
+            <LinearLayout
+                android:background="@color/black"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:gravity="center"
+                android:text=" NEW"
+                android:layout_weight="0.1"
+                android:textColor="@color/black"
 
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 

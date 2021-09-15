@@ -28,7 +28,7 @@
                 android:id="@+id/lyt_requestCode">
                 <TextView
 
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.3"
                     android:layout_width="0dp"
                     android:textSize="16dp"
                     android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 <TextView
 
                     android:id="@+id/consignmentcode"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.7"
                     android:layout_width="0dp"
                     android:textSize="16dp"
                     android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
             >
                 <TextView
 
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -67,7 +67,7 @@
                 <TextView
 
                     android:id="@+id/transactionid"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.7"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -84,7 +84,7 @@
                 android:id="@+id/Status_linear">
                 <TextView
 
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -95,14 +95,39 @@
                 <TextView
 
                     android:id="@+id/status"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.7"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/black"/>
             </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/jobdone_linear">
+                <TextView
 
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Job Done Date"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+                <TextView
+
+                    android:id="@+id/jobdonedate"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
