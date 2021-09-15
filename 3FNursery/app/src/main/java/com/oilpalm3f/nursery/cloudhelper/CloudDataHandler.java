@@ -61,7 +61,7 @@ public class CloudDataHandler {
 
 
 
-    public static synchronized void getKrasDataFromCloud(final JSONObject values, final String url, final ApplicationThread.OnComplete<String> onComplete) {
+    public static synchronized void getKrasDataFromCloud(final JSONObject values,  String url, final ApplicationThread.OnComplete<String> onComplete) {
         ApplicationThread.bgndPost(CloudDataHandler.class.getName(), "placeDataInCloud..", new Runnable() {
             @Override
             public void run() {
