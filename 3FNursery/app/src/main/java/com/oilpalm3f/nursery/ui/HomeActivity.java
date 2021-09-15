@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.pavlospt.CircleView;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
@@ -43,7 +44,8 @@ public class HomeActivity extends AppCompatActivity {
     List<ConsignmentDetails> consignmentDetails;
     private LinearLayout refreshRel;
     private Spinner nurserySpinner, consignmentSpinner;
-
+    private CircleView circleView;
+    private DataAccessHandler dataAccessHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +64,14 @@ public class HomeActivity extends AppCompatActivity {
         refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
         IrrigationRel =findViewById(R.id.IrrigationRel);
         checkactivityRel = findViewById(R.id.checkactivityRel);
+        circleView = (CircleView) findViewById(R.id.countTxt);
+        dataAccessHandler = new DataAccessHandler(this);
     }
 
     private void setviews() {
 
+        String unreadNotificationsCount = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getUnreadNotificationsCountQuery());
+        circleView.setTitleText(unreadNotificationsCount);
 
         RelativeLayout notificationsRel = (RelativeLayout) findViewById(R.id.notficationRel);
 
@@ -282,6 +288,15 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String unreadNotificationsCount = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getUnreadNotificationsCountQuery());
+        circleView.setTitleText(unreadNotificationsCount);
+
     }
 
 }
