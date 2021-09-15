@@ -463,6 +463,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 //    }
 
     private boolean GroupValidate() {
+        if(dataAccessHandler.getSingleIntValue(Queries.getTodayActivityCount(consignmentCode)) > 0)
+        {
+            Toast.makeText(this, "Sameday we can perform one activity" , Toast.LENGTH_SHORT).show();
+            return  false;
+        }
         dataValue = new ArrayList<>();
 
         for (int i = 0; i < activityTasklist.size(); i++) {
