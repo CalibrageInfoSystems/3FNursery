@@ -132,7 +132,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                 e.printStackTrace();
             }
         }
+        if (mActivitiesList.get(position).getStatusTypeId() == 354) {
+            holder.imglossStatus.setImageResource(R.drawable.inprogress);
 
+        }
 
         Log.d("getColorIndicator :", mActivitiesList.get(position).getColorIndicator() + "");
 
@@ -273,7 +276,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         public TextView activityName, expecteddate, saplingExpecteddate, txtStatusTxt, txtDoneDate;
         public LinearLayout mainlyt;
-        public ImageView imgStatus, imgNurStatus, imgShStatus;
+        public ImageView imgStatus, imgNurStatus, imgShStatus,imglossStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -287,6 +290,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             this.imgStatus = itemView.findViewById(R.id.imgStatus);
             this.imgNurStatus = itemView.findViewById(R.id.imgNurStatus);
             this.imgShStatus = itemView.findViewById(R.id.imgShStatus);
+            this.imglossStatus = itemView.findViewById(R.id.imglossStatus);
         }
     }
 
