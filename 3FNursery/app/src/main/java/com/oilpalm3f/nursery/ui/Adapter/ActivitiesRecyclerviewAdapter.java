@@ -92,9 +92,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
         if (mActivitiesList.get(position).getActivityDoneDate() != null && !mActivitiesList.get(position).getActivityDoneDate().isEmpty() && !mActivitiesList.get(position).getActivityDoneDate().equals("null"))  {
 
             holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate2(mActivitiesList.get(position).getActivityDoneDate()));
-
-
-        }
+ }
         else{
             holder.txtDoneDate.setText("");
         }
@@ -133,8 +131,11 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             }
         }
         if (mActivitiesList.get(position).getStatusTypeId() == 354) {
-            holder.imglossStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setImageResource(R.drawable.done);
 
+        }
+        else{
+            holder.imglossStatus.setImageResource(R.drawable.inprogress);
         }
 
         Log.d("getColorIndicator :", mActivitiesList.get(position).getColorIndicator() + "");

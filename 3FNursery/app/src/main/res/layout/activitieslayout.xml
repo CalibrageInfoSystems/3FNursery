@@ -115,7 +115,7 @@
 
             <ImageView
                 android:padding="10dp"
-                android:src="@drawable/done"
+
                 android:layout_weight="0.1"
                 android:textColor="@color/black"
                 android:id="@+id/imglossStatus"
