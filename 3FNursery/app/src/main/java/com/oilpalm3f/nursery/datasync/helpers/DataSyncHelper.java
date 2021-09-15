@@ -67,6 +67,7 @@ public class DataSyncHelper {
     public static int countCheck, transactionsCheck = 0, imagesCount = 0, reverseSyncTransCount = 0, innerCountCheck = 0;
     public static List<String> refreshtableNamesList = new ArrayList<>();
     public static LinkedHashMap<String, List> refreshtransactionsDataMap = new LinkedHashMap<>();
+
     private static String IMEINUMBER;
     public static int resetCount;
     public static int FarmerDataCount = 0;

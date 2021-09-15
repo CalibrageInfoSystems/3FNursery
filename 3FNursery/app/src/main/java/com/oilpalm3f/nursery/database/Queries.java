@@ -1,14 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
 package com.oilpalm3f.nursery.database;
 
 import com.oilpalm3f.nursery.cloudhelper.Log;

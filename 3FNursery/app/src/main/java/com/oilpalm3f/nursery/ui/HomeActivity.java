@@ -66,6 +66,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setviews() {
 
+
+        RelativeLayout notificationsRel = (RelativeLayout) findViewById(R.id.notficationRel);
+
+        notificationsRel.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, NotificationsScreen.class)));
+
+
         newactivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

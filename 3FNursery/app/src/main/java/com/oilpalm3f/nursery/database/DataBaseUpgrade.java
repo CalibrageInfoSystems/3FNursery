@@ -78,6 +78,8 @@ public class DataBaseUpgrade {
         String column5 = "Alter Table Sapling Add TransplantingDate datetime";
        String column6 = "Alter Table NurseryActivity Add DependentActivityCode VARCHAR(10)";
 
+        String CostCenter= "Alter table Nursery add  CostCenter varchar(50)";
+
 
 
         String CREATE_LABOUR_RATE = "CREATE TABLE LabourRate(\n" +
@@ -102,6 +104,7 @@ public class DataBaseUpgrade {
             db.execSQL(column3);
             db.execSQL(column4);
             db.execSQL(column5);
+            db.execSQL(CostCenter);
 
 
             db.execSQL(CREATE_LABOUR_RATE);
