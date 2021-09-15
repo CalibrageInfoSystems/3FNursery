@@ -33,11 +33,14 @@ public class DataBaseUpgrade {
 //                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             upgradeDb1(db);
                             break;
-                        case 3:
+                        case 2:
 //                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             upgradeDB2(db);
                             break;
-
+                        case 3:
+//                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            upgradeDB3(db);
+                            break;
 
                     }
                 } else {
@@ -78,7 +81,6 @@ public class DataBaseUpgrade {
         String column5 = "Alter Table Sapling Add TransplantingDate datetime";
        String column6 = "Alter Table NurseryActivity Add DependentActivityCode VARCHAR(10)";
 
-        String CostCenter= "Alter table Nursery add  CostCenter varchar(50)";
 
 
 
@@ -93,6 +95,8 @@ public class DataBaseUpgrade {
                 ")";
 
 
+
+
         try {
             db.execSQL(column6);
             db.execSQL(IrrigationLog1);
@@ -104,7 +108,7 @@ public class DataBaseUpgrade {
             db.execSQL(column3);
             db.execSQL(column4);
             db.execSQL(column5);
-            db.execSQL(CostCenter);
+
 
 
             db.execSQL(CREATE_LABOUR_RATE);
@@ -127,15 +131,35 @@ public class DataBaseUpgrade {
             e.printStackTrace();
         }
     }
+
+
     public static  void  upgradeDB3(final  SQLiteDatabase db){
         Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
-        // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
-
+        String column2= "Alter table Nursery add  CostCenter varchar(50)";
         String  column1 =  "Alter table NurseryActivity add Bucket VARCHAR(50)";
+
+        String alertsTable = "CREATE TABLE Alerts( \n" +
+                "Id INTEGER, \n" +
+                "Name VARCHAR, \n" +
+                "[Desc] VARCHAR, \n" +
+                "UserId INT NOT NULL, \n" +
+                "HTMLDesc Varchar(2000), \n" +
+                "IsRead INT NOT NULL, \n" +
+                "PlotCode VARCHAR, \n" +
+                "ComplaintCode VARCHAR, \n" +
+                "AlertTypeId INT, \n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR,\n" +
+                "UpdatedByUserId INT, \n" +
+                "UpdatedDate VARCHAR,\n" +
+                "ServerUpdatedStatus INT\n" +
+                ")";
         try {
 
             db.execSQL(column1);
+            db.execSQL(column2);
+            db.execSQL(alertsTable);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -64,7 +64,7 @@ public class NotificationsScreen extends AppCompatActivity {
 
         renderNotifications();
 
-        updateNotificationStatus();
+      updateNotificationStatus();
     }
 
     @Override
