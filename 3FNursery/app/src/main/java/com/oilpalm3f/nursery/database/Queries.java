@@ -740,6 +740,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
 //                "    WHERE S.ConsignmentCode = '"+consinmentCode+"'   \n" +
 //                "    )S on S.ActivityId  = NA.Id)R    ";
        return  "SELECT     \n" +
+               " isLossActivity,\n"+
                "      ActivityId,    \n" +
                "      ActivityTypeId,    \n" +
                "      IsMultipleEntries,    \n" +
@@ -759,6 +760,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                "            ELSE 3 END  as ColorIndicator--Red Color    \n" +
                "      FROM (    \n" +
                "       SELECT            \n" +
+               "         S.isLossActivity, \n"+
                "         NA.Id AS 'ActivityId',        \n" +
                "         NA.ActivityTypeId,          \n" +
                "         NA.IsMultipleEntries,          \n" +
@@ -792,6 +794,7 @@ public  String getTransactionIdUsingConsimentCode(String consignmentCode,String 
                "         N.ConsignmentCode,    \n" +
                "         T.JobCompletedDate AS 'DependencyDoneDate',    \n" +
                "         N.EstimatedDate,\n" +
+               "  CASE WHEN  NAF.LossFieldCount IS NULL THEN 'No' ELSE 'Yes' END as isLossActivity,  \n"+
                "          CASE WHEN S.StatusTypeId=348 AND NAF.LossFieldCount IS NULL THEN 'Activity Closed'    \n" +
                "      WHEN S.StatusTypeId=354 THEN 'Activity Closed' ELSE TS.[Desc] END as StatusType\n" +
                "\n" +
