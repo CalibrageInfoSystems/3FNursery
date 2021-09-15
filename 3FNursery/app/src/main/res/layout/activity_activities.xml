@@ -216,7 +216,7 @@ android:background="@color/light_gray"
 
                    <TextView
                        android:gravity="center"
-                       android:layout_weight="0.26"
+                       android:layout_weight="0.22"
                        android:textColor="@color/black"
                       android:text="Activity"
                        android:layout_width="0dp"
@@ -228,7 +228,7 @@ android:background="@color/light_gray"
                    <TextView
                        android:gravity="center"
                        android:text="Target Date "
-                       android:layout_weight="0.19"
+                       android:layout_weight="0.15"
                        android:textColor="@color/black"
                        android:id="@+id/expecteddate"
                        android:layout_width="0dp"
@@ -241,7 +241,7 @@ android:background="@color/light_gray"
                    <TextView
                        android:gravity="center"
                       android:text="Status "
-                       android:layout_weight="0.12"
+                       android:layout_weight="0.1"
                        android:textColor="@color/black"
                        android:id="@+id/txtSatusText"
                        android:layout_width="0dp"
@@ -293,8 +293,18 @@ android:background="@color/light_gray"
                        android:id="@+id/imgShStatus"
                        android:layout_width="0dp"
                        android:layout_height="match_parent" />
+                   <LinearLayout
+                       android:background="@color/black"
+                       android:layout_width="1dp"
+                       android:layout_height="match_parent"/>
+                   <TextView
+                       android:gravity="center"
+                       android:text=" NEW"
+                       android:layout_weight="0.1"
+                       android:textColor="@color/black"
 
-
+                       android:layout_width="0dp"
+                       android:layout_height="match_parent" />
 
                </LinearLayout>
 

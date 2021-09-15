@@ -107,7 +107,7 @@ public class CloudDataHandler {
             Log.e(LOG_TAG, "" + e.getMessage());
         }
 
-        
+
         getKrasDataFromCloud( requestObject, Config.live_url + Config.GETMONTHLYTARGETSBYUSERIDANDFINANCIALYEAR, new ApplicationThread.OnComplete<String>() {
             @Override
             public void execute(boolean success, String result, String msg) {
