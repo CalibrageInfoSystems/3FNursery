@@ -108,7 +108,7 @@ public class IrrigationActivity extends AppCompatActivity {
                         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
                         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
                         LinkedHashMap mapStatus = new LinkedHashMap();
-                        mapStatus.put("Id", 0);
+
                         mapStatus.put("LogDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         mapStatus.put("IrrigationCode", transactionId);
                         if (manregular_edt.length() != 0) {
