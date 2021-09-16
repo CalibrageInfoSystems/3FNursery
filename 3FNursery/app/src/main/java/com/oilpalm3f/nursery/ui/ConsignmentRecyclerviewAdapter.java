@@ -104,6 +104,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
                     CommonConstants.ConsignmentID = consignmentList.get(position).getId();
                     CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
                     intent.putExtra("consignmentCode", consignmentList.get(position).getConsignmentCode());
+                    intent.putExtra("camefrom",  1);
                     context.startActivity(intent);
 
                 }

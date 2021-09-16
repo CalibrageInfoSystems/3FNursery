@@ -1868,4 +1868,20 @@ public class Queries {
 
 
     }
+
+    public static String getreg_male(String irrigationCode) {
+        return "select RegularMale from NurseryIrrigationLog where IrrigationCode ='" + irrigationCode + "'";
+    }
+
+    public static String getreg_female(String irrigationCode) {
+        return "select RegularFemale from NurseryIrrigationLog where IrrigationCode ='" + irrigationCode + "'";
+    }
+
+    public static String getcontract_male(String irrigationCode) {
+        return "select ContractMale from NurseryIrrigationLog where IrrigationCode ='" + irrigationCode + "'";
+    }
+
+    public static String getcontract_female(String irrigationCode) {
+        return "select ContractFemale from NurseryIrrigationLog where IrrigationCode ='" + irrigationCode + "'";
+    }
 }
