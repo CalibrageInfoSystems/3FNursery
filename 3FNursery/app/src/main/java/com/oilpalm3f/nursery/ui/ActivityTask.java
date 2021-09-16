@@ -464,11 +464,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     private boolean GroupValidate() {
         // TOdo comment Testing
-//        if(dataAccessHandler.getSingleIntValue(Queries.getTodayActivityCount(consignmentCode)) > 0)
-////        {
-////            Toast.makeText(this, "Already Activity Submited" , Toast.LENGTH_SHORT).show();
-////            return  false;
-////        }
+        if(dataAccessHandler.getSingleIntValue(Queries.getTodayActivityCount(consignmentCode)) > 0)
+        {
+            Toast.makeText(this, "Today Activity Already Submited" , Toast.LENGTH_SHORT).show();
+            return  false;
+        }
 
         dataValue = new ArrayList<>();
 

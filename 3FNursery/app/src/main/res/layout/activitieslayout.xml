@@ -114,8 +114,8 @@
                 android:layout_height="match_parent"/>
 
             <ImageView
-                android:padding="10dp"
-
+                android:src="@drawable/done"
+                android:padding="15dp"
                 android:layout_weight="0.1"
                 android:textColor="@color/black"
                 android:id="@+id/imglossStatus"

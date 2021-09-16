@@ -5,22 +5,21 @@ import com.oilpalm3f.nursery.BuildConfig;
 public class Config {
 
     public static final boolean DEVELOPER_MODE = false;
-    //public static String live_url = "http://120.138.8.8:9020/API/api";//Commented on 12-04-2021 to change the URL to local
-    public static String live_url = "http://183.82.111.111/3FOilPalm_Nursery/API/api"; //localtest
-    //public static String live_url = "http://183.82.111.111/3FOilPalm_Live/API/api"; //locall ive
 
-    //   public static  String live_url = "http://182.18.139.166/3FOilPalm/API/api";
-    //local URl
+    public static String live_url = "http://183.82.111.111/3FOilPalm_Nursery/API/api"; //localtest
+//    public static String live_url = "http://183.82.111.111/3FOilPlam_Nursery_UAT/API/API"; //localtest
+
     public static void initialize() {
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("release")) {
-            // live_url = "http://120.138.8.8:9020/API/api";//Commented on 12-04-2021 to change the URL to local
+
             live_url = "http://183.82.111.111/3FOilPalm_Nursery/API/api";//localtest
-            //live_url = "http://183.82.111.111/3FOilPalm_Live/API/api";//locallive
+//            live_url = "http://183.82.111.111/3FOilPlam_Nursery_UAT/API/API"; //localtest
+
         } else {
-            // live_url = "http://120.138.8.8:9020/API/api";//Commented on 12-04-2021 to change the URL to local
+
             live_url = "http://183.82.111.111/3FOilPalm_Nursery/API/api";//localtest
-            //live_url = "http://183.82.111.111/3FOilPalm_Live/API/api";//locallive
-            //    live_url = "http://182.18.139.166/3FOilPalm/API/api";
+//            live_url = "http://183.82.111.111/3FOilPlam_Nursery_UAT/API/API"; //localtest
+
         }
     }
 
