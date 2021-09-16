@@ -14,10 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
-import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
-import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
@@ -145,6 +143,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
                     Intent intent = new Intent(context, IrrigationActivity.class);
                     intent.putExtra("consignmentCode",  IrrigationlogList.get(position).getIrrigationCode());
                     intent.putExtra("camefrom",  2);
+                    intent.putExtra("transactionId",  IrrigationlogList.get(position).getIrrigationCode());
                     context.startActivity(intent);
 
 

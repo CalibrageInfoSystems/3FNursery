@@ -1,30 +1,25 @@
 package com.oilpalm3f.nursery.ui;
 
+import android.app.DatePickerDialog;
+import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DatePickerDialog;
-import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
-import android.util.Pair;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentStatuData;
-import com.oilpalm3f.nursery.dbmodels.MutipleData;
-import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
-import com.oilpalm3f.nursery.ui.Adapter.ActivitiesRecyclerviewAdapter;
 import com.oilpalm3f.nursery.ui.Adapter.IrrigationstatusRecyclerviewAdapter;
 
 import java.text.ParseException;
@@ -32,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -177,7 +171,6 @@ public class IrrigationStatusActivity extends AppCompatActivity {
     }
 
     private void displayActivityData() {
-
 
         irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(sendweekdate,sendcurrentDate));
         if(irrigationloglist.size() != 0){
