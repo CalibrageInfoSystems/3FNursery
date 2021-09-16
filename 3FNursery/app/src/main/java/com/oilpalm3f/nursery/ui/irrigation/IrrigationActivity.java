@@ -17,6 +17,7 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.HomeActivity;
 
@@ -35,9 +36,10 @@ public class IrrigationActivity extends AppCompatActivity {
     private EditText manregular_edt, femalereg_edt, manout_edt, femaleout_edt, mancostregular_edt, femalecostreg_edt, mancostout_edt, femalecostout_edt;
     private Button save_btn;
     private DataAccessHandler dataAccessHandler;
-
+    private  List<NurseryIrrigationLogXref> IrrigationLogXreflist =new ArrayList<>();
     String CONSINEMENTCODES;
     List<String> list;
+    int Flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +69,33 @@ public class IrrigationActivity extends AppCompatActivity {
 //        consignment_num.setText(" : " + CommonConstants.ConsignmentID);
         if (getIntent() != null) {
             CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
-            list =  Arrays.asList(CONSINEMENTCODES.split(","));
-            Log.d(IrrigationActivity.LOG_TAG, "Consignment Codes Size :" + CONSINEMENTCODES);
-            Log.d(IrrigationActivity.LOG_TAG, "Consignment Codes Size :" + list.size());
-            consignment_num.setText(" : " + CONSINEMENTCODES);
+            Flag = getIntent().getIntExtra("camefrom",1);
+            Log.d(IrrigationActivity.LOG_TAG, "Consignment Code :" + CONSINEMENTCODES);
+            Log.d(IrrigationActivity.LOG_TAG, "Flag=====" + Flag);
+            if (Flag == 2){
+
+
+                IrrigationLogXreflist = dataAccessHandler.getirigationlogxref(Queries.getInstance().getIrrigationlogxref(CONSINEMENTCODES));
+                String CONSINEMENTCODE = IrrigationLogXreflist.get(0).getConsignmentCode();
+                String male_reg =  dataAccessHandler.getSingleValue(Queries.getreg_male(CONSINEMENTCODES));
+                String femmale_reg = dataAccessHandler.getSingleValue(Queries.getreg_female(CONSINEMENTCODES));
+                String male_contract =  dataAccessHandler.getSingleValue(Queries.getcontract_male(CONSINEMENTCODES));
+                String female_contract = dataAccessHandler.getSingleValue(Queries.getcontract_female(CONSINEMENTCODES));
+                manregular_edt.setText(male_reg);
+                femalereg_edt.setText(femmale_reg);
+                manout_edt.setText(male_contract);
+                femaleout_edt.setText(female_contract);
+                consignment_num.setText(" : " + CONSINEMENTCODE);
+            }
+            else{
+                list =  Arrays.asList(CONSINEMENTCODES.split(","));
+                Log.d(IrrigationActivity.LOG_TAG, "Consignment Codes Size :" + CONSINEMENTCODES);
+                Log.d(IrrigationActivity.LOG_TAG, "Consignment Codes Size :" + list.size());
+                consignment_num.setText(" : " + CONSINEMENTCODES);
+            }
+
         }
+
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

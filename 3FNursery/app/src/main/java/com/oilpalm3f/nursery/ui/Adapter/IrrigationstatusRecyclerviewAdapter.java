@@ -1,6 +1,7 @@
 package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.Log;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
@@ -22,6 +25,7 @@ import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,14 +104,8 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
             //  holder.createdDateTextView.setVisibility(View.GONE);
         }
 
-//        if(IrrigationlogList.size()== 0){
-//            holder.rvSubItem.setVisibility(View.GONE);
-//
-//        }
-//        else{
-//            holder.rvSubItem.setVisibility(View.VISIBLE);
-//
-//        }
+
+
 
       //  List<NurseryIrrigationLogXref> IrrigationLogXreflist =new ArrayList<>();
         Irrigation_code =IrrigationlogList.get(position).getIrrigationCode();
@@ -137,7 +135,27 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
         });
 
 
+        if(IrrigationlogList.get(position).getStatusTypeId() == 349 ){
+            holder.txtSatusText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //  List<NurseryIrrigationLogXref> IrrigationLogXreflist =new ArrayList<>();
 
+
+                    Intent intent = new Intent(context, IrrigationActivity.class);
+                    intent.putExtra("consignmentCode",  IrrigationlogList.get(position).getIrrigationCode());
+                    intent.putExtra("camefrom",  2);
+                    context.startActivity(intent);
+
+
+
+
+                }
+            });
+
+
+
+        }
 
     }
 
