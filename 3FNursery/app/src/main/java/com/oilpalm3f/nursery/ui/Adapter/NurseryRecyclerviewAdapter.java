@@ -51,7 +51,7 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
 
 
 
-        holder.mainlyt.setOnClickListener(new View.OnClickListener() {
+        holder.mainlyt.setOnClickListener(new View.OnClickListener() {    // Intent  Consignment Selection Screen
             @Override
             public void onClick(View view) {
                 CommonConstants.NurseryCode  = nurserysList.get(position).getCode();

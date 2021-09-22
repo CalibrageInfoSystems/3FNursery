@@ -36,7 +36,7 @@ public class IrrigationActivity extends AppCompatActivity {
     private Button save_btn;
     private DataAccessHandler dataAccessHandler;
     private List<NurseryIrrigationLogXref> IrrigationLogXreflist = new ArrayList<>();
-    String CONSINEMENTCODES, transactionId;
+    String CONSINEMENTCODES, transactionId, NUrsery_code,NurseryName;
     List<String> list;
     int Flag;
 
@@ -64,7 +64,7 @@ public class IrrigationActivity extends AppCompatActivity {
 
 
         date.setText("  : " + formattedDate);
-        nursaryname.setText(" : " + CommonConstants.NurseryName);
+
 //        consignment_num.setText(" : " + CommonConstants.ConsignmentID);
         if (getIntent() != null) {
             CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
@@ -77,6 +77,11 @@ public class IrrigationActivity extends AppCompatActivity {
 
                 IrrigationLogXreflist = dataAccessHandler.getirigationlogxref(Queries.getInstance().getIrrigationlogxref(CONSINEMENTCODES));
                 String CONSINEMENTCODE = IrrigationLogXreflist.get(0).getConsignmentCode();
+
+                NUrsery_code = dataAccessHandler.getSingleValue(Queries.getnurseryfromirrigation(CONSINEMENTCODE));
+                NurseryName = dataAccessHandler.getSingleValue(Queries.getnurserynamefromirrigation(NUrsery_code));
+                Log.d(IrrigationActivity.LOG_TAG, "NUrsery_code=====" + NUrsery_code);
+                Log.d(IrrigationActivity.LOG_TAG, "NurseryName=====" + NurseryName);
                 String male_reg = dataAccessHandler.getSingleValue(Queries.getreg_male(CONSINEMENTCODES));
                 String femmale_reg = dataAccessHandler.getSingleValue(Queries.getreg_female(CONSINEMENTCODES));
                 String male_contract = dataAccessHandler.getSingleValue(Queries.getcontract_male(CONSINEMENTCODES));
@@ -86,11 +91,13 @@ public class IrrigationActivity extends AppCompatActivity {
                 manout_edt.setText(male_contract);
                 femaleout_edt.setText(female_contract);
                 consignment_num.setText(" : " + CONSINEMENTCODE);
+                nursaryname.setText(" : " + NurseryName);
             } else {
                 list = Arrays.asList(CONSINEMENTCODES.split(","));
                 Log.d(IrrigationActivity.LOG_TAG, "Consignment Codes Size :" + CONSINEMENTCODES);
                 Log.d(IrrigationActivity.LOG_TAG, "Consignment Codes Size :" + list.size());
                 consignment_num.setText(" : " + CONSINEMENTCODES);
+                nursaryname.setText(" : " + CommonConstants.NurseryName);
             }
 
         }
@@ -103,10 +110,10 @@ public class IrrigationActivity extends AppCompatActivity {
                     if (manregular_edt.length() != 0 || femalereg_edt.length() != 0 ||
                             manout_edt.length() != 0 || femaleout_edt.length() != 0) {
                         Log.d(IrrigationActivity.class.getSimpleName(), "Update Irrigation Code :" + transactionId);
-                        String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
-                        String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
-                        String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
-                        String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+                        String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(NUrsery_code));
+                        String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(NUrsery_code));
+                        String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(NUrsery_code));
+                        String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(NUrsery_code));
                         LinkedHashMap mapStatus = new LinkedHashMap();
 
                         mapStatus.put("LogDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -114,7 +121,7 @@ public class IrrigationActivity extends AppCompatActivity {
                         if (manregular_edt.length() != 0) {
                             mapStatus.put("RegularMale", manregular_edt.getText().toString());
                         } else
-                            mapStatus.put("RegularMale", "");
+                            mapStatus.put("RegularMale", "");   
 
                         if (femalereg_edt.length() != 0) {
                             mapStatus.put("RegularFemale", femalereg_edt.getText().toString());
@@ -165,7 +172,10 @@ public class IrrigationActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Please enter at least one value", Toast.LENGTH_SHORT).show();
                     }
-                } else {
+                }
+
+
+                else {
                     if (manregular_edt.length() != 0 || femalereg_edt.length() != 0 ||
                             manout_edt.length() != 0 || femaleout_edt.length() != 0) {
                         String IrrigationCode = "IRR" + CommonConstants.TAB_ID + CommonConstants.NurseryCode + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getIrrigationMaxNumber()) + 1);

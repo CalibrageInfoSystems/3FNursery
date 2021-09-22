@@ -78,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         notificationsRel.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, NotificationsScreen.class)));
 
 
-        newactivity.setOnClickListener(new View.OnClickListener() {
+        newactivity.setOnClickListener(new View.OnClickListener() {    // Nursery Selection
             @Override
             public void onClick(View view) {
                 CommonConstants.COMMINGFROM = CommonConstants.NEWACTIVITYSCREEEN;
@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        irrigation.setOnClickListener(new View.OnClickListener() {
+        irrigation.setOnClickListener(new View.OnClickListener() {             // Nursery Selection
             @Override
             public void onClick(View view) {
 
@@ -102,7 +102,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        irrigation_post.setOnClickListener(new View.OnClickListener() {
+        irrigation_post.setOnClickListener(new View.OnClickListener() {  // Nursery Selection
             @Override
             public void onClick(View view) {
 
@@ -114,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        IrrigationRel.setOnClickListener(new View.OnClickListener() {
+        IrrigationRel.setOnClickListener(new View.OnClickListener() {  // Irrigation Status info
             @Override
             public void onClick(View view) {
 
@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        checkactivityRel.setOnClickListener(new View.OnClickListener() {
+        checkactivityRel.setOnClickListener(new View.OnClickListener() {  // CheckActivity
             @Override
             public void onClick(View view) {
 

@@ -83,65 +83,15 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
         compactCalendarView.invalidate();
 
 
-        logEventsByMonth(compactCalendarView, DateTimeUtil.onGetCurrentDate(this).substring(0, 7));
+        logEventsByMonth(compactCalendarView, DateTimeUtil.onGetCurrentDate(this).substring(0, 7));  //  load data in  calendar
 
         toolbar = ((AppCompatActivity) this).getSupportActionBar();
         textView.setText(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
 
     }
 
-    private void loadEvents() {
-        addEvents(-1, -1);
-        addEvents(Calendar.DECEMBER, -1);
-        addEvents(Calendar.AUGUST, -1);
-    }
-    private void addEvents(int month, int year) {
-        currentCalender.setTime(new Date());
-        currentCalender.set(Calendar.DAY_OF_MONTH, 1);
-        Date firstDayOfMonth = currentCalender.getTime();
-        for (int i = 0; i < 6; i++) {
-            currentCalender.setTime(firstDayOfMonth);
-            if (month > -1) {
-                currentCalender.set(Calendar.MONTH, month);
-            }
-            if (year > -1) {
-                currentCalender.set(Calendar.ERA, GregorianCalendar.AD);
-                currentCalender.set(Calendar.YEAR, year);
-            }
-            currentCalender.add(Calendar.DATE, i);
-            setToMidnight(currentCalender);
-            long timeInMillis = currentCalender.getTimeInMillis();
 
-            List<Event> events = getEvents(timeInMillis, i);
 
-            compactCalendarView.addEvents(events);
-        }
-    }
-
-    private List<Event> getEvents(long timeInMillis, int day) {
-        if (day < 2) {
-            return Arrays.asList(new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis)));
-        } else if ( day > 2 && day <= 4) {
-            return Arrays.asList(
-                    new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis)),
-                    new Event(Color.argb(255, 100, 68, 65), timeInMillis, "Event 2 at " + new Date(timeInMillis)));
-        } else {
-            return Arrays.asList(
-                    new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis) ),
-                    new Event(Color.argb(255, 100, 68, 65), timeInMillis, "Event 2 at " + new Date(timeInMillis)),
-                    new Event(Color.argb(255, 70, 68, 65), timeInMillis, "Event 3 at " + new Date(timeInMillis)));
-        }
-    }
-    private void loadEventsForYear(int year) {
-        addEvents(Calendar.DECEMBER, year);
-        addEvents(Calendar.AUGUST, year);
-    }
-    private void setToMidnight(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-    }
     private void setview() {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         saplingActivitiesList = dataAccessHandler.getNurseryCheckActivityDetails(Queries.getInstance().getdata(currentDate));
@@ -160,7 +110,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
             recyclerView.setVisibility(View.GONE);
 
         }
-        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() { //Click on date in Calendar view
             @Override
             public void onDayClick(Date dateClicked) {
                 textView.setText(dateFormatForMonth.format(dateClicked));
@@ -211,7 +161,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
 
     }
 
-    private void logEventsByMonth(CompactCalendarView compactCalendarView, String Date) {
+    private void logEventsByMonth(CompactCalendarView compactCalendarView, String Date) {  // show dot in Calendar view dates
 
 
         currentCalender.setTime(new Date());
@@ -230,7 +180,7 @@ public class CheckActivity extends AppCompatActivity implements RecyclerAdapter.
             updateddate = saplingActivitiesdatesList.get(i).getTargetDate();
 
             Log.d(TAG, "Each Event :" + updateddate);
-            Event ev1 = new Event(Color.RED, stringTodate(updateddate).getTime(), "Test data");
+            Event ev1 = new Event(Color.RED, stringTodate(updateddate).getTime(), "Test data"); // red color dots on date
             try {
                 compactCalendarView.removeEvent(ev1);
             } catch (Exception e) {

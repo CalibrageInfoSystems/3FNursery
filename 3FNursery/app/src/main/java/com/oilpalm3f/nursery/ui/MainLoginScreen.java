@@ -73,7 +73,7 @@ public class MainLoginScreen extends AppCompatActivity {
         versionnumbertxt.setText(CommonUtils.getAppVersion(this));
         dbVersionTxt.setText(""+ Palm3FoilDatabase.DATA_VERSION);
 
-        String query = Queries.getInstance().getUserDetailsNewQuery(CommonUtils.getIMEInumber(this));
+        String query = Queries.getInstance().getUserDetailsNewQuery(CommonUtils.getIMEInumber(this)); // Get Tab IMEI number
 
 
         final UserDetails userDetails = (UserDetails) dataAccessHandler.getUserDetails(query, 0);
@@ -139,31 +139,7 @@ public class MainLoginScreen extends AppCompatActivity {
 
 
     }
-    public void addUserMasSyncDetails(){
-        UserSync userSync;
 
-        SimpleDateFormat simpledatefrmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String currentTime = simpledatefrmt.format(new Date());
-
-        userSync = new UserSync();
-        userSync.setUserId(Integer.parseInt(CommonConstants.USER_ID));
-        userSync.setApp(""+"3fMainApp");
-        userSync.setDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        userSync.setMasterSync(1);
-        userSync.setTransactionSync(0);
-        userSync.setResetData(0);
-        userSync.setIsActive(1);
-        userSync.setCreatedByUserId(Integer.parseInt(CommonConstants.USER_ID));
-        userSync.setCreatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        userSync.setUpdatedByUserId(Integer.parseInt(CommonConstants.USER_ID));
-        userSync.setUpdatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        userSync.setServerUpdatedStatus(0);
-        long resul=  dataAccessHandler.addUserSync(userSync);
-        if(resul>-1){
-            Log.v("@@@MM","Success");
-        }
-
-    }
 
 
     private void initView() {

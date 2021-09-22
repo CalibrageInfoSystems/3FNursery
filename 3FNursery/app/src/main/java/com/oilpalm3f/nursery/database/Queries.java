@@ -18,9 +18,13 @@ public class Queries {
 
     public static String getIsoptionalField(int id) {
 
-        return "Select IsOptional from NurseryActivityField where id ='" + id + "' and IsOptional = 'true'";
+        return "Select IsOptional from NurseryActivityField where id ='" + id + "' and Dependency = 'Yes'";
     }
 
+    public static String getIsoptionalField2(int id) {
+
+        return "Select IsOptional from NurseryActivityField where id ='" + id + "' and Dependency = 'No'";
+    }
     public static String getCropId() {
         return "SELECT Id FROM LookUp WHERE Name ='Oil Palm' AND LookUpTypeId = '22'";
     }
@@ -824,11 +828,11 @@ public class Queries {
                 "CASE WHEN IsOptional IS 'true' THEN 1 --No Color    \n" +
                 "     WHEN IsOptional IS 'false' THEN 0 END as \n" +
                 "IsOptional," +
-                "Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
+                "Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + Id + "'";
     }
 
     public String getActivityTaskDetailsUsingGroupId(int activityTypeId, int groupId) {
-        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,CostCenter,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + activityTypeId + "'   and GroupId ='" + groupId + "' ";
+        return "select Id,ActivityTypeId,Dependency,IsOptional,Bucket,Field,ItemCode,ItemCodeName,GLCOde,GLName,InputType,UOM,IsActive,CreatedByUserId,CreatedDate,UpdatedByUserId,UpdatedDate,DataType,GroupId from NurseryActivityField where IsActive = 'true' AND ActivityTypeId = '" + activityTypeId + "'   and GroupId ='" + groupId + "' ";
     }
 
     public static String getTargetDay(String consimentId) {
@@ -1883,5 +1887,12 @@ public class Queries {
 
     public static String getcontract_female(String irrigationCode) {
         return "select ContractFemale from NurseryIrrigationLog where IrrigationCode ='" + irrigationCode + "'";
+    }
+
+    public static String getnurseryfromirrigation(String Consigmentcode) {
+        return "SELECT NurseryCode from Sapling where ConsignmentCode ='" + Consigmentcode + "'";
+    }
+    public static String getnurserynamefromirrigation(String Consigmentcode) {
+        return "SELECT Name  from Nursery where Code ='" + Consigmentcode + "'";
     }
 }

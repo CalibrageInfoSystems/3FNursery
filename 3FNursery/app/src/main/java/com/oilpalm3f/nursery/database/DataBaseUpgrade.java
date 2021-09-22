@@ -137,7 +137,9 @@ public class DataBaseUpgrade {
         Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
         String column2= "Alter table Nursery add  CostCenter varchar(50)";
+        String column3= "alter table Nursery add SAPCode varchar(5) ";
         String  column1 =  "Alter table NurseryActivity add Bucket VARCHAR(50)";
+        String column4 = "Alter table Sapling add SAPCode varchar(50)";
 
         String alertsTable = "CREATE TABLE Alerts( \n" +
                 "Id INTEGER, \n" +
@@ -159,6 +161,8 @@ public class DataBaseUpgrade {
 
             db.execSQL(column1);
             db.execSQL(column2);
+            db.execSQL(column3);
+            db.execSQL(column4);
             db.execSQL(alertsTable);
 
         } catch (Exception e) {

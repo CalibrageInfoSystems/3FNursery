@@ -2155,7 +2155,7 @@ f
     }
 
 
-    public List<NurseryData> getNurseryData(final String query) {
+    public List<NurseryData> getNurseryData(final String query) {    // Get Nursery Details
         List<NurseryData> nurseryData = new ArrayList<>();
         Log.d(LOG_TAG, "=== > Analysis ==> getNurseryData:" + query);
         Cursor cursor = null;
@@ -2603,7 +2603,6 @@ f
                     taskDetails.setItemCodeName(cursor.getString(cursor.getColumnIndex("ItemCodeName")));
                     taskDetails.setGLCode(cursor.getString(cursor.getColumnIndex("GLCode")));
                     taskDetails.setGLName(cursor.getString(cursor.getColumnIndex("GLName")));
-                    taskDetails.setCostCenter(cursor.getString(cursor.getColumnIndex("CostCenter")));
                     taskDetails.setInputType(cursor.getString(cursor.getColumnIndex("InputType")));
                     taskDetails.setUom(cursor.getString(cursor.getColumnIndex("UOM")));
                     taskDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));

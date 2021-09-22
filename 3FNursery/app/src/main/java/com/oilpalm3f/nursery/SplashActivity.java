@@ -79,7 +79,7 @@ public class SplashActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "@@@ Error while getting master data " + e.getMessage());
                     }
-                    startMasterSync();
+                    startMasterSync(); // Master Sync
                 }
                 break;
         }
