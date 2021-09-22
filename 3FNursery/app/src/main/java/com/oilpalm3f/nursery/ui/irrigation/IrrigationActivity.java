@@ -54,7 +54,6 @@ public class IrrigationActivity extends AppCompatActivity {
         femalereg_edt = findViewById(R.id.Femalereg_edt);
         manout_edt = findViewById(R.id.manout_edt);
         femaleout_edt = findViewById(R.id.femaleout_edt);
-
         save_btn = findViewById(R.id.save_btn);
 
 
