@@ -905,7 +905,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    public CheckBox addCheckbox(String content, int id) {
+    public CheckBox addCheckbox(String content, int id) {  // default checked Checkbox ids
         CheckBox cb = new CheckBox(this);
         cb.setText(content);
         cb.setId(id);
@@ -977,7 +977,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         et.setMaxLines(1);
 
         if (dataType.equalsIgnoreCase("Integer")) {
-            et.setInputType(InputType.TYPE_CLASS_NUMBER);
+            et.setInputType(InputType.TYPE_CLASS_NUMBER);  // Number Keyboard & max & digits
             et.setFilters(new InputFilter[] { new InputFilter.LengthFilter(7) });
         }
 
@@ -1089,6 +1089,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         final String defaultSeperator=Character.toString(symbols.getDecimalSeparator());
         editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         editText.setKeyListener(DigitsKeyListener.getInstance("0123456789." + defaultSeperator));
+        editText.setKeyListener(DigitsKeyListener.getInstance(false,true));
 
     }
 
