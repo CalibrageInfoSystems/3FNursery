@@ -111,7 +111,9 @@ public class MainLoginScreen extends AppCompatActivity {
         } else {
             UiUtils.showCustomToastMessage("User not existed", MainLoginScreen.this, 1);
         }
-
+        /*
+         * If backgrount type 0(Zero) = Green
+         *                    1        = Red*/
 
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +123,7 @@ public class MainLoginScreen extends AppCompatActivity {
                 userId = userID.getText().toString();
                 password = passwordEdit.getText().toString();
                 if (validateField()) {
-                    CommonUtils.hideKeyPad(MainLoginScreen.this, passwordEdit);
+                    CommonUtils.hideKeyPad(MainLoginScreen.this, passwordEdit); //hide keypad
                     startActivity(new Intent(MainLoginScreen.this, HomeActivity.class));
                     finish();
                 }
@@ -154,12 +156,12 @@ public class MainLoginScreen extends AppCompatActivity {
     private boolean validateField() {
         if (TextUtils.isEmpty(userId)) {
             Toasty.error(this, "Please enter user id", Toast.LENGTH_SHORT).show();
-            userID.requestFocus();
+            userID.requestFocus();  // not Editble
             return false;
         }
         if (TextUtils.isEmpty(password)) {
             Toasty.error(this, "Please enter password", Toast.LENGTH_SHORT).show();
-            passwordEdit.requestFocus();
+            passwordEdit.requestFocus(); // not Editble
             return false;
         }
         return true;

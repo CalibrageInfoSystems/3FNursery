@@ -66,8 +66,9 @@ public class IrrigationActivity extends AppCompatActivity {
 
 //        consignment_num.setText(" : " + CommonConstants.ConsignmentID);
         if (getIntent() != null) {
-            CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
-            Flag = getIntent().getIntExtra("camefrom", 1);
+
+     CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
+            Flag = getIntent().getIntExtra("camefrom", 1); // if Flag 2 ,irrigation log edit on rejection
             transactionId = getIntent().getStringExtra("transactionId");
             Log.d(IrrigationActivity.LOG_TAG, "Consignment Code :" + CONSINEMENTCODES);
             Log.d(IrrigationActivity.LOG_TAG, "Flag=====" + Flag);
@@ -230,7 +231,7 @@ public class IrrigationActivity extends AppCompatActivity {
 
                         final List<LinkedHashMap> irrigationArray = new ArrayList<>();
                         irrigationArray.add(mapStatus);
-
+// inserting data
 
                         dataAccessHandler.insertMyDataa("NurseryIrrigationLog",
                                 irrigationArray, new ApplicationThread.OnComplete<String>() {

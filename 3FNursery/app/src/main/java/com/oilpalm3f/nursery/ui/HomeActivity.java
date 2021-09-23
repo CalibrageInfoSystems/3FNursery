@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-        irrigation.setOnClickListener(new View.OnClickListener() {             // Nursery Selection
+        irrigation.setOnClickListener(new View.OnClickListener() {          // Nursery Selection
             @Override
             public void onClick(View view) {
 

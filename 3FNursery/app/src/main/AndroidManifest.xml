@@ -20,9 +20,7 @@
             android:name=".ui.TransactionDataActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.CheckActivity" />
-        <activity
-            android:name=".ui.IrrigationpostActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.IrrigationStatusActivity"
             android:theme="@style/AppTheme.NoActionBar" />

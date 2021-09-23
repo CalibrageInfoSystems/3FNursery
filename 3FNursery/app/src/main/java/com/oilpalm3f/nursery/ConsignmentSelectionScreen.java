@@ -50,7 +50,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
         String UserId = CommonConstants.USER_ID;
         Log.d("UserId Is : ", UserId);
 
-        select_btn.setOnClickListener(new View.OnClickListener() {
+        select_btn.setOnClickListener(new View.OnClickListener() {   // Select Multiple Consignments
             @Override
             public void onClick(View view) {
                 if (consignmentRecyclerviewAdapterMultiple.getSelected().size() > 0) {
@@ -81,7 +81,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         consignmentRecyclerview = findViewById(R.id.consignmentRecyclerview);
          select_btn = findViewById(R.id.selectbtn);
-        if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
+        if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) { // select btn visible
            select_btn.setVisibility(View.VISIBLE);
         }else{
             select_btn.setVisibility(View.GONE);
@@ -95,17 +95,17 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
 
         consignmentRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         if (CommonConstants.COMMINGFROM == CommonConstants.POST_CONSIGNMENT) {
-            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentPostPreeDataQuery(CommonConstants.USER_ID, nurserycode));
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentPostPreeDataQuery(CommonConstants.USER_ID, nurserycode));  // Multi Consignment selection
             consignmentRecyclerviewAdapterMultiple = new MultiConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapterMultiple);
         }else if( CommonConstants.COMMINGFROM == CommonConstants.NEWACTIVITYSCREEEN)
         {
-            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getAllConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getAllConsignmentDataQuery(CommonConstants.USER_ID, nurserycode)); //  Consignment selection
             consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
         }
         else {
-            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode)); //  Consignment selection
             consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
         }

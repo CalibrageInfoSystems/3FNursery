@@ -135,7 +135,7 @@ public class IrrigationStatusActivity extends AppCompatActivity {
 
 
 
-        displayActivityData();
+        displayActivityData(); // Irrigation data display
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

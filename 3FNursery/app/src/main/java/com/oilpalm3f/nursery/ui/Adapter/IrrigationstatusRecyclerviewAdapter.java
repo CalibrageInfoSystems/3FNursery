@@ -197,7 +197,7 @@ public class IrrigationstatusRecyclerviewAdapter extends RecyclerView.Adapter<Ir
 
             boolean expanded = irrigation.isExpanded();
 
-            sublinear.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            sublinear.setVisibility(expanded ? View.VISIBLE : View.GONE); // show & hide functionality
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(
                     rvSubItem.getContext(),

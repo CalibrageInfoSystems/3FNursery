@@ -829,7 +829,7 @@ public class CommonUtils {
         return isAllPermissionsGranted;
     }
 
-    public static String getIMEInumber(final Context context) {
+    public static String getIMEInumber(final Context context) { // get IMENumber
         String deviceId;
         if (android.os.Build.VERSION.SDK_INT >= 29) {
             deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
