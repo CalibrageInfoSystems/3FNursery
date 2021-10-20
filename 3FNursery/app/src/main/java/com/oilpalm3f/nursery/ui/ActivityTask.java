@@ -1,6 +1,15 @@
 package com.oilpalm3f.nursery.ui;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -14,14 +23,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
+import com.oilpalm3f.nursery.BuildConfig;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.cloudhelper.Log;
@@ -30,20 +46,30 @@ import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
+import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DisplayData;
 import com.oilpalm3f.nursery.dbmodels.ExistingData;
+import com.oilpalm3f.nursery.dbmodels.Imagemodel;
+import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
+import com.oilpalm3f.nursery.ui.Adapter.RVAdapter_ImageList;
+import com.oilpalm3f.nursery.utils.ImageUtility;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class ActivityTask extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
+import static com.oilpalm3f.nursery.common.CommonUtils.REQUEST_CAM_PERMISSIONS;
+
+public class ActivityTask extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, ImageClickListener {
 
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
 
@@ -51,12 +77,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     private DataAccessHandler dataAccessHandler;
     LinkedHashMap<String, Pair> typeofLabourdatamap = null;
     Boolean isSingleentry = false, addactivity = false;
-
+    private static final String LOG_TAG = ActivityTask.class.getName();
     private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
     int SaplingActivityCount;
     List<KeyValues> dataValue = new ArrayList<>();
     int random_int = 0;
     int maxnumber;
+    int Arrival_Sprouts,Received_sprouts;
     TextView textView5;
     String TransactionID;
     int sapactivitysize, sapactivitysizeinc;
@@ -66,14 +93,33 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int activityStatus;
     int isjobDoneId = 0;
     int SCREEN_FROM = 0;
-
+    private static final int CAMERA_REQUEST = 1888;
     ActivityTasks showHideActivity;
     CheckBox chkShowHide;
     int yesnoCHeckbox = -10;
     int ButtonId = 100000001;
+    int ImagId = 100000003;
+    int rcvId = 100000002;
+    ArrayList<String> Check_listdata = new ArrayList<String>();
+    private String mCurrentPhotoPath;
     String errorMsg = "";
     String Code, dependency_code;
-
+    ImageView image;
+    boolean  Checked;
+    List<CullinglossFileRepository> imageRepo = new ArrayList<>();
+    RVAdapter_ImageList adapter_imageList;
+    private Bitmap currentBitmap = null;
+    private Bitmap currentBitmap2 = null;
+    private String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    boolean enableEditing;
+    private List<String> multiplelist = new ArrayList<>();
+    String transactionIdNew,TransactionId;
+    String intentTransactionId;
+    int Arrivalsprouts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,17 +170,29 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
             // SCREEN CAME FROM UPDATE CURRENT SCREEN
             String consignmentcode = extras.getString("consignmentcode");
-            String intentTransactionId = extras.getString("transactionId");
-            boolean enableEditing = extras.getBoolean("enableEditing");
+            intentTransactionId   = extras.getString("transactionId");
+             enableEditing = extras.getBoolean("enableEditing");
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id :" + intentTransactionId);
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
 
-//            Button btn = (Button) findViewById(ButtonId);
-//            if (enableEditing)
-//                btn.setVisibility(View.VISIBLE);
-//            else
-//                btn.setVisibility(View.GONE);
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
+            if (imageRepo.size ()!= 0) {
+
+                addImageData(); //ToDO
+            }
+
+            Button btn = (Button) findViewById(ButtonId);
+            ImageView img = (ImageView)findViewById(ImagId);
+            if (enableEditing){
+                btn.setVisibility(View.VISIBLE);
+
+
+                   }
+            else {
+               // img.setVisibility(View.GONE);
+                btn.setVisibility(View.GONE);
+            }
             // TODO Bind DATA UsingTransactionID
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
@@ -149,16 +207,25 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             String consignmentcode = extras.getString("consignmentcode");
             String activityTypeId = extras.getString("ActivityTypeId");
 
-            boolean enableEditing = extras.getBoolean("enableEditing");
+             enableEditing = extras.getBoolean("enableEditing");
 
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
 
 
-//            Button btn = (Button) findViewById(ButtonId);
-//            if (enableEditing)
-//                btn.setVisibility(View.VISIBLE);
-//            else
-//                btn.setVisibility(View.GONE);
+            Button btn = (Button) findViewById(ButtonId);
+            ImageView img = (ImageView)findViewById(ImagId);
+            if (enableEditing){
+                multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(consignmentcode, activityTypeId));
+
+
+                btn.setVisibility(View.VISIBLE);
+//            img.setVisibility(View.VISIBLE);
+
+            }
+            else{
+                btn.setVisibility(View.GONE);
+         //   img.setVisibility(View.GONE);
+            }
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
@@ -167,8 +234,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 bindExistingData(transactionId);
             } else {
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
-                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
+                transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 209" + transactionIdNew);
 
 
             }
@@ -179,25 +246,47 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             btn.setVisibility(View.GONE);
         }
 
+
+
     }
 
     private void bindExistingData(String transactionId) {
         displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(transactionId));
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Count Of DisplayData :" + displayData.size());
 
+
         for (int i = 0; i < displayData.size(); i++) {
+
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis name Of DisplayData :" +displayData.get(i).getInputType());
+
             if (displayData.get(i).getInputType().equalsIgnoreCase("Check box")) {
+
                 CheckBox chk = (CheckBox) findViewById(displayData.get(i).getFieldId());
                 if ( displayData.get(i).getValue().equalsIgnoreCase("true")) {
                     chk.setChecked(true);
                 } else
                     chk.setChecked(false);
+
+                if (enableEditing){
+                    Checked  = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().Checkboxdisable(displayData.get(i).getFieldId(),consignmentCode, activityTypeId)) == "true" ? true :false ;
+
+Log.e("=================================>Checked",Checked+"");
+                        if (Checked) {
+                        chk.setEnabled(false);
+                    } else  {
+                        chk.setEnabled(true);}}
+
+
+
+
             } else if (displayData.get(i).getInputType().equalsIgnoreCase("TextBox")) {
                 EditText editText = (EditText) findViewById(displayData.get(i).getFieldId());
-                if (!TextUtils.isEmpty(displayData.get(i).getValue())) {
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis name Of DisplayData :" +displayData.get(i).getFieldId() +"============="+displayData.get(i).getValue());
+
+                if (!displayData.get(i).getValue().equalsIgnoreCase("null")) {
                     editText.setText(displayData.get(i).getValue());
-                } else
-                    editText.setText("");
+                }else{
+                    editText.setText("");}
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Display") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Formula")) {
                 TextView textView = (TextView) findViewById(displayData.get(i).getFieldId());
                 if (!TextUtils.isEmpty(displayData.get(i).getValue())) {
@@ -216,8 +305,27 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Spinner sp = (Spinner) findViewById(displayData.get(i).getFieldId());
                 sp.setSelection(position);
             }
+
+
+
+            else  {
+                String value = displayData.get(i).getValue();
+
+                TextView textView = (TextView) findViewById(displayData.get(i).getFieldId());
+                if (!TextUtils.isEmpty(displayData.get(i).getValue())) {
+                    textView.setText(displayData.get(i).getValue());
+                }
+
+
+
+            }
+
         }
+
+
+
     }
+
 
     private boolean goValidate() {
         Log.d("##############################", "YESNO CHECK VALUE :" + yesnoCHeckbox);
@@ -247,6 +355,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             mapXref.put("TransactionId", _transactionId);
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
+
             mapXref.put("FilePath", "");
             mapXref.put("IsActive", 1);
             mapXref.put("CreatedByUserId", CommonConstants.USER_ID);
@@ -268,7 +377,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null")))
                     mapXref.put("LabourRate", male_contract);
             }
-            if (id == 11 || id == 18 || id == 49 || id == 58 || id == 66 || id == 71 || id == 77 || id == 84 || id == 88 || id == 93 || id == 100 || id == 106 || id == 117 || id == 126 || id == 135 || id == 144 || id == 154 || id == 169 || id == 178 || id == 186 || id == 195 || id == 228 || id == 232 || id == 240 || id == 246 || id == 250 || id == 258 || id == 264 || id == 268 || id == 274 || id == 285 || id == 294 || id == 303 || id == 312 || id == 322 || id == 337 || id == 346 || id == 355 || id == 363 || id == 373 || id == 378 || id == 382 || id == 390 || id == 396 || id == 402 || id == 408 || id == 419 || id == 428 || id == 437 || id == 446 || id == 456 || id == 471 || id == 480 || id == 489 || id == 497 || id == 541 || id == 556 || id == 571 || id == 586 || id == 601 || id == 616 || id == 631 || id == 646 || id == 661 || id == 676 || id == 691 || id == 706 || id == 721 || id == 736 || id == 751 || id == 766 || id == 781 || id == 796 || id == 804 || id == 812 || id == 820 || id == 828 || id == 836 || id == 844 || id == 852 || id == 860 || id == 868 || id == 876 || id == 884 || id == 892 || id == 900 || id == 908 || id == 916 || id == 924 || id == 934 || id == 944 || id == 954 || id == 964 || id == 974 || id == 984 || id == 994 || id == 1004 || id == 1014 || id == 1024 || id == 1034 || id == 1044 || id == 1054 || id == 1064 || id == 1074 || id == 1084 || id == 1093 || id == 1102 || id == 1111 || id == 1120 || id == 1129 || id == 1138 || id == 1147 || id == 1156 || id == 1165 || id == 1174 || id == 1183 || id == 1192 || id == 1201 || id == 1210 || id == 1219 || id == 1228 || id == 1235 || id == 1241 || id == 1247 || id == 1254 || id == 1260 || id == 1266 || id == 1273 || id == 1279 || id == 1285 || id == 1292 || id == 1298 || id == 1304 || id == 1310 || id == 1316 || id == 1322 || id == 1328 || id == 1334 || id == 1340 || id == 1346 || id == 1352 || id == 1358 || id == 1364 || id == 1370 || id == 1376 || id == 1387 || id == 1398 || id == 1407 || id == 1416 || id == 1425 || id == 1434 || id == 1443 || id == 1452 || id == 1462 || id == 1475 || id == 1481 || id == 1487 || id == 1493 || id == 1499 || id == 1505 || id == 1511 || id == 1517 || id == 1523 || id == 1529 || id == 1535 || id == 1541 || id == 1547 || id == 1553 || id == 1559 || id == 1565 || id == 1571 || id == 1577 || id == 1583 || id == 1589 || id == 1595 || id == 1601 || id == 1607 || id == 1622 || id == 1637 || id == 1652 || id == 1667 || id == 1682 || id == 1697 || id == 1712 || id == 1727 || id == 1742 || id == 1757 || id == 1765 || id == 1773 || id == 1781 || id == 1789 || id == 1797 || id == 1805 || id == 1813 || id == 1821 || id == 1829 || id == 1837 || id == 1846 || id == 1855 || id == 1864 || id == 1873 || id == 1882 || id == 1891 || id == 1900 || id == 1909 || id == 1918 || id == 1927 || id == 1937 || id == 1947 || id == 1957 || id == 1967 || id == 1977 || id == 1987 || id == 1997 || id == 2007 || id == 2017 || id == 2027 || id == 2036 || id == 2045 || id == 2054 || id == 2063 || id == 2072 || id == 2081 || id == 2090 || id == 2099 || id == 2108 || id == 2117 || id == 2128 || id == 2139 || id == 2150 || id == 2161 || id == 2172 || id == 2183 || id == 2194 || id == 2205 || id == 2216 || id == 2227 || id == 2236 || id == 2245 || id == 2254 || id == 2263 || id == 2272 || id == 2281 || id == 2290 || id == 2299 || id == 2308 || id == 2317 || id == 2326 || id == 2335 || id == 2344 || id == 2353 || id == 2362 || id == 2371 || id == 2380 || id == 2389 || id == 2398 || id == 2407 || id == 2416 || id == 2425 || id == 2434 || id == 2443 || id == 2452 || id == 2461 || id == 2470 || id == 2479 || id == 2488 || id == 2497 || id == 2507 || id == 2517 || id == 2527 || id == 2537 || id == 2547 || id == 2557 || id == 2567 || id == 2577 || id == 2587 || id == 2597 || id == 2603 || id == 2609 || id == 2615 || id == 2626 || id == 2637 || id == 2648 || id == 2659 || id == 2668 || id == 2677 || id == 2686 || id == 2695 || id == 2704 || id == 2713 || id == 2722 || id == 2731 || id == 2740 || id == 2749 || id == 2758 || id == 2767 || id == 2777 || id == 2787 || id == 2797 || id == 2807 || id == 2822 || id == 2837 || id == 2852 || id == 2867 || id == 2875 || id == 2883 || id == 2891 || id == 2899 || id == 2908 || id == 2917 || id == 2926 || id == 2935 || id == 2945 || id == 2955 || id == 2965 || id == 2975 || id == 2984 || id == 2993 || id == 3002 || id == 3011 || id == 3017 || id == 3023 || id == 3029 || id == 3035 || id == 3041 || id == 3047 || id == 3053 || id == 3059 || id == 3067 || id == 3082) {
+            if (id == 11 || id == 18 || id == 49 || id == 58 || id == 66 || id == 71 || id == 77 || id == 84 || id == 88 || id == 93 || id == 100 || id == 106 || id == 117 || id == 126 || id == 135 || id == 144 || id == 154 || id == 169 || id == 178 || id == 186 || id == 195 || id == 228 || id == 232 || id == 240 || id == 246 || id == 250 || id == 258 || id == 264 || id == 268 || id == 274 || id == 285 || id == 294 || id == 303 || id == 312 || id == 322 || id == 337 || id == 346 || id == 355 || id == 363 || id == 373 || id == 378 || id == 382 || id == 390 || id == 396 || id == 402 || id == 408 || id == 419 || id == 428 || id == 437 || id == 446 || id == 456 || id == 471 || id == 480 || id == 489 || id == 497 || id == 541 || id == 556 || id == 571 || id == 586 || id == 601 || id == 616 || id == 631 || id == 646 || id == 661 || id == 676 || id == 691 || id == 706 || id == 721 || id == 736 || id == 751 || id == 766 || id == 781 || id == 796 || id == 804 || id == 812 || id == 820 || id == 828 || id == 836 || id == 844 || id == 852 || id == 860 || id == 868 || id == 876 || id == 884 || id == 892 || id == 900 || id == 908 || id == 916 || id == 924 || id == 934 || id == 944 || id == 954 || id == 964 || id == 974 || id == 984 || id == 994 || id == 1004 || id == 1014 || id == 1024 || id == 1034 || id == 1044 || id == 1054 || id == 1064 || id == 1074 || id == 1084 || id == 1093 || id == 1102 || id == 1111 || id == 1120 || id == 1129 || id == 1138 || id == 1147 || id == 1156 || id == 1165 || id == 1174 || id == 1183 || id == 1192 || id == 1201 || id == 1210 || id == 1219 || id == 1228 || id == 1235 || id == 1241 || id == 1247 || id == 1254 || id == 1260 || id == 1266 || id == 1273 || id == 1279 || id == 1285 || id == 1292 || id == 1298 || id == 1304 || id == 1310 || id == 1316 || id == 1322 || id == 1328 || id == 1334 || id == 1346 || id == 1352 || id == 1358 || id == 1364 || id == 1370 || id == 1376 || id == 1387 || id == 1398 || id == 1407 || id == 1416 || id == 1425 || id == 1434 || id == 1443 || id == 1452 || id == 1462 || id == 1475 || id == 1481 || id == 1487 || id == 1493 || id == 1499 || id == 1505 || id == 1511 || id == 1517 || id == 1523 || id == 1529 || id == 1535 || id == 1541 || id == 1547 || id == 1553 || id == 1559 || id == 1565 || id == 1571 || id == 1577 || id == 1583 || id == 1589 || id == 1595 || id == 1601 || id == 1607 || id == 1622 || id == 1637 || id == 1652 || id == 1667 || id == 1682 || id == 1697 || id == 1712 || id == 1727 || id == 1742 || id == 1757 || id == 1765 || id == 1773 || id == 1781 || id == 1789 || id == 1797 || id == 1805 || id == 1813 || id == 1821 || id == 1829 || id == 1837 || id == 1846 || id == 1855 || id == 1864 || id == 1873 || id == 1882 || id == 1891 || id == 1900 || id == 1909 || id == 1918 || id == 1927 || id == 1937 || id == 1947 || id == 1957 || id == 1967 || id == 1977 || id == 1987 || id == 1997 || id == 2007 || id == 2017 || id == 2027 || id == 2036 || id == 2045 || id == 2054 || id == 2063 || id == 2072 || id == 2081 || id == 2090 || id == 2099 || id == 2108 || id == 2117 || id == 2128 || id == 2139 || id == 2150 || id == 2161 || id == 2172 || id == 2183 || id == 2194 || id == 2205 || id == 2216 || id == 2227 || id == 2236 || id == 2245 || id == 2254 || id == 2263 || id == 2272 || id == 2281 || id == 2290 || id == 2299 || id == 2308 || id == 2317 || id == 2326 || id == 2335 || id == 2344 || id == 2353 || id == 2362 || id == 2371 || id == 2380 || id == 2389 || id == 2398 || id == 2407 || id == 2416 || id == 2425 || id == 2434 || id == 2443 || id == 2452 || id == 2461 || id == 2470 || id == 2479 || id == 2488 || id == 2497 || id == 2507 || id == 2517 || id == 2527 || id == 2537 || id == 2547 || id == 2557 || id == 2567 || id == 2577 || id == 2587 || id == 2597 || id == 2603 || id == 2609 || id == 2615 || id == 2626 || id == 2637 || id == 2648 || id == 2659 || id == 2668 || id == 2677 || id == 2686 || id == 2695 || id == 2704 || id == 2713 || id == 2722 || id == 2731 || id == 2740 || id == 2749 || id == 2758 || id == 2767 || id == 2777 || id == 2787 || id == 2797 || id == 2807 || id == 2822 || id == 2837 || id == 2852 || id == 2867 || id == 2875 || id == 2883 || id == 2891 || id == 2899 || id == 2908 || id == 2917 || id == 2926 || id == 2935 || id == 2945 || id == 2955 || id == 2965 || id == 2975 || id == 2984 || id == 2993 || id == 3002 || id == 3011 || id == 3017 || id == 3023 || id == 3029 || id == 3035 || id == 3041 || id == 3047 || id == 3053 || id == 3059 || id == 3067 || id == 3082) {
                 if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null")))
                     mapXref.put("LabourRate", female_contract);
             }
@@ -319,6 +428,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     });
+
 
 
                     // -------------------------
@@ -409,6 +519,29 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
                 ll.addView(addSpinner(activityTasklist.get(i).getId())); // add Spinner ui Dynamic
             }
+            else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
+                ll.addView(addSpinner(activityTasklist.get(i).getId())); // add Spinner ui Dynamic
+            }
+
+            else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox with Camera / Attachment") || activityTasklist.get(i).getInputType().contains("TextBox with Camera / Attachment")) {
+                String value = activityTasklist.get(i).getField();
+                Log.e("==============>",value);
+                ll.addView(addImageTexView(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
+                ll.addView(addRecyclerimageview());
+                ll.addView(addimagebutton(activityTasklist.get(i).getId()));
+
+                addImageData();
+                ImageView img = (ImageView)findViewById(ImagId);
+//                if (enableEditing){
+//                    img.setVisibility(View.VISIBLE);
+//
+//                }
+//                else{
+//
+//                    img.setVisibility(View.GONE);
+//                }
+
+            }
 
             // GetForeachGruoupItems
 
@@ -417,6 +550,149 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         ll.addView(addButton("Submit", ButtonId));
     }
+
+    private View addImageTexView(String field, Integer id) {
+
+            TextView tv = new TextView(this);
+            tv.setId(id);
+            tv.setText(field);
+
+            return tv;
+
+        }
+    private View addimagebutton( Integer id) {
+
+        image = new ImageView(this);
+image.setId(ImagId);
+
+
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(200, 200);
+        image.setLayoutParams(lp);
+        Glide.with(this)
+                .load(R.drawable.addimage)
+                .override(200,200)
+                .into(image);
+
+
+        image.setOnClickListener(v1 -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (!CommonUtils.isPermissionAllowed(this, Manifest.permission.CAMERA))) {
+                android.util.Log.v(LOG_TAG, "Camera Permissions Not Granted");
+                ActivityCompat.requestPermissions(
+                        this,
+                        PERMISSIONS_STORAGE,
+                        REQUEST_CAM_PERMISSIONS
+                );
+            } else {
+                dispatchTakePictureIntent(CAMERA_REQUEST,id);
+            }
+        });
+
+        return image;
+
+    }
+
+    private View addRecyclerimageview() {
+
+
+
+        RecyclerView rv = new RecyclerView(this);
+        rv.setId(rcvId);
+        RecyclerView.LayoutParams params = new
+                RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT,
+                RecyclerView.LayoutParams.WRAP_CONTENT
+        );
+        rv.setLayoutParams(params);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rv.setLayoutManager(llm);
+        rv.setVisibility(View.VISIBLE);
+
+        return rv;
+    }
+    private  void addImageData(){
+        RecyclerView rcv = findViewById(rcvId);
+        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id 586 :" + intentTransactionId);
+
+            ImageView img = (ImageView)findViewById(ImagId);
+            if (enableEditing){
+                  img.setVisibility(View.VISIBLE);
+
+            }
+            else {
+                 img.setVisibility(View.GONE);
+
+            }
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
+          }
+        else{
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
+
+        }
+
+       adapter_imageList = new RVAdapter_ImageList(this,imageRepo,this);
+        rcv.setAdapter(adapter_imageList);
+
+    }
+
+    private void dispatchTakePictureIntent(int actionCode,int Id) {
+        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        switch (actionCode) {
+            case CAMERA_REQUEST:
+                File f = null;
+                mCurrentPhotoPath = null;
+                try {
+                    f = setUpPhotoFile(Id);
+                    mCurrentPhotoPath = f.getAbsolutePath();
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            BuildConfig.APPLICATION_ID + ".provider", f);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                } catch (IOException e) {
+                    android.util.Log.v(LOG_TAG, "IOException " + e.getMessage());
+                    e.printStackTrace();
+                    f = null;
+                    mCurrentPhotoPath = null;
+                }
+
+                break;
+
+            default:
+                break;
+        } // switch
+        android.util.Log.v(LOG_TAG, "dispatchTakePictureIntent ");
+        startActivityForResult(takePictureIntent, actionCode);
+    }
+
+    private File setUpPhotoFile(int id) throws IOException {
+
+        File f = createImageFile(id);
+        mCurrentPhotoPath = f.getAbsolutePath();
+Log.e("================>622",mCurrentPhotoPath);
+        return f;
+    }
+
+    private File createImageFile(int ActivityId) throws IOException {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File rootDirectory = new File(root + "/3F_Pictures");
+        File pictureDirectory = new File(root + "/3F_Pictures/" + "NurseryPhotos");
+
+        if (!rootDirectory.exists()) {
+            rootDirectory.mkdirs();
+        }
+
+        if (!pictureDirectory.exists()) {
+            pictureDirectory.mkdirs();
+        }
+
+        File finalFile = new File(pictureDirectory,  Calendar.getInstance().getTimeInMillis() + CommonConstants.JPEG_FILE_SUFFIX);
+        return finalFile;
+    }
+
+
 
     private boolean validate() {
         dataValue = new ArrayList<>();
@@ -484,6 +760,16 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     private boolean GroupValidate() {
         // TOdo comment Testing
 //
+        imageRepo = new ArrayList<>();
+
+        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
+
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
+        }
+        else{
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
+
+        }
 
         dataValue = new ArrayList<>();
 
@@ -529,18 +815,40 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
 
             }
+
             if(activityTasklist.get(i).getActivityTypeId() == 12){
                 try {
-                    int int52 = 52, int51 = 51,int53 = 53;
+                    int int52 = 52, int51 = 51,int53 = 53,  int7 = 7;
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int52)));
                     Log.d("TESTING  finalValue", + finalValue + "");
               //      dataValue.add(new KeyValues(int53, finalValue+ ""));
                     if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please  Enter Total No of Healthy Sprouts Less than are equal to  Total received Sprouts  " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
 
+
+
+                    int value =  Arrival_Sprouts - CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
+                    Log.e("============>arrival Sprout 807",value+"");
+                    Log.e("============>arrival Sprout 811",Arrival_Sprouts+"");
+
+                    if(value < 0){
+                        Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    Received_sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 51))) + CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
+                    Log.e("============>Received Sprout 820",Received_sprouts+"");
+                    Log.e("============>arrival Sprout 821",Arrival_Sprouts+"");
+                    int value2 =  Arrival_Sprouts - Received_sprouts;
+
+                    Log.e("============>arrival Sprout 824",value2+"");
+                    if(value2 < 0){
+                        Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -556,7 +864,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                  //   dataValue.add(new KeyValues(int62, finalValue + ""));
 
                     if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please  Enter No of Sprouts Sown Less than are equal to  Sprouts to sown =  (sprouts for Sowing in Sprout Counting ) " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
 
@@ -575,12 +883,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                 //    dataValue.add(new KeyValues(int62, finalValue + ""));
                     if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please  Enter No of healthy Saplings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int508)));
                     if(finalValue2 < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please  Enter germination Loss saplings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 } catch (Exception e) {
@@ -595,12 +903,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int510))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int511)));
                     Log.d("TESTING  finalValue", + finalValue + "");
                     if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please  Enter No of healthy Saplings Less than are equal to Current Closing Stock  " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int510))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int512)));
                     if(finalValue2 < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please  Enter germination Loss saplings Less than are equal to Current Closing Stock  " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
 
@@ -617,12 +925,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int515)));
                     Log.d("TESTING  finalValue", + finalValue + "");
                     if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int516)));
                     if(finalValue2 < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please Enter Mortality Loss-1 Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
 
@@ -640,12 +948,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int518))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int519)));
                     Log.d("TESTING  finalValue", + finalValue + "");
                     if(finalValue < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int518))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int520)));
                     if(finalValue2 < 0){
-                        Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Please Enter Mortality Loss-2 Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
 
@@ -662,7 +970,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int522))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
             Log.d("TESTING  finalValue", + finalValue + "");
             if(finalValue < 0){
-                Toast.makeText(this, "Please  Enter Correct Values  " , Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please Enter Transplantation Loss Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -672,6 +980,377 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     }
 
+            if(activityTasklist.get(i).getActivityTypeId() == 157){
+                try {
+                    int int525 = 525, int526 = 526,int527 = 527;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int526)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are e qual to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int527)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+// Culling Loss 2
+            if(activityTasklist.get(i).getActivityTypeId() == 183){
+                try {
+                    int int3086 = 3086, int3087 = 3087,int3088 = 3088;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3086))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3087)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3086))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3088)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+//SN-Culling loss-3
+
+            if(activityTasklist.get(i).getActivityTypeId() == 208){
+                try {
+                    int int3097 = 3097, int3099 = 3099,int3098 = 3098;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3097))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3098)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3097))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3099)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //SN-Culling loss-4
+            if(activityTasklist.get(i).getActivityTypeId() == 222){
+                try {
+                    int int3108 = 3108, int3109 = 3109,int3110 = 3110;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3109)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3110)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //SN-Culling loss-5
+            if(activityTasklist.get(i).getActivityTypeId() == 235){
+                try {
+                    int int3119 = 3119, int3120 = 3120 ,int3121 = 3121;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3119))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3120)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3119))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3121)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            //SN-Culling loss-6
+            if(activityTasklist.get(i).getActivityTypeId() == 249){
+                try {
+                    int int3131 = 3131, int3132 = 3132 ,int3133 = 3133;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3131))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3132)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3131))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3133)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            //SN-Culling loss-7
+            if(activityTasklist.get(i).getActivityTypeId() == 262){
+                try {
+                    int int3142 = 3142, int3143 = 3143 ,int3144 = 3144;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3142))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3143)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3142))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3144)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            //TN-Culling loss-8
+            if(activityTasklist.get(i).getActivityTypeId() == 277){
+                Log.e("image size=>",imageRepo.size()+"");
+                try {
+                    int int3153 = 3153, int3154 = 3154 ,int3155 = 3155;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3153))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3154)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3153))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3155)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //TN-Culling loss-9
+            if(activityTasklist.get(i).getActivityTypeId() == 290){
+                Log.e("image size=>",imageRepo.size()+"");
+                try {
+                    int int3164 = 3164, int3165 = 3165 ,int3166 = 3166;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3164))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3165)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3164))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3166)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(imageRepo.size() == 0 ){
+                    Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            //TN-Culling loss-10
+            if(activityTasklist.get(i).getActivityTypeId() == 304){
+
+                Log.e("image size=>",imageRepo.size()+"");
+                try {
+                    int int3175 = 3175, int3176 = 3176 ,int3177 = 3177;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3175))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3176)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3175))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3177)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 ){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //TN-Culling loss-11
+            if(activityTasklist.get(i).getActivityTypeId() == 317){
+                Log.e("image size=>",imageRepo.size()+"");
+                try {
+                    int int3186 = 3186, int3187 = 3187 ,int3188 = 3188;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3187)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3188)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //TN-Culling loss-12
+            if(activityTasklist.get(i).getActivityTypeId() == 331){
+                Log.e("image size=>",imageRepo.size()+"");
+                try {
+                    int int3197 = 3197, int3198 = 3198 ,int3199 = 3199;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3197))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3198)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3197))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3199)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+            //SN-Culling loss-13
+            if(activityTasklist.get(i).getActivityTypeId() == 344){
+                try {
+                    int int3208 = 3208, int3209 = 3209 ,int3210 = 3210;
+
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3208))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3209)));
+                    Log.d("TESTING  finalValue", + finalValue + "");
+                    if(finalValue < 0){
+                        Toast.makeText(this, "Please Enter No of healthy Saplings Less than are equal to Current Closing Stock" , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+
+                    int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3208))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3210)));
+                    if(finalValue2 < 0){
+                        Toast.makeText(this, "Please Enter Weaklings Less than are equal to Current Closing Stock " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    if(imageRepo.size() == 0 || imageRepo == null){
+                        Toast.makeText(this, "Please add At Least one Image( Attachment) " , Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
 
         if (yesnoCHeckbox > 0 && Integer.parseInt(activityTypeId) != 9) {
@@ -729,7 +1408,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             EditText editText = (EditText) findViewById(groupFields.get(i).getId());
             errorMsg = errorMsg + "\n" + groupFields.get(i).getField();
-            if (editText.getVisibility() == View.GONE || editText != null & editText.getText() != null & !StringUtils.isEmpty(editText.getText())) {
+            if (editText.getVisibility() == View.GONE || editText != null & editText.getText() != null & !StringUtils.isEmpty(editText.getText())  & !editText.getText().toString().equalsIgnoreCase("0") ) {
                 return true;
             }
         }
@@ -779,11 +1458,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                             try {
                                 findViewById(f).setVisibility(View.GONE);
+
+
                                 findViewById(f + 9000).setVisibility(View.GONE);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
+try{
+    EditText txt  = findViewById(f);
+    txt.setText("");
+}catch(Exception e){
+    e.printStackTrace();
+}
 
                         }
 
@@ -799,13 +1485,20 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
+                            try{
+                                EditText txt  = findViewById(f);
+                                txt.setText("");
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         for (int f = 32; f < 45; f++) {
 
                             try {
                                 findViewById(f).setVisibility(View.VISIBLE);
                                 findViewById(f + 9000).setVisibility(View.VISIBLE);
-
+//
 //                                    if(f < 45 && f > 31){
 //                                        try {
 //                                            ((EditText)findViewById(f)).setText("");
@@ -824,7 +1517,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
                 } else if (Integer.parseInt(activityTypeId) == 91) {
-                    if (i == 1) {
+                    if (i == 2) {
                         yesnoCHeckbox = 210;
 
                         for (int f = 200; f < 211; f++) {
@@ -854,7 +1547,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
                         }
-                    } else if (i == 2) {
+                    } else if (i == 1) {
                         yesnoCHeckbox = 224;
 
 
@@ -1002,7 +1695,17 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             et.setClickable(false);
         }
+        if (id == 51) {
+            try {
 
+                 Arrival_Sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 7)));
+
+                    Log.e("================> Arrival Sprouts ",Arrival_Sprouts+"" );
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (id == 60) {
             try {
@@ -1017,7 +1720,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         if (id == 506) {
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 62)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingg(consignmentCode, 61)));
                 et.setText(finalValueold + "");
 
 
@@ -1074,6 +1777,171 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
         }
+
+
+        if (id == 525) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 524)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3086) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 535)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (id == 3097) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3096)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (id == 3108) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3107)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3119) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3118)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3131) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3130)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (id == 3142) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3141)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (id == 3153) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3152)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3164) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3163)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (id == 3175) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3174)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3186) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3185)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3197) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3196)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (id == 3208) {
+            // DOne
+            try {
+
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3207)));
+                et.setText(finalValueold + "");
+
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
         textInputLayout.setHint(content);
         textInputLayout.addView(et);
 
@@ -1119,7 +1987,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MUTIPLE_ENTRY_EDITDATA");
             // SCREEN CAME FROM UPDATE CURRENT SCREEN
-            String intentTransactionId = extras.getString("transactionId");
+             intentTransactionId = extras.getString("transactionId");
             String consignmentcode = extras.getString("consignmentcode");
             String ActivityTypeId = extras.getString("ActivityTypeId");
             boolean enableEditing = extras.getBoolean("enableEditing");
@@ -1155,8 +2023,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else {
                 statusTypeId = 346;
             }
-            String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
-            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
+             transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 1872" + transactionIdNew);
+
+            String[] strArray = null;
+
+            strArray = transactionIdNew.split("/");
+
+            for (int i = 0; i< strArray.length; i++){
+                System.out.println(strArray[i]);
+            }
+
+
             addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, true);
 
         } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
@@ -1183,8 +2061,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else {
                 // TODO dont have any Existind data add new activity
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                String transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
+
 
                 addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, false);
             }
@@ -1291,8 +2170,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     activityTasklist.get(i).getActivityTypeId() == 293 || activityTasklist.get(i).getActivityTypeId() == 294 || activityTasklist.get(i).getActivityTypeId() == 295 ||
                     activityTasklist.get(i).getActivityTypeId() == 305 || activityTasklist.get(i).getActivityTypeId() == 306 || activityTasklist.get(i).getActivityTypeId() == 307 || activityTasklist.get(i).getActivityTypeId() == 308 ||
                     activityTasklist.get(i).getActivityTypeId() == 309 || activityTasklist.get(i).getActivityTypeId() == 318 || activityTasklist.get(i).getActivityTypeId() == 319 || activityTasklist.get(i).getActivityTypeId() == 320 ||
-                    activityTasklist.get(i).getActivityTypeId() == 321 || activityTasklist.get(i).getActivityTypeId() == 322 || activityTasklist.get(i).getActivityTypeId() == 332 ||
-                    activityTasklist.get(i).getActivityTypeId() == 333 || activityTasklist.get(i).getActivityTypeId() == 334 || activityTasklist.get(i).getActivityTypeId() == 335 || activityTasklist.get(i).getActivityTypeId() == 336) {
+                    activityTasklist.get(i).getActivityTypeId() == 321 || activityTasklist.get(i).getActivityTypeId() == 322 || activityTasklist.get(i).getActivityTypeId() == 332 ||  activityTasklist.get(i).getActivityTypeId() == 3219 ||
+            activityTasklist.get(i).getActivityTypeId() == 3220 || activityTasklist.get(i).getActivityTypeId() == 3221 || activityTasklist.get(i).getActivityTypeId() == 3222 || activityTasklist.get(i).getActivityTypeId() == 3223 || activityTasklist.get(i).getActivityTypeId() == 3224 || activityTasklist.get(i).getActivityTypeId() == 3225 || activityTasklist.get(i).getActivityTypeId() == 3226 || activityTasklist.get(i).getActivityTypeId() == 3227 || activityTasklist.get(i).getActivityTypeId() == 3228 || activityTasklist.get(i).getActivityTypeId() == 3229 || activityTasklist.get(i).getActivityTypeId() == 3230 || activityTasklist.get(i).getActivityTypeId() == 3231 || activityTasklist.get(i).getActivityTypeId() == 3232 || activityTasklist.get(i).getActivityTypeId() == 3233 || activityTasklist.get(i).getActivityTypeId() == 3234 || activityTasklist.get(i).getActivityTypeId() == 3235 || activityTasklist.get(i).getActivityTypeId() == 3236 || activityTasklist.get(i).getActivityTypeId() == 3237 || activityTasklist.get(i).getActivityTypeId() == 3238 || activityTasklist.get(i).getActivityTypeId() == 3239 || activityTasklist.get(i).getActivityTypeId() == 3240 || activityTasklist.get(i).getActivityTypeId() == 3241 || activityTasklist.get(i).getActivityTypeId() == 3242 || activityTasklist.get(i).getActivityTypeId() == 3243 || activityTasklist.get(i).getActivityTypeId() == 3244 || activityTasklist.get(i).getActivityTypeId() == 3245 || activityTasklist.get(i).getActivityTypeId() == 3246 || activityTasklist.get(i).getActivityTypeId() == 3247 || activityTasklist.get(i).getActivityTypeId() == 3248 || activityTasklist.get(i).getActivityTypeId() == 3249 || activityTasklist.get(i).getActivityTypeId() == 3250 || activityTasklist.get(i).getActivityTypeId() == 3251 || activityTasklist.get(i).getActivityTypeId() == 3252 || activityTasklist.get(i).getActivityTypeId() == 3253 || activityTasklist.get(i).getActivityTypeId() == 3254 || activityTasklist.get(i).getActivityTypeId() == 3255 || activityTasklist.get(i).getActivityTypeId() == 3256 || activityTasklist.get(i).getActivityTypeId() == 3257 || activityTasklist.get(i).getActivityTypeId() == 3258 || activityTasklist.get(i).getActivityTypeId() == 3259 || activityTasklist.get(i).getActivityTypeId() == 3260 || activityTasklist.get(i).getActivityTypeId() == 3261 || activityTasklist.get(i).getActivityTypeId() == 3262 || activityTasklist.get(i).getActivityTypeId() == 3263 || activityTasklist.get(i).getActivityTypeId() == 3264 || activityTasklist.get(i).getActivityTypeId() == 3265 || activityTasklist.get(i).getActivityTypeId() == 3266 || activityTasklist.get(i).getActivityTypeId() == 3267 || activityTasklist.get(i).getActivityTypeId() == 3268 || activityTasklist.get(i).getActivityTypeId() == 3269 || activityTasklist.get(i).getActivityTypeId() == 3270 || activityTasklist.get(i).getActivityTypeId() == 3271 || activityTasklist.get(i).getActivityTypeId() == 3272 || activityTasklist.get(i).getActivityTypeId() == 3273 || activityTasklist.get(i).getActivityTypeId() == 3274 || activityTasklist.get(i).getActivityTypeId() == 3275 || activityTasklist.get(i).getActivityTypeId() == 3276 || activityTasklist.get(i).getActivityTypeId() == 3277 || activityTasklist.get(i).getActivityTypeId() == 3278 || activityTasklist.get(i).getActivityTypeId() == 3279 || activityTasklist.get(i).getActivityTypeId() == 3280 || activityTasklist.get(i).getActivityTypeId() == 3281 || activityTasklist.get(i).getActivityTypeId() == 3282 || activityTasklist.get(i).getActivityTypeId() == 3283 || activityTasklist.get(i).getActivityTypeId() == 3284 || activityTasklist.get(i).getActivityTypeId() == 3285 || activityTasklist.get(i).getActivityTypeId() == 3286 || activityTasklist.get(i).getActivityTypeId() == 3287 || activityTasklist.get(i).getActivityTypeId() == 3288 || activityTasklist.get(i).getActivityTypeId() == 3289 || activityTasklist.get(i).getActivityTypeId() == 3290 || activityTasklist.get(i).getActivityTypeId() == 3291 || activityTasklist.get(i).getActivityTypeId() == 3292 || activityTasklist.get(i).getActivityTypeId() == 3293 || activityTasklist.get(i).getActivityTypeId() == 3294 || activityTasklist.get(i).getActivityTypeId() == 3295 || activityTasklist.get(i).getActivityTypeId() == 3296 || activityTasklist.get(i).getActivityTypeId() == 3297 || activityTasklist.get(i).getActivityTypeId() == 3298 || activityTasklist.get(i).getActivityTypeId() == 3299 || activityTasklist.get(i).getActivityTypeId() == 3300 || activityTasklist.get(i).getActivityTypeId() == 3301 || activityTasklist.get(i).getActivityTypeId() == 3302 || activityTasklist.get(i).getActivityTypeId() == 3303 || activityTasklist.get(i).getActivityTypeId() == 3304 || activityTasklist.get(i).getActivityTypeId() == 3305 || activityTasklist.get(i).getActivityTypeId() == 3306 || activityTasklist.get(i).getActivityTypeId() == 3307 || activityTasklist.get(i).getActivityTypeId() == 3308 || activityTasklist.get(i).getActivityTypeId() == 3309 || activityTasklist.get(i).getActivityTypeId() == 3310 || activityTasklist.get(i).getActivityTypeId() == 3311 || activityTasklist.get(i).getActivityTypeId() == 3312 || activityTasklist.get(i).getActivityTypeId() == 3313 || activityTasklist.get(i).getActivityTypeId() == 3314 || activityTasklist.get(i).getActivityTypeId() == 3315 || activityTasklist.get(i).getActivityTypeId() == 3316 || activityTasklist.get(i).getActivityTypeId() == 3317 || activityTasklist.get(i).getActivityTypeId() == 3318 || activityTasklist.get(i).getActivityTypeId() == 3319 || activityTasklist.get(i).getActivityTypeId() == 3320 || activityTasklist.get(i).getActivityTypeId() == 3321 || activityTasklist.get(i).getActivityTypeId() == 3322 || activityTasklist.get(i).getActivityTypeId() == 3323 || activityTasklist.get(i).getActivityTypeId() == 3324 || activityTasklist.get(i).getActivityTypeId() == 3325 || activityTasklist.get(i).getActivityTypeId() == 3326 || activityTasklist.get(i).getActivityTypeId() == 3327 || activityTasklist.get(i).getActivityTypeId() == 3328 || activityTasklist.get(i).getActivityTypeId() == 3329 || activityTasklist.get(i).getActivityTypeId() == 3330 || activityTasklist.get(i).getActivityTypeId() == 3331 || activityTasklist.get(i).getActivityTypeId() == 3332 || activityTasklist.get(i).getActivityTypeId() == 3333 || activityTasklist.get(i).getActivityTypeId() == 3334 || activityTasklist.get(i).getActivityTypeId() == 3335 || activityTasklist.get(i).getActivityTypeId() == 3336 || activityTasklist.get(i).getActivityTypeId() == 3337 || activityTasklist.get(i).getActivityTypeId() == 3338 || activityTasklist.get(i).getActivityTypeId() == 3339 || activityTasklist.get(i).getActivityTypeId() == 3340 || activityTasklist.get(i).getActivityTypeId() == 3341 || activityTasklist.get(i).getActivityTypeId() == 3342 || activityTasklist.get(i).getActivityTypeId() == 3343 || activityTasklist.get(i).getActivityTypeId() == 3344 || activityTasklist.get(i).getActivityTypeId() == 3345 || activityTasklist.get(i).getActivityTypeId() == 3346 || activityTasklist.get(i).getActivityTypeId() == 3347 || activityTasklist.get(i).getActivityTypeId() == 3348 || activityTasklist.get(i).getActivityTypeId() == 3349 || activityTasklist.get(i).getActivityTypeId() == 3350 || activityTasklist.get(i).getActivityTypeId() == 3351 || activityTasklist.get(i).getActivityTypeId() == 3352 || activityTasklist.get(i).getActivityTypeId() == 3353 || activityTasklist.get(i).getActivityTypeId() == 3354 || activityTasklist.get(i).getActivityTypeId() == 3355 || activityTasklist.get(i).getActivityTypeId() == 3356 || activityTasklist.get(i).getActivityTypeId() == 3357 || activityTasklist.get(i).getActivityTypeId() == 3358 || activityTasklist.get(i).getActivityTypeId() == 3359 || activityTasklist.get(i).getActivityTypeId() == 3360 || activityTasklist.get(i).getActivityTypeId() == 3361 || activityTasklist.get(i).getActivityTypeId() == 3362 || activityTasklist.get(i).getActivityTypeId() == 3363 || activityTasklist.get(i).getActivityTypeId() == 3364 || activityTasklist.get(i).getActivityTypeId() == 3365 || activityTasklist.get(i).getActivityTypeId() == 3366 || activityTasklist.get(i).getActivityTypeId() == 3367 || activityTasklist.get(i).getActivityTypeId() == 3368 || activityTasklist.get(i).getActivityTypeId() == 3369 || activityTasklist.get(i).getActivityTypeId() == 3370 || activityTasklist.get(i).getActivityTypeId() == 3371 || activityTasklist.get(i).getActivityTypeId() == 3372 || activityTasklist.get(i).getActivityTypeId() == 3373 || activityTasklist.get(i).getActivityTypeId() == 3374 || activityTasklist.get(i).getActivityTypeId() == 3375 || activityTasklist.get(i).getActivityTypeId() == 3376 || activityTasklist.get(i).getActivityTypeId() == 3377 || activityTasklist.get(i).getActivityTypeId() == 3378 || activityTasklist.get(i).getActivityTypeId() == 3379 || activityTasklist.get(i).getActivityTypeId() == 3380 || activityTasklist.get(i).getActivityTypeId() == 3381 || activityTasklist.get(i).getActivityTypeId() == 3382 || activityTasklist.get(i).getActivityTypeId() == 3383 || activityTasklist.get(i).getActivityTypeId() == 3384 || activityTasklist.get(i).getActivityTypeId() == 3385 || activityTasklist.get(i).getActivityTypeId() == 3386 || activityTasklist.get(i).getActivityTypeId() == 3387 || activityTasklist.get(i).getActivityTypeId() == 3388 || activityTasklist.get(i).getActivityTypeId() == 3389 || activityTasklist.get(i).getActivityTypeId() == 3390 || activityTasklist.get(i).getActivityTypeId() == 3391 || activityTasklist.get(i).getActivityTypeId() == 3392 || activityTasklist.get(i).getActivityTypeId() == 3393 || activityTasklist.get(i).getActivityTypeId() == 3394 || activityTasklist.get(i).getActivityTypeId() == 3395 || activityTasklist.get(i).getActivityTypeId() == 3396 || activityTasklist.get(i).getActivityTypeId() == 3397 || activityTasklist.get(i).getActivityTypeId() == 3398 || activityTasklist.get(i).getActivityTypeId() == 3399 || activityTasklist.get(i).getActivityTypeId() == 3400 || activityTasklist.get(i).getActivityTypeId() == 3401 || activityTasklist.get(i).getActivityTypeId() == 3402 || activityTasklist.get(i).getActivityTypeId() == 3403 || activityTasklist.get(i).getActivityTypeId() == 3404 || activityTasklist.get(i).getActivityTypeId() == 3405 || activityTasklist.get(i).getActivityTypeId() == 3406 || activityTasklist.get(i).getActivityTypeId() == 3407 || activityTasklist.get(i).getActivityTypeId() == 3408 || activityTasklist.get(i).getActivityTypeId() == 3409 || activityTasklist.get(i).getActivityTypeId() == 3410 || activityTasklist.get(i).getActivityTypeId() == 3411 || activityTasklist.get(i).getActivityTypeId() == 3412 || activityTasklist.get(i).getActivityTypeId() == 3413 || activityTasklist.get(i).getActivityTypeId() == 3414 || activityTasklist.get(i).getActivityTypeId() == 3415 || activityTasklist.get(i).getActivityTypeId() == 3416 || activityTasklist.get(i).getActivityTypeId() == 3417 || activityTasklist.get(i).getActivityTypeId() == 3418 || activityTasklist.get(i).getActivityTypeId() == 3419 || activityTasklist.get(i).getActivityTypeId() == 3420 || activityTasklist.get(i).getActivityTypeId() == 3421 || activityTasklist.get(i).getActivityTypeId() == 3422 || activityTasklist.get(i).getActivityTypeId() == 3423 || activityTasklist.get(i).getActivityTypeId() == 3424 || activityTasklist.get(i).getActivityTypeId() == 3425 || activityTasklist.get(i).getActivityTypeId() == 3426 || activityTasklist.get(i).getActivityTypeId() == 3427 || activityTasklist.get(i).getActivityTypeId() == 3428 || activityTasklist.get(i).getActivityTypeId() == 3429 || activityTasklist.get(i).getActivityTypeId() == 3430 || activityTasklist.get(i).getActivityTypeId() == 3431 || activityTasklist.get(i).getActivityTypeId() == 3432 || activityTasklist.get(i).getActivityTypeId() == 3433 || activityTasklist.get(i).getActivityTypeId() == 3434 || activityTasklist.get(i).getActivityTypeId() == 3435 || activityTasklist.get(i).getActivityTypeId() == 3436 || activityTasklist.get(i).getActivityTypeId() == 3437 || activityTasklist.get(i).getActivityTypeId() == 3438 || activityTasklist.get(i).getActivityTypeId() == 3439 || activityTasklist.get(i).getActivityTypeId() == 3440 || activityTasklist.get(i).getActivityTypeId() == 3441 || activityTasklist.get(i).getActivityTypeId() == 3442 || activityTasklist.get(i).getActivityTypeId() == 3443 || activityTasklist.get(i).getActivityTypeId() == 3444 || activityTasklist.get(i).getActivityTypeId() == 3445 || activityTasklist.get(i).getActivityTypeId() == 3446 || activityTasklist.get(i).getActivityTypeId() == 3447 || activityTasklist.get(i).getActivityTypeId() == 3448 || activityTasklist.get(i).getActivityTypeId() == 3449 || activityTasklist.get(i).getActivityTypeId() == 3450 || activityTasklist.get(i).getActivityTypeId() == 3451 || activityTasklist.get(i).getActivityTypeId() == 3452 || activityTasklist.get(i).getActivityTypeId() == 3453 || activityTasklist.get(i).getActivityTypeId() == 3454 || activityTasklist.get(i).getActivityTypeId() == 3455 || activityTasklist.get(i).getActivityTypeId() == 3456 || activityTasklist.get(i).getActivityTypeId() == 3457 || activityTasklist.get(i).getActivityTypeId() == 3458 || activityTasklist.get(i).getActivityTypeId() == 3459 || activityTasklist.get(i).getActivityTypeId() == 3460 || activityTasklist.get(i).getActivityTypeId() == 3461 || activityTasklist.get(i).getActivityTypeId() == 3462 || activityTasklist.get(i).getActivityTypeId() == 3463 || activityTasklist.get(i).getActivityTypeId() == 3464 || activityTasklist.get(i).getActivityTypeId() == 3465 || activityTasklist.get(i).getActivityTypeId() == 3466 || activityTasklist.get(i).getActivityTypeId() == 3467 || activityTasklist.get(i).getActivityTypeId() == 3468 || activityTasklist.get(i).getActivityTypeId() == 3469 || activityTasklist.get(i).getActivityTypeId() == 3470 || activityTasklist.get(i).getActivityTypeId() == 3471 || activityTasklist.get(i).getActivityTypeId() == 3472 || activityTasklist.get(i).getActivityTypeId() == 3473 || activityTasklist.get(i).getActivityTypeId() == 3474 || activityTasklist.get(i).getActivityTypeId() == 3475 || activityTasklist.get(i).getActivityTypeId() == 3476 || activityTasklist.get(i).getActivityTypeId() == 3477 || activityTasklist.get(i).getActivityTypeId() == 3478 || activityTasklist.get(i).getActivityTypeId() == 3479 || activityTasklist.get(i).getActivityTypeId() == 3480 || activityTasklist.get(i).getActivityTypeId() == 3481 || activityTasklist.get(i).getActivityTypeId() == 3482 || activityTasklist.get(i).getActivityTypeId() == 3483 || activityTasklist.get(i).getActivityTypeId() == 3484 || activityTasklist.get(i).getActivityTypeId() == 3485 || activityTasklist.get(i).getActivityTypeId() == 3486 || activityTasklist.get(i).getActivityTypeId() == 3487 || activityTasklist.get(i).getActivityTypeId() == 3488 || activityTasklist.get(i).getActivityTypeId() == 3489 || activityTasklist.get(i).getActivityTypeId() == 3490 || activityTasklist.get(i).getActivityTypeId() == 3491 || activityTasklist.get(i).getActivityTypeId() == 3492 || activityTasklist.get(i).getActivityTypeId() == 3493 || activityTasklist.get(i).getActivityTypeId() == 3494 || activityTasklist.get(i).getActivityTypeId() == 3495 || activityTasklist.get(i).getActivityTypeId() == 3496 || activityTasklist.get(i).getActivityTypeId() == 3497 || activityTasklist.get(i).getActivityTypeId() == 3498 || activityTasklist.get(i).getActivityTypeId() == 3499 || activityTasklist.get(i).getActivityTypeId() == 3500 || activityTasklist.get(i).getActivityTypeId() == 3501 || activityTasklist.get(i).getActivityTypeId() == 3502 || activityTasklist.get(i).getActivityTypeId() == 3503 || activityTasklist.get(i).getActivityTypeId() == 3504 || activityTasklist.get(i).getActivityTypeId() == 3505 || activityTasklist.get(i).getActivityTypeId() == 3506 || activityTasklist.get(i).getActivityTypeId() == 3507 || activityTasklist.get(i).getActivityTypeId() == 3508 || activityTasklist.get(i).getActivityTypeId() == 3509 || activityTasklist.get(i).getActivityTypeId() == 3510 || activityTasklist.get(i).getActivityTypeId() == 3511 || activityTasklist.get(i).getActivityTypeId() == 3512 || activityTasklist.get(i).getActivityTypeId() == 3513 || activityTasklist.get(i).getActivityTypeId() == 3514 || activityTasklist.get(i).getActivityTypeId() == 3515 || activityTasklist.get(i).getActivityTypeId() == 3516 || activityTasklist.get(i).getActivityTypeId() == 3517 || activityTasklist.get(i).getActivityTypeId() == 3518 || activityTasklist.get(i).getActivityTypeId() == 3519 || activityTasklist.get(i).getActivityTypeId() == 3520 || activityTasklist.get(i).getActivityTypeId() == 3521 || activityTasklist.get(i).getActivityTypeId() == 3522 || activityTasklist.get(i).getActivityTypeId() == 3523 || activityTasklist.get(i).getActivityTypeId() == 3524 || activityTasklist.get(i).getActivityTypeId() == 3525 || activityTasklist.get(i).getActivityTypeId() == 3526 || activityTasklist.get(i).getActivityTypeId() == 3527 || activityTasklist.get(i).getActivityTypeId() == 3528 || activityTasklist.get(i).getActivityTypeId() == 3529 || activityTasklist.get(i).getActivityTypeId() == 3530 || activityTasklist.get(i).getActivityTypeId() == 3531 || activityTasklist.get(i).getActivityTypeId() == 3532 || activityTasklist.get(i).getActivityTypeId() == 3533 || activityTasklist.get(i).getActivityTypeId() == 3534 || activityTasklist.get(i).getActivityTypeId() == 3535 || activityTasklist.get(i).getActivityTypeId() == 3536 || activityTasklist.get(i).getActivityTypeId() == 3537 || activityTasklist.get(i).getActivityTypeId() == 3538 || activityTasklist.get(i).getActivityTypeId() == 3539 || activityTasklist.get(i).getActivityTypeId() == 3540 ||
+            activityTasklist.get(i).getActivityTypeId() == 333 || activityTasklist.get(i).getActivityTypeId() == 334 || activityTasklist.get(i).getActivityTypeId() == 335 || activityTasklist.get(i).getActivityTypeId() == 336) {
 
                 showHideActivity = activityTasklist.get(i);
 
@@ -1307,6 +2187,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     private void updateSingleEntryData(String _consignmentcode, String _activityTypeId, String _transactionId, int _statusTypeId, boolean inSertInHistory) {
         displayData = dataAccessHandler.getdisplayDetails(Queries.getInstance().getDisplayData(_transactionId));
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Count Of DisplayData :" + displayData.size());
+        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Count Of Statusid :" +_statusTypeId);
+        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis inSertInHistory :" +inSertInHistory);
         if (displayData != null && displayData.size() > 0) {
 
 
@@ -1318,6 +2200,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 updateXref.put("TransactionId", _transactionId);
                 updateXref.put("FieldId", dataValue.get(j).id);
                 updateXref.put("Value", dataValue.get(j).value);
+
                 updateXref.put("FilePath", "");
                 updateXref.put("IsActive", 1);
 //                updateXref.put("CreatedByUserId", CommonConstants.USER_ID);
@@ -1340,14 +2223,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             }
 
+
             LinkedHashMap activityMap = new LinkedHashMap();
             activityMap.put("TransactionId", _transactionId);
             activityMap.put("ConsignmentCode", _consignmentcode);
             activityMap.put("ActivityId", _activityTypeId);
             activityMap.put("StatusTypeId", 346);  // TODO Check with In DB
-//            activityMap.put("Comment", "");
+            activityMap.put("Comment", "");
             activityMap.put("IsActive", 1);
-//            activityMap.put("CreatedByUserId", CommonConstants.USER_ID);
+            activityMap.put("CreatedByUserId", CommonConstants.USER_ID);
             activityMap.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
             activityMap.put("UpdatedByUserId", CommonConstants.USER_ID);
             activityMap.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -1388,12 +2272,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (inSertInHistory) {
                 LinkedHashMap status = new LinkedHashMap();
                 status.put("TransactionId", _transactionId);
-                status.put("StatusTypeId", 346);
+                status.put("StatusTypeId", 349);
                 status.put("Comments", "");
                 status.put("CreatedByUserId", CommonConstants.USER_ID);
                 status.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-                status.put("UpdatedByUserId", CommonConstants.USER_ID);
-                status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+//                status.put("UpdatedByUserId", CommonConstants.USER_ID);
+//                status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                 status.put("ServerUpdatedStatus", 0);
 
                 final List<LinkedHashMap> historyList = new ArrayList<>();
@@ -1401,7 +2285,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 dataAccessHandler.insertMyDataa("SaplingActivityHistory", historyList, new ApplicationThread.OnComplete<String>() {
                     @Override
                     public void execute(boolean success, String result, String msg) {
-                        Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
+                        Log.d(ActivityTask.class.getSimpleName(), "==> SaplingActivityHistoryf INSERT COMPLETED");
                     }
                 });
             }
@@ -1414,6 +2298,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int btnid = 1;
         int id = view.getId();
+
         if (view.getId() == ButtonId) {
             if (goValidate())
                 saveData();
@@ -1495,12 +2380,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis onFocusChange() id : " + view.getId() + "   isView showing :" + b);
         int id = view.getId();
 
+
         if (id == 51 || id == 52 || id == 53) {
             try {
-                int int52 = 52, int53 = 53, int51 = 51;
+                int int52 = 52, int53 = 53, int51 = 51,int7 = 7;
                 EditText edt53 = findViewById(int53);
                 int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int52)));
-//                edt53.setFocusable(false);
+
                 edt53.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1513,6 +2399,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 EditText edt54 = findViewById(int54);
                 int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int53)));
                 edt54.setText(finalValue + "");
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1540,7 +2427,26 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
 
-        } else if (id == 508 || id == 507 || id == 509) {
+        }
+
+         if (id == 508 || id == 507 ) {
+
+            try {
+
+                int int506 = 506, int507 = 507, int508 = 508;
+
+
+                EditText edt508 = findViewById(int508);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int507)));
+
+                edt508.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if (id == 508 || id == 507 || id == 509) {
 
             try {
 
@@ -1556,7 +2462,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 512 || id == 513) {
+        }
+
+         if (id == 512 || id == 511) {
+
+            try {
+
+                int int510 = 510, int512 = 512, int511 = 511;
+
+
+                EditText edt512 = findViewById(int512);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int510))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int511)));
+                edt512.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }  if (id == 512 || id == 513 || id == 511) {
 
             try {
 
@@ -1572,7 +2495,25 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 516 || id == 517 || id == 515) {
+        }
+         if (id == 516 || id == 517 || id == 515) {
+
+            try {
+
+                int int514 = 514, int516 = 516, int515 = 515;
+
+
+                EditText edt516 = findViewById(int516);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int515)));
+
+                edt516.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if (id == 516 || id == 517 || id == 515) {
 
             try {
 
@@ -1588,7 +2529,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 520 || id == 521 || id == 519) {
+        }
+         if (id == 520 || id == 519) {
+
+            try {
+
+                int int518 = 518, int520 = 520, int519 = 519;
+                EditText edt520 = findViewById(int520);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int518))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int519)));
+
+                edt520.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+         if (id == 520 || id == 521 || id == 519) {
 
             try {
 
@@ -1618,63 +2576,591 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
 
-        } else if (id == 526) {
+        }
+
+         if (id == 526 || id == 527 || id == 528 ) {
+
             try {
-                int int523 = 523, int527 = 527;
-                EditText edt527 = findViewById(int527);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 513))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
-                edt527.setText(finalValue + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (id == 530) {
-            try {
-                int int530 = 530, int531 = 531;
-                EditText edt531 = findViewById(int531);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 527))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int530)));
-                edt531.setText(finalValue + "");
+
+                int int525 = 525, int526 = 526, int528 = 528;
+                EditText edt528 = findViewById(int528);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int526)));
+
+                edt528.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
 
-        } else if (id == 534) {
+        }
+
+         if (id == 535 || id == 528  || id == 530 || id == 531 || id == 532 || id == 533 || id == 534) {
+            // DOne
             try {
-                int int534 = 534, int535 = 535;
+                int int528 = 528, int535 = 535, int525 = 525;
                 EditText edt535 = findViewById(int535);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 527))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int534)));
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int528)));
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
                 edt535.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (id == 538) {
-            try {
-                int int538 = 538, int539 = 539;
-                EditText edt539 = findViewById(int539);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 535))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int538)));
-                edt539.setText(finalValue + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (id == 541) {
-            try {
-                int int526 = 526, int541 = 541, int542 = 542;
-                EditText edt542 = findViewById(int542);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 526))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int541)));
-                edt542.setText(finalValue + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (id == 546) {
-            try {
-                int int546 = 546, int553 = 553;
-                EditText edt553 = findViewById(int553);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 542))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int546)));
-                edt553.setText(finalValue + "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
+
+
+         if (id == 3087 || id == 3088 || id == 3089 ) {
+
+            try {
+
+                int int3086 = 3086 , int3087 = 3087, int3089 = 3089;
+                EditText edt3089 = findViewById(int3089);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3086))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3087)));
+
+                edt3089.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3089  || id == 3091 || id == 3092 || id == 3093 || id == 3094 || id == 3095 || id == 3096) {
+            // DOne
+            try {
+                int int3096 = 3096, int3086 = 3086, int3089 = 3089;
+                EditText edt3096 = findViewById(int3096);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3086))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3089)));
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
+                edt3096.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+         if (id == 3097 || id == 3098 || id == 3099 ) {
+
+            try {
+
+                int int3100 = 3100 , int3097 = 3097, int3098 = 3098;
+                EditText edt3100 = findViewById(int3100);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3097))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3098)));
+
+                edt3100.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3100  || id == 3102 || id == 3103 || id == 3104 || id == 3105 || id == 3106 || id == 3107) {
+            // DOne
+            try {
+                int int3097 = 3097, int3107 = 3107, int3100 = 3100;
+                EditText edt3107 = findViewById(int3107);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3097))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3100)));
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
+                edt3107.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+         if (id == 3109|| id == 3110 || id == 3111 ) {
+
+            try {
+
+                int int3111 = 3111 , int3108 = 3108, int3109 = 3109;
+                EditText edt3111 = findViewById(int3111);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3109)));
+
+                edt3111.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3113  || id == 3114 || id == 3115 || id == 3116 || id == 3117 || id == 3118 || id == 3111) {
+            // DOne
+            try {
+                int int3111 = 3111, int3118 = 3118, int3108 = 3108;
+                EditText edt3118 = findViewById(int3118);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3111)));
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
+                edt3118.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+         if (id == 3120|| id == 3121 || id == 3122 ) {
+
+            try {
+
+                int int3119 = 3119 , int3120 = 3120, int3122 = 3122;
+                EditText edt3122 = findViewById(int3122);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3119))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3120)));
+
+                edt3122.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+//        else if ( id == 3113  || id == 3114 || id == 3115 || id == 3116 || id == 3117 || id == 3118 || id == 3111) {
+//            // DOne
+//            try {
+//                int int3111 = 3111, int3118 = 3118, int3108 = 3108;
+//                EditText edt3118 = findViewById(int3118);
+//                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3111)));
+//                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
+//                edt3118.setText(finalValue + "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+         if ( id == 3122  || id == 3124 || id == 3125 || id == 3126 || id == 3127 || id == 3130 || id == 3129  ) {
+            // DOne
+            try {
+                int int3122 = 3122, int3130 = 3130, int3119 = 3119;
+                EditText edt3130 = findViewById(int3130);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3119))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3122)));
+                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
+                edt3130.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+         if (id == 3134|| id == 3132 || id == 3133 ) {
+
+            try {
+
+                int int3134 = 3134 , int3131 = 3131, int3132 = 3132;
+                EditText edt3134= findViewById(int3134);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3131))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3132)));
+
+                edt3134.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3134  || id == 3136 || id == 3137 || id == 3138 || id == 3139 || id == 3140 || id == 3141 ) {
+            // DOne
+            try {
+                int int3131 = 3131, int3141 = 3141, int3134 = 3134;
+                EditText edt3141 = findViewById(int3141);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3131))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3134)));
+
+                edt3141.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+         if (id == 3143|| id == 3144 || id == 3145 ) {
+
+            try {
+
+                int int3145 = 3145 , int3143 = 3143, int3142 = 3142;
+                EditText edt3145= findViewById(int3145);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3142))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3143)));
+
+                edt3145.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3145  || id == 3147 || id == 3152 || id == 3148 || id == 3149 || id == 3150 || id == 3151 ) {
+            // DOne
+            try {
+                int int3145 = 3145, int3142 = 3142, int3152 = 3152;
+                EditText edt3152 = findViewById(int3152);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3142))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3145)));
+
+                edt3152.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+         if (id == 3154|| id == 3155 || id == 3156 ) {
+
+            try {
+
+                int int3156 = 3156 , int3153 = 3153, int3154 = 3154;
+                EditText edt3156= findViewById(int3156);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3153))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3154)));
+
+                edt3156.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3156 || id == 3158 || id == 3159 || id == 3160 || id == 3161 || id == 3162 || id == 3163 ) {
+            // DOne
+            try {
+                int int3153 = 3153, int3156 = 3156, int3163 = 3163;
+                EditText edt3163 = findViewById(int3163);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3153))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3156)));
+
+                edt3163.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+         if (id == 3165|| id == 3166 || id == 3167 ) {
+
+            try {
+
+                int int3167 = 3167 , int3164 = 3164, int3165 = 3165;
+                EditText edt3167= findViewById(int3167);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3164))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3165)));
+
+                edt3167.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3167  || id == 3169 || id == 3170 || id == 3171 || id == 3172 || id == 3173 || id == 3174 ) {
+            // DOne
+            try {
+                int int3174 = 3174, int3164 = 3164, int3167 = 3167;
+                EditText edt3174 = findViewById(int3174);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3164))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3167)));
+
+                edt3174.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+         if (id == 3176|| id == 3177 || id == 3178 ) {
+
+            try {
+
+                int int3178 = 3178 , int3175 = 3175, int3176 = 3176;
+                EditText edt3178= findViewById(int3178);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3175))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3176)));
+
+                edt3178.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+         if ( id == 3178  || id == 3185 || id == 3180 || id == 3181 || id == 3182 || id == 3183 || id == 3184 ) {
+            // DOne
+            try {
+                int int3175 = 3175, int3185 = 3185, int3178 = 3178;
+                EditText edt3185 = findViewById(int3185);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3175))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3178)));
+
+                edt3185.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+         if (id == 3187|| id == 3188 || id == 3189 ) {
+
+            try {
+
+                int int3186 = 3186 , int3187 = 3187, int3189 = 3189;
+                EditText edt3189= findViewById(int3189);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3187)));
+
+                edt3189.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+         if ( id == 3189  || id == 3195 || id == 3196 || id == 3191 || id == 3192 || id == 3193 || id == 3194 ) {
+            // DOne
+            try {
+                int int3196 = 3196, int3186 = 3186, int3189 = 3189;
+                EditText edt3196 = findViewById(int3196);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3189)));
+
+                edt3196.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+         if (id == 3198|| id == 3199 || id == 3200 ) {
+
+            try {
+
+                int int3197 = 3197 , int3198 = 3198, int3200 = 3200;
+                EditText edt3200= findViewById(int3200);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3197))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3198)));
+
+                edt3200.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+         if ( id == 3200  || id == 3202 || id == 3203 || id == 3204 || id == 3205 || id == 3206 || id == 3207 ) {
+            // DOne
+            try {
+                int int3197 = 3197, int3207 = 3207, int3200 = 3200;
+                EditText edt3207 = findViewById(int3207);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3197))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3200)));
+
+                edt3207.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+         if (id == 3211 || id == 3209 || id == 3210 ) {
+
+            try {
+
+                int int3211 = 3211 , int3208 = 3208, int3209 = 3209;
+                EditText edt3211= findViewById(int3211);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3208))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3209)));
+
+                edt3211.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+         if ( id == 3211  ||  id == 3213 || id == 3214 || id == 3215 || id == 3216 || id == 3217 || id == 3218) {
+            // DOne
+            try {
+                int int3208 = 3208, int3211 = 3211, int3218 = 3218;
+                EditText edt3218 = findViewById(int3218);
+                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3208))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3211)));
+
+                edt3218.setText(finalValue + "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+//        else if (id == 526) {
+//            try {
+//                int int523 = 523, int527 = 527;
+//                EditText edt527 = findViewById(int527);
+//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 513))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
+//                edt527.setText(finalValue + "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else if (id == 530) {
+//            try {
+//                int int530 = 530, int531 = 531;
+//                EditText edt531 = findViewById(int531);
+//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 527))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int530)));
+//                edt531.setText(finalValue + "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+
+// else if (id == 538) {
+//            try {
+//                int int538 = 538, int539 = 539;
+//                EditText edt539 = findViewById(int539);
+//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 535))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int538)));
+//                edt539.setText(finalValue + "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else if (id == 541) {
+//            try {
+//                int int526 = 526, int541 = 541, int542 = 542;
+//                EditText edt542 = findViewById(int542);
+//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 526))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int541)));
+//                edt542.setText(finalValue + "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else if (id == 546) {
+//            try {
+//                int int546 = 546, int553 = 553;
+//                EditText edt553 = findViewById(int553);
+//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 542))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int546)));
+//                edt553.setText(finalValue + "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
+
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case CAMERA_REQUEST: {
+                if (resultCode == RESULT_OK) {
+                    handleBigCameraPhoto();
+                }
+//                if (resultCode == RESULT_OK && typeSelected == Manual_Weigh) {
+//                    handleBigCameraPhoto1();
+//                }
+                break;
+            } // ACTION_TAKE_PHOTO_B
+
+        } // switch
+    }
+
+    private void handleBigCameraPhoto() {
+        Log.e("================>622",mCurrentPhotoPath);
+        if (mCurrentPhotoPath != null) {
+            setPic();
+            galleryAddPic();
+
+        }
+
+    }
+
+    private void setPic() {
+        Log.e("================>622",mCurrentPhotoPath);
+        /* There isn't enough memory to open up more than a couple camera photos */
+        /* So pre-scale the target bitmap into which the file is decoded */
+
+        /* Get the size of the ImageView */
+        int targetW = image.getWidth();
+        int targetH = image.getHeight();
+
+        /* Get the size of the image */
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        /* Figure out which way needs to be reduced less */
+        int scaleFactor = 1;
+        if ((targetW > 0) || (targetH > 0)) {
+            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+        }
+
+        /* Set bitmap options to scale the image decode target */
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        /* Decode the JPEG file into a Bitmap */
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+        bitmap = ImageUtility.rotatePicture(90, bitmap);
+
+        currentBitmap = bitmap;
+        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2918:" + intentTransactionId);
+        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2919:" + transactionIdNew);
+
+        List<LinkedHashMap> repodetails = new ArrayList<>();
+        LinkedHashMap lossrepo = new LinkedHashMap();
+        lossrepo.put("ImageString", "null");
+        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
+        lossrepo.put("TransactionId", intentTransactionId);}
+        else{
+            lossrepo.put("TransactionId", transactionIdNew);
+        }
+        lossrepo.put("FileName",  "");
+        if(mCurrentPhotoPath!=null){
+            lossrepo.put("FileLocation", mCurrentPhotoPath);}
+        lossrepo.put("FileExtension", ".jpg");
+        lossrepo.put("CreatedByUserId", CommonConstants.USER_ID);
+        lossrepo.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        lossrepo.put("ServerUpdatedStatus", 0);
+
+        repodetails.add(lossrepo);
+        Log.d(ActivityTask.class.getSimpleName(), "repodetails====="+ repodetails +"");
+        dataAccessHandler.insertMyDataa("CullingLossFileRepository", repodetails, new ApplicationThread.OnComplete<String>() {
+            @Override
+            public void execute(boolean success, String result, String msg) {
+                if (success) {
+                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> CullingLossFileRepository INSERT COMPLETED");
+                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
+                    addImageData();
+
+                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+            //   image.setImageBitmap(bitmap);
+
+//		/* Associate the Bitmap to the ImageView */
+//        if (null != rotatedBitmap) {
+//            String convertedImage = CommonUtils.getBase64String(rotatedBitmap);
+//            Log.v(LOG_TAG, "@@@ converted image "+convertedImage.length());
+//            slipImage.setImageBitmap(rotatedBitmap);
+//            currentBitmap = rotatedBitmap;
+//        } else {
+//            currentBitmap = bitmap;
+//            slipImage.setImageBitmap(bitmap);
+//        }
+
+     //   image.setVisibility(View.VISIBLE);
+      //  slipIcon.setVisibility(View.GONE);
+     //   image.invalidate();
+    }
+
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+       sendBroadcast(mediaScanIntent);
+    }
+
+
+    @Override
+    public void onImageClicked(int id) {
+Log.e("============>",id+"");
+        dataAccessHandler.deleteRow("CullingLossFileRepository", "id", id+"", true, new ApplicationThread.OnComplete<String>() {
+            @Override
+            public void execute(boolean success, String result, String msg) {
+                if (success) {
+
+                    addImageData();
+                    Toast.makeText(ActivityTask.this, "Image Deleted Successfully", Toast.LENGTH_SHORT).show();
+                    android.util.Log.v(LOG_TAG, "@@@  image deletion success for " + "CullingLossFileRepository");
+                } else {
+                    android.util.Log.v(LOG_TAG, "@@@ image  deletion failed for " + "CullingLossFileRepository");
+                }
+            }
+        });
     }
 }
 

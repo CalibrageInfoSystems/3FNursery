@@ -74,19 +74,23 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
             holder.editicon.setVisibility(View.VISIBLE);
         }
 
-        holder.transactionId.setText(":  " + multiplelist.get(position).getTransactionId());
-        holder.consignmentcode.setText(":  " + multiplelist.get(position).getConsignmentCode());
-        holder.status.setText(":  " +multiplelist.get(position).getDesc());
+        holder.transactionId.setText("" + multiplelist.get(position).getTransactionId());
+        holder.consignmentcode.setText("" + multiplelist.get(position).getConsignmentCode());
+        holder.status.setText("" +multiplelist.get(position).getDesc());
+        Log.d("Status=============80 ", "" +multiplelist.get(position).getDesc());
+        Log.d("Status=============81 ", "" +status);
+        Log.d("Status=============82", "" +multiplelist.get(position).getStatusTypeId());
+
         if (multiplelist.get(position).getComment() != null && !StringUtils.isEmpty(multiplelist.get(position).getComment())  && !multiplelist.get(position).getComment().equalsIgnoreCase("null"))
         {
             holder.lyt_coments.setVisibility(View.VISIBLE);
-            holder.comment.setText(":  " + multiplelist.get(position).getComment());
+            holder.comment.setText("" + multiplelist.get(position).getComment());
         }
 
         if(multiplelist.get(position).getStatusTypeId() == 346){
             holder.lyt_coments.setVisibility(View.GONE);
         }
-        holder.createddate.setText(":  " + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
+        holder.createddate.setText("" + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
 
         holder.infoicon.setOnClickListener(new View.OnClickListener() {
             @Override

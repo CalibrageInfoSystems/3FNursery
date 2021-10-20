@@ -32,6 +32,7 @@ import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentStatuData;
 import com.oilpalm3f.nursery.dbmodels.CookingOil;
 import com.oilpalm3f.nursery.dbmodels.CropMaintenanceHistory;
+import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DigitalContract;
 import com.oilpalm3f.nursery.dbmodels.Disease;
 import com.oilpalm3f.nursery.dbmodels.DisplayData;
@@ -2708,12 +2709,15 @@ f
 
     public List<SaplingActivityXrefModel> getSaplingActivityXrefDetails(final String query, final int type) {
         List<SaplingActivityXrefModel> saplingActivityXrefDataDetails = new ArrayList<>();
+
+
+
         Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ GradingRepo details query " + query);
         try {
             cursor = mDatabase.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-
                     SaplingActivityXrefModel saplingsactivityxrefDetails = new SaplingActivityXrefModel();
                     saplingsactivityxrefDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsactivityxrefDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
@@ -5046,4 +5050,44 @@ f
         }
         return sapactivitydata;
     }
-}
+
+
+
+    public List<CullinglossFileRepository>getCullinglossRepoDetails(final String query) {
+        List<CullinglossFileRepository> Cullinglossrepolist = new ArrayList<>();
+        CullinglossFileRepository cullinglossrepository = null;
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ GradingRepo details query " + query);
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    cullinglossrepository = new CullinglossFileRepository();
+
+                    String filelocation = cursor.getString(cursor.getColumnIndex("FileLocation"));
+                    if (filelocation != null) {
+                        try {
+                            cullinglossrepository.setImageString(CommonUtils.encodeFileToBase64Binary(new File(filelocation)));
+                        } catch (Exception exc) {
+
+                        }
+                    }
+                    cullinglossrepository.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    cullinglossrepository.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    cullinglossrepository.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
+                    cullinglossrepository.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
+                    cullinglossrepository.setFileExtension(cursor.getString(cursor.getColumnIndex("FileExtension")));
+                    cullinglossrepository.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    cullinglossrepository.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    cullinglossrepository.setServerUpdatedStatus(0);
+                    Cullinglossrepolist.add(cullinglossrepository);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "@@@ getting GradingRepo details " + e.getMessage());
+        }
+return Cullinglossrepolist;
+    }}
+
+
+

@@ -1127,10 +1127,12 @@ public class CommonUtils {
     public static void copyFile(final Context context) {
         try {
             String dataDir = context.getApplicationInfo().dataDir;
-
+///sdcard/3FNursery_Files/3F_Database/3foilpalm.sqlite
             final String dbfile = "/sdcard/3f_" + CommonConstants.TAB_ID + "_" + System.nanoTime();
+          Log.e(LOG_TAG,"============>dbfile"+ dbfile);
 
-            File dir = new File(dataDir + "/databases");
+//            File dir = new File(dataDir + "/databases");
+            File dir = new File(dataDir + "/database");
             for (File file : dir.listFiles()) {
                 if (file.isFile() && file.getName().equals("3foilpalm.sqlite")) {
                     try {

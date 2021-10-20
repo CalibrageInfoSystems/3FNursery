@@ -14,6 +14,15 @@ public class SaplingActivityXrefModel {
     private String UpdatedDate;
     private int ServerUpdatedStatus;
     private  double LabourRate;
+//    private String ImageString;
+//
+//    public String getImageString() {
+//        return ImageString;
+//    }
+//
+//    public void setImageString(String imageString) {
+//        ImageString = imageString;
+//    }
 
     public double getLabourRate() {
         return LabourRate;

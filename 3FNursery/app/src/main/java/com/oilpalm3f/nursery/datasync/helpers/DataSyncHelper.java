@@ -18,6 +18,7 @@ import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.DatabaseKeys;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DataCountModel;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
@@ -325,7 +326,7 @@ public class DataSyncHelper {
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
         List<NurseryIrrigationLogForDb> nurseryIrrigationLog = (List<NurseryIrrigationLogForDb>) dataAccessHandler.getIrrigationDetails(Queries.getInstance().getNurceryIrrigationHistoryRefresh(), 1);
         List<NurseryIrrigationLogXref> nurseryIrrigationLogXref = (List<NurseryIrrigationLogXref>) dataAccessHandler.getIrrigationDetailsXref(Queries.getInstance().getNurceryIrrigationXrefHistoryRefresh(), 1);
-
+        List<CullinglossFileRepository> cullinglossrepoList = (List<CullinglossFileRepository>) dataAccessHandler.getCullinglossRepoDetails(Queries.getInstance().getFileRepositoryRefresh());
 
 
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
@@ -336,6 +337,8 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityHistory, saplingActivityHistorylist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLog, nurseryIrrigationLog);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLogXREF, nurseryIrrigationLogXref);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_FILEREPOSITORY, cullinglossrepoList);
+
 
 
 //        allRefreshDataMap.put(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, gpsTrackingList);
@@ -350,7 +353,7 @@ public class DataSyncHelper {
         SharedPreferences sharedPreferences = context.getSharedPreferences("appprefs", MODE_PRIVATE);
         String date = sharedPreferences.getString(PREVIOUS_SYNC_DATE, null);
 
-        final String finalDate = date;// "2021-07-28 10:28:36";  // date
+        final String finalDate = date ;//"2021-10-16 10:21:40";  // date
         Log.v(LOG_TAG, "@@@ Date " + date);
         progressDialogFragment.updateText("Getting total records count");
         final ProgressDialogFragment finalProgressDialogFragment = progressDialogFragment;
@@ -451,14 +454,14 @@ public class DataSyncHelper {
             if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SAPLING)) {
                 Saplings saplingslist = (Saplings) dataList.get(innerCountCheck);
                 saplingslist.setServerUpdatedStatus(1);
-                whereCondition = " where  NurseryCode = '" + saplingslist.getNurseryCode() + "'";
+                whereCondition = " where  NurseryCode = '" + saplingslist.getNurseryCode() + "'  AND ConsignmentCode =  '"+ saplingslist.getConsignmentCode() + "'";
                 try {
                     ccData = new JSONObject(gson.toJson(saplingslist));
                     dataToInsert.add(CommonUtils.toMap(ccData));
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
-                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "NurseryCode", saplingslist.getNurseryCode()));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "ConsignmentCode", saplingslist.getConsignmentCode()));
             } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivity)) {
                 SaplingActivity saplingActivity = (SaplingActivity) dataList.get(innerCountCheck);
                 saplingActivity.setServerUpdatedStatus(1);

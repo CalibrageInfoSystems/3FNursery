@@ -48,7 +48,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -85,6 +85,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap.add(DatabaseKeys.TABLE_SaplingActivityHistory);
         allRefreshDataMap.add(DatabaseKeys.TABLE_NurseryIrrigationLog);
         allRefreshDataMap.add(DatabaseKeys.TABLE_NurseryIrrigationLogXREF);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_FILEREPOSITORY);
         allRefreshDataMap.add(DatabaseKeys.TABLE_ALERTS);
 
 
@@ -112,6 +113,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         tvsaplinghistory = findViewById(R.id.historycount);
         irrigationLog = findViewById(R.id.irrigationLog);
         irrigationLogXref = findViewById(R.id.irrigationLogXref);
+        cullingLossFileRepository =findViewById(R.id.cullingLossFileRepository);
 
         btnsend = findViewById(R.id.btsynctoserver);
         btnmastersync = findViewById(R.id.btnmastersync);
@@ -119,9 +121,9 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         transSyncBtn = findViewById(R.id.transSyncBtn);
         btresetdatabase = findViewById(R.id.btresetdatabase);
 
-        btnmastersync.setEnabled(false);
+        btnmastersync.setEnabled(true);
         btresetdatabase.setEnabled(true);
-        btnDBcopy.setEnabled(false);
+        btnDBcopy.setEnabled(true);
 
         btnsend.setOnLongClickListener(view -> {
             Log.v(LOG_TAG, "long pressed");
@@ -205,6 +207,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             tvsaplinghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityHistory")));
             irrigationLog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryIrrigationLog")));
             irrigationLogXref.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryIrrigationLogXref")));
+            cullingLossFileRepository.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("CullingLossFileRepository")));
 
 //            //getVistLogRecords
 //            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
@@ -458,7 +461,8 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
     public File getDbFileToUpload() {
         try {
 //            File dir = Environment.getExternalStorageDirectory();
-            File dbFileToUpload = new File("/sdcard/3F_Files/3F_Database/3foilpalm.sqlite");
+//            File dbFileToUpload = new File("/sdcard/3F_Files/3F_Database/3foilpalm.sqlite");
+            File dbFileToUpload = new File("/sdcard/3FNursery_Files/3F_Database/3foilpalm.sqlite");
             return dbFileToUpload;
         } catch (Exception e) {
             android.util.Log.w("Settings Backup", e);

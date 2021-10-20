@@ -18,7 +18,8 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.TransactionDataActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".ui.CheckActivity" />
 
         <activity
@@ -34,7 +35,9 @@
             android:noHistory="true" />
         <activity android:name=".ConsignmentSelectionScreen" />
         <activity android:name=".ui.NurserySelectionScreen" />
-        <activity android:name=".ui.ActivityTask" />
+        <activity android:name=".ui.ActivityTask"
+            android:theme="@style/AppTheme"
+            />
         <activity android:name=".ui.RefreshSyncActivity" />
         <activity android:name=".testUI.TestActivity">
 

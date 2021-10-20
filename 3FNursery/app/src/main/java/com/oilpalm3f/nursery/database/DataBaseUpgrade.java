@@ -23,6 +23,7 @@ public class DataBaseUpgrade {
                 upgradeDb1(db);
                 upgradeDB2(db);
                 upgradeDB3(db);
+                upgradeDB4(db);
 
             } else {
                 boolean isDbUpgradeFinished = sharedPreferences.getBoolean(String.valueOf(Palm3FoilDatabase.DATA_VERSION), false);
@@ -40,6 +41,10 @@ public class DataBaseUpgrade {
                         case 3:
 //                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
                             upgradeDB3(db);
+                            break;
+                        case 4:
+//                            UiUtils.showCustomToastMessage("Updating database 6-->" + Palm3FoilDatabase.DATA_VERSION, context, 0);
+                            upgradeDB4(db);
                             break;
 
                     }
@@ -157,6 +162,9 @@ public class DataBaseUpgrade {
                 "UpdatedDate VARCHAR,\n" +
                 "ServerUpdatedStatus INT\n" +
                 ")";
+
+
+
         try {
 
             db.execSQL(column1);
@@ -165,11 +173,38 @@ public class DataBaseUpgrade {
             db.execSQL(column4);
             db.execSQL(alertsTable);
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public static  void  upgradeDB4(final  SQLiteDatabase db){
+        Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
+
+
+        String cullingLossFileRepository = "CREATE TABLE CullingLossFileRepository( \n" +
+                "Id INTEGER   PRIMARY KEY AUTOINCREMENT\n" +
+                "                                      NOT NULL,\n" +
+                "TransactionId VARCHAR, \n" +
+                "ImageString Varchar, \n" +
+                "FileName VARCHAR, \n" +
+                "FileLocation VARCHAR, \n" +
+                "FileExtension VARCHAR, \n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR,\n" +
+                "ServerUpdatedStatus INT\n" +
+                ")";
+
+        try {
+
+
+            db.execSQL(cullingLossFileRepository);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private static void checkTheColumnIsThere(String tableName, String columnName, String dataType, final SQLiteDatabase db) {
 

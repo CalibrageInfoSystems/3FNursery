@@ -52,7 +52,7 @@ public class MultipleEntryScreen extends AppCompatActivity {
             statusId = extras.getInt("statusId");
 //            consignmentcode = extras.getString("addActivity");
             Log.d("ActivityTypeIdHere", activityTypeId + "");
-            Log.d("ActivityTypeIdHere", activityTypeId + "");
+            Log.d("status===55", status + "");
         }
 
         init();
@@ -85,6 +85,7 @@ public class MultipleEntryScreen extends AppCompatActivity {
 
         Log.d("multiplelist", multiplelist.size() + "");
         multipleentryrcv.setLayoutManager(new LinearLayoutManager(this));
+        Log.d("status===88", status + "");
         multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist, activityName, activityTypeId, ismultipleentry, consignmentcode, status);
         multipleentryrcv.setAdapter(multipleEntriesRecyclerViewAdapter);
 

@@ -103,28 +103,40 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
             holder.imglossStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setVisibility(View.GONE);
+            holder.imglossStatustext.setText("NA");
         } else if (mActivitiesList.get(position).getStatusTypeId() == 347) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
             holder.imglossStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setVisibility(View.GONE);
+            holder.imglossStatustext.setText("NA");
         } else if (mActivitiesList.get(position).getStatusTypeId() == 348) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.done);
             holder.imgShStatus.setImageResource(R.drawable.done);
-            holder.imglossStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setVisibility(View.GONE);
+            holder.imglossStatustext.setText("NA");
         } else if (mActivitiesList.get(position).getStatusTypeId() == 349) {
             holder.imgStatus.setImageResource(R.drawable.done);
             holder.imgNurStatus.setImageResource(R.drawable.rejected);
             holder.imgShStatus.setImageResource(R.drawable.rejected);
+            holder.imglossStatus.setVisibility(View.GONE);
+            holder.imglossStatustext.setText("NA");
         } else if (mActivitiesList.get(position).getStatusTypeId() == 352) {
             holder.imgStatus.setImageResource(R.drawable.inprogress);
             holder.imgNurStatus.setImageResource(R.drawable.inprogress);
             holder.imgShStatus.setImageResource(R.drawable.inprogress);
-            holder.imglossStatus.setImageResource(R.drawable.inprogress);
+            holder.imglossStatus.setVisibility(View.GONE);
+            holder.imglossStatustext.setText("NA");
         }else if (mActivitiesList.get(position).getStatusTypeId() == 354) {
+            holder.imglossStatustext.setVisibility(View.GONE);
+            holder.imglossStatus.setVisibility(View.VISIBLE);
             holder.imglossStatus.setImageResource(R.drawable.done);
-
+            holder.imgStatus.setImageResource(R.drawable.done);
+            holder.imgNurStatus.setImageResource(R.drawable.done);
+            holder.imgShStatus.setImageResource(R.drawable.done);
         }
         else{
             holder.imglossStatus.setImageDrawable(null);
@@ -213,7 +225,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
                     dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
                     Log.d("dependencyname=============", dependencyname);
-                    Toast.makeText(context, "   Please Complete  " + dependencyname + "   Activity ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "   Please Complete " + dependencyname + " Activity ", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -280,7 +292,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView activityName, expecteddate, saplingExpecteddate, txtStatusTxt, txtDoneDate;
+        public TextView activityName, expecteddate, imglossStatustext, txtStatusTxt, txtDoneDate;
         public LinearLayout mainlyt;
         public ImageView imgStatus, imgNurStatus, imgShStatus,imglossStatus;
 
@@ -291,7 +303,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             this.expecteddate = (TextView) itemView.findViewById(R.id.expecteddate);
             this.txtStatusTxt = (TextView) itemView.findViewById(R.id.txtStatusTxt);
             this.txtDoneDate = (TextView) itemView.findViewById(R.id.txtDoneDate);
-//            this.saplingExpecteddate = (TextView )itemView.findViewById(R.id.saplingExpecteddate);
+    this.imglossStatustext = (TextView )itemView.findViewById(R.id.imglossStatustext);
             this.mainlyt = (LinearLayout) itemView.findViewById(R.id.mainlyt);
             this.imgStatus = itemView.findViewById(R.id.imgStatus);
             this.imgNurStatus = itemView.findViewById(R.id.imgNurStatus);

@@ -56,6 +56,11 @@ public class Queries {
                 "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "'";
     }
 
+    public static String sproutsforSowingg(String ConsignmentCode, int filedId) {
+        return "Select sum(sx.Value) from SaplingActivity s\n" +
+                "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "' AND StatusTypeId = 348";
+    }
     public static String getAlertsPlotFollowUpQuery(int limit, int offset) {
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
                 "  m.Name as MandalName,\n" +
@@ -82,7 +87,17 @@ public class Queries {
     public static String getAlertsCount(int type) {
         return "select count(*) from Alerts where AlertType = " + type + "";
     }
+    public static String Checkboxdisable(int id , String Consignmentcode,String Activitytypeid) {
 
+        return "Select  sx.Value  from  SaplingActivity S \n" +
+                "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
+                "Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "where ConsignmentCode  ='" + Consignmentcode + "' and sx.FieldId = '" + id + "'  and  sx.Value ='true' and ActivityId = '" + Activitytypeid + "'";
+
+//        return "Select sx.Value from SaplingActivity s\n" +
+//                "             Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+//                "    \t\t where sx.FieldId = '" + id + "' AND ConsignmentCode = '" + Consignmentcode + "'";
+    }
 
     public static String getAlertsMissingTreesInfoQuery(int limit, int offset) {
         return "  select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,\n" +
@@ -221,30 +236,30 @@ public class Queries {
     public String getConsignmentDataQuery(String Userid, String NurseryCode) {
         return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname ,T.Desc as Status from  UserConsignmentXref X \n" +
                 "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
-                "inner join LookUp L ON S.OriginId = L.Id \n" +
-                "inner join LookUp O ON S.VendorId = O.Id \n" +
-                "inner join LookUp K ON S.VarietyId = K.Id \n" +
-                "inner join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
+                "LEFT join LookUp L ON S.OriginId = L.Id \n" +
+                "LEFT join LookUp O ON S.VendorId = O.Id \n" +
+                "LEFT join LookUp K ON S.VarietyId = K.Id \n" +
+                "LEFT join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
                 "where X.UserId='" + Userid + "'  AND S.NurseryCode = '" + NurseryCode + "' AND StatusTypeId < 340 AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
     public String getAllConsignmentDataQuery(String Userid, String NurseryCode) {
         return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname, T.Desc as Status from  UserConsignmentXref X \n" +
                 "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
-                "inner join LookUp L ON S.OriginId = L.Id \n" +
-                "inner join LookUp O ON S.VendorId = O.Id \n" +
-                "inner join LookUp K ON S.VarietyId = K.Id \n" +
-                "inner join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
+                "LEFT join LookUp L ON S.OriginId = L.Id \n" +
+                "LEFT join LookUp O ON S.VendorId = O.Id \n" +
+                "LEFT join LookUp K ON S.VarietyId = K.Id \n" +
+                "LEFT join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
                 "where X.UserId='" + Userid + "'  AND S.NurseryCode = '" + NurseryCode + "'  AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
     public String getConsignmentPostPreeDataQuery(String Userid, String NurseryCode) {
         return "select S.Id,S.EstimatedQuantity,S.CreatedDate,S.ArrivedDate,S.ArrivedQuantity,S.ConsignmentCode as ConsignmentCode, L.name as Originname, O.name as Vendorname, K.name as Varietyname,T.Desc as Status from  UserConsignmentXref X \n" +
                 "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
-                "inner join LookUp L ON S.OriginId = L.Id \n" +
-                "inner join LookUp O ON S.VendorId = O.Id \n" +
-                "inner join LookUp K ON S.VarietyId = K.Id \n" +
-                "inner join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
+                "LEFT join LookUp L ON S.OriginId = L.Id \n" +
+                "LEFT join LookUp O ON S.VendorId = O.Id \n" +
+                "LEFT join LookUp K ON S.VarietyId = K.Id \n" +
+                "LEFT join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
                 "where X.UserId='" + Userid + "'  AND S.NurseryCode = '" + NurseryCode + "' AND StatusTypeId > 339 AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
@@ -386,13 +401,15 @@ public class Queries {
         return "Select  StatusTypeId from SaplingActivity where ConsignmentCode = '" + consinmentid + "'  and  ActivityId = '" + activityId + "'  order by Id desc  Limit  1";
     }
 
-    public String CheckActivityStatus(String consinmentid, String activityId, String transactionId) {
+    public String CharindexCheckActivityStatus(String consinmentid, String activityId, String transactionId) {
         return "Select  StatusTypeId from SaplingActivity where ConsignmentCode = '" + consinmentid + "'  and  ActivityId = '" + activityId + "' and TransactionId ='" + transactionId + "' order by Id desc  Limit  1";
     }
 
 
     public String getSaplingActivityMaxNumber() {
-        return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";
+
+
+        return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'- ') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";
     }
 
     public String getIrrigationMaxNumber() {
@@ -492,7 +509,7 @@ public class Queries {
     }
 
     public String deleteInCompleteData() {
-        return "delete from %s where PlotCode IN (" + "%s" + ")";
+        return "delete from  CullingLossFileRepository where id = '4'";
     }
 
 
@@ -746,7 +763,7 @@ public class Queries {
 //                "       WHERE ConsignmentCode = '"+consinmentCode+"' AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = S.ConsignmentCode   \n" +
 //                "    WHERE S.ConsignmentCode = '"+consinmentCode+"'   \n" +
 //                "    )S on S.ActivityId  = NA.Id)R    ";
-        return "SELECT     \n" +
+        return "SELECT DISTINCT   \n" +
                 " isLossActivity,\n" +
                 "      ActivityId,    \n" +
                 "      ActivityTypeId,    \n" +
@@ -904,7 +921,7 @@ public class Queries {
     }
 
     public String getFileRepositoryRefresh() {
-        return "select * from FileRepository where ServerUpdatedStatus = 0";
+        return "select * from CullinglossFileRepository  where ServerUpdatedStatus = 0";
     }
 
     public String getVistLogs() {
@@ -1744,6 +1761,9 @@ public class Queries {
     public static String getField(String Id) {
         return "Select Field from NurseryActivityField where Id = " + Id;
     }
+    public static String getlocalimagepath(String Id) {
+        return "SELECT FileLocation from CullingLossFileRepository WHERE TransactionId =" +Id;
+    }
 
     public static String getTodayActivityCount(String consignmentCode) {
         return "SELECT Count(*)\n" +
@@ -1895,4 +1915,11 @@ public class Queries {
     public static String getnurserynamefromirrigation(String Consigmentcode) {
         return "SELECT Name  from Nursery where Code ='" + Consigmentcode + "'";
     }
-}
+
+
+    public static String getimagepath(String id ) {
+       // return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
+        return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
+    }
+    }
+

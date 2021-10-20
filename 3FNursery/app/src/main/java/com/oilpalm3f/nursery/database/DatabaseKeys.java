@@ -20,7 +20,7 @@ public class DatabaseKeys {
 
 
 
-    public static String TABLE_FILEREPOSITORY = "FileRepository";
+    public static String TABLE_FILEREPOSITORY = "CullingLossFileRepository";
     public static String TABLE_NURSERYSAPLING_DETAILS = "NurserySaplingDetails";
     public static String TABLE_ADVANCED_DETAILS = "AdvancedDetails";
     public static String TABLE_PLOT = "Plot";
