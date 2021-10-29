@@ -136,7 +136,7 @@
                     android:gravity="bottom"
                     android:text="Sapling Age" />
                 <TextView
-                    android:textStyle="bold"
+
                     android:id="@+id/txtAge"
                     android:textColor="@color/black"
                     android:layout_weight="0.6"

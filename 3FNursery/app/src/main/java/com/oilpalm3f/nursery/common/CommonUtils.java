@@ -1680,6 +1680,28 @@ public class CommonUtils {
         System.out.println(dt1.format(date));
         return "" + dt1.format(date);
     }
+
+    public static String getPropeCreateDate(final String utcTime) {
+
+
+        String time = "";
+            if (utcTime != null) {
+                SimpleDateFormat utcFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+               utcFormatter.setTimeZone(TimeZone.getDefault());
+                Date gpsUTCDate = null;//from  ww  w.j  a va 2 s  . c  o  m
+                try {
+                    gpsUTCDate = utcFormatter.parse(utcTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat localFormatter = new SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.ENGLISH);
+               localFormatter.setTimeZone(TimeZone.getDefault());
+                assert gpsUTCDate != null;
+                time = localFormatter.format(gpsUTCDate.getTime());
+            }
+            return time;
+
+    }
     public static String getProperComplaintsDate2(final String dateTime) {
 
         final SimpleDateFormat sdfq = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
@@ -1691,6 +1713,7 @@ public class CommonUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
         System.out.println(dt1.format(date));
         return "" + dt1.format(date);
@@ -1712,6 +1735,7 @@ public class CommonUtils {
         protected DateFormat initialValue() {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             df.setTimeZone(UTC_TIME_ZONE);
+           // sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             return df;
         }
     };
@@ -1748,6 +1772,17 @@ public class CommonUtils {
         return dateToCheck;
     }
 
+    public static Date parseAsIso8601_(String date) {
+        Date dateToCheck = null;
+        try {
+            dateToCheck = ISO_8601_1_FORMAT.get().parse(date);
+        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+            dateToCheck = thisIsStupid(date);
+        }
+
+        return dateToCheck;
+    }
     public static Date thisIsStupid(final String date) {
         try {
             return ISO_8601_1_FORMAT.get().parse(date);

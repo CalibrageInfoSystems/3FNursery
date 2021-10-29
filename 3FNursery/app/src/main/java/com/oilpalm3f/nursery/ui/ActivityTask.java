@@ -96,6 +96,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     private static final int CAMERA_REQUEST = 1888;
     ActivityTasks showHideActivity;
     CheckBox chkShowHide;
+
+    boolean  Check_true = true;
     int yesnoCHeckbox = -10;
     int ButtonId = 100000001;
     int ImagId = 100000003;
@@ -105,7 +107,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     String errorMsg = "";
     String Code, dependency_code;
     ImageView image;
-    boolean  Checked;
+    String  Checked;
+    int finalValue62,finalValue60;
     List<CullinglossFileRepository> imageRepo = new ArrayList<>();
     RVAdapter_ImageList adapter_imageList;
     private Bitmap currentBitmap = null;
@@ -117,7 +120,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     };
     boolean enableEditing;
     private List<String> multiplelist = new ArrayList<>();
-    String transactionIdNew,TransactionId;
+    String transactionIdNew,transactionId;
     String intentTransactionId;
     int Arrivalsprouts;
     @Override
@@ -176,11 +179,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
             bindExistingData(intentTransactionId);
 
-            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
-            if (imageRepo.size ()!= 0) {
-
-                addImageData(); //ToDO
-            }
+//            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
+//            if (imageRepo.size ()!= 0) {
+//
+//                addImageData(); //ToDO
+//            }
 
             Button btn = (Button) findViewById(ButtonId);
             ImageView img = (ImageView)findViewById(ImagId);
@@ -214,6 +217,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             Button btn = (Button) findViewById(ButtonId);
             ImageView img = (ImageView)findViewById(ImagId);
+
+
             if (enableEditing){
                 multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(consignmentcode, activityTypeId));
 
@@ -229,17 +234,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
-            String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
+            transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
+Log.e("transactionId===================",transactionId);
+
+
             if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
                 bindExistingData(transactionId);
+                imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
             } else {
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
                 transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 209" + transactionIdNew);
-
+                imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
 
             }
+            if (imageRepo.size ()!= 0) {
 
+                addImageData(); //ToDO
+            }
         }
         if(Integer.parseInt(activityTypeId) == 1 || Integer.parseInt(activityTypeId) == 2 || Integer.parseInt(activityTypeId) == 4){
             Button btn = (Button) findViewById(ButtonId);
@@ -268,13 +280,25 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     chk.setChecked(false);
 
                 if (enableEditing){
-                    Checked  = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().Checkboxdisable(displayData.get(i).getFieldId(),consignmentCode, activityTypeId)) == "true" ? true :false ;
+                    Checked  = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().Checkboxdisable(displayData.get(i).getFieldId(),consignmentCode, activityTypeId)) ;
 
 Log.e("=================================>Checked",Checked+"");
-                        if (Checked) {
+                        if (Checked != null && Checked.equalsIgnoreCase("true")) {
                         chk.setEnabled(false);
+                            checkBoxChecked();
                     } else  {
-                        chk.setEnabled(true);}}
+                        chk.setEnabled(true);
+                            checkBoxChecked();
+                        }}
+                try {
+
+                    int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRequiedFeildID(activityTypeId));
+
+                    int  int1388 = Feild_id;
+                    onClick(findViewById(int1388));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
 
@@ -614,25 +638,27 @@ image.setId(ImagId);
     }
     private  void addImageData(){
         RecyclerView rcv = findViewById(rcvId);
-        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
-            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id 586 :" + intentTransactionId);
 
-            ImageView img = (ImageView)findViewById(ImagId);
-            if (enableEditing){
-                  img.setVisibility(View.VISIBLE);
+        if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   transactionId : 631" + transactionId);
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 632" + transactionIdNew);
+            if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+
+
+                ImageView img = (ImageView) findViewById(ImagId);
+                if (enableEditing) {
+                    img.setVisibility(View.VISIBLE);
+
+                } else {
+                    img.setVisibility(View.GONE);
+
+                }
+                imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
+            } else {
+                imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
 
             }
-            else {
-                 img.setVisibility(View.GONE);
-
-            }
-            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
-          }
-        else{
-            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
-
         }
-
        adapter_imageList = new RVAdapter_ImageList(this,imageRepo,this);
         rcv.setAdapter(adapter_imageList);
 
@@ -762,9 +788,8 @@ Log.e("================>622",mCurrentPhotoPath);
 //
         imageRepo = new ArrayList<>();
 
-        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
-
-            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
+        if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
         }
         else{
             imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
@@ -788,6 +813,7 @@ Log.e("================>622",mCurrentPhotoPath);
             ) {
 
                 EditText et = findViewById(id);
+
 
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
 
@@ -830,27 +856,85 @@ Log.e("================>622",mCurrentPhotoPath);
 
 
 
-                    int value =  Arrival_Sprouts - CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
-                    Log.e("============>arrival Sprout 807",value+"");
-                    Log.e("============>arrival Sprout 811",Arrival_Sprouts+"");
+                        int value = Arrival_Sprouts - CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
+                        Log.e("============>arrival Sprout 807", value + "");
+                        Log.e("============>arrival Sprout 811", Arrival_Sprouts + "");
+//                    if ( == 0) {
+//                        Toast.makeText(this, "PleasArrival_Sproutse Approve  Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
+//                        return false;
+//                    }
+                        if (value < 0) {
+                            Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    if (enableEditing) {
 
-                    if(value < 0){
-                        Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)" , Toast.LENGTH_SHORT).show();
-                        return false;
+                        int count_edit = 0;
+                        try{
+                            count_edit =  Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingEdit(consignmentCode, 51,intentTransactionId)));
+                        }
+                        catch (Exception exception)     {
+                            exception.printStackTrace();
+
+                        }
+
+                        Log.e("============>arrival Sprout 821",Arrival_Sprouts+"");
+                      int  Received_sprouts_edit = count_edit  + CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
+
+                        Log.e("============>Received Sprout 855",Received_sprouts_edit+"");
+                        int value_edit =  Arrival_Sprouts - (count_edit+ CommonUtils.getIntFromEditText(((EditText) findViewById(int51))));
+
+                        Log.e("============>arrival Sprout 824",value_edit+"");
+                        if(value_edit < 0){
+                            Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)" , Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+
+
+                    }
+                    else {
+
+                        int count = 0;
+                        try {
+                            count = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 51)));
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+
+                        }
+
+                        Log.e("============>arrival Sprout 821", Arrival_Sprouts + "");
+                        Received_sprouts = count + CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
+
+                        Log.e("============>Received Sprout 855", Received_sprouts + "");
+                        int value2 = Arrival_Sprouts - Received_sprouts;
+
+                        Log.e("============>arrival Sprout 824", value2 + "");
+                        if (value2 < 0) {
+                            Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+
+                        int LossCheckbox = 59;
+                        CheckBox chk = findViewById(LossCheckbox);
+
+
+                        if (chk.isChecked()) {
+
+                            if (value2 != 0) {
+                                chk.setChecked(false);
+                                Toast.makeText(this, "Please  Enter PN-Arrival Of Sprouts Equall to  Total received Sprouts ", Toast.LENGTH_SHORT).show();
+                                return false;
+                            }
+
+                        }
                     }
 
-                    Received_sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 51))) + CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
-                    Log.e("============>Received Sprout 820",Received_sprouts+"");
-                    Log.e("============>arrival Sprout 821",Arrival_Sprouts+"");
-                    int value2 =  Arrival_Sprouts - Received_sprouts;
 
-                    Log.e("============>arrival Sprout 824",value2+"");
-                    if(value2 < 0){
-                        Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than are equal to Sprouts arrived Count (PN-Arrival Of Sprouts)" , Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return  false;
                 }
 
             }
@@ -867,9 +951,26 @@ Log.e("================>622",mCurrentPhotoPath);
                         Toast.makeText(this, "Please  Enter No of Sprouts Sown Less than are equal to  Sprouts to sown =  (sprouts for Sowing in Sprout Counting ) " , Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    int LossCheckbox = 67;
+                    CheckBox chk = findViewById(LossCheckbox);
+
+
+                    if (chk.isChecked())
+                    {
+
+                        if (CommonUtils.getIntFromEditText(((EditText) findViewById(int62))) != 0 ){
+                            chk.setChecked(false);
+                            Toast.makeText(this, "Balance to sown Should be Zero while Activity complete  " , Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    }
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                  //  return  false;
                 }
 
             }
@@ -1635,6 +1736,8 @@ try{
             yesnoCHeckbox = id;
             cb.setChecked(true);
 
+
+
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:" + yesnoCHeckbox);
         }
 
@@ -1673,6 +1776,11 @@ try{
             et.setInputType(InputType.TYPE_CLASS_NUMBER);  // Number Keyboard & max & digits
             et.setFilters(new InputFilter[] { new InputFilter.LengthFilter(7) });
         }
+        if (dataType.equalsIgnoreCase("String")) {
+           et.setFilters(new InputFilter[] { new InputFilter.LengthFilter(1000) });
+
+            et.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        }
 
        else if (dataType.equalsIgnoreCase("Float")) {
 
@@ -1687,10 +1795,11 @@ try{
         }
 
 
-
         et.setOnFocusChangeListener(this::onFocusChange);
 
-        if (id == 60 || id == 506 || id == 510 || id == 514 || id == 518 || id == 522) {
+        if (id == 60 || id == 506 || id == 510 || id == 514 || id == 518 || id == 522 || id == 525 || id == 3086 || id == 3097 || id == 3108 || id == 3119 || id == 3131 || id == 3142 || id == 3153 || id == 3164
+                || id == 3175
+                || id == 3186 || id == 3197 || id == 3208) {
             et.setFocusable(false);
             et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             et.setClickable(false);
@@ -1698,7 +1807,7 @@ try{
         if (id == 51) {
             try {
 
-                 Arrival_Sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 7)));
+                 Arrival_Sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingg(consignmentCode, 7)));
 
                     Log.e("================> Arrival Sprouts ",Arrival_Sprouts+"" );
 
@@ -1709,9 +1818,24 @@ try{
 
         if (id == 60) {
             try {
+                finalValue60= Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingnew(consignmentCode, 52)));
+                et.setText(finalValue60 + "");
+                Log.e("finalValue60===========",finalValue60+"");
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 54)));
-                et.setText(finalValueold + "");
+        if (id == 62) {
+
+            int value_61 = 0;
+            try {
+
+                value_61 = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 61)));
+                 finalValue62 =finalValue60 - value_61 ;
+
+                 Log.e("Value62===========",finalValue62+"");
+                et.setText(finalValue62 + "");
 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -1720,7 +1844,7 @@ try{
         if (id == 506) {
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingg(consignmentCode, 61)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 61)));
                 et.setText(finalValueold + "");
 
 
@@ -1732,7 +1856,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 509)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 509)));
                 et.setText(finalValueold + "");
 
 
@@ -1744,7 +1868,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 513)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 513)));
                 et.setText(finalValueold + "");
 
 
@@ -1756,7 +1880,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 517)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 517)));
                 et.setText(finalValueold + "");
 
 
@@ -1769,7 +1893,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 521)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 521)));
                 et.setText(finalValueold + "");
 
 
@@ -1783,7 +1907,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 524)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 524)));
                 et.setText(finalValueold + "");
 
 
@@ -1796,7 +1920,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 535)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 535)));
                 et.setText(finalValueold + "");
 
 
@@ -1808,7 +1932,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3096)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3096)));
                 et.setText(finalValueold + "");
 
 
@@ -1820,7 +1944,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3107)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3107)));
                 et.setText(finalValueold + "");
 
 
@@ -1833,7 +1957,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3118)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3118)));
                 et.setText(finalValueold + "");
 
 
@@ -1846,7 +1970,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3130)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3130)));
                 et.setText(finalValueold + "");
 
 
@@ -1858,7 +1982,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3141)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3141)));
                 et.setText(finalValueold + "");
 
 
@@ -1870,7 +1994,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3152)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3152)));
                 et.setText(finalValueold + "");
 
 
@@ -1883,7 +2007,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3163)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3163)));
                 et.setText(finalValueold + "");
 
 
@@ -1895,7 +2019,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3174)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3174)));
                 et.setText(finalValueold + "");
 
 
@@ -1908,7 +2032,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3185)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3185)));
                 et.setText(finalValueold + "");
 
 
@@ -1921,7 +2045,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3196)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3196)));
                 et.setText(finalValueold + "");
 
 
@@ -1934,7 +2058,7 @@ try{
             // DOne
             try {
 
-                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 3207)));
+                int finalValueold = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.getCurrentClosingStock(consignmentCode, 3207)));
                 et.setText(finalValueold + "");
 
 
@@ -1990,7 +2114,7 @@ try{
              intentTransactionId = extras.getString("transactionId");
             String consignmentcode = extras.getString("consignmentcode");
             String ActivityTypeId = extras.getString("ActivityTypeId");
-            boolean enableEditing = extras.getBoolean("enableEditing");
+             enableEditing = extras.getBoolean("enableEditing");
 
             int statusTypeId;
             if (isjobDoneId != 0) {
@@ -2004,6 +2128,7 @@ try{
                 statusTypeId = 346;
             }
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis =>enableEditing: " + enableEditing);
 
             updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId, enableEditing);
 
@@ -2054,10 +2179,13 @@ try{
             } else {
                 statusTypeId = 346;
             }
-            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
-            String transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
+
+           // updateSingleEntryData(consignmentcode, activityTypeId, intentTransactionId, statusTypeId, enableEditing);
+
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM enableEditing  : " + enableEditing);
+             transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
             if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
-                updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, false);
+                updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, enableEditing);
             } else {
                 // TODO dont have any Existind data add new activity
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
@@ -2066,6 +2194,8 @@ try{
 
 
                 addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, false);
+
+
             }
 
 
@@ -2080,99 +2210,8 @@ try{
         for (int i = 0; i < activityTasklist.size(); i++) {
 
 
-            if (activityTasklist.get(i).getActivityTypeId() == 26 ||   activityTasklist.get(i).getActivityTypeId() == 93 ||
-                    activityTasklist.get(i).getActivityTypeId() == 37 || activityTasklist.get(i).getActivityTypeId() == 39 ||
-                    activityTasklist.get(i).getActivityTypeId() == 40 || activityTasklist.get(i).getActivityTypeId() == 16 ||
-                    activityTasklist.get(i).getActivityTypeId() == 17 || activityTasklist.get(i).getActivityTypeId() == 18 || activityTasklist.get(i).getActivityTypeId() == 19 ||
-                    activityTasklist.get(i).getActivityTypeId() == 124 || activityTasklist.get(i).getActivityTypeId() == 125 || activityTasklist.get(i).getActivityTypeId() == 130 ||
-                    activityTasklist.get(i).getActivityTypeId() == 131 || activityTasklist.get(i).getActivityTypeId() == 132 || activityTasklist.get(i).getActivityTypeId() == 133 ||
-                    activityTasklist.get(i).getActivityTypeId() == 134 || activityTasklist.get(i).getActivityTypeId() == 139 || activityTasklist.get(i).getActivityTypeId() == 140 ||
-                    activityTasklist.get(i).getActivityTypeId() == 141 || activityTasklist.get(i).getActivityTypeId() == 142 || activityTasklist.get(i).getActivityTypeId() == 143 ||
-                    activityTasklist.get(i).getActivityTypeId() == 163 || activityTasklist.get(i).getActivityTypeId() == 288 || activityTasklist.get(i).getActivityTypeId() == 289 ||
-                    activityTasklist.get(i).getActivityTypeId() == 296 || activityTasklist.get(i).getActivityTypeId() == 21 ||  activityTasklist.get(i).getActivityTypeId() == 33 ||
-                    activityTasklist.get(i).getActivityTypeId() == 45 || activityTasklist.get(i).getActivityTypeId() == 49 || activityTasklist.get(i).getActivityTypeId() == 55 ||
-                    activityTasklist.get(i).getActivityTypeId() == 59 || activityTasklist.get(i).getActivityTypeId() == 71 || activityTasklist.get(i).getActivityTypeId() == 76 ||
-                    activityTasklist.get(i).getActivityTypeId() == 82 || activityTasklist.get(i).getActivityTypeId() == 86 || activityTasklist.get(i).getActivityTypeId() == 100 ||
-                    activityTasklist.get(i).getActivityTypeId() == 104 || activityTasklist.get(i).getActivityTypeId() == 109 || activityTasklist.get(i).getActivityTypeId() == 113 ||
-                    activityTasklist.get(i).getActivityTypeId() == 117 || activityTasklist.get(i).getActivityTypeId() == 22 ||
-                    activityTasklist.get(i).getActivityTypeId() == 34 || activityTasklist.get(i).getActivityTypeId() == 46 || activityTasklist.get(i).getActivityTypeId() == 50 ||
-                    activityTasklist.get(i).getActivityTypeId() == 56 || activityTasklist.get(i).getActivityTypeId() == 60 || activityTasklist.get(i).getActivityTypeId() == 72 ||
-                    activityTasklist.get(i).getActivityTypeId() == 77 || activityTasklist.get(i).getActivityTypeId() == 83 || activityTasklist.get(i).getActivityTypeId() == 87 || activityTasklist.get(i).getActivityTypeId() == 101 ||
-                    activityTasklist.get(i).getActivityTypeId() == 105 || activityTasklist.get(i).getActivityTypeId() == 110 || activityTasklist.get(i).getActivityTypeId() == 114 ||
-                    activityTasklist.get(i).getActivityTypeId() == 118 || activityTasklist.get(i).getActivityTypeId() == 23 ||
-                    activityTasklist.get(i).getActivityTypeId() == 35 || activityTasklist.get(i).getActivityTypeId() == 47 || activityTasklist.get(i).getActivityTypeId() == 51 ||
-                    activityTasklist.get(i).getActivityTypeId() == 57 || activityTasklist.get(i).getActivityTypeId() == 61 || activityTasklist.get(i).getActivityTypeId() == 73 ||
-                    activityTasklist.get(i).getActivityTypeId() == 78 || activityTasklist.get(i).getActivityTypeId() == 84 || activityTasklist.get(i).getActivityTypeId() == 88 ||
-                    activityTasklist.get(i).getActivityTypeId() == 102 || activityTasklist.get(i).getActivityTypeId() == 106 || activityTasklist.get(i).getActivityTypeId() == 111 ||
-                    activityTasklist.get(i).getActivityTypeId() == 115 || activityTasklist.get(i).getActivityTypeId() == 119 ||
-                    activityTasklist.get(i).getActivityTypeId() == 31 || activityTasklist.get(i).getActivityTypeId() == 36 || activityTasklist.get(i).getActivityTypeId() == 48 ||
-                    activityTasklist.get(i).getActivityTypeId() == 52 || activityTasklist.get(i).getActivityTypeId() == 58 || activityTasklist.get(i).getActivityTypeId() == 62 ||
-                    activityTasklist.get(i).getActivityTypeId() == 74 || activityTasklist.get(i).getActivityTypeId() == 79 || activityTasklist.get(i).getActivityTypeId() == 85 || activityTasklist.get(i).getActivityTypeId() == 89 ||
-                    activityTasklist.get(i).getActivityTypeId() == 103 || activityTasklist.get(i).getActivityTypeId() == 107 || activityTasklist.get(i).getActivityTypeId() == 112 ||
-                    activityTasklist.get(i).getActivityTypeId() == 116 || activityTasklist.get(i).getActivityTypeId() == 120 || activityTasklist.get(i).getActivityTypeId() == 151 ||
-                    activityTasklist.get(i).getActivityTypeId() == 166 || activityTasklist.get(i).getActivityTypeId() == 178 || activityTasklist.get(i).getActivityTypeId() == 191 ||
-                    activityTasklist.get(i).getActivityTypeId() == 203 || activityTasklist.get(i).getActivityTypeId() == 215 || activityTasklist.get(i).getActivityTypeId() == 228 ||
-                    activityTasklist.get(i).getActivityTypeId() == 242 || activityTasklist.get(i).getActivityTypeId() == 255 || activityTasklist.get(i).getActivityTypeId() == 270 ||
-                    activityTasklist.get(i).getActivityTypeId() == 152 || activityTasklist.get(i).getActivityTypeId() == 167 || activityTasklist.get(i).getActivityTypeId() == 179 ||
-                    activityTasklist.get(i).getActivityTypeId() == 192 || activityTasklist.get(i).getActivityTypeId() == 204 || activityTasklist.get(i).getActivityTypeId() == 216 ||
-                    activityTasklist.get(i).getActivityTypeId() == 229 || activityTasklist.get(i).getActivityTypeId() == 243 || activityTasklist.get(i).getActivityTypeId() == 256 ||
-                    activityTasklist.get(i).getActivityTypeId() == 271 || activityTasklist.get(i).getActivityTypeId() == 154 || activityTasklist.get(i).getActivityTypeId() == 169 ||
-                    activityTasklist.get(i).getActivityTypeId() == 181 || activityTasklist.get(i).getActivityTypeId() == 194 || activityTasklist.get(i).getActivityTypeId() == 206 ||
-                    activityTasklist.get(i).getActivityTypeId() == 218 || activityTasklist.get(i).getActivityTypeId() == 231 || activityTasklist.get(i).getActivityTypeId() == 191 ||
-                    activityTasklist.get(i).getActivityTypeId() == 203 || activityTasklist.get(i).getActivityTypeId() == 215 || activityTasklist.get(i).getActivityTypeId() == 245 ||
-                    activityTasklist.get(i).getActivityTypeId() == 258 || activityTasklist.get(i).getActivityTypeId() == 273 || activityTasklist.get(i).getActivityTypeId() == 155 ||
-                    activityTasklist.get(i).getActivityTypeId() == 170 || activityTasklist.get(i).getActivityTypeId() == 182 || activityTasklist.get(i).getActivityTypeId() == 195 ||
-                    activityTasklist.get(i).getActivityTypeId() == 207 || activityTasklist.get(i).getActivityTypeId() == 219 || activityTasklist.get(i).getActivityTypeId() == 232 ||
-                    activityTasklist.get(i).getActivityTypeId() == 246 || activityTasklist.get(i).getActivityTypeId() == 259 || activityTasklist.get(i).getActivityTypeId() == 274 ||
-                    activityTasklist.get(i).getActivityTypeId() == 283 || activityTasklist.get(i).getActivityTypeId() == 297 || activityTasklist.get(i).getActivityTypeId() == 310 || activityTasklist.get(i).getActivityTypeId() == 324 ||
-                    activityTasklist.get(i).getActivityTypeId() == 337 || activityTasklist.get(i).getActivityTypeId() == 284 || activityTasklist.get(i).getActivityTypeId() == 298 ||
-                    activityTasklist.get(i).getActivityTypeId() == 311 || activityTasklist.get(i).getActivityTypeId() == 325 || activityTasklist.get(i).getActivityTypeId() == 338 ||
-                    activityTasklist.get(i).getActivityTypeId() == 285 || activityTasklist.get(i).getActivityTypeId() == 299 || activityTasklist.get(i).getActivityTypeId() == 312 ||
-                    activityTasklist.get(i).getActivityTypeId() == 326 || activityTasklist.get(i).getActivityTypeId() == 339 || activityTasklist.get(i).getActivityTypeId() == 286 ||
-                    activityTasklist.get(i).getActivityTypeId() == 300 || activityTasklist.get(i).getActivityTypeId() == 313 || activityTasklist.get(i).getActivityTypeId() == 327 ||
-                    activityTasklist.get(i).getActivityTypeId() == 340 || activityTasklist.get(i).getActivityTypeId() == 287 || activityTasklist.get(i).getActivityTypeId() == 301 || activityTasklist.get(i).getActivityTypeId() == 314 ||
-                    activityTasklist.get(i).getActivityTypeId() == 328 || activityTasklist.get(i).getActivityTypeId() == 341 ||
-                    activityTasklist.get(i).getActivityTypeId() == 153 || activityTasklist.get(i).getActivityTypeId() == 168 || activityTasklist.get(i).getActivityTypeId() == 180 || activityTasklist.get(i).getActivityTypeId() == 193 ||
-                    activityTasklist.get(i).getActivityTypeId() == 205 || activityTasklist.get(i).getActivityTypeId() == 217 || activityTasklist.get(i).getActivityTypeId() == 230 ||
-                    activityTasklist.get(i).getActivityTypeId() == 244 || activityTasklist.get(i).getActivityTypeId() == 257 || activityTasklist.get(i).getActivityTypeId() == 272 ||
-                  activityTasklist.get(i).getActivityTypeId() == 53 || activityTasklist.get(i).getActivityTypeId() == 69 || activityTasklist.get(i).getActivityTypeId() == 80 ||
-                    activityTasklist.get(i).getActivityTypeId() == 44 || activityTasklist.get(i).getActivityTypeId() == 54 || activityTasklist.get(i).getActivityTypeId() == 70 ||
-                    activityTasklist.get(i).getActivityTypeId() == 81 || activityTasklist.get(i).getActivityTypeId() == 39 ||
-                    activityTasklist.get(i).getActivityTypeId() == 40  || activityTasklist.get(i).getActivityTypeId() == 64 ||
-                    activityTasklist.get(i).getActivityTypeId() == 65 || activityTasklist.get(i).getActivityTypeId() == 66 || activityTasklist.get(i).getActivityTypeId() == 67 ||
-                    activityTasklist.get(i).getActivityTypeId() == 68 || activityTasklist.get(i).getActivityTypeId() == 95 || activityTasklist.get(i).getActivityTypeId() == 96 ||
-                    activityTasklist.get(i).getActivityTypeId() == 97 || activityTasklist.get(i).getActivityTypeId() == 98 || activityTasklist.get(i).getActivityTypeId() == 99 ||
-                    activityTasklist.get(i).getActivityTypeId() == 137 || activityTasklist.get(i).getActivityTypeId() == 149 || activityTasklist.get(i).getActivityTypeId() == 164 ||
-                    activityTasklist.get(i).getActivityTypeId() == 176 || activityTasklist.get(i).getActivityTypeId() == 189 || activityTasklist.get(i).getActivityTypeId() == 201 || activityTasklist.get(i).getActivityTypeId() == 220 ||
-                    activityTasklist.get(i).getActivityTypeId() == 233 || activityTasklist.get(i).getActivityTypeId() == 247 || activityTasklist.get(i).getActivityTypeId() == 260 || activityTasklist.get(i).getActivityTypeId() == 275 ||
-                    activityTasklist.get(i).getActivityTypeId() == 138 || activityTasklist.get(i).getActivityTypeId() == 150 || activityTasklist.get(i).getActivityTypeId() == 165 || activityTasklist.get(i).getActivityTypeId() == 177 || activityTasklist.get(i).getActivityTypeId() == 190 || activityTasklist.get(i).getActivityTypeId() == 202 ||
-                    activityTasklist.get(i).getActivityTypeId() == 221 || activityTasklist.get(i).getActivityTypeId() == 234 || activityTasklist.get(i).getActivityTypeId() == 248 ||
-                    activityTasklist.get(i).getActivityTypeId() == 261 || activityTasklist.get(i).getActivityTypeId() == 276 ||
-                    activityTasklist.get(i).getActivityTypeId() == 214 || activityTasklist.get(i).getActivityTypeId() == 241 || activityTasklist.get(i).getActivityTypeId() == 268 ||
-                    activityTasklist.get(i).getActivityTypeId() == 144 || activityTasklist.get(i).getActivityTypeId() == 145 ||
-                    activityTasklist.get(i).getActivityTypeId() == 146 || activityTasklist.get(i).getActivityTypeId() == 147 || activityTasklist.get(i).getActivityTypeId() == 148 ||
-                    activityTasklist.get(i).getActivityTypeId() == 158 || activityTasklist.get(i).getActivityTypeId() == 159 || activityTasklist.get(i).getActivityTypeId() == 160 ||
-                    activityTasklist.get(i).getActivityTypeId() == 161 || activityTasklist.get(i).getActivityTypeId() == 162 || activityTasklist.get(i).getActivityTypeId() == 171 ||
-                    activityTasklist.get(i).getActivityTypeId() == 172 || activityTasklist.get(i).getActivityTypeId() == 173 || activityTasklist.get(i).getActivityTypeId() == 174 ||
-                    activityTasklist.get(i).getActivityTypeId() == 175 || activityTasklist.get(i).getActivityTypeId() == 184 || activityTasklist.get(i).getActivityTypeId() == 185 ||
-                    activityTasklist.get(i).getActivityTypeId() == 186 || activityTasklist.get(i).getActivityTypeId() == 187 || activityTasklist.get(i).getActivityTypeId() == 188 ||
-                    activityTasklist.get(i).getActivityTypeId() == 196 || activityTasklist.get(i).getActivityTypeId() == 197 || activityTasklist.get(i).getActivityTypeId() == 198 ||
-                    activityTasklist.get(i).getActivityTypeId() == 199 || activityTasklist.get(i).getActivityTypeId() == 200 || activityTasklist.get(i).getActivityTypeId() == 209 || activityTasklist.get(i).getActivityTypeId() == 210 ||
-                    activityTasklist.get(i).getActivityTypeId() == 211 || activityTasklist.get(i).getActivityTypeId() == 212 || activityTasklist.get(i).getActivityTypeId() == 213 || activityTasklist.get(i).getActivityTypeId() == 223 || activityTasklist.get(i).getActivityTypeId() == 224 ||
-                    activityTasklist.get(i).getActivityTypeId() == 225 || activityTasklist.get(i).getActivityTypeId() == 226 || activityTasklist.get(i).getActivityTypeId() == 227 ||
-                    activityTasklist.get(i).getActivityTypeId() == 236 || activityTasklist.get(i).getActivityTypeId() == 237 || activityTasklist.get(i).getActivityTypeId() == 238 || activityTasklist.get(i).getActivityTypeId() == 239 ||
-                    activityTasklist.get(i).getActivityTypeId() == 240 || activityTasklist.get(i).getActivityTypeId() == 250 || activityTasklist.get(i).getActivityTypeId() == 251 || activityTasklist.get(i).getActivityTypeId() == 252 || activityTasklist.get(i).getActivityTypeId() == 253 || activityTasklist.get(i).getActivityTypeId() == 254 || activityTasklist.get(i).getActivityTypeId() == 263 ||
-                    activityTasklist.get(i).getActivityTypeId() == 264 || activityTasklist.get(i).getActivityTypeId() == 265 || activityTasklist.get(i).getActivityTypeId() == 266 || activityTasklist.get(i).getActivityTypeId() == 302 ||
-                    activityTasklist.get(i).getActivityTypeId() == 315 || activityTasklist.get(i).getActivityTypeId() == 329 || activityTasklist.get(i).getActivityTypeId() == 342 ||
-                    activityTasklist.get(i).getActivityTypeId() == 316 || activityTasklist.get(i).getActivityTypeId() == 330 || activityTasklist.get(i).getActivityTypeId() == 343 || activityTasklist.get(i).getActivityTypeId() == 323 ||
-                    activityTasklist.get(i).getActivityTypeId() == 278 || activityTasklist.get(i).getActivityTypeId() == 279 || activityTasklist.get(i).getActivityTypeId() == 280 ||
-                    activityTasklist.get(i).getActivityTypeId() == 281 || activityTasklist.get(i).getActivityTypeId() == 282 || activityTasklist.get(i).getActivityTypeId() == 291 || activityTasklist.get(i).getActivityTypeId() == 292 ||
-                    activityTasklist.get(i).getActivityTypeId() == 293 || activityTasklist.get(i).getActivityTypeId() == 294 || activityTasklist.get(i).getActivityTypeId() == 295 ||
-                    activityTasklist.get(i).getActivityTypeId() == 305 || activityTasklist.get(i).getActivityTypeId() == 306 || activityTasklist.get(i).getActivityTypeId() == 307 || activityTasklist.get(i).getActivityTypeId() == 308 ||
-                    activityTasklist.get(i).getActivityTypeId() == 309 || activityTasklist.get(i).getActivityTypeId() == 318 || activityTasklist.get(i).getActivityTypeId() == 319 || activityTasklist.get(i).getActivityTypeId() == 320 ||
-                    activityTasklist.get(i).getActivityTypeId() == 321 || activityTasklist.get(i).getActivityTypeId() == 322 || activityTasklist.get(i).getActivityTypeId() == 332 ||  activityTasklist.get(i).getActivityTypeId() == 3219 ||
-            activityTasklist.get(i).getActivityTypeId() == 3220 || activityTasklist.get(i).getActivityTypeId() == 3221 || activityTasklist.get(i).getActivityTypeId() == 3222 || activityTasklist.get(i).getActivityTypeId() == 3223 || activityTasklist.get(i).getActivityTypeId() == 3224 || activityTasklist.get(i).getActivityTypeId() == 3225 || activityTasklist.get(i).getActivityTypeId() == 3226 || activityTasklist.get(i).getActivityTypeId() == 3227 || activityTasklist.get(i).getActivityTypeId() == 3228 || activityTasklist.get(i).getActivityTypeId() == 3229 || activityTasklist.get(i).getActivityTypeId() == 3230 || activityTasklist.get(i).getActivityTypeId() == 3231 || activityTasklist.get(i).getActivityTypeId() == 3232 || activityTasklist.get(i).getActivityTypeId() == 3233 || activityTasklist.get(i).getActivityTypeId() == 3234 || activityTasklist.get(i).getActivityTypeId() == 3235 || activityTasklist.get(i).getActivityTypeId() == 3236 || activityTasklist.get(i).getActivityTypeId() == 3237 || activityTasklist.get(i).getActivityTypeId() == 3238 || activityTasklist.get(i).getActivityTypeId() == 3239 || activityTasklist.get(i).getActivityTypeId() == 3240 || activityTasklist.get(i).getActivityTypeId() == 3241 || activityTasklist.get(i).getActivityTypeId() == 3242 || activityTasklist.get(i).getActivityTypeId() == 3243 || activityTasklist.get(i).getActivityTypeId() == 3244 || activityTasklist.get(i).getActivityTypeId() == 3245 || activityTasklist.get(i).getActivityTypeId() == 3246 || activityTasklist.get(i).getActivityTypeId() == 3247 || activityTasklist.get(i).getActivityTypeId() == 3248 || activityTasklist.get(i).getActivityTypeId() == 3249 || activityTasklist.get(i).getActivityTypeId() == 3250 || activityTasklist.get(i).getActivityTypeId() == 3251 || activityTasklist.get(i).getActivityTypeId() == 3252 || activityTasklist.get(i).getActivityTypeId() == 3253 || activityTasklist.get(i).getActivityTypeId() == 3254 || activityTasklist.get(i).getActivityTypeId() == 3255 || activityTasklist.get(i).getActivityTypeId() == 3256 || activityTasklist.get(i).getActivityTypeId() == 3257 || activityTasklist.get(i).getActivityTypeId() == 3258 || activityTasklist.get(i).getActivityTypeId() == 3259 || activityTasklist.get(i).getActivityTypeId() == 3260 || activityTasklist.get(i).getActivityTypeId() == 3261 || activityTasklist.get(i).getActivityTypeId() == 3262 || activityTasklist.get(i).getActivityTypeId() == 3263 || activityTasklist.get(i).getActivityTypeId() == 3264 || activityTasklist.get(i).getActivityTypeId() == 3265 || activityTasklist.get(i).getActivityTypeId() == 3266 || activityTasklist.get(i).getActivityTypeId() == 3267 || activityTasklist.get(i).getActivityTypeId() == 3268 || activityTasklist.get(i).getActivityTypeId() == 3269 || activityTasklist.get(i).getActivityTypeId() == 3270 || activityTasklist.get(i).getActivityTypeId() == 3271 || activityTasklist.get(i).getActivityTypeId() == 3272 || activityTasklist.get(i).getActivityTypeId() == 3273 || activityTasklist.get(i).getActivityTypeId() == 3274 || activityTasklist.get(i).getActivityTypeId() == 3275 || activityTasklist.get(i).getActivityTypeId() == 3276 || activityTasklist.get(i).getActivityTypeId() == 3277 || activityTasklist.get(i).getActivityTypeId() == 3278 || activityTasklist.get(i).getActivityTypeId() == 3279 || activityTasklist.get(i).getActivityTypeId() == 3280 || activityTasklist.get(i).getActivityTypeId() == 3281 || activityTasklist.get(i).getActivityTypeId() == 3282 || activityTasklist.get(i).getActivityTypeId() == 3283 || activityTasklist.get(i).getActivityTypeId() == 3284 || activityTasklist.get(i).getActivityTypeId() == 3285 || activityTasklist.get(i).getActivityTypeId() == 3286 || activityTasklist.get(i).getActivityTypeId() == 3287 || activityTasklist.get(i).getActivityTypeId() == 3288 || activityTasklist.get(i).getActivityTypeId() == 3289 || activityTasklist.get(i).getActivityTypeId() == 3290 || activityTasklist.get(i).getActivityTypeId() == 3291 || activityTasklist.get(i).getActivityTypeId() == 3292 || activityTasklist.get(i).getActivityTypeId() == 3293 || activityTasklist.get(i).getActivityTypeId() == 3294 || activityTasklist.get(i).getActivityTypeId() == 3295 || activityTasklist.get(i).getActivityTypeId() == 3296 || activityTasklist.get(i).getActivityTypeId() == 3297 || activityTasklist.get(i).getActivityTypeId() == 3298 || activityTasklist.get(i).getActivityTypeId() == 3299 || activityTasklist.get(i).getActivityTypeId() == 3300 || activityTasklist.get(i).getActivityTypeId() == 3301 || activityTasklist.get(i).getActivityTypeId() == 3302 || activityTasklist.get(i).getActivityTypeId() == 3303 || activityTasklist.get(i).getActivityTypeId() == 3304 || activityTasklist.get(i).getActivityTypeId() == 3305 || activityTasklist.get(i).getActivityTypeId() == 3306 || activityTasklist.get(i).getActivityTypeId() == 3307 || activityTasklist.get(i).getActivityTypeId() == 3308 || activityTasklist.get(i).getActivityTypeId() == 3309 || activityTasklist.get(i).getActivityTypeId() == 3310 || activityTasklist.get(i).getActivityTypeId() == 3311 || activityTasklist.get(i).getActivityTypeId() == 3312 || activityTasklist.get(i).getActivityTypeId() == 3313 || activityTasklist.get(i).getActivityTypeId() == 3314 || activityTasklist.get(i).getActivityTypeId() == 3315 || activityTasklist.get(i).getActivityTypeId() == 3316 || activityTasklist.get(i).getActivityTypeId() == 3317 || activityTasklist.get(i).getActivityTypeId() == 3318 || activityTasklist.get(i).getActivityTypeId() == 3319 || activityTasklist.get(i).getActivityTypeId() == 3320 || activityTasklist.get(i).getActivityTypeId() == 3321 || activityTasklist.get(i).getActivityTypeId() == 3322 || activityTasklist.get(i).getActivityTypeId() == 3323 || activityTasklist.get(i).getActivityTypeId() == 3324 || activityTasklist.get(i).getActivityTypeId() == 3325 || activityTasklist.get(i).getActivityTypeId() == 3326 || activityTasklist.get(i).getActivityTypeId() == 3327 || activityTasklist.get(i).getActivityTypeId() == 3328 || activityTasklist.get(i).getActivityTypeId() == 3329 || activityTasklist.get(i).getActivityTypeId() == 3330 || activityTasklist.get(i).getActivityTypeId() == 3331 || activityTasklist.get(i).getActivityTypeId() == 3332 || activityTasklist.get(i).getActivityTypeId() == 3333 || activityTasklist.get(i).getActivityTypeId() == 3334 || activityTasklist.get(i).getActivityTypeId() == 3335 || activityTasklist.get(i).getActivityTypeId() == 3336 || activityTasklist.get(i).getActivityTypeId() == 3337 || activityTasklist.get(i).getActivityTypeId() == 3338 || activityTasklist.get(i).getActivityTypeId() == 3339 || activityTasklist.get(i).getActivityTypeId() == 3340 || activityTasklist.get(i).getActivityTypeId() == 3341 || activityTasklist.get(i).getActivityTypeId() == 3342 || activityTasklist.get(i).getActivityTypeId() == 3343 || activityTasklist.get(i).getActivityTypeId() == 3344 || activityTasklist.get(i).getActivityTypeId() == 3345 || activityTasklist.get(i).getActivityTypeId() == 3346 || activityTasklist.get(i).getActivityTypeId() == 3347 || activityTasklist.get(i).getActivityTypeId() == 3348 || activityTasklist.get(i).getActivityTypeId() == 3349 || activityTasklist.get(i).getActivityTypeId() == 3350 || activityTasklist.get(i).getActivityTypeId() == 3351 || activityTasklist.get(i).getActivityTypeId() == 3352 || activityTasklist.get(i).getActivityTypeId() == 3353 || activityTasklist.get(i).getActivityTypeId() == 3354 || activityTasklist.get(i).getActivityTypeId() == 3355 || activityTasklist.get(i).getActivityTypeId() == 3356 || activityTasklist.get(i).getActivityTypeId() == 3357 || activityTasklist.get(i).getActivityTypeId() == 3358 || activityTasklist.get(i).getActivityTypeId() == 3359 || activityTasklist.get(i).getActivityTypeId() == 3360 || activityTasklist.get(i).getActivityTypeId() == 3361 || activityTasklist.get(i).getActivityTypeId() == 3362 || activityTasklist.get(i).getActivityTypeId() == 3363 || activityTasklist.get(i).getActivityTypeId() == 3364 || activityTasklist.get(i).getActivityTypeId() == 3365 || activityTasklist.get(i).getActivityTypeId() == 3366 || activityTasklist.get(i).getActivityTypeId() == 3367 || activityTasklist.get(i).getActivityTypeId() == 3368 || activityTasklist.get(i).getActivityTypeId() == 3369 || activityTasklist.get(i).getActivityTypeId() == 3370 || activityTasklist.get(i).getActivityTypeId() == 3371 || activityTasklist.get(i).getActivityTypeId() == 3372 || activityTasklist.get(i).getActivityTypeId() == 3373 || activityTasklist.get(i).getActivityTypeId() == 3374 || activityTasklist.get(i).getActivityTypeId() == 3375 || activityTasklist.get(i).getActivityTypeId() == 3376 || activityTasklist.get(i).getActivityTypeId() == 3377 || activityTasklist.get(i).getActivityTypeId() == 3378 || activityTasklist.get(i).getActivityTypeId() == 3379 || activityTasklist.get(i).getActivityTypeId() == 3380 || activityTasklist.get(i).getActivityTypeId() == 3381 || activityTasklist.get(i).getActivityTypeId() == 3382 || activityTasklist.get(i).getActivityTypeId() == 3383 || activityTasklist.get(i).getActivityTypeId() == 3384 || activityTasklist.get(i).getActivityTypeId() == 3385 || activityTasklist.get(i).getActivityTypeId() == 3386 || activityTasklist.get(i).getActivityTypeId() == 3387 || activityTasklist.get(i).getActivityTypeId() == 3388 || activityTasklist.get(i).getActivityTypeId() == 3389 || activityTasklist.get(i).getActivityTypeId() == 3390 || activityTasklist.get(i).getActivityTypeId() == 3391 || activityTasklist.get(i).getActivityTypeId() == 3392 || activityTasklist.get(i).getActivityTypeId() == 3393 || activityTasklist.get(i).getActivityTypeId() == 3394 || activityTasklist.get(i).getActivityTypeId() == 3395 || activityTasklist.get(i).getActivityTypeId() == 3396 || activityTasklist.get(i).getActivityTypeId() == 3397 || activityTasklist.get(i).getActivityTypeId() == 3398 || activityTasklist.get(i).getActivityTypeId() == 3399 || activityTasklist.get(i).getActivityTypeId() == 3400 || activityTasklist.get(i).getActivityTypeId() == 3401 || activityTasklist.get(i).getActivityTypeId() == 3402 || activityTasklist.get(i).getActivityTypeId() == 3403 || activityTasklist.get(i).getActivityTypeId() == 3404 || activityTasklist.get(i).getActivityTypeId() == 3405 || activityTasklist.get(i).getActivityTypeId() == 3406 || activityTasklist.get(i).getActivityTypeId() == 3407 || activityTasklist.get(i).getActivityTypeId() == 3408 || activityTasklist.get(i).getActivityTypeId() == 3409 || activityTasklist.get(i).getActivityTypeId() == 3410 || activityTasklist.get(i).getActivityTypeId() == 3411 || activityTasklist.get(i).getActivityTypeId() == 3412 || activityTasklist.get(i).getActivityTypeId() == 3413 || activityTasklist.get(i).getActivityTypeId() == 3414 || activityTasklist.get(i).getActivityTypeId() == 3415 || activityTasklist.get(i).getActivityTypeId() == 3416 || activityTasklist.get(i).getActivityTypeId() == 3417 || activityTasklist.get(i).getActivityTypeId() == 3418 || activityTasklist.get(i).getActivityTypeId() == 3419 || activityTasklist.get(i).getActivityTypeId() == 3420 || activityTasklist.get(i).getActivityTypeId() == 3421 || activityTasklist.get(i).getActivityTypeId() == 3422 || activityTasklist.get(i).getActivityTypeId() == 3423 || activityTasklist.get(i).getActivityTypeId() == 3424 || activityTasklist.get(i).getActivityTypeId() == 3425 || activityTasklist.get(i).getActivityTypeId() == 3426 || activityTasklist.get(i).getActivityTypeId() == 3427 || activityTasklist.get(i).getActivityTypeId() == 3428 || activityTasklist.get(i).getActivityTypeId() == 3429 || activityTasklist.get(i).getActivityTypeId() == 3430 || activityTasklist.get(i).getActivityTypeId() == 3431 || activityTasklist.get(i).getActivityTypeId() == 3432 || activityTasklist.get(i).getActivityTypeId() == 3433 || activityTasklist.get(i).getActivityTypeId() == 3434 || activityTasklist.get(i).getActivityTypeId() == 3435 || activityTasklist.get(i).getActivityTypeId() == 3436 || activityTasklist.get(i).getActivityTypeId() == 3437 || activityTasklist.get(i).getActivityTypeId() == 3438 || activityTasklist.get(i).getActivityTypeId() == 3439 || activityTasklist.get(i).getActivityTypeId() == 3440 || activityTasklist.get(i).getActivityTypeId() == 3441 || activityTasklist.get(i).getActivityTypeId() == 3442 || activityTasklist.get(i).getActivityTypeId() == 3443 || activityTasklist.get(i).getActivityTypeId() == 3444 || activityTasklist.get(i).getActivityTypeId() == 3445 || activityTasklist.get(i).getActivityTypeId() == 3446 || activityTasklist.get(i).getActivityTypeId() == 3447 || activityTasklist.get(i).getActivityTypeId() == 3448 || activityTasklist.get(i).getActivityTypeId() == 3449 || activityTasklist.get(i).getActivityTypeId() == 3450 || activityTasklist.get(i).getActivityTypeId() == 3451 || activityTasklist.get(i).getActivityTypeId() == 3452 || activityTasklist.get(i).getActivityTypeId() == 3453 || activityTasklist.get(i).getActivityTypeId() == 3454 || activityTasklist.get(i).getActivityTypeId() == 3455 || activityTasklist.get(i).getActivityTypeId() == 3456 || activityTasklist.get(i).getActivityTypeId() == 3457 || activityTasklist.get(i).getActivityTypeId() == 3458 || activityTasklist.get(i).getActivityTypeId() == 3459 || activityTasklist.get(i).getActivityTypeId() == 3460 || activityTasklist.get(i).getActivityTypeId() == 3461 || activityTasklist.get(i).getActivityTypeId() == 3462 || activityTasklist.get(i).getActivityTypeId() == 3463 || activityTasklist.get(i).getActivityTypeId() == 3464 || activityTasklist.get(i).getActivityTypeId() == 3465 || activityTasklist.get(i).getActivityTypeId() == 3466 || activityTasklist.get(i).getActivityTypeId() == 3467 || activityTasklist.get(i).getActivityTypeId() == 3468 || activityTasklist.get(i).getActivityTypeId() == 3469 || activityTasklist.get(i).getActivityTypeId() == 3470 || activityTasklist.get(i).getActivityTypeId() == 3471 || activityTasklist.get(i).getActivityTypeId() == 3472 || activityTasklist.get(i).getActivityTypeId() == 3473 || activityTasklist.get(i).getActivityTypeId() == 3474 || activityTasklist.get(i).getActivityTypeId() == 3475 || activityTasklist.get(i).getActivityTypeId() == 3476 || activityTasklist.get(i).getActivityTypeId() == 3477 || activityTasklist.get(i).getActivityTypeId() == 3478 || activityTasklist.get(i).getActivityTypeId() == 3479 || activityTasklist.get(i).getActivityTypeId() == 3480 || activityTasklist.get(i).getActivityTypeId() == 3481 || activityTasklist.get(i).getActivityTypeId() == 3482 || activityTasklist.get(i).getActivityTypeId() == 3483 || activityTasklist.get(i).getActivityTypeId() == 3484 || activityTasklist.get(i).getActivityTypeId() == 3485 || activityTasklist.get(i).getActivityTypeId() == 3486 || activityTasklist.get(i).getActivityTypeId() == 3487 || activityTasklist.get(i).getActivityTypeId() == 3488 || activityTasklist.get(i).getActivityTypeId() == 3489 || activityTasklist.get(i).getActivityTypeId() == 3490 || activityTasklist.get(i).getActivityTypeId() == 3491 || activityTasklist.get(i).getActivityTypeId() == 3492 || activityTasklist.get(i).getActivityTypeId() == 3493 || activityTasklist.get(i).getActivityTypeId() == 3494 || activityTasklist.get(i).getActivityTypeId() == 3495 || activityTasklist.get(i).getActivityTypeId() == 3496 || activityTasklist.get(i).getActivityTypeId() == 3497 || activityTasklist.get(i).getActivityTypeId() == 3498 || activityTasklist.get(i).getActivityTypeId() == 3499 || activityTasklist.get(i).getActivityTypeId() == 3500 || activityTasklist.get(i).getActivityTypeId() == 3501 || activityTasklist.get(i).getActivityTypeId() == 3502 || activityTasklist.get(i).getActivityTypeId() == 3503 || activityTasklist.get(i).getActivityTypeId() == 3504 || activityTasklist.get(i).getActivityTypeId() == 3505 || activityTasklist.get(i).getActivityTypeId() == 3506 || activityTasklist.get(i).getActivityTypeId() == 3507 || activityTasklist.get(i).getActivityTypeId() == 3508 || activityTasklist.get(i).getActivityTypeId() == 3509 || activityTasklist.get(i).getActivityTypeId() == 3510 || activityTasklist.get(i).getActivityTypeId() == 3511 || activityTasklist.get(i).getActivityTypeId() == 3512 || activityTasklist.get(i).getActivityTypeId() == 3513 || activityTasklist.get(i).getActivityTypeId() == 3514 || activityTasklist.get(i).getActivityTypeId() == 3515 || activityTasklist.get(i).getActivityTypeId() == 3516 || activityTasklist.get(i).getActivityTypeId() == 3517 || activityTasklist.get(i).getActivityTypeId() == 3518 || activityTasklist.get(i).getActivityTypeId() == 3519 || activityTasklist.get(i).getActivityTypeId() == 3520 || activityTasklist.get(i).getActivityTypeId() == 3521 || activityTasklist.get(i).getActivityTypeId() == 3522 || activityTasklist.get(i).getActivityTypeId() == 3523 || activityTasklist.get(i).getActivityTypeId() == 3524 || activityTasklist.get(i).getActivityTypeId() == 3525 || activityTasklist.get(i).getActivityTypeId() == 3526 || activityTasklist.get(i).getActivityTypeId() == 3527 || activityTasklist.get(i).getActivityTypeId() == 3528 || activityTasklist.get(i).getActivityTypeId() == 3529 || activityTasklist.get(i).getActivityTypeId() == 3530 || activityTasklist.get(i).getActivityTypeId() == 3531 || activityTasklist.get(i).getActivityTypeId() == 3532 || activityTasklist.get(i).getActivityTypeId() == 3533 || activityTasklist.get(i).getActivityTypeId() == 3534 || activityTasklist.get(i).getActivityTypeId() == 3535 || activityTasklist.get(i).getActivityTypeId() == 3536 || activityTasklist.get(i).getActivityTypeId() == 3537 || activityTasklist.get(i).getActivityTypeId() == 3538 || activityTasklist.get(i).getActivityTypeId() == 3539 || activityTasklist.get(i).getActivityTypeId() == 3540 ||
-            activityTasklist.get(i).getActivityTypeId() == 333 || activityTasklist.get(i).getActivityTypeId() == 334 || activityTasklist.get(i).getActivityTypeId() == 335 || activityTasklist.get(i).getActivityTypeId() == 336) {
+            if (activityTasklist.get(i).getActivityTypeId()  == 14 || activityTasklist.get(i).getActivityTypeId()  == 19 || activityTasklist.get(i).getActivityTypeId()  == 31 || activityTasklist.get(i).getActivityTypeId()  == 45 || activityTasklist.get(i).getActivityTypeId()  == 59 || activityTasklist.get(i).getActivityTypeId()  == 67 || activityTasklist.get(i).getActivityTypeId()  == 78 || activityTasklist.get(i).getActivityTypeId()  == 89 || activityTasklist.get(i).getActivityTypeId()  == 94 || activityTasklist.get(i).getActivityTypeId()  == 198 || activityTasklist.get(i).getActivityTypeId()  == 210 || activityTasklist.get(i).getActivityTypeId()  == 224 || activityTasklist.get(i).getActivityTypeId()  == 236 || activityTasklist.get(i).getActivityTypeId()  == 1229 || activityTasklist.get(i).getActivityTypeId()  == 1248 || activityTasklist.get(i).getActivityTypeId()  == 1267 || activityTasklist.get(i).getActivityTypeId()  == 1286 || activityTasklist.get(i).getActivityTypeId()  == 3219 || activityTasklist.get(i).getActivityTypeId()  == 3220 || activityTasklist.get(i).getActivityTypeId()  == 3221 || activityTasklist.get(i).getActivityTypeId()  == 3222 || activityTasklist.get(i).getActivityTypeId()  == 3223 || activityTasklist.get(i).getActivityTypeId()  == 3224 || activityTasklist.get(i).getActivityTypeId()  == 3226 || activityTasklist.get(i).getActivityTypeId()  == 3227 || activityTasklist.get(i).getActivityTypeId()  == 3228 || activityTasklist.get(i).getActivityTypeId()  == 3229 || activityTasklist.get(i).getActivityTypeId()  == 3230 || activityTasklist.get(i).getActivityTypeId()  == 3231 || activityTasklist.get(i).getActivityTypeId()  == 3232 || activityTasklist.get(i).getActivityTypeId()  == 3233 || activityTasklist.get(i).getActivityTypeId()  == 3234 || activityTasklist.get(i).getActivityTypeId()  == 3236 || activityTasklist.get(i).getActivityTypeId()  == 3237 || activityTasklist.get(i).getActivityTypeId()  == 3238 || activityTasklist.get(i).getActivityTypeId()  == 3239 || activityTasklist.get(i).getActivityTypeId()  == 3240 || activityTasklist.get(i).getActivityTypeId()  == 3241 || activityTasklist.get(i).getActivityTypeId()  == 3242 || activityTasklist.get(i).getActivityTypeId()  == 3243 || activityTasklist.get(i).getActivityTypeId()  == 3244 || activityTasklist.get(i).getActivityTypeId()  == 3246 || activityTasklist.get(i).getActivityTypeId()  == 3247 || activityTasklist.get(i).getActivityTypeId()  == 3248 || activityTasklist.get(i).getActivityTypeId()  == 3249 || activityTasklist.get(i).getActivityTypeId()  == 3250 || activityTasklist.get(i).getActivityTypeId()  == 3251 || activityTasklist.get(i).getActivityTypeId()  == 3252 || activityTasklist.get(i).getActivityTypeId()  == 3253 || activityTasklist.get(i).getActivityTypeId()  == 3254 || activityTasklist.get(i).getActivityTypeId()  == 3255 || activityTasklist.get(i).getActivityTypeId()  == 3256 || activityTasklist.get(i).getActivityTypeId()  == 3257 || activityTasklist.get(i).getActivityTypeId()  == 3258 || activityTasklist.get(i).getActivityTypeId()  == 3259 || activityTasklist.get(i).getActivityTypeId()  == 3260 || activityTasklist.get(i).getActivityTypeId()  == 3261 || activityTasklist.get(i).getActivityTypeId()  == 3262 || activityTasklist.get(i).getActivityTypeId()  == 3263 || activityTasklist.get(i).getActivityTypeId()  == 3265 || activityTasklist.get(i).getActivityTypeId()  == 3266 || activityTasklist.get(i).getActivityTypeId()  == 3267 || activityTasklist.get(i).getActivityTypeId()  == 3268 || activityTasklist.get(i).getActivityTypeId()  == 3269 || activityTasklist.get(i).getActivityTypeId()  == 3270 || activityTasklist.get(i).getActivityTypeId()  == 3271 || activityTasklist.get(i).getActivityTypeId()  == 3272 || activityTasklist.get(i).getActivityTypeId()  == 3273 || activityTasklist.get(i).getActivityTypeId()  == 3274 || activityTasklist.get(i).getActivityTypeId()  == 3275 || activityTasklist.get(i).getActivityTypeId()  == 3276 || activityTasklist.get(i).getActivityTypeId()  == 3277 || activityTasklist.get(i).getActivityTypeId()  == 3278 || activityTasklist.get(i).getActivityTypeId()  == 3279 || activityTasklist.get(i).getActivityTypeId()  == 3280 || activityTasklist.get(i).getActivityTypeId()  == 3281 || activityTasklist.get(i).getActivityTypeId()  == 3282 || activityTasklist.get(i).getActivityTypeId()  == 3283 || activityTasklist.get(i).getActivityTypeId()  == 3284 || activityTasklist.get(i).getActivityTypeId()  == 3285 || activityTasklist.get(i).getActivityTypeId()  == 3286 || activityTasklist.get(i).getActivityTypeId()  == 3287 || activityTasklist.get(i).getActivityTypeId()  == 3288 || activityTasklist.get(i).getActivityTypeId()  == 3289 || activityTasklist.get(i).getActivityTypeId()  == 3291 || activityTasklist.get(i).getActivityTypeId()  == 3292 || activityTasklist.get(i).getActivityTypeId()  == 3293 || activityTasklist.get(i).getActivityTypeId()  == 3294 || activityTasklist.get(i).getActivityTypeId()  == 3295 || activityTasklist.get(i).getActivityTypeId()  == 3296 || activityTasklist.get(i).getActivityTypeId()  == 3297 || activityTasklist.get(i).getActivityTypeId()  == 3298 || activityTasklist.get(i).getActivityTypeId()  == 3299 || activityTasklist.get(i).getActivityTypeId()  == 3300 || activityTasklist.get(i).getActivityTypeId()  == 3301 || activityTasklist.get(i).getActivityTypeId()  == 3302 || activityTasklist.get(i).getActivityTypeId()  == 3303 || activityTasklist.get(i).getActivityTypeId()  == 3304 || activityTasklist.get(i).getActivityTypeId()  == 3305 || activityTasklist.get(i).getActivityTypeId()  == 3306 || activityTasklist.get(i).getActivityTypeId()  == 3307 || activityTasklist.get(i).getActivityTypeId()  == 3308 || activityTasklist.get(i).getActivityTypeId()  == 3309 || activityTasklist.get(i).getActivityTypeId()  == 3310 || activityTasklist.get(i).getActivityTypeId()  == 3311 || activityTasklist.get(i).getActivityTypeId()  == 3312 || activityTasklist.get(i).getActivityTypeId()  == 3313 || activityTasklist.get(i).getActivityTypeId()  == 3314 || activityTasklist.get(i).getActivityTypeId()  == 3315 || activityTasklist.get(i).getActivityTypeId()  == 3316 || activityTasklist.get(i).getActivityTypeId()  == 3317 || activityTasklist.get(i).getActivityTypeId()  == 3318 || activityTasklist.get(i).getActivityTypeId()  == 3319 || activityTasklist.get(i).getActivityTypeId()  == 3320 || activityTasklist.get(i).getActivityTypeId()  == 3321 || activityTasklist.get(i).getActivityTypeId()  == 3323 || activityTasklist.get(i).getActivityTypeId()  == 3324 || activityTasklist.get(i).getActivityTypeId()  == 3325 || activityTasklist.get(i).getActivityTypeId()  == 3326 || activityTasklist.get(i).getActivityTypeId()  == 3327 || activityTasklist.get(i).getActivityTypeId()  == 3328 || activityTasklist.get(i).getActivityTypeId()  == 3329 || activityTasklist.get(i).getActivityTypeId()  == 3330 || activityTasklist.get(i).getActivityTypeId()  == 3331 || activityTasklist.get(i).getActivityTypeId()  == 3332 || activityTasklist.get(i).getActivityTypeId()  == 3333 || activityTasklist.get(i).getActivityTypeId()  == 3334 || activityTasklist.get(i).getActivityTypeId()  == 3335 || activityTasklist.get(i).getActivityTypeId()  == 3336 || activityTasklist.get(i).getActivityTypeId()  == 3337 || activityTasklist.get(i).getActivityTypeId()  == 3338 || activityTasklist.get(i).getActivityTypeId()  == 3339 || activityTasklist.get(i).getActivityTypeId()  == 3340 || activityTasklist.get(i).getActivityTypeId()  == 3341 || activityTasklist.get(i).getActivityTypeId()  == 3342 || activityTasklist.get(i).getActivityTypeId()  == 3343 || activityTasklist.get(i).getActivityTypeId()  == 3344 || activityTasklist.get(i).getActivityTypeId()  == 3345 || activityTasklist.get(i).getActivityTypeId()  == 3346 || activityTasklist.get(i).getActivityTypeId()  == 3347 || activityTasklist.get(i).getActivityTypeId()  == 3348 || activityTasklist.get(i).getActivityTypeId()  == 3349 || activityTasklist.get(i).getActivityTypeId()  == 3350 || activityTasklist.get(i).getActivityTypeId()  == 3352 || activityTasklist.get(i).getActivityTypeId()  == 3353 || activityTasklist.get(i).getActivityTypeId()  == 3354 || activityTasklist.get(i).getActivityTypeId()  == 3355 || activityTasklist.get(i).getActivityTypeId()  == 3356 || activityTasklist.get(i).getActivityTypeId()  == 3357 || activityTasklist.get(i).getActivityTypeId()  == 3358 || activityTasklist.get(i).getActivityTypeId()  == 3359 || activityTasklist.get(i).getActivityTypeId()  == 3360 || activityTasklist.get(i).getActivityTypeId()  == 3361 || activityTasklist.get(i).getActivityTypeId()  == 3362 || activityTasklist.get(i).getActivityTypeId()  == 3363 || activityTasklist.get(i).getActivityTypeId()  == 3364 || activityTasklist.get(i).getActivityTypeId()  == 3365 || activityTasklist.get(i).getActivityTypeId()  == 3366 || activityTasklist.get(i).getActivityTypeId()  == 3367 || activityTasklist.get(i).getActivityTypeId()  == 3368 || activityTasklist.get(i).getActivityTypeId()  == 3369 || activityTasklist.get(i).getActivityTypeId()  == 3370 || activityTasklist.get(i).getActivityTypeId()  == 3371 || activityTasklist.get(i).getActivityTypeId()  == 3372 || activityTasklist.get(i).getActivityTypeId()  == 3373 || activityTasklist.get(i).getActivityTypeId()  == 3374 || activityTasklist.get(i).getActivityTypeId()  == 3375 || activityTasklist.get(i).getActivityTypeId()  == 3376 || activityTasklist.get(i).getActivityTypeId()  == 3377 || activityTasklist.get(i).getActivityTypeId()  == 3379 || activityTasklist.get(i).getActivityTypeId()  == 3380 || activityTasklist.get(i).getActivityTypeId()  == 3381 || activityTasklist.get(i).getActivityTypeId()  == 3382 || activityTasklist.get(i).getActivityTypeId()  == 3383 || activityTasklist.get(i).getActivityTypeId()  == 3384 || activityTasklist.get(i).getActivityTypeId()  == 3385 || activityTasklist.get(i).getActivityTypeId()  == 3386 || activityTasklist.get(i).getActivityTypeId()  == 3387 || activityTasklist.get(i).getActivityTypeId()  == 3388 || activityTasklist.get(i).getActivityTypeId()  == 3389 || activityTasklist.get(i).getActivityTypeId()  == 3390 || activityTasklist.get(i).getActivityTypeId()  == 3391 || activityTasklist.get(i).getActivityTypeId()  == 3392 || activityTasklist.get(i).getActivityTypeId()  == 3393 || activityTasklist.get(i).getActivityTypeId()  == 3394 || activityTasklist.get(i).getActivityTypeId()  == 3395 || activityTasklist.get(i).getActivityTypeId()  == 3396 || activityTasklist.get(i).getActivityTypeId()  == 3397 || activityTasklist.get(i).getActivityTypeId()  == 3398 || activityTasklist.get(i).getActivityTypeId()  == 3399 || activityTasklist.get(i).getActivityTypeId()  == 3400 || activityTasklist.get(i).getActivityTypeId()  == 3401 || activityTasklist.get(i).getActivityTypeId()  == 3402 || activityTasklist.get(i).getActivityTypeId()  == 3403 || activityTasklist.get(i).getActivityTypeId()  == 3405 || activityTasklist.get(i).getActivityTypeId()  == 3406 || activityTasklist.get(i).getActivityTypeId()  == 3407 || activityTasklist.get(i).getActivityTypeId()  == 3408 || activityTasklist.get(i).getActivityTypeId()  == 3409 || activityTasklist.get(i).getActivityTypeId()  == 3410 || activityTasklist.get(i).getActivityTypeId()  == 3411 || activityTasklist.get(i).getActivityTypeId()  == 3412 || activityTasklist.get(i).getActivityTypeId()  == 3413 || activityTasklist.get(i).getActivityTypeId()  == 3414 || activityTasklist.get(i).getActivityTypeId()  == 3415 || activityTasklist.get(i).getActivityTypeId()  == 3416 || activityTasklist.get(i).getActivityTypeId()  == 3417 || activityTasklist.get(i).getActivityTypeId()  == 3419 || activityTasklist.get(i).getActivityTypeId()  == 3420 || activityTasklist.get(i).getActivityTypeId()  == 3421 || activityTasklist.get(i).getActivityTypeId()  == 3422 || activityTasklist.get(i).getActivityTypeId()  == 3423 || activityTasklist.get(i).getActivityTypeId()  == 3424 || activityTasklist.get(i).getActivityTypeId()  == 3425 || activityTasklist.get(i).getActivityTypeId()  == 3426 || activityTasklist.get(i).getActivityTypeId()  == 3427 || activityTasklist.get(i).getActivityTypeId()  == 3428 || activityTasklist.get(i).getActivityTypeId()  == 3429 || activityTasklist.get(i).getActivityTypeId()  == 3430 || activityTasklist.get(i).getActivityTypeId()  == 3432 || activityTasklist.get(i).getActivityTypeId()  == 3433 || activityTasklist.get(i).getActivityTypeId()  == 3434 || activityTasklist.get(i).getActivityTypeId()  == 3435 || activityTasklist.get(i).getActivityTypeId()  == 3436 || activityTasklist.get(i).getActivityTypeId()  == 3437 ||
+                    activityTasklist.get(i).getActivityTypeId()  == 3438 || activityTasklist.get(i).getActivityTypeId()  == 3439 || activityTasklist.get(i).getActivityTypeId()  == 3440 || activityTasklist.get(i).getActivityTypeId()  == 3441 || activityTasklist.get(i).getActivityTypeId()  == 3442 || activityTasklist.get(i).getActivityTypeId()  == 3443 || activityTasklist.get(i).getActivityTypeId()  == 3444 || activityTasklist.get(i).getActivityTypeId()  == 3446 || activityTasklist.get(i).getActivityTypeId()  == 3447 || activityTasklist.get(i).getActivityTypeId()  == 3448 || activityTasklist.get(i).getActivityTypeId()  == 3449 || activityTasklist.get(i).getActivityTypeId()  == 3450 || activityTasklist.get(i).getActivityTypeId()  == 3451 || activityTasklist.get(i).getActivityTypeId()  == 3452 || activityTasklist.get(i).getActivityTypeId()  == 3453 || activityTasklist.get(i).getActivityTypeId()  == 3454 || activityTasklist.get(i).getActivityTypeId()  == 3455 || activityTasklist.get(i).getActivityTypeId()  == 3456 || activityTasklist.get(i).getActivityTypeId()  == 3457 || activityTasklist.get(i).getActivityTypeId()  == 3459 || activityTasklist.get(i).getActivityTypeId()  == 3460 || activityTasklist.get(i).getActivityTypeId()  == 3461 || activityTasklist.get(i).getActivityTypeId()  == 3462 || activityTasklist.get(i).getActivityTypeId()  == 3463 || activityTasklist.get(i).getActivityTypeId()  == 3464 || activityTasklist.get(i).getActivityTypeId()  == 3465 || activityTasklist.get(i).getActivityTypeId()  == 3466 || activityTasklist.get(i).getActivityTypeId()  == 3467 || activityTasklist.get(i).getActivityTypeId()  == 3468 || activityTasklist.get(i).getActivityTypeId()  == 3469 || activityTasklist.get(i).getActivityTypeId()  == 3470 || activityTasklist.get(i).getActivityTypeId()  == 3471 || activityTasklist.get(i).getActivityTypeId()  == 3472 || activityTasklist.get(i).getActivityTypeId()  == 3474 || activityTasklist.get(i).getActivityTypeId()  == 3475 || activityTasklist.get(i).getActivityTypeId()  == 3476 || activityTasklist.get(i).getActivityTypeId()  == 3477 || activityTasklist.get(i).getActivityTypeId()  == 3478 || activityTasklist.get(i).getActivityTypeId()  == 3479 || activityTasklist.get(i).getActivityTypeId()  == 3480 || activityTasklist.get(i).getActivityTypeId()  == 3481 || activityTasklist.get(i).getActivityTypeId()  == 3482 || activityTasklist.get(i).getActivityTypeId()  == 3483 || activityTasklist.get(i).getActivityTypeId()  == 3484 || activityTasklist.get(i).getActivityTypeId()  == 3485 || activityTasklist.get(i).getActivityTypeId()  == 3487 || activityTasklist.get(i).getActivityTypeId()  == 3488 || activityTasklist.get(i).getActivityTypeId()  == 3489 || activityTasklist.get(i).getActivityTypeId()  == 3490 || activityTasklist.get(i).getActivityTypeId()  == 3491 || activityTasklist.get(i).getActivityTypeId()  == 3492 || activityTasklist.get(i).getActivityTypeId()  == 3493 || activityTasklist.get(i).getActivityTypeId()  == 3494 || activityTasklist.get(i).getActivityTypeId()  == 3495 || activityTasklist.get(i).getActivityTypeId()  == 3496 || activityTasklist.get(i).getActivityTypeId()  == 3497 || activityTasklist.get(i).getActivityTypeId()  == 3498 || activityTasklist.get(i).getActivityTypeId()  == 3499 || activityTasklist.get(i).getActivityTypeId()  == 3501 || activityTasklist.get(i).getActivityTypeId()  == 3502 || activityTasklist.get(i).getActivityTypeId()  == 3503 || activityTasklist.get(i).getActivityTypeId()  == 3504 || activityTasklist.get(i).getActivityTypeId()  == 3505 || activityTasklist.get(i).getActivityTypeId()  == 3506 || activityTasklist.get(i).getActivityTypeId()  == 3507 || activityTasklist.get(i).getActivityTypeId()  == 3508 || activityTasklist.get(i).getActivityTypeId()  == 3509 || activityTasklist.get(i).getActivityTypeId()  == 3510 || activityTasklist.get(i).getActivityTypeId()  == 3511 || activityTasklist.get(i).getActivityTypeId()  == 3513 || activityTasklist.get(i).getActivityTypeId()  == 3514 || activityTasklist.get(i).getActivityTypeId()  == 3515 || activityTasklist.get(i).getActivityTypeId()  == 3516 || activityTasklist.get(i).getActivityTypeId()  == 3517 || activityTasklist.get(i).getActivityTypeId()  == 3518 || activityTasklist.get(i).getActivityTypeId()  == 3519 || activityTasklist.get(i).getActivityTypeId()  == 3520 || activityTasklist.get(i).getActivityTypeId()  == 3521 || activityTasklist.get(i).getActivityTypeId()  == 3522 || activityTasklist.get(i).getActivityTypeId()  == 3523 || activityTasklist.get(i).getActivityTypeId()  == 3524 || activityTasklist.get(i).getActivityTypeId()  == 3525 || activityTasklist.get(i).getActivityTypeId()  == 3526 || activityTasklist.get(i).getActivityTypeId()  == 3528 || activityTasklist.get(i).getActivityTypeId()  == 3529 || activityTasklist.get(i).getActivityTypeId()  == 3530 || activityTasklist.get(i).getActivityTypeId()  == 3531 || activityTasklist.get(i).getActivityTypeId()  == 3532 || activityTasklist.get(i).getActivityTypeId()  == 3533 || activityTasklist.get(i).getActivityTypeId()  == 3534 || activityTasklist.get(i).getActivityTypeId()  == 3535 || activityTasklist.get(i).getActivityTypeId()  == 3536 || activityTasklist.get(i).getActivityTypeId()  == 3537 || activityTasklist.get(i).getActivityTypeId()  == 3538 || activityTasklist.get(i).getActivityTypeId()  == 3539) {
 
                 showHideActivity = activityTasklist.get(i);
 
@@ -2311,11 +2350,31 @@ try{
 // check box check & Uncheck
             if (((CheckBox) view).isChecked()) {
                 checkBoxChecked();
-//                    Toast.makeText(ActivityTask.this, "CHECKED", Toast.LENGTH_SHORT).show();
+                try {
+
+
+                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
+
+                CheckBox chk_is = findViewById(Feild_id);
+
+                chk_is.setChecked(false);
+                chk_is.setEnabled(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                try {
+
+                    int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
+
+                CheckBox chk_is = findViewById(Feild_id);
+
+                chk_is.setChecked(true);
+                chk_is.setEnabled(false);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-
-            else {
                 // Need to disble remainign widgets
                 for (ActivityTasks widget : activityTasklist) {
                     String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField(widget.getId()));
@@ -2351,6 +2410,14 @@ try{
     }
 
     private void checkBoxChecked() {
+
+
+        //  Activity Typeid : 37
+        // if(){
+        // checkbox  = .setsele
+        // }
+
+
         for (ActivityTasks widget : activityTasklist) {
 
             String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField2(widget.getId()));
@@ -2358,7 +2425,7 @@ try{
             if (optional != null && !StringUtils.isEmpty(optional)) {
                 findViewById(widget.getId()).setVisibility(View.GONE);
                 findViewById(widget.getId() + 9000).setVisibility(View.GONE);
-            }else{
+            } else {
                 findViewById(widget.getId()).setVisibility(View.VISIBLE);
                 try {
                     findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
@@ -2366,10 +2433,59 @@ try{
                     e.printStackTrace();
                 }
             }
+//            if (widget.getActivityTypeId() == Integer.parseInt(activityTypeId)) {
+//                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
+//                Log.e("==============>Feild_id", Feild_id + "");
+//
+//                CheckBox chk_is = findViewById(Feild_id);
+//
+//                chk_is.setChecked(true);
+//                chk_is.setEnabled(false);
+//            }
 
 
+            Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:2397==== " + yesnoCHeckbox);
+
+//            if (widget.getActivityTypeId() == Integer.parseInt(activityTypeId)) {
+//                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
+//                int requied_Id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRequiedFeildID(activityTypeId));
+//                Log.e("==============>Feild_id", Feild_id + "");
+//                Log.e("==============>Feild_id==requied_Id", requied_Id + "");
+//
+//                CheckBox chk_is = findViewById(Feild_id);
+//                CheckBox chk_req = findViewById(requied_Id);
+//                if (chk_req.isChecked()) {
+//                    chk_is.setChecked(true);
+//                    chk_is.setEnabled(false);
+//                    Toast.makeText(this,
+//                            "required Checked", Toast.LENGTH_LONG).show();
+//                } else {
+//                    chk_is.setChecked(true);
+//                    chk_is.setEnabled(false);
+//
+//                Toast.makeText(this,
+//                        "required  not  Checked", Toast.LENGTH_LONG).show();
+//
+//        }
+//    }
+
+      if(widget.getActivityTypeId() == 12) {
+          int LossCheckbox = 59;
+          CheckBox chk = findViewById(LossCheckbox);
 
 
+          if (chk.isChecked()) {
+              Toast.makeText(this,
+                      "Checked", Toast.LENGTH_LONG).show();
+
+          } else {
+
+              chk.setChecked(false);
+              Toast.makeText(this, "Please  Enter PN-Arrival Of Sprouts Equall to  Total received Sprouts ", Toast.LENGTH_SHORT).show();
+
+          }
+
+      }
         }
     }
 
@@ -2421,8 +2537,46 @@ try{
             try {
                 int int60 = 60, int61 = 61, int62 = 62;
                 EditText edt62 = findViewById(int62);
-                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int60))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
-                edt62.setText(finalValue + "");
+                int value_61 = 0;
+                try {
+                    value_61 = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 61)));
+                    Log.e("=============>", value_61 + "");
+
+
+                }   catch (Exception exception)     {
+                        exception.printStackTrace();
+
+                    }
+                Button btn = (Button) findViewById(ButtonId);
+                if (btn.getVisibility()==View.VISIBLE) {
+                int finalValue =  finalValue60 - value_61 - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
+                edt62.setText(finalValue + "");}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        else if (id == 505 || id == 504 || id == 503) {
+            try {
+                int int502 = 502, int504 = 504, int505 = 505, int503 = 503;
+                EditText edt505 = findViewById(int505);
+                int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int502))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int503)));
+                //    edt55.setText(finalValue + "");
+                EditText edt504 = findViewById(int504);
+                edt504.setText(finalValue + "");
+
+
+                try {
+
+                    int  percentage = (CommonUtils.getIntFromEditText(((EditText) findViewById(int503))) * 100/ CommonUtils.getIntFromEditText(((EditText) findViewById(int502))));
+
+
+                    edt505.setText(percentage + "");
+                    Log.e("Germnationpercentage=============",percentage+"");
+                }
+                catch (NumberFormatException e) {
+                    Log.e("Germnationpercentage=============",e.getMessage()+"");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -3084,14 +3238,16 @@ try{
         bitmap = ImageUtility.rotatePicture(90, bitmap);
 
         currentBitmap = bitmap;
-        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2918:" + intentTransactionId);
+        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2918:" + transactionId);
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2919:" + transactionIdNew);
 
         List<LinkedHashMap> repodetails = new ArrayList<>();
         LinkedHashMap lossrepo = new LinkedHashMap();
         lossrepo.put("ImageString", "null");
-        if (SCREEN_FROM == CommonConstants.FROM_MUTIPLE_ENTRY_EDITDATA) {
-        lossrepo.put("TransactionId", intentTransactionId);}
+        transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentCode, activityTypeId));
+            if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   transactionId  2919:" + transactionId);
+        lossrepo.put("TransactionId", transactionId);}
         else{
             lossrepo.put("TransactionId", transactionIdNew);
         }

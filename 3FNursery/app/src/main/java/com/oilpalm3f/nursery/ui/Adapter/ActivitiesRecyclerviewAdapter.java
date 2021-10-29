@@ -251,6 +251,14 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             }
         }
 
+//        int Arrival_Sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingg(ConsignmentCode, 7)));
+//        Log.d("Arrival_Sprouts=============", Arrival_Sprouts+"");
+//        if (Arrival_Sprouts == 0)
+//
+//        {
+//        Toast.makeText(context, "Please Approve  Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
+//        return false;}
+
 //        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A012") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
 //
 //            Toast.makeText(context, mActivitiesList.get(position).getDependentActivityCode() +"dependency " + mActivitiesList.get(position).getName() , Toast.LENGTH_LONG).show();

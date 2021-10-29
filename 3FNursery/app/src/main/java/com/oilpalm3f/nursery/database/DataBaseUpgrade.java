@@ -195,11 +195,12 @@ public class DataBaseUpgrade {
                 "CreatedDate VARCHAR,\n" +
                 "ServerUpdatedStatus INT\n" +
                 ")";
-
+        String CurrentClosingStock = "Alter table Sapling add CurrentClosingStock int";
         try {
 
 
             db.execSQL(cullingLossFileRepository);
+            db.execSQL(CurrentClosingStock);
 
         } catch (Exception e) {
             e.printStackTrace();

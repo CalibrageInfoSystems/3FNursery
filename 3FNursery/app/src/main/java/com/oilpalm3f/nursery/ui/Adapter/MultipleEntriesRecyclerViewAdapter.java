@@ -90,7 +90,18 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
         if(multiplelist.get(position).getStatusTypeId() == 346){
             holder.lyt_coments.setVisibility(View.GONE);
         }
-        holder.createddate.setText("" + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
+
+        if(multiplelist.get(position).getCreatedDate().contains("T")){
+            Log.d("Created date =============95", "" +multiplelist.get(position).getCreatedDate());
+            holder.createddate.setText("" + CommonUtils.getPropeCreateDate(multiplelist.get(position).getCreatedDate()));
+        }else{
+            Log.d("Created date =============98", "" +multiplelist.get(position).getCreatedDate());
+            holder.createddate.setText("" + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
+
+        }
+
+
+        Log.d("Created date =============104", "" + CommonUtils.getProperComplaintsDate(multiplelist.get(position).getCreatedDate()));
 
         holder.infoicon.setOnClickListener(new View.OnClickListener() {
             @Override

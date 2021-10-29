@@ -19,6 +19,53 @@ public class Saplings {
     private int UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
+    private int StatusTypeId;
+    private  String ArrivedDate;
+    private  int ArrivedQuantity;
+    private  String SowingDate;
+    private  String TransplantingDate;
+    private String SAPCode;
+    private  int CurrentClosingStock;
+
+    public String getArrivedDate() {
+        return ArrivedDate;
+    }
+
+    public void setArrivedDate(String arrivedDate) {
+        ArrivedDate = arrivedDate;
+    }
+
+    public int getArrivedQuantity() {
+        return ArrivedQuantity;
+    }
+
+    public void setArrivedQuantity(int arrivedQuantity) {
+        ArrivedQuantity = arrivedQuantity;
+    }
+
+    public String getSowingDate() {
+        return SowingDate;
+    }
+
+    public void setSowingDate(String sowingDate) {
+        SowingDate = sowingDate;
+    }
+
+    public String getTransplantingDate() {
+        return TransplantingDate;
+    }
+
+    public void setTransplantingDate(String transplantingDate) {
+        TransplantingDate = transplantingDate;
+    }
+
+    public String getSAPCode() {
+        return SAPCode;
+    }
+
+    public void setSAPCode(String SAPCode) {
+        this.SAPCode = SAPCode;
+    }
 
     public Integer getId() {
         return Id;
@@ -138,5 +185,21 @@ public class Saplings {
 
     public void setServerUpdatedStatus(int serverUpdatedStatus) {
         ServerUpdatedStatus = serverUpdatedStatus;
+    }
+
+    public int getStatusTypeId() {
+        return StatusTypeId;
+    }
+
+    public void setStatusTypeId(int statusTypeId) {
+        StatusTypeId = statusTypeId;
+    }
+
+    public int getCurrentClosingStock() {
+        return CurrentClosingStock;
+    }
+
+    public void setCurrentClosingStock(int currentClosingStock) {
+        CurrentClosingStock = currentClosingStock;
     }
 }

@@ -20,7 +20,11 @@ import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryAcitivity;
 import com.oilpalm3f.nursery.ui.Adapter.ActivitiesRecyclerviewAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -84,10 +88,40 @@ public class Activities extends AppCompatActivity {
              txtSatus.setText(":  " +consignmentstatusList.get(0).getStatusType() + "");
              txtType.setText(":  " +consignmentstatusList.get(0).getVarietyname() + "");
              String dateofsowing = consignmentstatusList.get(0).getSowingDate();
-            if ((dateofsowing != null && !dateofsowing.isEmpty() && !dateofsowing.equals("null")))
-                txtDateOfsowing.setText(":  "+CommonUtils.getProperComplaintsDate2(dateofsowing));
+            if ((dateofsowing != null && !dateofsowing.isEmpty() && !dateofsowing.equals("null"))) {
+                txtDateOfsowing.setText(":  " + CommonUtils.getProperComplaintsDate2(dateofsowing));
+                Log.e("====>date '====", dateofsowing+"");
 
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date d = null;
+                try {
+                    d = formatter.parse(dateofsowing);//catch exception
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+                Calendar thatDay = Calendar.getInstance();
+                thatDay.setTime(d);
+
+                Calendar today = Calendar.getInstance();
+
+                long diff = today.getTimeInMillis() - thatDay.getTimeInMillis(); //result in millis
+                long days = diff / (24 * 60 * 60 * 1000);
+
+                txtAge.setText(":  " + days +" Day(s)");
+
+            }
         }
+
+
+
+//        long diff = date1.getTime() - date2.getTime();
+//        long seconds = diff / 1000;
+//        long minutes = seconds / 60;
+//        long hours = minutes / 60;
+//        long days = hours / 24;
         displayActivityData();
 
 

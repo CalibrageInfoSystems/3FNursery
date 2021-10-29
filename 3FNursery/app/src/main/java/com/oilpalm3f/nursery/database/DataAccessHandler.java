@@ -553,6 +553,8 @@ public class DataAccessHandler<T> {
         return "";
     }
 
+
+
     public String getOnlyTwoValueFromDb(String query) {
         Log.v(LOG_TAG, "@@@ query " + query);
         Cursor mOprQuery = null;
@@ -2636,7 +2638,13 @@ f
             cursor = mDatabase.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-
+//                    "StatusTypeId"	int,
+//                    "ArrivedDate"	datetime,
+//                            "ArrivedQuantity"	int,
+//                    "SowingDate"	datetime,
+//                            "TransplantingDate"	datetime,
+//                            "SAPCode"	varchar(50),
+//                            "CurrentClosingStock"	int
                     Saplings saplingsDetails = new Saplings();
                     saplingsDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsDetails.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
@@ -2653,6 +2661,14 @@ f
                     saplingsDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     saplingsDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     saplingsDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+                    saplingsDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+
+                    saplingsDetails.setArrivedDate(cursor.getString(cursor.getColumnIndex("ArrivedDate")));
+                    saplingsDetails.setArrivedQuantity(cursor.getInt(cursor.getColumnIndex("ArrivedQuantity")));
+                    saplingsDetails.setSowingDate(cursor.getString(cursor.getColumnIndex("SowingDate")));
+                    saplingsDetails.setTransplantingDate(cursor.getString(cursor.getColumnIndex("TransplantingDate")));
+                    saplingsDetails.setSAPCode(cursor.getString(cursor.getColumnIndex("SAPCode")));
+                    saplingsDetails.setCurrentClosingStock(cursor.getInt(cursor.getColumnIndex("CurrentClosingStock")));
 
                     saplingDataDetails.add(saplingsDetails);
                 } while (cursor.moveToNext());

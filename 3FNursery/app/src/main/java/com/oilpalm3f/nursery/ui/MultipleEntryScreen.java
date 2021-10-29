@@ -32,7 +32,8 @@ public class MultipleEntryScreen extends AppCompatActivity {
     MultipleEntriesRecyclerViewAdapter multipleEntriesRecyclerViewAdapter;
     private List<MutipleData> multiplelist = new ArrayList<>();
     private List<LandlevellingFields> fieldslist = new ArrayList<>();
-
+String btn_visibility;
+int Feild_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +90,14 @@ public class MultipleEntryScreen extends AppCompatActivity {
         multipleEntriesRecyclerViewAdapter = new MultipleEntriesRecyclerViewAdapter(MultipleEntryScreen.this, multiplelist, fieldslist, activityName, activityTypeId, ismultipleentry, consignmentcode, status);
         multipleentryrcv.setAdapter(multipleEntriesRecyclerViewAdapter);
 
-//        int value = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().CheckJobDoneOrnot(consignmentcode, activityTypeId));
-        if (statusId == 352) {
-            addBtn.setVisibility(View.VISIBLE);
-        } else {
+        Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID( activityTypeId)) ;
+        btn_visibility = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().addbutton(Feild_id,consignmentcode, activityTypeId)) ;
+
+
+        if (btn_visibility != null && btn_visibility.equalsIgnoreCase("true")) {
             addBtn.setVisibility(View.GONE);
+        } else {
+            addBtn.setVisibility(View.VISIBLE);
         }
 //        addBtn.setVisibility(View.GONE);
         addBtn.setOnClickListener(new View.OnClickListener() {

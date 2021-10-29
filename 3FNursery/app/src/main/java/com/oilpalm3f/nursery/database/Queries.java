@@ -49,18 +49,34 @@ public class Queries {
     public static String getSaplingVerirty(String verityId) {
         return "Select Desc from TypeCdDmt where TypeCdId = " + verityId;
     }
+    public static String sproutsforSowing62(String ConsignmentCode, int filedId) {
+        return "Select sx.Value from SaplingActivity s\n" +
+                "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "'" ;
+    }
+    public static String sproutsforSowingnew(String ConsignmentCode, int filedId) {
+        return "Select sum(sx.Value) from SaplingActivity s\n" +
+                "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "' AND s.StatusTypeId = 354 ";
+    }
 
     public static String sproutsforSowing(String ConsignmentCode, int filedId) {
         return "Select sum(sx.Value) from SaplingActivity s\n" +
                 "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
                 "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "'";
     }
-
+    public static String sproutsforSowingEdit(String ConsignmentCode, int filedId,String Transactionid) {
+        return "Select sum(sx.Value) from SaplingActivity s\n" +
+                "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "' AND sx.TransactionId != '" + Transactionid + "'";
+    }
     public static String sproutsforSowingg(String ConsignmentCode, int filedId) {
         return "Select sum(sx.Value) from SaplingActivity s\n" +
                 "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
-                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "' AND StatusTypeId = 348";
+                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '"+ ConsignmentCode + "'";
     }
+
+
     public static String getAlertsPlotFollowUpQuery(int limit, int offset) {
         return "select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,f.ContactNumber,\n" +
                 "  m.Name as MandalName,\n" +
@@ -98,7 +114,27 @@ public class Queries {
 //                "             Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
 //                "    \t\t where sx.FieldId = '" + id + "' AND ConsignmentCode = '" + Consignmentcode + "'";
     }
+    public static String  addbutton(int id , String Consignmentcode,String Activitytypeid) {
 
+        return "Select  sx.Value  from  SaplingActivity S \n" +
+                "Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "where ConsignmentCode  ='" + Consignmentcode + "' and sx.FieldId = '" + id + "'  and  sx.Value ='true' and ActivityId = '" + Activitytypeid + "'";
+
+//
+    }
+
+    public static String  getFeildID(String Activitytypeid) {
+
+        return "Select id from NurseryActivityField where Field like '%completed%' and ActivityTypeId = '" + Activitytypeid + "'";
+
+//
+    }
+    public static String  getRequiedFeildID(String Activitytypeid) {
+
+        return "Select id from NurseryActivityField where Field like '% Required?%' and ActivityTypeId = '" + Activitytypeid + "'";
+
+//
+    }
     public static String getAlertsMissingTreesInfoQuery(int limit, int offset) {
         return "  select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,\n" +
                 " m.Name as MandalName,\n" +
@@ -581,6 +617,16 @@ public class Queries {
     }
 
     public String getPlotDetailsForVisit(final String farmercode) {
+
+
+
+
+
+//        SELECT sum(S.CurrentClosingStock) FROM Sapling  S
+//        LEFT JOIN (SELECT SA.ConsignmentCode,SAX.Value, SAX.TransactionId,SA.StatusTypeId FROM SaplingActivityXref SAX
+//        INNER JOIN SaplingActivity SA ON SA.TransactionId = SAX.TransactionId
+//        WHERE SA.ConsignmentCode ='AP/NA/Felda Three Way/DELI X EKONA/Nov-21/C -02' AND SAX.FieldId ='61' )SA ON SA.ConsignmentCode = S.ConsignmentCode
+//        WHERE S.ConsignmentCode ='AP/NA/Felda Three Way/DELI X EKONA/Nov-21/C -02'
 
         return "select p.Code, p.TotalPalmArea, p.TotalPlotArea, p.GPSPlotArea, p.SurveyNumber, addr.Landmark,\n" +
                 "v.Code AS VillageCode, v.Name as VillageName, v.Id as VillageId,\n" +
@@ -1827,7 +1873,11 @@ public class Queries {
                 "\tWHERE \n" +
                 "\tTargetDate is not null ";
     }
-
+    public String getActivityCompletedOrnot(String activityid,String filed_id,String consignment_id){
+        return "Select  sx.Value  from SaplingActivity s\n" +
+                "        Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "        where sx.FieldId = 59 AND ConsignmentCode = 'AR/Indegenous/Unipalm/DELI X LAME/Oct-21/C -01'  and ActivityId = '12'  and  sx.Value ='true'";
+    }
     public String getdata(String date) {
         return "SELECT \n" +
                 "    \tActivityId,        \n" +
@@ -1921,5 +1971,16 @@ public class Queries {
        // return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
         return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
     }
+    public static String getCurrentClosingStock(String ConsignmentCode, int filedId) {
+        // return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
+        return "  SELECT (CASE WHEN (SA.StatusTypeId IN (346,349) OR (SA.StatusTypeId IS NULL)) THEN S.CurrentClosingStock ELSE SA.Value END) AS PrevClosingBalance\n" +
+                "\t\tFROM Sapling  S \n" +
+                "        LEFT JOIN (SELECT SA.ConsignmentCode,SAX.Value, SAX.TransactionId,SA.StatusTypeId FROM SaplingActivityXref SAX\n" +
+                "        INNER JOIN SaplingActivity SA ON SA.TransactionId = SAX.TransactionId\n" +
+                "        WHERE SA.ConsignmentCode ='" + ConsignmentCode + "' AND SAX.FieldId ='" + filedId + "' )SA ON SA.ConsignmentCode = S.ConsignmentCode\n" +
+                "        WHERE S.ConsignmentCode ='" + ConsignmentCode + "'";
     }
+
+
+}
 
