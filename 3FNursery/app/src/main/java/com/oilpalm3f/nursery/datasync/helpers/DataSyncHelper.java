@@ -859,6 +859,8 @@ public class DataSyncHelper {
                 totalDataCount++;
                 if (totalDataCount == totalData.size()) {
                     Log.v(LOG_TAG, "@@@ done with data syncing");
+
+                    UiUtils.showCustomToastMessage("Data synced successfully", context, 0);
                     if (TextUtils.isEmpty(date)) {
                         ProgressBar.hideProgressBar();
                         if (null != progressDialogFragment && !CommonUtils.currentActivity.isFinishing()) {

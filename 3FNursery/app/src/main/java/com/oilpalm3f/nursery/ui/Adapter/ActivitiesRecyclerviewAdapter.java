@@ -119,7 +119,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
             holder.imglossStatus.setVisibility(View.GONE);
             holder.imglossStatustext.setText("NA");
         } else if (mActivitiesList.get(position).getStatusTypeId() == 349) {
-            holder.imgStatus.setImageResource(R.drawable.done);
+            holder.imgStatus.setImageResource(R.drawable.rejected);
             holder.imgNurStatus.setImageResource(R.drawable.rejected);
             holder.imgShStatus.setImageResource(R.drawable.rejected);
             holder.imglossStatus.setVisibility(View.GONE);
@@ -225,7 +225,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
                     dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
                     Log.d("dependencyname=============", dependencyname);
-                    Toast.makeText(context, "   Please Complete " + dependencyname + " Activity ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, " Please Complete Nursery Manager Approval " + dependencyname + " Activity ", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -237,7 +237,27 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
     private boolean validations(int position) {
         boolean issuces = false;
+
         dependecyCode = mActivitiesList.get(position).getDependentActivityCode();
+//        if(mActivitiesList.get(position).getActivityId() == 12) {
+//            Integer status_code = dataAccessHandler.getSingleIntValue(Queries.SporoutsCountstatus(ConsignmentCode, 11));
+//            if (status_code == 348) {
+//                issuces = true;
+//            } else {
+//                Toast.makeText(context, "Please Complete StateHead Approval to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//        if(mActivitiesList.get(position).getActivityId() == 13) {
+//            Integer status_code = dataAccessHandler.getSingleIntValue(Queries.SporoutsCountstatus(ConsignmentCode, 12));
+//            if (status_code == 352) {
+//                Toast.makeText(context, "Please Change PN-Sprout Count and Transit Loss Status", Toast.LENGTH_LONG).show();
+//                return false;
+//            } else {
+//
+//                return true;
+//            }
+//        }
 
         Log.d("dependecyCode=============", dependecyCode);
         if (StringUtils.isEmpty(dependecyCode) || dependecyCode == null || dependecyCode.equalsIgnoreCase("null") || dependecyCode == "") {
@@ -248,8 +268,42 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
             if (statuscode != null) {
                 issuces = true;
+                if ( statuscode == 347 || statuscode == 348 || statuscode == 354) {
+                    return true;
             }
+                else{
+                    dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
+                    Log.d("dependencyname=============", dependencyname);
+                    Toast.makeText(context, " Please Complete Nursery Manager Approval " + dependencyname + " Activity ", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            }
+
         }
+//        else{
+//
+//            Integer statuscode = dataAccessHandler.getSingleIntValue(Queries.dependencystatus(ConsignmentCode, dependecyCode));
+//            if ( statuscode == 347 || statuscode == 348) {
+//                issuces = true;
+//            }
+//            else{
+//                dependencyname = dataAccessHandler.getSingleValue(Queries.dependencyname(dependecyCode));
+//                Log.d("dependencyname=============", dependencyname);
+//                Toast.makeText(context, " Please Complete Nursery Manager Approval " + dependencyname + " Activity ", Toast.LENGTH_LONG).show();
+//                issuces = false;
+//            }
+//        }
+//
+//        if (StringUtils.isEmpty(dependecyCode) || dependecyCode == null || dependecyCode.equalsIgnoreCase("null") || dependecyCode == "") {
+//            issuces = true;
+//        } else {
+//
+//            Integer statuscode = dataAccessHandler.getSingleIntValue(Queries.dependencystatus(ConsignmentCode, dependecyCode));
+//
+//            if (statuscode != null) {
+//                issuces = true;
+//            }
+//        }
 
 //        int Arrival_Sprouts = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingg(ConsignmentCode, 7)));
 //        Log.d("Arrival_Sprouts=============", Arrival_Sprouts+"");
@@ -259,11 +313,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 //        Toast.makeText(context, "Please Approve  Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
 //        return false;}
 
-//        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A012") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
-//
-//            Toast.makeText(context, mActivitiesList.get(position).getDependentActivityCode() +"dependency " + mActivitiesList.get(position).getName() , Toast.LENGTH_LONG).show();
-//            return false;
-//        }
+
 //        if(mActivitiesList.get(position).getCode().equalsIgnoreCase("A013") && StringUtils.isEmpty(mActivitiesList.get(position).getUpdatedDate())){
 //
 //

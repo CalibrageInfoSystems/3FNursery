@@ -1124,15 +1124,37 @@ public class CommonUtils {
 //
 //    }
 
+//    public static void copyFile(final Context context) {
+//        try {
+//            String dataDir = context.getApplicationInfo().dataDir;
+/////sdcard/3FNursery_Files/3F_Database/3foilpalm.sqlite
+//            final String dbfile = "/sdcard/3f_" + CommonConstants.TAB_ID + "_" + System.nanoTime();
+//          Log.e(LOG_TAG,"============>dbfile"+ dbfile);
+//
+////            File dir = new File(dataDir + "/databases");
+//            File dir = new File(dataDir + "/database");
+//            for (File file : dir.listFiles()) {
+//                if (file.isFile() && file.getName().equals("3foilpalm.sqlite")) {
+//                    try {
+//                        copy(file, new File(dbfile));
+//                    } catch (Exception e) {
+//                        android.util.Log.e(LOG_TAG, "", e);
+//                    }
+//                    break;
+//                }
+//            }
+//        } catch (Exception e) {
+//            android.util.Log.w("Settings Backup", e);
+//        }
+//
+//    }
     public static void copyFile(final Context context) {
         try {
             String dataDir = context.getApplicationInfo().dataDir;
-///sdcard/3FNursery_Files/3F_Database/3foilpalm.sqlite
-            final String dbfile = "/sdcard/3f_" + CommonConstants.TAB_ID + "_" + System.nanoTime();
-          Log.e(LOG_TAG,"============>dbfile"+ dbfile);
 
-//            File dir = new File(dataDir + "/databases");
-            File dir = new File(dataDir + "/database");
+            final String dbfile = "/sdcard/3f_" + CommonConstants.TAB_ID + "_" + System.nanoTime();
+
+            File dir = new File(dataDir + "/databases");
             for (File file : dir.listFiles()) {
                 if (file.isFile() && file.getName().equals("3foilpalm.sqlite")) {
                     try {
@@ -1148,7 +1170,6 @@ public class CommonUtils {
         }
 
     }
-
     public static boolean isLocationPermissionGranted(final Context context) {
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);

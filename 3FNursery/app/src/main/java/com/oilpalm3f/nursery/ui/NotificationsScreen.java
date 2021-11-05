@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,11 @@ public class NotificationsScreen extends AppCompatActivity {
         refreshBtn = (Button) findViewById(R.id.refreshBtn);
         layoutManager = new LinearLayoutManager(this);
         notiRecyclerView.setLayoutManager(layoutManager);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_);
+        toolbar.setTitle("Notifications");
+        setSupportActionBar(toolbar);
+
 
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -73,7 +73,7 @@ public class Queries {
     public static String sproutsforSowingg(String ConsignmentCode, int filedId) {
         return "Select sum(sx.Value) from SaplingActivity s\n" +
                 "         Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
-                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '"+ ConsignmentCode + "'";
+                "\t\t where sx.FieldId = " + filedId + " AND ConsignmentCode = '" + ConsignmentCode + "' AND StatusTypeId in (347,348) ";
     }
 
 
@@ -1784,6 +1784,11 @@ public class Queries {
                 "\tInner Join  SaplingActivityStatus  S On S.ActivityId = na.id \n" +
                 "\twhere na.Code = '" + dependencyCode + "' and  S.ConsignmentCode = '" + ConsignmentCode + "'";
     }
+    public static String SporoutsCountstatus(String ConsignmentCode, int ID) {
+        return "SELECT  S.StatusTypeId from NurseryActivity na \n" +
+                "\tInner Join  SaplingActivityStatus  S On S.ActivityId = na.id \n" +
+                "\twhere na.Id = '" + ID + "' and  S.ConsignmentCode = '" + ConsignmentCode + "'";
+    }
 
     public static String dependencyname(String dependencyCode) {
         return "Select name from NurseryActivity where code= '" + dependencyCode + "'";
@@ -1981,6 +1986,20 @@ public class Queries {
                 "        WHERE S.ConsignmentCode ='" + ConsignmentCode + "'";
     }
 
+    public static String gethistory(String code, String activitytypeId,String TransactionId) {
+        return "Select S.Comment from  SaplingActivity S \n" +
+                "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
+                "where ConsignmentCode  ='" + code + "' and ActivityId = '" + activitytypeId +"' and TransactionId = '" + TransactionId + "'";
+    }
+    public static String gethistoryuser(String code, String activitytypeId,String TransactionId) {
+        return "Select S.UpdatedByUserId from  SaplingActivity S \n" +
+                "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
+                "where ConsignmentCode  ='" + code + "' and ActivityId = '" + activitytypeId +"' and TransactionId = '" + TransactionId + "'";
+    } public static String getDate(String code, String activitytypeId,String TransactionId) {
+        return "Select S.UpdatedDate from  SaplingActivity S \n" +
+                "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
+                "where ConsignmentCode  ='" + code + "' and ActivityId = '" + activitytypeId +"' and TransactionId = '" + TransactionId + "'";
+    }
 
 }
 

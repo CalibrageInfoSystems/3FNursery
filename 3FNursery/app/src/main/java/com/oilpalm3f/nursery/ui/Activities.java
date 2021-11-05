@@ -73,7 +73,7 @@ public class Activities extends AppCompatActivity {
 
         activitiesRecyclerview = findViewById(R.id.activitiesRecyclerview);
 
-        consignmentdatalyt = findViewById(R.id.consignmentdatalyt);
+      //  consignmentdatalyt = findViewById(R.id.consignmentdatalyt);
         recyclerviewlayout = findViewById(R.id.recyclerviewlayout);
 
 

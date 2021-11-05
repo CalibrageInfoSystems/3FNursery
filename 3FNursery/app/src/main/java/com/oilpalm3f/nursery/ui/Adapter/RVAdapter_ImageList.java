@@ -97,7 +97,9 @@ String imagepath ;
         bitmap = ImageUtility.rotatePicture(90, bitmap);
 
         currentBitmap2 = bitmap;
-        holder.image.setImageBitmap(bitmap);}else{
+        holder.image.setImageBitmap(bitmap);}
+
+        else{
             holder.image.setVisibility(View.GONE);
         }
         holder.img_delete.setOnClickListener(new View.OnClickListener() {
