@@ -332,6 +332,43 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    public void showAlertDialog() {
+        final Dialog dialog = new Dialog(RefreshSyncActivity.this);
+        dialog.setContentView(R.layout.custom_alert_dailog);
+
+        Button yesDialogButton = dialog.findViewById(R.id.Yes);
+        Button noDialogButton = dialog.findViewById(R.id.No);
+        TextView msg = dialog.findViewById(R.id.test);
+        yesDialogButton.setTextColor(getResources().getColor(R.color.green));
+        noDialogButton.setTextColor(getResources().getColor(R.color.btnPressedColor));
+        msg.setText("Do you want to upload data base to server ?");
+        // if button is clicked, close the custom dialog
+        yesDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CommonUtils.isNetworkAvailable(RefreshSyncActivity.this)) {
+                    dialog.dismiss();
+                    ProgressBar.showProgressBar(RefreshSyncActivity.this, "uploading database...");
+                    CommonUtils.copyFile(RefreshSyncActivity.this);
+                    uploadDatabaseFile();
+                } else {
+                    dialog.dismiss();
+                    UiUtils.showCustomToastMessage("Please check network connection", RefreshSyncActivity.this, 1);
+                }
+            }
+        });
+        dialog.show();
+        noDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+//                        Toast.makeText(getApplicationContext(),"Dismissed..!!",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
     public void addUserTraSyncDetails() {
 
         SimpleDateFormat simpledatefrmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -481,8 +518,6 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
                         ProgressBar.hideProgressBar();
                         if (success) {
                             Log.v(LOG_TAG, "@@@ 3f db file upload success");
-                            dataAccessHandler.executeRawQuery("DELETE FROM ErrorLogs");
-                            Log.v(LOG_TAG, "delete table ErrorLogs");
                             CommonUtils.showToast("3f db file uploaded successfully", RefreshSyncActivity.this);
                         } else {
                             Log.v(LOG_TAG, "@@@ 3f db file upload failed due to " + msg);
@@ -493,44 +528,6 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
-
-    public void showAlertDialog() {
-        final Dialog dialog = new Dialog(RefreshSyncActivity.this);
-        dialog.setContentView(R.layout.custom_alert_dailog);
-
-        Button yesDialogButton = dialog.findViewById(R.id.Yes);
-        Button noDialogButton = dialog.findViewById(R.id.No);
-        TextView msg = dialog.findViewById(R.id.test);
-        yesDialogButton.setTextColor(getResources().getColor(R.color.green));
-        noDialogButton.setTextColor(getResources().getColor(R.color.btnPressedColor));
-        msg.setText(R.string.do_you_want_to_upload_data_base_to_server);
-        // if button is clicked, close the custom dialog
-        yesDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CommonUtils.isNetworkAvailable(RefreshSyncActivity.this)) {
-                    dialog.dismiss();
-                    ProgressBar.showProgressBar(RefreshSyncActivity.this, "uploading database...");
-                    CommonUtils.copyFile(RefreshSyncActivity.this);
-                    uploadDatabaseFile();
-                } else {
-                    dialog.dismiss();
-                    UiUtils.showCustomToastMessage("Please check network connection", RefreshSyncActivity.this, 1);
-                }
-            }
-        });
-        dialog.show();
-        noDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-//                        Toast.makeText(getApplicationContext(),"Dismissed..!!",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-
     public void showTransactionsAlertDialog(final boolean fromReset) {
         final Dialog dialog = new Dialog(RefreshSyncActivity.this);
         dialog.setContentView(R.layout.custom_alert_dailog);

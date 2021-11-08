@@ -2145,6 +2145,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else {
                 statusTypeId = 346;
             }
+
+
             transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 1872" + transactionIdNew);
 
@@ -2186,10 +2188,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else {
                 // TODO dont have any Existind data add new activity
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                transactionIdNew = "TRAN"  + consignmentcode +  CommonConstants.TAB_ID + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
 
-
+//TRAN+NurserySAPCode(3)+ConsignmentId(4)+TabCode-Seq No(ActivityCount)
                 addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, false);
 
 
@@ -2349,18 +2351,20 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 // check box check & Uncheck
             if (((CheckBox) view).isChecked()) {
                 checkBoxChecked();
-//                try {
-//
-//
-//                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
-//
-//                CheckBox chk_is = findViewById(Feild_id);
-//
-//                chk_is.setChecked(false);
-//                chk_is.setEnabled(true);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+
+                try {
+
+
+                    int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
+
+                    CheckBox chk_is = findViewById(Feild_id);
+
+                    chk_is.setEnabled(true);
+                    if(enableEditing){
+            chk_is.setChecked(false);}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             } else {
                 try {
@@ -2442,6 +2446,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
             }
+
+
+
 //            if (widget.getActivityTypeId() == Integer.parseInt(activityTypeId)) {
 //                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
 //                Log.e("==============>Feild_id", Feild_id + "");
