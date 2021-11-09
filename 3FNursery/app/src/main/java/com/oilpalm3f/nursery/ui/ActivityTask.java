@@ -865,11 +865,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     value_edit = Arrival_Sprouts - (count_edit + CommonUtils.getIntFromEditText(((EditText) findViewById(int51))));
 
                     Log.e("============>arrival Sprout 824", value_edit + "");
+
                     if (value_edit < 0) {
                         Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than or equal to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    int LossCheckboxx = 59;
+                    CheckBox chkk = findViewById(LossCheckboxx);
 
+
+                    if (chkk.isChecked()) {
+
+                        if (value_edit != 0) {
+                            chkk.setChecked(false);
+                            Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than or equal to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+                    }
 
                 } else {
                     try {

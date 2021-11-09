@@ -2638,13 +2638,7 @@ f
             cursor = mDatabase.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-//                    "StatusTypeId"	int,
-//                    "ArrivedDate"	datetime,
-//                            "ArrivedQuantity"	int,
-//                    "SowingDate"	datetime,
-//                            "TransplantingDate"	datetime,
-//                            "SAPCode"	varchar(50),
-//                            "CurrentClosingStock"	int
+
                     Saplings saplingsDetails = new Saplings();
                     saplingsDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsDetails.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
@@ -2657,7 +2651,7 @@ f
                     saplingsDetails.setEstimatedQuantity(cursor.getInt(cursor.getColumnIndex("EstimatedQuantity")));
                     saplingsDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
                     saplingsDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
-                    saplingsDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    saplingsDetails.setCreatedDate(CommonUtils.getPropeCreateDate(cursor.getString(cursor.getColumnIndex("CreatedDate"))));
                     saplingsDetails.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
                     saplingsDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     saplingsDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));

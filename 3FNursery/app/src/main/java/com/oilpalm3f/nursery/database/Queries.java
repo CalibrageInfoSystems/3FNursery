@@ -221,7 +221,7 @@ public class Queries {
     public String getMultiplerecordsDetailsQuery(String code, String activitytypeId) {
         return "Select S.Id,S.TransactionId,S.ConsignmentCode,S.ActivityId,S.StatusTypeId,S.Comment,S.IsActive, S.CreatedDate,S.ServerUpdatedStatus,t.Desc from  SaplingActivity S \n" +
                 "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
-                "where ConsignmentCode  ='" + code + "' and ActivityId = '" + activitytypeId + "'";
+                "where ConsignmentCode  ='" + code + "' and ActivityId = '" + activitytypeId + "'ORDER BY S.CreatedDate DESC";
     }
 
     public String getFieldsData() {
