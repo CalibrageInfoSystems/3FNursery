@@ -71,7 +71,7 @@ import java.util.Locale;
 
 import static com.oilpalm3f.nursery.common.CommonUtils.REQUEST_CAM_PERMISSIONS;
 
-public class ActivityTask extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, ImageClickListener {
+public class ActivityTask extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, ImageClickListener, TextWatcher {
 
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
 
@@ -1802,14 +1802,37 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
         et.setOnFocusChangeListener(this::onFocusChange);
+//        et.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                et.requestFocus();
+//
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start,
+//                                          int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start,
+//                                      int before, int count) {
+//                if(s.length() != 0){
+//
+//                }
+//                 //   field1.setText("");
+//            }
+//        });
 
-        if (id == 60 || id == 506 || id == 510 || id == 514 || id == 518 || id == 522 || id == 525 || id == 3086 || id == 3097 || id == 3108 || id == 3119 || id == 3131 || id == 3142 || id == 3153 || id == 3164
+        if (id == 60 || id == 62 || id == 506 || id == 510 || id == 514 || id == 518 || id == 522 || id == 525 || id == 3086 || id == 3097 || id == 3108 || id == 3119 || id == 3131 || id == 3142 || id == 3153 || id == 3164
                 || id == 3175
                 || id == 3186 || id == 3197 || id == 3208) {
             et.setFocusable(false);
             et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
             et.setClickable(false);
         }
+
 
 
         if (id == 51) {
@@ -2521,6 +2544,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onFocusChange(View view, boolean b) {
+
+
         if (findViewById(ButtonId).getVisibility() == View.VISIBLE){
             // SetTextFor formula
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis onFocusChange() id : " + view.getId() + "   isView showing :" + b);
@@ -2539,7 +2564,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
         }
-        if (id == 53 || id == 51 || id == 54) {
+        if (id == 52 || id == 51 || id == 54) {
             try {
                 int int51 = 51, int53 = 53, int54 = 54;
                 EditText edt54 = findViewById(int54);
@@ -3175,57 +3200,19 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         }
 
-//        else if (id == 526) {
-//            try {
-//                int int523 = 523, int527 = 527;
-//                EditText edt527 = findViewById(int527);
-//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 513))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
-//                edt527.setText(finalValue + "");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else if (id == 530) {
-//            try {
-//                int int530 = 530, int531 = 531;
-//                EditText edt531 = findViewById(int531);
-//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 527))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int530)));
-//                edt531.setText(finalValue + "");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//        }
-
-// else if (id == 538) {
-//            try {
-//                int int538 = 538, int539 = 539;
-//                EditText edt539 = findViewById(int539);
-//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 535))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int538)));
-//                edt539.setText(finalValue + "");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else if (id == 541) {
-//            try {
-//                int int526 = 526, int541 = 541, int542 = 542;
-//                EditText edt542 = findViewById(int542);
-//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 526))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int541)));
-//                edt542.setText(finalValue + "");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else if (id == 546) {
-//            try {
-//                int int546 = 546, int553 = 553;
-//                EditText edt553 = findViewById(int553);
-//                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 542))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int546)));
-//                edt553.setText(finalValue + "");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
+        else{
+            int id = view.getId();
+            try {
+                EditText et = findViewById(id);
+                if (findViewById(ButtonId).getVisibility() == View.GONE) {
+                    et.setFocusable(false);
+                    et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+                    et.setClickable(false);
+                }  } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 }
     @SuppressLint("MissingSuperCall")
@@ -3375,6 +3362,21 @@ Log.e("============>",id+"");
                 }
             }
         });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 }
 

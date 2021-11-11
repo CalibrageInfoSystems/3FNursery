@@ -91,7 +91,16 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
         if (mActivitiesList.get(position).getActivityDoneDate() != null && !mActivitiesList.get(position).getActivityDoneDate().isEmpty() && !mActivitiesList.get(position).getActivityDoneDate().equals("null"))  {
 
-            holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate2(mActivitiesList.get(position).getActivityDoneDate()));
+            try {
+                Date oneWayTripDate = input.parse(mActivitiesList.get(position).getActivityDoneDate());
+                String datetimevaluereq = output.format(oneWayTripDate);
+                holder.txtDoneDate.setText(datetimevaluereq);
+
+                android.util.Log.e("===============", "======currentData======99===" + output.format(oneWayTripDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+         //   holder.txtDoneDate.setText(CommonUtils.getProperComplaintsDate2(mActivitiesList.get(position).getActivityDoneDate()));
  }
         else{
             holder.txtDoneDate.setText("");

@@ -961,6 +961,9 @@ public class Queries {
     public String getNurceryIrrigationXrefHistoryRefresh() {
         return "select * from NurseryIrrigationLogXref where ServerUpdatedStatus = 0";
     }
+    public String getNurceryIrrigation_HistoryRefresh() {
+        return "select * from IrrigationLogStatusHistory where ServerUpdatedStatus = 0";
+    }
 
     public String getSaplingActivityStatusRefresh() {
         return "select * from SaplingActivityStatus where ServerUpdatedStatus = 0";
@@ -1778,7 +1781,24 @@ public class Queries {
     public static String getcontractfemalerate(String NurseryCode) {
         return "select Value from LabourRate where key = 'Outside Female per Man Day' and NurseryCode ='" + NurseryCode + "'";
     }
-
+    public static String getuserid(String irrigationcode) {
+        return "SELECT n.UpdatedByUserId\n" +
+                "    from NurseryIrrigationLog n\n" +
+                "    Inner Join TypeCdDmt t on t.TypeCdId = n.StatusTypeId\n" +
+                "    where  IrrigationCode  ='" + irrigationcode + "'";
+    }
+    public static String getcomments(String irrigationcode) {
+        return "SELECT n.Comments\n" +
+                "    from NurseryIrrigationLog n\n" +
+                "    Inner Join TypeCdDmt t on t.TypeCdId = n.StatusTypeId\n" +
+                "    where  IrrigationCode  ='" + irrigationcode + "'";
+    }
+    public static String getupdateddate(String irrigationcode) {
+        return "SELECT n.UpdatedDate\n" +
+                "    from NurseryIrrigationLog n\n" +
+                "    Inner Join TypeCdDmt t on t.TypeCdId = n.StatusTypeId\n" +
+                "    where  IrrigationCode  ='" + irrigationcode + "'";
+    }
     public static String dependencystatus(String ConsignmentCode, String dependencyCode) {
         return "SELECT  S.StatusTypeId from NurseryActivity na \n" +
                 "\tInner Join  SaplingActivityStatus  S On S.ActivityId = na.id \n" +

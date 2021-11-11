@@ -18,7 +18,7 @@ public class DatabaseKeys {
     public static String TABLE_NurseryIrrigationLog = "NurseryIrrigationLog";
     public static String TABLE_NurseryIrrigationLogXREF = "NurseryIrrigationLogXref";
 
-
+    public static String TABLE_NurseryIrrigationhistory = "IrrigationLogStatusHistory";
 
     public static String TABLE_FILEREPOSITORY = "CullingLossFileRepository";
     public static String TABLE_NURSERYSAPLING_DETAILS = "NurserySaplingDetails";

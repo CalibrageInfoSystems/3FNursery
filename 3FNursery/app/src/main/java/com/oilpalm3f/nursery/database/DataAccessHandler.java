@@ -55,6 +55,7 @@ import com.oilpalm3f.nursery.dbmodels.IdentityProofFileRepositoryXref;
 import com.oilpalm3f.nursery.dbmodels.IdentityProofRefresh;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.InterCropPlantationXref;
+import com.oilpalm3f.nursery.dbmodels.Irrigationhistorymodel;
 import com.oilpalm3f.nursery.dbmodels.KrasDataToDisplay;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.LandlordBank;
@@ -5097,7 +5098,43 @@ f
             Log.e(LOG_TAG, "@@@ getting GradingRepo details " + e.getMessage());
         }
 return Cullinglossrepolist;
-    }}
+    }
+    public List<Irrigationhistorymodel> getIrrigationHistoryDetails(final String query, final int type) {
+        List<Irrigationhistorymodel> IrrigationHistoryDataDetails = new ArrayList<>();
+        Cursor cursor = null;
+        Log.v(LOG_TAG, "@@@ Irrigationhistory details query " + query);
+
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    Irrigationhistorymodel IrrigationhistoryDetails = new Irrigationhistorymodel();
+                    IrrigationhistoryDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    IrrigationhistoryDetails.setIrrigationCode(cursor.getString(cursor.getColumnIndex("IrrigationCode")));
+                    IrrigationhistoryDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    IrrigationhistoryDetails.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    IrrigationhistoryDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    IrrigationhistoryDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    IrrigationhistoryDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    IrrigationhistoryDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    IrrigationHistoryDataDetails.add(IrrigationhistoryDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return IrrigationHistoryDataDetails;
+    }
+
+}
 
 
 

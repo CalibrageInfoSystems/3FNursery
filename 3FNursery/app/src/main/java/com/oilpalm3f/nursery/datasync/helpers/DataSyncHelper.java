@@ -21,6 +21,7 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DataCountModel;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
+import com.oilpalm3f.nursery.dbmodels.Irrigationhistorymodel;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
@@ -326,6 +327,7 @@ public class DataSyncHelper {
         List<SaplingActivityHistoryModel> saplingActivityHistorylist = (List<SaplingActivityHistoryModel>) dataAccessHandler.getSaplingActivityHistoryDetails(Queries.getInstance().getSaplingActivityHistoryRefresh(), 1);
         List<NurseryIrrigationLogForDb> nurseryIrrigationLog = (List<NurseryIrrigationLogForDb>) dataAccessHandler.getIrrigationDetails(Queries.getInstance().getNurceryIrrigationHistoryRefresh(), 1);
         List<NurseryIrrigationLogXref> nurseryIrrigationLogXref = (List<NurseryIrrigationLogXref>) dataAccessHandler.getIrrigationDetailsXref(Queries.getInstance().getNurceryIrrigationXrefHistoryRefresh(), 1);
+        List<Irrigationhistorymodel> nurseryIrrigationHistory = (List<Irrigationhistorymodel>) dataAccessHandler.getIrrigationHistoryDetails(Queries.getInstance().getNurceryIrrigation_HistoryRefresh(), 1);
         List<CullinglossFileRepository> cullinglossrepoList = (List<CullinglossFileRepository>) dataAccessHandler.getCullinglossRepoDetails(Queries.getInstance().getFileRepositoryRefresh());
 
 
@@ -337,6 +339,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityHistory, saplingActivityHistorylist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLog, nurseryIrrigationLog);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLogXREF, nurseryIrrigationLogXref);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationhistory, nurseryIrrigationHistory);
         allRefreshDataMap.put(DatabaseKeys.TABLE_FILEREPOSITORY, cullinglossrepoList);
 
 

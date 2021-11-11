@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class IrrigationStatusActivity extends AppCompatActivity {
+public class  IrrigationStatusActivity extends AppCompatActivity {
     private static final String LOG_TAG =  IrrigationStatusActivity.class.getSimpleName();
     private TextView txtSatus;
     private DataAccessHandler dataAccessHandler;
@@ -54,12 +54,7 @@ public class IrrigationStatusActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Irrigation Status");
         setSupportActionBar(toolbar);
-
-
-
-
-
-        init();
+      init();
         setViews();
     }
 

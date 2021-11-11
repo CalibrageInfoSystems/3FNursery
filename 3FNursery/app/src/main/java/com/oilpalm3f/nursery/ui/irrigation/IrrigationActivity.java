@@ -39,7 +39,7 @@ public class IrrigationActivity extends AppCompatActivity {
     String CONSINEMENTCODES, transactionId, NUrsery_code,NurseryName;
     List<String> list;
     int Flag;
-
+    String Comments,Userid,Date_history;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +58,16 @@ public class IrrigationActivity extends AppCompatActivity {
 
 
         Date date1 = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = df.format(date1);
 
 
-        date.setText("  : " + formattedDate);
+        date.setText(" : " + formattedDate);
 
 //        consignment_num.setText(" : " + CommonConstants.ConsignmentID);
         if (getIntent() != null) {
 
-     CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
+         CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
             Flag = getIntent().getIntExtra("camefrom", 1); // if Flag 2 ,irrigation log edit on rejection
             transactionId = getIntent().getStringExtra("transactionId");
             Log.d(IrrigationActivity.LOG_TAG, "Consignment Code :" + CONSINEMENTCODES);
@@ -110,6 +110,9 @@ public class IrrigationActivity extends AppCompatActivity {
                     if (manregular_edt.length() != 0 || femalereg_edt.length() != 0 ||
                             manout_edt.length() != 0 || femaleout_edt.length() != 0) {
                         Log.d(IrrigationActivity.class.getSimpleName(), "Update Irrigation Code :" + transactionId);
+                        Comments =  dataAccessHandler.getSingleValue(Queries.getcomments(transactionId));
+                        Userid =  dataAccessHandler.getSingleValue(Queries.getuserid(transactionId));
+                        Date_history =  dataAccessHandler.getSingleValue(Queries.getupdateddate(transactionId));
                         String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(NUrsery_code));
                         String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(NUrsery_code));
                         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(NUrsery_code));
@@ -121,7 +124,7 @@ public class IrrigationActivity extends AppCompatActivity {
                         if (manregular_edt.length() != 0) {
                             mapStatus.put("RegularMale", manregular_edt.getText().toString());
                         } else
-                            mapStatus.put("RegularMale", "");   
+                            mapStatus.put("RegularMale", "");
 
                         if (femalereg_edt.length() != 0) {
                             mapStatus.put("RegularFemale", femalereg_edt.getText().toString());
@@ -143,9 +146,14 @@ public class IrrigationActivity extends AppCompatActivity {
                         mapStatus.put("ContractMaleRate", male_contract);
                         mapStatus.put("ContractFeMaleRate", female_contract);
                         mapStatus.put("StatusTypeId", 346);
+                        mapStatus.put("Comments", "");
+                        mapStatus.put("IsActive", 1);
+                        mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
+                        mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         mapStatus.put("UpdatedByUserId", CommonConstants.USER_ID);
                         mapStatus.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                         mapStatus.put("ServerUpdatedStatus", 0);
+
 
                         final List<LinkedHashMap> irrigationArray = new ArrayList<>();
                         irrigationArray.add(mapStatus);
@@ -172,6 +180,27 @@ public class IrrigationActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Please enter at least one value", Toast.LENGTH_SHORT).show();
                     }
+
+
+                    LinkedHashMap status = new LinkedHashMap();
+                    status.put("IrrigationCode", transactionId);
+                    status.put("StatusTypeId", 349);
+                    status.put("Comments",Comments);
+                    status.put("isActive", 1);
+                    status.put("CreatedByUserId", Userid);
+                    status.put("CreatedDate", Date_history);
+
+//                status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+                    status.put("ServerUpdatedStatus", 0);
+
+                    final List<LinkedHashMap> historyList = new ArrayList<>();
+                    historyList.add(status);
+                    dataAccessHandler.insertMyDataa("IrrigationLogStatusHistory", historyList, new ApplicationThread.OnComplete<String>() {
+                        @Override
+                        public void execute(boolean success, String result, String msg) {
+                            Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");
+                        }
+                    });
                 }
 
 
@@ -184,6 +213,11 @@ public class IrrigationActivity extends AppCompatActivity {
                         String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
                         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
                         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+//                        if (male_reg.equalsIgnoreCase("0")  || femmale_reg.equalsIgnoreCase("0") ||
+//                                male_contract.equalsIgnoreCase("0")  || female_contract.equalsIgnoreCase("0")  &&  male_reg != null && femmale_reg != null &&  male_contract == null || female_contract == null ) {
+//                            Toast.makeText(getApplicationContext(), "Please Add Labour Rate", Toast.LENGTH_SHORT).show();
+//
+//                        }
                         Log.d(LOG_TAG, "==> Analysis ==>  lobour rates ==> " + male_reg + femmale_reg + male_contract + female_contract);
                         LinkedHashMap mapStatus = new LinkedHashMap();
                         mapStatus.put("Id", 0);
@@ -205,18 +239,19 @@ public class IrrigationActivity extends AppCompatActivity {
 
                         }
 
+                        if (male_reg != null ) {
+                            mapStatus.put("RegularMaleRate", male_reg);
 
-                        mapStatus.put("RegularMaleRate", male_reg);
-
-
-                        mapStatus.put("RegularFeMaleRate", femmale_reg);
-
-
-                        mapStatus.put("ContractMaleRate", male_contract);
-
-
-                        mapStatus.put("ContractFeMaleRate", female_contract);
-
+                        }
+                        if (femmale_reg != null ) {
+                            mapStatus.put("RegularFeMaleRate", femmale_reg);
+                        }
+                        if (male_contract != null ) {
+                            mapStatus.put("ContractMaleRate", male_contract);
+                        }
+                        if (female_contract != null ) {
+                            mapStatus.put("ContractFeMaleRate", female_contract);
+                        }
 
                         mapStatus.put("StatusTypeId", 346);
 
