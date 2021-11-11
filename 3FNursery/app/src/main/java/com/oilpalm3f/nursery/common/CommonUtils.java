@@ -838,8 +838,8 @@ public class CommonUtils {
             deviceId = mTelephony.getDeviceId();
         }
 
-  return deviceId;
-    //  return "ddfe270e3940733e";
+ //   return deviceId;
+      return "ddfe270e3940733e";
   // "351558072434907";
         // return telephonyManager.getDeviceId();
     }

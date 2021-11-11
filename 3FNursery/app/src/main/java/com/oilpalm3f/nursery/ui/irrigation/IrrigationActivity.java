@@ -146,7 +146,7 @@ public class IrrigationActivity extends AppCompatActivity {
                         mapStatus.put("ContractMaleRate", male_contract);
                         mapStatus.put("ContractFeMaleRate", female_contract);
                         mapStatus.put("StatusTypeId", 346);
-                        mapStatus.put("Comments", "");
+                      mapStatus.put("Comments", "");
                         mapStatus.put("IsActive", 1);
                         mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
                         mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -164,6 +164,7 @@ public class IrrigationActivity extends AppCompatActivity {
                                     @Override
                                     public void execute(boolean success, String result, String msg) {
                                         if (success) {
+
                                             Toast.makeText(IrrigationActivity.this, "Data Saved Successfully ", Toast.LENGTH_SHORT).show();
                                             Intent newIntent = new Intent(IrrigationActivity.this, HomeActivity.class);
                                             newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -255,7 +256,7 @@ public class IrrigationActivity extends AppCompatActivity {
 
                         mapStatus.put("StatusTypeId", 346);
 
-                        mapStatus.put("Comments", "");
+                     mapStatus.put("Comments", "");
                         mapStatus.put("IsActive", 1);
                         mapStatus.put("CreatedByUserId", CommonConstants.USER_ID);
                         mapStatus.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
