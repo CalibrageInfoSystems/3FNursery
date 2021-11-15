@@ -105,6 +105,8 @@ import com.oilpalm3f.nursery.helper.CustomCursor;
 import com.oilpalm3f.nursery.helper.PrefUtil;
 import com.oilpalm3f.nursery.utils.ImageUtility;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -2239,7 +2241,7 @@ f
                 do {
 
                     SaplingActivity saplingsactivityDetails = new SaplingActivity();
-                    saplingsactivityDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                 //   saplingsactivityDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsactivityDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     saplingsactivityDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
                     saplingsactivityDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
@@ -2690,7 +2692,7 @@ f
                 do {
 
                     SaplingActivity saplingsactivityDetails = new SaplingActivity();
-                    saplingsactivityDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                  //  saplingsactivityDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsactivityDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     saplingsactivityDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
                     saplingsactivityDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
@@ -2873,7 +2875,7 @@ f
                 do {
 
                     SaplingActivityStatusModel saplingsactivitystatusDetails = new SaplingActivityStatusModel();
-                    saplingsactivitystatusDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                  //  saplingsactivitystatusDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsactivitystatusDetails.setConsignmentCode(cursor.getString(cursor.getColumnIndex("ConsignmentCode")));
                     saplingsactivitystatusDetails.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
                     saplingsactivitystatusDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
@@ -5134,6 +5136,21 @@ return Cullinglossrepolist;
         return IrrigationHistoryDataDetails;
     }
 
+
+    public String getGenerateActivityid(final String maxNum) {
+       // String maxNum = getOnlyOneValueFromDb(query);
+        String convertedNum = "";
+        if (!TextUtils.isEmpty(maxNum)) {
+            convertedNum = CommonUtils.serialNumber(Integer.parseInt(maxNum) + 1, 3);
+        } else {
+            convertedNum = CommonUtils.serialNumber(1, 3);
+        }
+     //   StringBuilder farmerCoder = new StringBuilder();
+        String finalNumber = StringUtils.leftPad(convertedNum,3,"0");
+
+        Log.v(LOG_TAG, "@@@ finalNumber code " + finalNumber);
+        return finalNumber;
+    }
 }
 
 

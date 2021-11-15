@@ -127,7 +127,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     String transactionIdNew, transactionId;
     String intentTransactionId;
     int Arrivalsprouts;
-    int value_edit, value2, value;
+    int value_edit, value2, value,Consignment_ID;
+    String Sapcode,Nurserycode,Activity_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +156,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         dataAccessHandler = new DataAccessHandler(this);
         LinearLayout ll = (LinearLayout) findViewById(R.id.linearLayout2);
 
-        maxnumber = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber());
+        maxnumber = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber(activityTypeId,consignmentCode));
         Log.d("maxnumber", maxnumber + "");
 
         activityTasklist = dataAccessHandler.getActivityTasksDetails(Queries.getInstance().getActivityTaskDetails(Integer.parseInt(activityTypeId)));
@@ -242,8 +243,16 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             // TODO CHECK DATA EXIST OR NOT      IF EXIST BIND DATA
 
+
+            Nurserycode = dataAccessHandler.getSingleValue(Queries.getnurserycode(consignmentcode));
+            Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(Nurserycode));
+            Consignment_ID = dataAccessHandler.getSingleIntValue(Queries.getID(consignmentcode));
+             Activity_ID = dataAccessHandler.getGenerateActivityid(activityTypeId);
+            Log.d(ActivityTask.class.getSimpleName(), "==> analysis ==> Activity_ID  :" + Activity_ID);
+            Log.e("Sapcode===================", Sapcode+"========>"+Nurserycode);
             transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
             Log.e("transactionId===================", transactionId);
+           // Sapcode,Nurserycode
 
 
             if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
@@ -251,11 +260,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
             } else {
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                transactionIdNew = "TRAN" + Sapcode + Consignment_ID + CommonConstants.TAB_ID  + Activity_ID +"-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber(activityTypeId,consignmentcode)) + 1);
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 209" + transactionIdNew);
                 imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
 
             }
+
+            //TRAN+NurserySAPCode(3)+ConsignmentId(4)+TabCode-Seq No(ActivityCount)
             if (imageRepo.size() != 0) {
 
                 addImageData(); //ToDO
@@ -2182,8 +2193,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 statusTypeId = 346;
             }
 
+            Nurserycode = dataAccessHandler.getSingleValue(Queries.getnurserycode(consignmentcode));
+            Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(Nurserycode));
+            Consignment_ID = dataAccessHandler.getSingleIntValue(Queries.getID(consignmentcode));
+            Activity_ID = dataAccessHandler.getGenerateActivityid(activityTypeId);
+            Log.e("Sapcode===================2195 ", Sapcode+"========>"+Nurserycode);
+            transactionIdNew = "TRAN" + Sapcode + Consignment_ID + CommonConstants.TAB_ID  + Activity_ID + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber(activityTypeId,consignmentcode)) + 1);
 
-            transactionIdNew = "T" + CommonConstants.TAB_ID + consignmentcode + activityTypeId + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 1872" + transactionIdNew);
 
             String[] strArray = null;
@@ -2216,6 +2232,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
             // updateSingleEntryData(consignmentcode, activityTypeId, intentTransactionId, statusTypeId, enableEditing);
+//            Select  SAPCode from Nursery where Code ='NURAM01'
+//            Select  NurseryCode from Sapling where ConsignmentCode ='AP/Imported/Local/Others/Nov-21/C-01'
 
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM enableEditing  : " + enableEditing);
             transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
@@ -2224,7 +2242,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             } else {
                 // TODO dont have any Existind data add new activity
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
-                transactionIdNew = "TRAN"  + consignmentcode +  CommonConstants.TAB_ID + " - " + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber()) + 1);
+                Nurserycode = dataAccessHandler.getSingleValue(Queries.getnurserycode(consignmentcode));
+                Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(Nurserycode));
+                Consignment_ID = dataAccessHandler.getSingleIntValue(Queries.getID(consignmentcode));
+                Activity_ID = dataAccessHandler.getGenerateActivityid(activityTypeId);
+                transactionIdNew = "TRAN" + Sapcode + Consignment_ID + CommonConstants.TAB_ID  + Activity_ID +"-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber(activityTypeId,consignmentcode)) + 1);
+
+
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID :" + transactionIdNew);
 
 //TRAN+NurserySAPCode(3)+ConsignmentId(4)+TabCode-Seq No(ActivityCount)

@@ -2,7 +2,7 @@ package com.oilpalm3f.nursery.dbmodels;
 
 public class SaplingActivity {
 
-    private Integer Id;
+  //  private Integer Id;
     private String TransactionId;
     private String ConsignmentCode;
     private Integer ActivityId;
@@ -14,14 +14,14 @@ public class SaplingActivity {
     private int UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
-
-    public Integer getId() {
-        return Id;
-    }
-
-    public void setId(Integer id) {
-        Id = id;
-    }
+//
+//    public Integer getId() {
+//        return Id;
+//    }
+//
+//    public void setId(Integer id) {
+//        Id = id;
+//    }
 
     public String getTransactionId() {
         return TransactionId;

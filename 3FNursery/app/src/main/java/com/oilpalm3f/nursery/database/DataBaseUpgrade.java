@@ -196,11 +196,22 @@ public class DataBaseUpgrade {
                 "ServerUpdatedStatus INT\n" +
                 ")";
         String CurrentClosingStock = "Alter table Sapling add CurrentClosingStock int";
+        String column1 = "Alter Table Sapling Add TransitLoss int";
+        String column2 = "Alter Table Sapling Add GerminationLoss int";
+        String column3 = "Alter Table Sapling Add MortalityLoss int";
+        String column4 = "Alter Table Sapling Add TransplantationLoss int";
+        String column5 = "Alter Table Sapling Add CullingLoss int";
+
         try {
 
 
             db.execSQL(cullingLossFileRepository);
             db.execSQL(CurrentClosingStock);
+            db.execSQL(column1);
+            db.execSQL(column2);
+            db.execSQL(column3);
+            db.execSQL(column4);
+            db.execSQL(column5);
 
         } catch (Exception e) {
             e.printStackTrace();

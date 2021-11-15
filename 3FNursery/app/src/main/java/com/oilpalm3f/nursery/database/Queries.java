@@ -442,10 +442,10 @@ public class Queries {
     }
 
 
-    public String getSaplingActivityMaxNumber() {
+    public String getSaplingActivityMaxNumber( String activityId,String consinmentid) {
 
 
-        return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'- ') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity";
+        return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from SaplingActivity WHERE ActivityId = '" + activityId + "' and ConsignmentCode ='" + consinmentid + "'";
     }
 
     public String getIrrigationMaxNumber() {
@@ -1990,8 +1990,15 @@ public class Queries {
     public static String getnurserynamefromirrigation(String Consigmentcode) {
         return "SELECT Name  from Nursery where Code ='" + Consigmentcode + "'";
     }
-
-
+    public static String getnurserycode(String Consigmentcode) {
+        return "SELECT NurseryCode from Sapling where ConsignmentCode ='" + Consigmentcode + "'";
+    }
+    public static String getSapcode(String Nurserycode) {
+        return "SELECT SAPCode from Nursery where Code ='" + Nurserycode + "'";
+    }
+    public static String getID(String Consigmentcode) {
+        return "SELECT Id from Sapling where ConsignmentCode ='" + Consigmentcode + "'";
+    }
     public static String getimagepath(String id ) {
        // return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
         return "select * from  CullingLossFileRepository where TransactionId = '" + id + "'";
