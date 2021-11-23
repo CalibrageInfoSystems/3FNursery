@@ -221,38 +221,7 @@ public class DataSyncHelper {
                 @Override
                 public void execute(boolean success, String result, String msg) {
                     if (success) {
-
-                        if(tableName.equals("SaplingActivityXref"))
-                        {
-                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityXrefRefresh(), tableName));
-
-                        }else if(tableName.equals("SaplingActivity")){
-                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityRefresh(), tableName));
-
-                        }
-                        else if(tableName.equals("SaplingActivityStatus"))
-                        {
-                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityStatusRefresh(), tableName));
-
-                            Log.v(LOG_TAG, "@@@ " + String.format(Queries.getInstance().getSaplingActivityStatusRefresh(), tableName));
-                        }
-                        else if(tableName.equals("CullingLossFileRepository"))
-                        {
-                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getFileRepositoryRefresh(), tableName));
-
-                            Log.v(LOG_TAG, "@@@ " + String.format(Queries.getInstance().getFileRepositoryRefresh(), tableName));
-                        }
-
-                        else if(tableName.equals("SaplingActivityHistory"))
-                        {
-                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityHistoryRefresh(), tableName));
-
-                            Log.v(LOG_TAG, "@@@ " + String.format(Queries.getInstance().getSaplingActivityHistoryRefresh(), tableName));
-                        }
-                        else {
-                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
-                        }
-                      //  dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
+                        dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
                         Log.v(LOG_TAG, "@@@ Transactions sync success for " + tableName);
                         transactionsCheck++;
                         if (transactionsCheck == refreshtransactionsDataMap.size()) {
@@ -271,9 +240,14 @@ public class DataSyncHelper {
                         });
                         transactionsCheck++;
                         if (transactionsCheck == refreshtransactionsDataMap.size()) {
-                            Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
+//                            Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
+//                            final List<ImageDetails> imagesData = dataAccessHandler.getImageDetails();
+//                            if (null != imagesData && !imagesData.isEmpty()) {
+//                                sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
+//                            } else {
+                            ProgressBar.hideProgressBar();
                             onComplete.execute(true, null, "Sync is success");
-
+                            //}
                         } else {
                             postTransactionsDataToCloud(context, refreshtableNamesList.get(transactionsCheck), dataAccessHandler, onComplete);
                         }
@@ -726,6 +700,7 @@ public class DataSyncHelper {
             }
         });
     }
+
 
 
     public static class DownLoadData extends AsyncTask<String, String, String> {
