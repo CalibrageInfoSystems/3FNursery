@@ -96,7 +96,12 @@ int Feild_id;
 
         if (btn_visibility != null && btn_visibility.equalsIgnoreCase("true")) {
             addBtn.setVisibility(View.GONE);
-        } else {
+        }
+      else  if (statusId == 346) {
+            addBtn.setVisibility(View.GONE);
+
+        } else
+            {
             addBtn.setVisibility(View.VISIBLE);
         }
 //        addBtn.setVisibility(View.GONE);
@@ -121,6 +126,7 @@ int Feild_id;
                     at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK);
                     startActivity(at);
                 } else {
+
                     Toast.makeText(MultipleEntryScreen.this, "Already Job done", Toast.LENGTH_SHORT).show();
                 }
 

@@ -19,6 +19,7 @@ import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.Alerts;
 import com.oilpalm3f.nursery.ui.Adapter.NotificationDisplayAdapter;
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
+import com.oilpalm3f.nursery.utils.UiUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,16 +53,16 @@ public class NotificationsScreen extends AppCompatActivity {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                DataSyncHelper.getAlertsData(NotificationsScreen.this, new ApplicationThread.OnComplete<String>() {
-//                    @Override
-//                    public void execute(boolean success, String result, String msg) {
-//                        if (success) {
-//                            renderNotifications();
-//                        } else {
-//                            UiUtils.showCustomToastMessage("Error while getting alerts Data", NotificationsScreen.this, 1);
-//                        }
-//                    }
-//                });
+                DataSyncHelper.getAlertsData(NotificationsScreen.this, new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+                        if (success) {
+                            renderNotifications();
+                        } else {
+                            UiUtils.showCustomToastMessage("Error while getting alerts Data", NotificationsScreen.this, 1);
+                        }
+                    }
+                });
             }
         });
 

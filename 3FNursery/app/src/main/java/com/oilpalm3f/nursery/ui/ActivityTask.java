@@ -2,6 +2,7 @@ package com.oilpalm3f.nursery.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +48,7 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DisplayData;
@@ -55,7 +58,10 @@ import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.ui.Adapter.RVAdapter_ImageList;
+import com.oilpalm3f.nursery.uihelper.ProgressBar;
+import com.oilpalm3f.nursery.uihelper.ProgressDialogFragment;
 import com.oilpalm3f.nursery.utils.ImageUtility;
+import com.oilpalm3f.nursery.utils.UiUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,6 +74,9 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.oilpalm3f.nursery.common.CommonUtils.REQUEST_CAM_PERMISSIONS;
 
@@ -95,6 +104,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int activityStatus;
     int isjobDoneId = 0;
     int SCREEN_FROM = 0;
+    int selectedPo;
     private static final int CAMERA_REQUEST = 1888;
     ActivityTasks showHideActivity;
     CheckBox chkShowHide;
@@ -167,7 +177,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 CheckBox chk = findViewById(yesnoCHeckbox);
                 if (chk != null) {
                     chk.setChecked(true);
-                    checkBoxChecked(); // default Check box check
+                    checkBoxChecked(true); // default Check box check
                 }
             }
         } catch (Exception exc) {
@@ -254,9 +264,20 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.e("transactionId===================", transactionId);
            // Sapcode,Nurserycode
 
-
+            int statusTypeId;
+            if (isjobDoneId != 0) {
+                CheckBox chk = findViewById(isjobDoneId);
+                if (chk.isChecked()) {
+                    statusTypeId = 346;
+                } else {
+                    statusTypeId = 352;
+                }
+            } else {
+                statusTypeId = 346;
+            }
             if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
                 bindExistingData(transactionId);
+             //   updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, enableEditing);
                 imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
             } else {
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
@@ -298,17 +319,25 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     chk.setChecked(false);
 
                 if (enableEditing) {
+
                     Checked = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().Checkboxdisable(displayData.get(i).getFieldId(), consignmentCode, activityTypeId));
 
                     Log.e("=================================>Checked", Checked + "");
                     if (Checked != null && Checked.equalsIgnoreCase("true")) {
                         chk.setEnabled(false);
-                        checkBoxChecked();
+                        checkBoxChecked(true);
                     } else {
                         chk.setEnabled(true);
-                        checkBoxChecked();
+                        checkBoxChecked(true);
+                    }
+
+
+                    if(displayData.get(i).getValue().equalsIgnoreCase("true")){
+                        chk.setEnabled(true);
+                        checkBoxChecked(true);
                     }
                 }
+
                 try {
 
                     int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRequiedFeildID(activityTypeId));
@@ -389,6 +418,36 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             LinkedHashMap mapXref = new LinkedHashMap();
             mapXref.put("Id", 0);
             mapXref.put("TransactionId", _transactionId);
+
+
+//            if (activityTypeId.equalsIgnoreCase("9") &&( dataValue.get(j).id == 31) ){
+//
+//                Log.e("selectedPo==================31",selectedPo+"=========value" + dataValue.get(j).value);
+//                if(selectedPo == 2){
+//
+//                    mapXref.put("FieldId", 31);
+//                    mapXref.put("Value",dataValue.get(j).value);}
+//                else{
+//
+//                   mapXref.put("FieldId", 31);
+//                mapXref.put("Value","false");}
+//
+//
+//
+//            }
+//           else if (activityTypeId.equalsIgnoreCase("9") &&( dataValue.get(j).id == 45 ) ){
+//
+//                Log.e("selectedPo==================45",selectedPo+"=========value" + dataValue.get(j).value);
+//if(selectedPo == 1){
+//                    mapXref.put("FieldId", 45);
+//                    mapXref.put("Value",dataValue.get(j).value);}
+//else{
+//    mapXref.put("FieldId", 45);
+//    mapXref.put("Value","false");
+//}
+//
+//            }
+
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
 
@@ -438,6 +497,31 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
 
                 if (success) {
+                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+
+
+                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                            @Override
+                            public void execute(boolean success, Object result, String msg) {
+                                if (success) {
+
+                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                        @Override
+                                        public void run() {
+                                          finish();
+                                        }
+                                    });
+                                } else {
+                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
                     LinkedHashMap sapling = new LinkedHashMap();
                     sapling.put("TransactionId", _transactionId);
                     sapling.put("ConsignmentCode", _consignmentCode);
@@ -457,10 +541,35 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void execute(boolean success, String result, String msg) {
                             if (success) {
+
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivity INSERT COMPLETED");
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
-                                finish();
-                                Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+
+                                if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+
+
+                                    DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                                        @Override
+                                        public void execute(boolean success, Object result, String msg) {
+                                            if (success) {
+
+                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        finish();
+                                                    }
+                                                });
+                                            } else {
+                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }
                     });
@@ -488,6 +597,31 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             public void execute(boolean success, String result, String msg) {
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Update Task Completed");
+                                if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+
+
+                                    DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                                        @Override
+                                        public void execute(boolean success, Object result, String msg) {
+                                            if (success) {
+
+                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        finish();
+                                                    }
+                                                });
+                                            } else {
+                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
                                 finish();
                                 Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                             }
@@ -513,7 +647,31 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void execute(boolean success, String result, String msg) {
                                 if (success) {
-                                    Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
+                                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+
+
+                                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                                            @Override
+                                            public void execute(boolean success, Object result, String msg) {
+                                                if (success) {
+
+                                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            finish();
+                                                        }
+                                                    });
+                                                } else {
+                                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
 
                                 }
 
@@ -535,10 +693,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         for (int i = 0; i < activityTasklist.size(); i++) {
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
-                if (activityTasklist.get(i).getField().equalsIgnoreCase("Is the activity completed")) {
+                if (activityTasklist.get(i).getField().equalsIgnoreCase("Is the activity completed") ) {
                     isjobDoneId = activityTasklist.get(i).getId();
                     ll.addView(addCheckbox
-                            (activityTasklist.get(i).getField(), activityTasklist.get(i).getId())); // add checkbox ui Dynamic
+                            (activityTasklist.get(i).getField()  , activityTasklist.get(i).getId())); // add checkbox ui Dynamic
+
                 } else {
                     ll.addView(addCheckbox(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
                 }
@@ -755,9 +914,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
 
                 Spinner spinnner = findViewById(id);
-                int selectedPo = spinnner.getSelectedItemPosition();
+                 selectedPo = spinnner.getSelectedItemPosition();
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), spinnner.getSelectedItem().toString()));
-                Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString());
+                Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString()  + selectedPo);
                 if (spinnner.getSelectedItemPosition() == 0) {
                     //TOdo  need to check already exist or not
 
@@ -809,7 +968,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
 
                 CheckBox chk = (CheckBox) findViewById(id);
-                Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
+                Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "id===============" + activityTasklist.get(i).getId());
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
             }
@@ -881,6 +1040,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than or equal to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+
+
+
                     int LossCheckboxx = 59;
                     CheckBox chkk = findViewById(LossCheckboxx);
 
@@ -1551,13 +1714,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-             //   Toast.makeText(ActivityTask.this, "Selected PO :" + i, Toast.LENGTH_SHORT).show();
-
+           //  Toast.makeText(ActivityTask.this, "Selected PO :" + i, Toast.LENGTH_SHORT).show();
+                selectedPo = i;
                 if (Integer.parseInt(activityTypeId) == 9) {
+
                     if (i == 2) {
 
                         // HIDE ITEMS
-
+                      //  yesnoCHeckbox = 31;
 
                         for (int f = 21; f < 32; f++) {
 
@@ -1588,6 +1752,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             try {
                                 EditText txt = findViewById(f);
                                 txt.setText("");
+
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1596,7 +1762,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                     } else if (i == 1) {
                         yesnoCHeckbox = 45;
-                        for (int f = 21; f < 34; f++) {
+                        for (int f = 21; f < 32; f++) {
 
                             try {
                                 findViewById(f).setVisibility(View.GONE);
@@ -2173,7 +2339,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis =>enableEditing: " + enableEditing);
 
 
-
             updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId, enableEditing);
 
         } else if (SCREEN_FROM == CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK) {
@@ -2231,13 +2396,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 statusTypeId = 346;
             }
 
-            // updateSingleEntryData(consignmentcode, activityTypeId, intentTransactionId, statusTypeId, enableEditing);
-//            Select  SAPCode from Nursery where Code ='NURAM01'
-//            Select  NurseryCode from Sapling where ConsignmentCode ='AP/Imported/Local/Others/Nov-21/C-01'
+
 
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM enableEditing  : " + enableEditing);
             transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
+          //  updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, enableEditing);
+
             if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis =>  transactionId  : " + transactionId);
                 updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, enableEditing);
             } else {
                 // TODO dont have any Existind data add new activity
@@ -2287,7 +2454,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Count Of DisplayData :" + displayData.size());
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Count Of Statusid :" + _statusTypeId);
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis inSertInHistory :" + inSertInHistory);
-
+        Comments = dataAccessHandler.getOnlyOneValueFromDb(Queries.gethistory(consignmentCode, activityTypeId,_transactionId));
+        Userid = dataAccessHandler.getOnlyOneValueFromDb(Queries.gethistoryuser(consignmentCode, activityTypeId,_transactionId));
+        Date_history = dataAccessHandler.getOnlyOneValueFromDb(Queries.getDate(consignmentCode, activityTypeId,_transactionId));
+        Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Status History :2337" + Comments + Userid + Date_history);
         if (displayData != null && displayData.size() > 0) {
 
 
@@ -2385,7 +2555,44 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 dataAccessHandler.insertMyDataa("SaplingActivityHistory", historyList, new ApplicationThread.OnComplete<String>() {
                     @Override
                     public void execute(boolean success, String result, String msg) {
-                        Log.d(ActivityTask.class.getSimpleName(), "==> SaplingActivityHistoryf INSERT COMPLETED");
+
+                        if (success) {
+                            if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+
+
+                                DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                                    @Override
+                                    public void execute(boolean success, Object result, String msg) {
+                                        if (success) {
+                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                @Override
+                                                public void run() {
+
+//                                                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+//                                                    UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
+                                                    finish();
+                                                }
+                                            });
+                                        } else {
+                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                  //  Toasty.error(ActivityTask.this, "Data sending failed", 10).show();
+//                                        Toast.makeText(RefreshSyncActivity.this, "Data sending failed", Toast.LENGTH_SHORT).show();
+                                                    ProgressBar.hideProgressBar();
+                                                //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                                    finish();
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            Log.d(ActivityTask.class.getSimpleName(), "==> SaplingActivityHistoryf INSERT COMPLETED");
+                        }
+
                     }
                 });
             }
@@ -2410,7 +2617,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 id == 1752 || id == 181 || id == 253 || id == 259 || id == 269 || id == 280 || id == 1019 || id == 871 || id == 2940 || id == 1962 || id == 1972 || id == 1792 || id == 1800 || id == 1982 || id == 1808 || id == 1992 || id == 1816 || id == 2002 || id == 1824 || id == 2012 || id == 475 || id == 484 || id == 451 || id == 466 || id == 492 || id == 475 || id == 2862 || id == 2930 || id == 2870 || id == 2940 || id == 492 || id == 466 || id == 475 || id == 2862 || id == 2930 || id == 2878 || id == 2950 || id == 2988 || id == 2886 || id == 2997 || id == 2960 || id == 289 || id == 298 || id == 307 || id == 317 || id == 332 || id == 341 || id == 368 || id == 385 || id == 391 || id == 397 || id == 403 || id == 414 || id == 423 || id == 432 || id == 611 || id == 626 || id == 641 || id == 656 || id == 671 || id == 686 || id == 701 || id == 716 || id == 731 || id == 746 || id == 761 || id == 776 || id == 581 || id == 791 || id == 799 || id == 1079 || id == 1088 || id == 1097 || id == 1106 || id == 1115 || id == 1124 || id == 1133 || id == 1142 || id == 1151 || id == 1160 || id == 1169 || id == 1178 || id == 1178 || id == 1187 || id == 1196 || id == 1205 || id == 1214 || id == 1223 || id == 1230 || id == 1236 || id == 1242 || id == 1249 || id == 1255 || id == 1261 || id == 1268 || id == 1274 || id == 1280 || id == 1287 || id == 1293 || id == 1317 || id == 1323 || id == 1329 || id == 1335 || id == 1341 || id == 1347 || id == 1353 || id == 1359 || id == 1365 || id == 1371 || id == 1382 || id == 1393 || id == 1402 || id == 1411 || id == 1420 || id == 1429 || id == 1438 || id == 1447 || id == 1457 || id == 1470 || id == 1476 || id == 1482 || id == 1488 || id == 1494 || id == 1500 || id == 1506 || id == 1512 || id == 1518 || id == 1524 || id == 1530 || id == 1536 || id == 1542 || id == 1548 || id == 1554 || id == 1560 || id == 1566 || id == 1572 || id == 1578 || id == 1584 || id == 1590 || id == 1596 || id == 1602 || id == 1617 || id == 1632 || id == 1647 || id == 1662 || id == 1677 || id == 1692 || id == 1707 || id == 1722 || id == 1737 || id == 1832 || id == 1841 || id == 1850 || id == 1859 || id == 1868 || id == 1877 || id == 1886 || id == 1895 || id == 1904 || id == 1913 || id == 2022 || id == 2031 || id == 2040 || id == 2049 || id == 2058 || id == 2067 || id == 2076 || id == 2085 || id == 1187 || id == 1196 || id == 1205 || id == 1214 || id == 1223 || id == 1230 || id == 1236 || id == 1242 || id == 1249 || id == 2094 || id == 2103 || id == 2112 || id == 2123 || id == 2145 || id == 2156 || id == 2167 || id == 2178 || id == 2189 || id == 2200 || id == 2211 || id == 2222 || id == 2231 || id == 2240 || id == 2249 || id == 2258 || id == 2267 || id == 2276 || id == 2285 || id == 2294 || id == 2303 || id == 2312 || id == 2321 || id == 2330 || id == 2339 || id == 2348 || id == 2357 || id == 2366 || id == 2375 || id == 2384 || id == 2393 || id == 2402 || id == 2411 || id == 2420 || id == 2429 || id == 2438 || id == 2447 || id == 2456 || id == 2465 || id == 2474 || id == 2483 || id == 2492 || id == 2502 || id == 2512 || id == 2522 || id == 2532 || id == 2542 || id == 2552 || id == 2562 || id == 2572 || id == 2582 || id == 2592 || id == 2598 || id == 2604 || id == 2610 || id == 2621 || id == 2632 || id == 2643 || id == 2654 || id == 2663 || id == 2672 || id == 2681 || id == 2690 || id == 2699 || id == 2708 || id == 2717 || id == 2726 || id == 2735 || id == 2744 || id == 2753 || id == 2762 || id == 2772 || id == 2782 || id == 2792 || id == 2802 || id == 2817 || id == 2832 || id == 2847 || id == 2894 || id == 2903 || id == 2912 || id == 2921 || id == 2970 || id == 2979 || id == 3006 || id == 3012 || id == 3018 || id == 3024 || id == 3030 || id == 3036 || id == 3042 || id == 3048 || id == 3054 || id == 3062 || id == 3077 || id == 979 || id == 551 || id == 791 || id == 919 || id == 566 || id == 929 || id == 807 || id == 939 || id == 596 || id == 815 || id == 949 || id == 823 || id == 951 || id == 831 || id == 969 || id == 839 || id == 847 || id == 989 || id == 855 || id == 979 || id == 999 || id == 863 || id == 1009 || id == 879 || id == 1029 || id == 887 || id == 1049 || id == 1039 || id == 895 || id == 903 || id == 1059 || id == 911 || id == 1069 || id == 350 || id == 1922 || id == 358 || id == 1942 || id == 1768 || id == 1776 || id == 1952 || id == 1784) {
 // check box check & Uncheck
             if (((CheckBox) view).isChecked()) {
-                checkBoxChecked();
+                checkBoxChecked(true);
 
                 try {
 
@@ -2421,6 +2628,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                     chk_is.setEnabled(true);
                     if(enableEditing){
+
             chk_is.setChecked(false);}
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2476,7 +2684,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void checkBoxChecked() {
+    private void checkBoxChecked(boolean cleardata) {
 
 
         //  Activity Typeid : 37
@@ -2492,9 +2700,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (optional != null && !StringUtils.isEmpty(optional)) {
                 findViewById(widget.getId()).setVisibility(View.GONE);
                 findViewById(widget.getId() + 9000).setVisibility(View.GONE);
+
                 try {
                     EditText txt = findViewById(widget.getId());
-                    txt.setText("");
+                    if(!cleardata) {
+                        txt.setText("");
+                      }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -2817,12 +3029,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             try {
 
-                int int523 = 523, int524 = 524;
+                int int523 = 523, int524 = 524, int522 = 522;
 
 
                 EditText edt524 = findViewById(int524);
-                int finalValue = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 521))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
 
+                int finalValue =  CommonUtils.getIntFromEditText(((EditText) findViewById(int522))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
+                Log.d("Transplationloss============", +finalValue + "");
                 edt524.setText(finalValue + "");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -3337,8 +3550,40 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> CullingLossFileRepository INSERT COMPLETED");
                     Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
                     addImageData();
+                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
 
-                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+
+                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                            @Override
+                            public void execute(boolean success, Object result, String msg) {
+                                if (success) {
+                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                            UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
+                                            finish();
+                                        }
+                                    });
+                                } else {
+                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Toasty.error(ActivityTask.this, "Data sending failed", 10).show();
+//                                        Toast.makeText(RefreshSyncActivity.this, "Data sending failed", Toast.LENGTH_SHORT).show();
+                                            ProgressBar.hideProgressBar();
+                                            Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                            finish();
+
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+               //     Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                 }
             }
         });

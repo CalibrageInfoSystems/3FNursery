@@ -18,6 +18,7 @@ import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.DatabaseKeys;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.Alerts;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DataCountModel;
 import com.oilpalm3f.nursery.dbmodels.ImageDetails;
@@ -220,7 +221,38 @@ public class DataSyncHelper {
                 @Override
                 public void execute(boolean success, String result, String msg) {
                     if (success) {
-                        dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
+
+                        if(tableName.equals("SaplingActivityXref"))
+                        {
+                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityXrefRefresh(), tableName));
+
+                        }else if(tableName.equals("SaplingActivity")){
+                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityRefresh(), tableName));
+
+                        }
+                        else if(tableName.equals("SaplingActivityStatus"))
+                        {
+                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityStatusRefresh(), tableName));
+
+                            Log.v(LOG_TAG, "@@@ " + String.format(Queries.getInstance().getSaplingActivityStatusRefresh(), tableName));
+                        }
+                        else if(tableName.equals("CullingLossFileRepository"))
+                        {
+                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getFileRepositoryRefresh(), tableName));
+
+                            Log.v(LOG_TAG, "@@@ " + String.format(Queries.getInstance().getFileRepositoryRefresh(), tableName));
+                        }
+
+                        else if(tableName.equals("SaplingActivityHistory"))
+                        {
+                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().getSaplingActivityHistoryRefresh(), tableName));
+
+                            Log.v(LOG_TAG, "@@@ " + String.format(Queries.getInstance().getSaplingActivityHistoryRefresh(), tableName));
+                        }
+                        else {
+                            dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
+                        }
+                      //  dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
                         Log.v(LOG_TAG, "@@@ Transactions sync success for " + tableName);
                         transactionsCheck++;
                         if (transactionsCheck == refreshtransactionsDataMap.size()) {
@@ -239,14 +271,9 @@ public class DataSyncHelper {
                         });
                         transactionsCheck++;
                         if (transactionsCheck == refreshtransactionsDataMap.size()) {
-//                            Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
-//                            final List<ImageDetails> imagesData = dataAccessHandler.getImageDetails();
-//                            if (null != imagesData && !imagesData.isEmpty()) {
-//                                sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
-//                            } else {
-                            ProgressBar.hideProgressBar();
+                            Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
                             onComplete.execute(true, null, "Sync is success");
-                            //}
+
                         } else {
                             postTransactionsDataToCloud(context, refreshtableNamesList.get(transactionsCheck), dataAccessHandler, onComplete);
                         }
@@ -555,6 +582,21 @@ public class DataSyncHelper {
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", nurseryIrrigationLogXref.getConsignmentCode(), "IrrigationCode", nurseryIrrigationLogXref.getIrrigationCode() + ""));
             }
 
+            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_ALERTS)) {
+
+               // List<Alerts> alertsList;
+                Alerts alertsList = (Alerts) dataList.get(innerCountCheck);
+                alertsList.setServerUpdatedStatus(1);
+                whereCondition = " where  Id= '" + alertsList.getId() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(alertsList));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "Id", alertsList.getId()+""));
+            }
+
             if (dataList.size() != innerCountCheck) {
                 updateOrInsertData(tableName, dataToInsert, whereCondition, recordExisted, dataAccessHandler, new ApplicationThread.OnComplete() {
                     @Override
@@ -651,7 +693,7 @@ public class DataSyncHelper {
     }
 
     public static void getAlertsData(final Context context, final ApplicationThread.OnComplete<String> onComplete) {
-        CloudDataHandler.getGenericData(Config.live_url + Config.GET_ALERTS + CommonConstants.USER_ID, new ApplicationThread.OnComplete<String>() {
+        CloudDataHandler.getGenericData(Config.live_url + Config.GET_ALERTS, new ApplicationThread.OnComplete<String>() {
             @Override
             public void execute(boolean success, String result, String msg) {
                 if (success) {
@@ -684,6 +726,7 @@ public class DataSyncHelper {
             }
         });
     }
+
 
     public static class DownLoadData extends AsyncTask<String, String, String> {
 
@@ -841,6 +884,14 @@ public class DataSyncHelper {
                             List<NurseryIrrigationLogForDb> irrigationLogs = gson.fromJson(dataArray.toString(), type);
                             if (null != irrigationLogs && irrigationLogs.size() > 0)
                                 dataToUpdate.put(tableName, irrigationLogs);
+                        }
+                        else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_ALERTS)) {  // TODO need to check
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<Alerts>>() {
+                            }.getType();
+                            List<Alerts> alters = gson.fromJson(dataArray.toString(), type);
+                            if (null != alters && alters.size() > 0)
+                                dataToUpdate.put(tableName, alters);
                         }
                     }
                     resultMessage = "success";
