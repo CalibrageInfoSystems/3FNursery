@@ -497,31 +497,31 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
 
                 if (success) {
-                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
-
-
-                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
-                            @Override
-                            public void execute(boolean success, Object result, String msg) {
-                                if (success) {
-
-                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-                                        @Override
-                                        public void run() {
-                                          finish();
-                                        }
-                                    });
-                                } else {
-                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
+//                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+//
+//
+//                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+//                            @Override
+//                            public void execute(boolean success, Object result, String msg) {
+//                                if (success) {
+//
+//                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                          finish();
+//                                        }
+//                                    });
+//                                } else {
+//                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                        });
+//                    }
                     LinkedHashMap sapling = new LinkedHashMap();
                     sapling.put("TransactionId", _transactionId);
                     sapling.put("ConsignmentCode", _consignmentCode);
@@ -545,31 +545,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivity INSERT COMPLETED");
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
 
-                                if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
 
-
-                                    DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
-                                        @Override
-                                        public void execute(boolean success, Object result, String msg) {
-                                            if (success) {
-
-                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        finish();
-                                                    }
-                                                });
-                                            } else {
-                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
                             }
                         }
                     });
@@ -597,31 +573,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             public void execute(boolean success, String result, String msg) {
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Update Task Completed");
-                                if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
 
-
-                                    DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
-                                        @Override
-                                        public void execute(boolean success, Object result, String msg) {
-                                            if (success) {
-
-                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        finish();
-                                                    }
-                                                });
-                                            } else {
-                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
                                 finish();
                                 Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                             }
