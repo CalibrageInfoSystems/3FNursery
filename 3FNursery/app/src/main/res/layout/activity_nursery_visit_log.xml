@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.NurseryVisitLogActivity"
+    android:background="@color/white">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/applaout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_below="@+id/applaout"
+        android:weightSum="1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                card_view:cardCornerRadius="8dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/mainnlyt"
+                    android:padding="10dp">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_weight="0.5"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Nursery"
+                            android:textSize="18dp"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <Spinner
+                            android:id="@+id/nurserycodespin"
+                            android:layout_weight="0.5"
+                            android:layout_width="0dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/spinner_bg"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/black"
+                            android:text="NurseryName"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_weight="0.5"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Log Type"
+                            android:textSize="18dp"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <Spinner
+                            android:id="@+id/logtypespin"
+                            android:layout_weight="0.5"
+                            android:layout_width="0dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/spinner_bg"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/black"
+                            android:text="NurseryName"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_weight="0.5"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Date"
+                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/date"
+                            android:layout_weight="0.5"
+                            android:layout_width="0dp"
+                            android:textSize="20dp"
+                            android:inputType="date"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/black"
+                            android:text="Date"/>
+
+                    </LinearLayout>
+
+
+
+
+
+                    <Button
+                        android:id="@+id/submitBtn"
+                        style="@style/basicBtnStyle"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="Save" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </ScrollView>
+
+    </LinearLayout>
+</RelativeLayout>
