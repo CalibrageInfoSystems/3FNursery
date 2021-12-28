@@ -70,10 +70,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         dataAccessHandler = new DataAccessHandler(ctx);
         holder.transactionid.setText(" :   " + saplingActivities_List.get(position).getName());
         holder.consignmentcode.setText(" :   " + saplingActivities_List.get(position).getConsignmentCode());
+        if(saplingActivities_List.get(position).getStatusTypeId() == 352 || saplingActivities_List.get(position).getStatusTypeId() == 349 || saplingActivities_List.get(position).getDesc() == null) {
+            holder.linear_layout.setVisibility(View.VISIBLE);
+        }
+        else{
+            holder.linear_layout.setVisibility(View.GONE);
+        }
      if( saplingActivities_List.get(position).getDesc()!=null){
-        holder.status.setText(" :   " +saplingActivities_List.get(position).getDesc());}
+        holder.status.setText(" :   " +saplingActivities_List.get(position).getDesc());
+     }
      else{
-         holder.Status_linear.setVisibility(View.GONE);
+         holder.status.setText(" :   " +"Open");
 
      }
 
@@ -92,6 +99,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         else{
             holder.jobdone_linear.setVisibility(View.GONE);
         }
+
 
 
 //
@@ -126,7 +134,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView transactionid,consignmentcode,status,jobdonedate;
-        LinearLayout Status_linear,jobdone_linear;
+        LinearLayout Status_linear,jobdone_linear,linear_layout;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -134,7 +142,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
           Status_linear = itemView.findViewById(R.id.Status_linear);
             jobdone_linear = itemView.findViewById(R.id.jobdone_linear);
-
+            linear_layout = itemView.findViewById(R.id.linear_layout);
             ctx = itemView.getContext();
 
             transactionid = itemView.findViewById(R.id.transactionid);

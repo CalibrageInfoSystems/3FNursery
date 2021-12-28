@@ -48,7 +48,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -116,7 +116,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         irrigationLogXref = findViewById(R.id.irrigationLogXref);
         cullingLossFileRepository =findViewById(R.id.cullingLossFileRepository);
         irrigationLoghistory = findViewById(R.id.irrigationLoghistory);
-
+        Irrigationlabourlog =findViewById(R.id.Irrigationlabourlog);
         btnsend = findViewById(R.id.btsynctoserver);
         btnmastersync = findViewById(R.id.btnmastersync);
         btnDBcopy = findViewById(R.id.btcopydatabase);
@@ -211,6 +211,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             irrigationLogXref.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryIrrigationLogXref")));
             irrigationLoghistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("IrrigationLogStatusHistory")));
             cullingLossFileRepository.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("CullingLossFileRepository")));
+            Irrigationlabourlog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryLabourLog")));
 
 //            //getVistLogRecords
 //            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));

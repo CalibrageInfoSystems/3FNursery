@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
     RelativeLayout irrigation;
-    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel;
+    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel,nurserylabourlogsrel;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -64,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         refreshRel = (LinearLayout) findViewById(R.id.refreshRel1);
         IrrigationRel =findViewById(R.id.IrrigationRel);
         checkactivityRel = findViewById(R.id.checkactivityRel);
+        nurserylabourlogsrel = findViewById(R.id.nurserylabourlogsrel);
         circleView = (CircleView) findViewById(R.id.countTxt);
         dataAccessHandler = new DataAccessHandler(this);
     }
@@ -142,7 +143,18 @@ public class HomeActivity extends AppCompatActivity {
             resetPrevRegData();
             startActivity(new Intent(HomeActivity.this, RefreshSyncActivity.class));
         });
+        nurserylabourlogsrel.setOnClickListener(new View.OnClickListener() {  // CheckActivity
+            @Override
+            public void onClick(View view) {
 
+             ;
+                Intent selectionscreen = new Intent(HomeActivity.this, NurseryLabourLogActivity.class);
+                startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
+
+            }
+        });
 
     }
 
@@ -183,8 +195,6 @@ public class HomeActivity extends AppCompatActivity {
         consignmentpin = dialog.findViewById(R.id.consignmentpin);
         submitBtn =  dialog.findViewById(R.id.submitBtn);
         nurserydatamap = dataAccessHandler.getPairData(Queries.getInstance().getNurseryMasterQuery());
-
-
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(HomeActivity.this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(nurserydatamap, "Nursery"));
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         nurserySpinner.setAdapter(spinnerArrayAdapter);

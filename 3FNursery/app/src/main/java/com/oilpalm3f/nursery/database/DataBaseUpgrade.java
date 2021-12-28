@@ -202,6 +202,24 @@ public class DataBaseUpgrade {
         String column4 = "Alter Table Sapling Add TransplantationLoss int";
         String column5 = "Alter Table Sapling Add CullingLoss int";
 
+
+        String NurseryLabourLog = "CREATE TABLE NurseryLabourLog( \n" +
+                "Id INTEGER, \n" +
+                "LogDate VARCHAR, \n" +
+                "RegularMale INT, \n" +
+                "RegularFemale INT , \n" +
+                "ContractMale INT, \n" +
+                "ContractFemale INT , \n" +
+                "IsActive VARCHAR, \n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR,\n" +
+                "UpdatedByUserId INT, \n" +
+                "UpdatedDate VARCHAR,\n" +
+                "ServerUpdatedStatus INT,\n" +
+                "NurseryCode VARCHAR \n"+
+                ")";
+
+
         try {
 
 
@@ -212,6 +230,7 @@ public class DataBaseUpgrade {
             db.execSQL(column3);
             db.execSQL(column4);
             db.execSQL(column5);
+            db.execSQL(NurseryLabourLog);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -105,7 +105,7 @@ public class ConsignmentSelectionScreen extends AppCompatActivity {
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
         }
         else {
-            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode)); //  Consignment selection
+            consignmentList = dataAccessHandler.getConsignmentData(Queries.getInstance().getConsignmentDataQuery(CommonConstants.USER_ID, nurserycode));//  Consignment selection
             consignmentRecyclerviewAdapter = new ConsignmentRecyclerviewAdapter(ConsignmentSelectionScreen.this, consignmentList, nurserycode);
             consignmentRecyclerview.setAdapter(consignmentRecyclerviewAdapter);
         }

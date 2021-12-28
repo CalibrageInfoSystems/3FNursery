@@ -17,9 +17,11 @@ import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.HomeActivity;
+import com.oilpalm3f.nursery.uihelper.ProgressBar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -178,7 +180,8 @@ public class IrrigationActivity extends AppCompatActivity {
 
                                 });
 
-                    } else {
+                    }
+                    else {
                         Toast.makeText(getApplicationContext(), "Please enter at least one value", Toast.LENGTH_SHORT).show();
                     }
 
@@ -199,7 +202,43 @@ public class IrrigationActivity extends AppCompatActivity {
                     dataAccessHandler.insertMyDataa("IrrigationLogStatusHistory", historyList, new ApplicationThread.OnComplete<String>() {
                         @Override
                         public void execute(boolean success, String result, String msg) {
-                            Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");
+                            if (success) {
+                                if (CommonUtils.isNetworkAvailable(IrrigationActivity.this)) {
+
+
+                                    DataSyncHelper.performRefreshTransactionsSync(IrrigationActivity.this, new ApplicationThread.OnComplete() {
+                                        @Override
+                                        public void execute(boolean success, Object result, String msg) {
+                                            if (success) {
+                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(IrrigationActivity.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+//                                                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+//                                                    UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
+                                                        finish();
+                                                    }
+                                                });
+                                            } else {
+                                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        //  Toasty.error(ActivityTask.this, "Data sending failed", 10).show();
+//                                        Toast.makeText(RefreshSyncActivity.this, "Data sending failed", Toast.LENGTH_SHORT).show();
+                                                        ProgressBar.hideProgressBar();
+                                                        //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                                        finish();
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+
+
+                                Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
                         }
                     });
                 }
@@ -294,9 +333,43 @@ public class IrrigationActivity extends AppCompatActivity {
                                                             @Override
                                                             public void execute(boolean success, String result, String msg) {
                                                                 if (success) {
+                                                                    if (CommonUtils.isNetworkAvailable(IrrigationActivity.this)) {
 
 
-                                                                } else {
+                                                                        DataSyncHelper.performRefreshTransactionsSync(IrrigationActivity.this, new ApplicationThread.OnComplete() {
+                                                                            @Override
+                                                                            public void execute(boolean success, Object result, String msg) {
+                                                                                if (success) {
+                                                                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                                                        @Override
+                                                                                        public void run() {
+
+                                                    Toast.makeText(IrrigationActivity.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+//                                                    UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
+                                                                                            finish();
+                                                                                        }
+                                                                                    });
+                                                                                } else {
+                                                                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                                                        @Override
+                                                                                        public void run() {
+
+                                                                                            //  Toasty.error(ActivityTask.this, "Data sending failed", 10).show();
+//                                        Toast.makeText(RefreshSyncActivity.this, "Data sending failed", Toast.LENGTH_SHORT).show();
+                                                                                            ProgressBar.hideProgressBar();
+                                                                                            //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                                                                            finish();
+
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
+
+
+                                                                    Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
+                                                                else {
 
                                                                     Toast.makeText(IrrigationActivity.this, "Data Saved Failed try again :" + msg, Toast.LENGTH_SHORT).show();
                                                                 }

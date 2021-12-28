@@ -120,8 +120,8 @@ int Feild_id;
 
                     at.putExtra("ActivityTypeId", activityTypeId);
                     at.putExtra("consignmentcode", consignmentcode);
-                    at.putExtra("Ismultipleentry", true);
-                    at.putExtra("ActivityName", activityName);
+                    at.putExtra("multipleEntry", true);
+                    at.putExtra("ActivityName", activityName);                                 
                     at.putExtra("enableEditing", showbutton);
                     at.putExtra(CommonConstants.SCREEN_CAME_FROM, CommonConstants.FROM_MULTIPLE_ADD_NEW_TASK);
                     startActivity(at);

@@ -2,7 +2,7 @@ package com.oilpalm3f.nursery.dbmodels;
 
 public class SaplingActivityXrefModel {
 
-    private Integer Id;
+   // private Integer Id;
     private String TransactionId;
     private Integer FieldId;
     private String Value;
@@ -14,6 +14,7 @@ public class SaplingActivityXrefModel {
     private String UpdatedDate;
     private int ServerUpdatedStatus;
     private  double LabourRate;
+
 //    private String ImageString;
 //
 //    public String getImageString() {
@@ -32,13 +33,13 @@ public class SaplingActivityXrefModel {
         LabourRate = labourRate;
     }
 
-    public Integer getId() {
-        return Id;
-    }
-
-    public void setId(Integer id) {
-        Id = id;
-    }
+//    public Integer getId() {
+//        return Id;
+//    }
+//
+//    public void setId(Integer id) {
+//        Id = id;
+//    }
 
     public String getTransactionId() {
         return TransactionId;

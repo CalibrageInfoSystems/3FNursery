@@ -269,30 +269,29 @@
                     android:layout_height="match_parent" />
 
                 <RelativeLayout
-                    android:id="@+id/cropMaintenanceRel"
+                    android:id="@+id/nurserylabourlogsrel"
                     android:layout_width="0dp"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-
                     <ImageView
-                        android:id="@+id/cm_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/logo"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_centerInParent="true"
                         android:src="@drawable/nurseryactivity"
                         android:visibility="visible" />
 
                     <TextView
-                        android:id="@+id/cm_title_txt"
+                        android:id="@+id/nurserylabourlogs"
                         style="@style/moduleHomeBtnStyle"
-                        android:layout_below="@+id/cm_logo"
-                        android:text="Nursery"
+                        android:layout_below="@+id/logo"
+                        android:text="Nursery Labour Log"
                         android:visibility="visible" />
 
 
                 </RelativeLayout>
+
 
             </LinearLayout>
 

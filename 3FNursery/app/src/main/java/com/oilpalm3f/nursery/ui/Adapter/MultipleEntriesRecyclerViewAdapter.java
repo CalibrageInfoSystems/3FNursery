@@ -122,6 +122,7 @@ public class MultipleEntriesRecyclerViewAdapter extends RecyclerView.Adapter<Mul
                 Intent at = new Intent(context, ActivityTask.class);
                 at.putExtra("consignmentcode", ConsignmentCode);
                 at.putExtra("ActivityName", ActivityName);
+                at.putExtra("multipleEntry", true);
                 at.putExtra("ActivityTypeId", ActivityTypeId);
                 at.putExtra("transactionId", multiplelist.get(position).getTransactionId());
                 at.putExtra("enableEditing", showbutton);

@@ -26,6 +26,7 @@ import com.oilpalm3f.nursery.dbmodels.Irrigationhistorymodel;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
+import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -219,11 +220,9 @@ public class DataSyncHelper {
             CommonConstants.SyncTableName = tableName;
             CloudDataHandler.placeDataInCloud(context, transObj, Config.live_url + Config.transactionSyncURL, new ApplicationThread.OnComplete<String>() {
                 @Override
-                public void execute(boolean success, String result, String msg) {
-                    if (success) {
+                public void execute(boolean success, String result, String msg) {if (success) {
                         dataAccessHandler.executeRawQuery(String.format(Queries.getInstance().updateServerUpdatedStatus(), tableName));
-                        Log.v(LOG_TAG, "@@@ Transactions sync success for " + tableName);
-                        transactionsCheck++;
+                        Log.v(LOG_TAG, "@@@ Transactions sync success for " + tableName);transactionsCheck++;
                         if (transactionsCheck == refreshtransactionsDataMap.size()) {
                             Log.v(LOG_TAG, "@@@ Done with transactions sync " + transactionsCheck);
                             onComplete.execute(true, null, "Sync is success");
@@ -330,6 +329,7 @@ public class DataSyncHelper {
         List<NurseryIrrigationLogXref> nurseryIrrigationLogXref = (List<NurseryIrrigationLogXref>) dataAccessHandler.getIrrigationDetailsXref(Queries.getInstance().getNurceryIrrigationXrefHistoryRefresh(), 1);
         List<Irrigationhistorymodel> nurseryIrrigationHistory = (List<Irrigationhistorymodel>) dataAccessHandler.getIrrigationHistoryDetails(Queries.getInstance().getNurceryIrrigation_HistoryRefresh(), 1);
         List<CullinglossFileRepository> cullinglossrepoList = (List<CullinglossFileRepository>) dataAccessHandler.getCullinglossRepoDetails(Queries.getInstance().getFileRepositoryRefresh());
+        List<NurseryLabourLog>nurseryLabourLogslist  = (List<NurseryLabourLog>) dataAccessHandler.getnurserylabourlogs(Queries.getInstance().getNurserylabourlogs());
 
 
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
@@ -342,6 +342,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationLogXREF, nurseryIrrigationLogXref);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationhistory, nurseryIrrigationHistory);
         allRefreshDataMap.put(DatabaseKeys.TABLE_FILEREPOSITORY, cullinglossrepoList);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryLabourLog, nurseryLabourLogslist);
 
 
 
@@ -477,8 +478,9 @@ public class DataSyncHelper {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
-//            } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
-            } else if (tableName.equalsIgnoreCase("SaplingActivityXref")) {
+            }
+            else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
+        //    } else if (tableName.equalsIgnoreCase("SaplingActivityXref")) {
                 SaplingActivityXrefModel saplingActivityXredata = null;
                 try {
                     saplingActivityXredata = (SaplingActivityXrefModel) dataList.get(innerCountCheck);
@@ -494,7 +496,7 @@ public class DataSyncHelper {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
-                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "TransactionId", saplingActivityXredata.getTransactionId()));
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "FieldId",  saplingActivityXredata.getFieldId()+"", "TransactionId", saplingActivityXredata.getTransactionId() + ""));
             } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityHistory)) {
                 SaplingActivityHistoryModel saplingActivityHistorydata = (SaplingActivityHistoryModel) dataList.get(innerCountCheck);
                 saplingActivityHistorydata.setServerUpdatedStatus(1);
@@ -529,7 +531,9 @@ public class DataSyncHelper {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
 //                Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
-                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "FieldId", saplingActivityXrefModel.getFieldId()+""));
+              //  recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "FieldId", saplingActivityXrefModel.getFieldId()+""));
+
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "FieldId",  saplingActivityXrefModel.getFieldId()+"", "TransactionId", saplingActivityXrefModel.getTransactionId() + ""));
             }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_NurseryIrrigationLog)) {
                 NurseryIrrigationLogForDb nurseryIrrigationLog = (NurseryIrrigationLogForDb) dataList.get(innerCountCheck);
                 nurseryIrrigationLog.setServerUpdatedStatus(1);

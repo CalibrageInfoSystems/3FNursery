@@ -3,6 +3,7 @@ package com.oilpalm3f.nursery.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +53,15 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
 
 
         //final ConsignmentData model = consignmentList.get(position);
+        Log.e("=============Satatus", consignmentList.get(position).getStatus()+"");
 
         holder.consignmentcode.setText(":  " + consignmentList.get(position).getConsignmentCode());
         holder.originname.setText(":  " + consignmentList.get(position).getOriginname());
         holder.vendorname.setText(":  " + consignmentList.get(position).getVendorname());
         holder.varietyname.setText(":  " + consignmentList.get(position).getVarietyname());
         holder.txtStatusTxt.setText(":  " + consignmentList.get(position).getStatus());
+
+
 
         holder.estimatedqty.setText(":  " + consignmentList.get(position).getEstimatedQuantity() + "");
 //        holder.ordereddate.setText(":  " +  CommonUtils.getProperComplaintsDate(consignmentList.get(position).getCreatedDate()));
@@ -94,6 +98,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
                     Intent intent = new Intent(context, Activities.class);
                     intent.putExtra("nurceryId", nurceryId);
                     intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
+                    intent.putExtra("EstimatedQty",consignmentList.get(position).getEstimatedQuantity()+"" );
                     context.startActivity(intent);
 
                 } else {

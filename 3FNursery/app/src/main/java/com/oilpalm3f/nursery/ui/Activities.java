@@ -35,7 +35,7 @@ public class Activities extends AppCompatActivity {
     private ActivitiesRecyclerviewAdapter activitiesRecyclerviewAdapter;
     private List<NurseryAcitivity> mActivitiesList = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
-    private String NURCERYCODE,CONSINEMENTCODE;
+    private String NURCERYCODE,CONSINEMENTCODE, EstimatedQty;
     private List<ConsignmentStatuData> consignmentstatusList = new ArrayList<>();
     LinearLayout consignmentdatalyt, recyclerviewlayout;
     private List<MutipleData> multiplelist = new ArrayList<>();
@@ -52,10 +52,11 @@ public class Activities extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Select Activity");
         setSupportActionBar(toolbar);
-
-            NURCERYCODE = getIntent().getStringExtra("nurceryId");
-            CONSINEMENTCODE = getIntent().getStringExtra("ConsignmentCode");
-
+if( getIntent()!= null) {
+    NURCERYCODE = getIntent().getStringExtra("nurceryId");
+    CONSINEMENTCODE = getIntent().getStringExtra("ConsignmentCode");
+    EstimatedQty = getIntent().getStringExtra("EstimatedQty");
+}
 
         init();
         setViews();

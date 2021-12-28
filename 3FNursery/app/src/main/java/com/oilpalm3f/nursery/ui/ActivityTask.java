@@ -106,6 +106,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int SCREEN_FROM = 0;
     int selectedPo;
     private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_REQUEST2 = 1889;
     ActivityTasks showHideActivity;
     CheckBox chkShowHide;
     String Comments,Userid,Date_history;
@@ -114,12 +115,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int ButtonId = 100000001;
     int ImagId = 100000003;
     int rcvId = 100000002;
+    int ImageId = 100000004;
     ArrayList<String> Check_listdata = new ArrayList<String>();
-    private String mCurrentPhotoPath;
+    private String mCurrentPhotoPath , mCurrentPhotoPathfile;
     String errorMsg = "";
     String Code, dependency_code;
-    ImageView image;
-    String Checked;
+    ImageView image,FileImage;
+    String Checked,Checked_new;
     int finalValue62, finalValue60;
     List<CullinglossFileRepository> imageRepo = new ArrayList<>();
     RVAdapter_ImageList adapter_imageList;
@@ -130,7 +132,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    boolean enableEditing;
+    boolean enableEditing,Ismultipleentry;
     private List<String> multiplelist = new ArrayList<>();
     private List historyModelArrayList = new ArrayList<>();
 
@@ -154,7 +156,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 consignmentCode = extras.getString("consignmentcode");
 //                dependency_code = extras.getString("DependentActivityCode");
                 Code = extras.getString("Code");
-
+Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -177,7 +179,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 CheckBox chk = findViewById(yesnoCHeckbox);
                 if (chk != null) {
                     chk.setChecked(true);
-                    checkBoxChecked(true); // default Check box check
+                    checkBoxChecked(false); // default Check box check
                 }
             }
         } catch (Exception exc) {
@@ -191,20 +193,21 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             String consignmentcode = extras.getString("consignmentcode");
             intentTransactionId = extras.getString("transactionId");
             enableEditing = extras.getBoolean("enableEditing");
+            Ismultipleentry = extras.getBoolean("multipleEntry");
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### transaction Id :" + intentTransactionId);
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
-
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### Ismultipleentry :" + Ismultipleentry);
             Comments = dataAccessHandler.getOnlyOneValueFromDb(Queries.gethistory(consignmentCode, activityTypeId,intentTransactionId));
             Userid = dataAccessHandler.getOnlyOneValueFromDb(Queries.gethistoryuser(consignmentCode, activityTypeId,intentTransactionId));
             Date_history = dataAccessHandler.getOnlyOneValueFromDb(Queries.getDate(consignmentCode, activityTypeId,intentTransactionId));
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis Status History :" + Comments + Userid + Date_history);
             bindExistingData(intentTransactionId);
 
-//            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
-//            if (imageRepo.size ()!= 0) {
-//
-//                addImageData(); //ToDO
-//            }
+            imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
+            if (imageRepo.size ()!= 0) {
+
+                addImageData(); //ToDO
+            }
 
             Button btn = (Button) findViewById(ButtonId);
             ImageView img = (ImageView) findViewById(ImagId);
@@ -222,18 +225,19 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
             String activityTypeId = extras.getString("ActivityTypeId");
             String consignmentcode = extras.getString("consignmentcode");
-            boolean Ismultipleentry = extras.getBoolean("Ismultipleentry");
+             Ismultipleentry = extras.getBoolean("Ismultipleentry");
+            enableEditing = extras.getBoolean("enableEditing");
             // TODO Just Add New Task
 
         } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
             String consignmentcode = extras.getString("consignmentcode");
             String activityTypeId = extras.getString("ActivityTypeId");
-
+             Ismultipleentry = extras.getBoolean("multipleEntry");
             enableEditing = extras.getBoolean("enableEditing");
 
-            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
-
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_SINGLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_SINGLE_ENTRY_EDITDATA  ###### Ismultipleentry :" + Ismultipleentry);
 
             Button btn = (Button) findViewById(ButtonId);
             ImageView img = (ImageView) findViewById(ImagId);
@@ -288,10 +292,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
 
             //TRAN+NurserySAPCode(3)+ConsignmentId(4)+TabCode-Seq No(ActivityCount)
-            if (imageRepo.size() != 0) {
-
-                addImageData(); //ToDO
-            }
+//            if (imageRepo.size() != 0) {
+//
+//                addImageData(); //ToDO
+//            }
         }
         if (Integer.parseInt(activityTypeId) == 1 || Integer.parseInt(activityTypeId) == 2 || Integer.parseInt(activityTypeId) == 4) {
             Button btn = (Button) findViewById(ButtonId);
@@ -309,9 +313,17 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < displayData.size(); i++) {
 
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis name Of DisplayData :" + displayData.get(i).getInputType());
+            if (displayData.get(i).getInputType().equalsIgnoreCase("File") || displayData.get(i).getInputType() == "File" || displayData.get(i).getInputType().contentEquals("File")) {
+                Log.e("==============>702", activityTasklist.get(i).getInputType());
+                String imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, ".jpg"));
+                Log.v(LOG_TAG, "imagepath ============" + imagepath);
+                if (imagepath != null) {
+                    ImageView File_Image = (ImageView) findViewById(ImageId);
+                    Bitmap bitmap = BitmapFactory.decodeFile(imagepath);
 
-            if (displayData.get(i).getInputType().equalsIgnoreCase("Check box")) {
-
+                    File_Image.setImageBitmap(bitmap);
+                }
+            } else if (displayData.get(i).getInputType().equalsIgnoreCase("Check box")) {
                 CheckBox chk = (CheckBox) findViewById(displayData.get(i).getFieldId());
                 if (displayData.get(i).getValue().equalsIgnoreCase("true")) {
                     chk.setChecked(true);
@@ -325,23 +337,25 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     Log.e("=================================>Checked", Checked + "");
                     if (Checked != null && Checked.equalsIgnoreCase("true")) {
                         chk.setEnabled(false);
-                        checkBoxChecked(true);
+                        checkBoxChecked(false);
                     } else {
                         chk.setEnabled(true);
-                        checkBoxChecked(true);
+                        checkBoxChecked(false);
                     }
 
 
-                    if(displayData.get(i).getValue().equalsIgnoreCase("true")){
+                    if (displayData.get(i).getValue().equalsIgnoreCase("true")) {
                         chk.setEnabled(true);
-                        checkBoxChecked(true);
+                        checkBoxChecked(false);
                     }
                 }
 
                 try {
 
                     int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRequiedFeildID(activityTypeId));
-
+                    Log.e("=================================>Checked", Feild_id + "");
+                    CheckBox chknew = (CheckBox) findViewById(Feild_id);
+                    chknew.setEnabled(true);
                     int int1388 = Feild_id;
                     onClick(findViewById(int1388));
                 } catch (Exception e) {
@@ -375,7 +389,22 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
                 Spinner sp = (Spinner) findViewById(displayData.get(i).getFieldId());
                 sp.setSelection(position);
-            } else {
+            }
+//         else if (displayData.get(i).getInputType().equalsIgnoreCase("File")  ||displayData.get(i).getInputType() == "File" || displayData.get(i).getInputType().contentEquals("File")){
+//                Log.e("==============>702", activityTasklist.get(i).getInputType());
+//             String  imagepath=  dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId,"NurseryImage"));
+//                Log.v(LOG_TAG, "imagepath ============" + imagepath);
+//                if(imagepath!=null){
+//                  ImageView  File_Image =  (ImageView) findViewById(ImageId);
+//                    Bitmap bitmap = BitmapFactory.decodeFile(imagepath);
+//
+//                    File_Image.setImageBitmap(bitmap);}
+//              //  ll.addView(addFileimagebutton(activityTasklist.get(i).getId()));
+//
+//
+//            }
+
+            else {
                 String value = displayData.get(i).getValue();
 
                 TextView textView = (TextView) findViewById(displayData.get(i).getFieldId());
@@ -384,10 +413,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
 
 
+//            }
+
             }
-
         }
-
 
     }
 
@@ -418,7 +447,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             LinkedHashMap mapXref = new LinkedHashMap();
             mapXref.put("Id", 0);
             mapXref.put("TransactionId", _transactionId);
-
+            Log.e("selectedPo================",selectedPo+"=========value" + dataValue.get(j).value);
 
 //            if (activityTypeId.equalsIgnoreCase("9") &&( dataValue.get(j).id == 31) ){
 //
@@ -450,8 +479,15 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
+            if ( dataValue.get(j).value == ".jpg"  ||  dataValue.get(j).value.equalsIgnoreCase(".jpg")){
+            if(mCurrentPhotoPath!= null){
 
-            mapXref.put("FilePath", "");
+            mapXref.put("FilePath",mCurrentPhotoPath);}}
+            else{
+                mapXref.put("FilePath","");
+            }
+
+
             mapXref.put("IsActive", 1);
             mapXref.put("CreatedByUserId", CommonConstants.USER_ID);
             mapXref.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -573,9 +609,36 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             public void execute(boolean success, String result, String msg) {
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
                                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Update Task Completed");
+                                if (success) {
+                                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
 
-                                finish();
-                                Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+
+                                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+                                            @Override
+                                            public void execute(boolean success, Object result, String msg) {
+                                                if (success) {
+
+                                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            finish();
+                                                        }
+                                                    });
+                                                } else {
+                                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                    finish();
+                                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         });
 
@@ -624,7 +687,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                                             }
                                         });
                                     }
-
+                                    finish();
+                                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -640,10 +704,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
     private void createDynamicUI(LinearLayout ll) {
 
-
         List<ActivityTasks> groupView = new ArrayList<>();
 
         for (int i = 0; i < activityTasklist.size(); i++) {
+            Log.e("==============>677", activityTasklist.get(i).getBucket());
+                   if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File")  ||activityTasklist.get(i).getInputType() == "File" || activityTasklist.get(i).getInputType().contentEquals("File")){
+                Log.e("==============>702", activityTasklist.get(i).getBucket());
+
+                ll.addView(addFileimagebutton(activityTasklist.get(i).getId()));
+
+
+            }
+
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
                 if (activityTasklist.get(i).getField().equalsIgnoreCase("Is the activity completed") ) {
                     isjobDoneId = activityTasklist.get(i).getId();
@@ -666,7 +738,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 ll.addView(addSpinner(activityTasklist.get(i).getId())); // add Spinner ui Dynamic
             } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
                 ll.addView(addSpinner(activityTasklist.get(i).getId())); // add Spinner ui Dynamic
-            } else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox with Camera / Attachment") || activityTasklist.get(i).getInputType().contains("TextBox with Camera / Attachment")) {
+            }
+
+            else if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox with Camera / Attachment") || activityTasklist.get(i).getInputType().contains("TextBox with Camera / Attachment")) {
                 String value = activityTasklist.get(i).getField();
                 Log.e("==============>", value);
                 ll.addView(addImageTexView(activityTasklist.get(i).getField(), activityTasklist.get(i).getId()));
@@ -686,6 +760,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             }
 
+
+
             // GetForeachGruoupItems
 
 
@@ -693,6 +769,70 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         ll.addView(addButton("Submit", ButtonId));
     }
+
+    private View addFileimagebutton(Integer id) {
+
+
+
+        FileImage = new ImageView(this);
+        FileImage.setId(ImageId);
+
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(200, 200);
+        FileImage.setLayoutParams(lp);
+        FileImage.setImageResource(R.drawable.addimage);
+//            Glide.with(this)
+//                    .load(R.drawable.addimage)
+//                    .override(200, 200)
+//                    .into(FileImage);
+
+
+        FileImage.setOnClickListener(v1 -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (!CommonUtils.isPermissionAllowed(this, Manifest.permission.CAMERA))) {
+                    android.util.Log.v(LOG_TAG, "Camera Permissions Not Granted");
+                    ActivityCompat.requestPermissions(
+                            this,
+                            PERMISSIONS_STORAGE,
+                            REQUEST_CAM_PERMISSIONS
+                    );
+                } else {
+                    dispatchTakeFilePictureIntent(CAMERA_REQUEST2, id);
+                }
+            });
+
+            return FileImage;
+
+        }
+
+    private void dispatchTakeFilePictureIntent(int cameraRequest, Integer id) {
+        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        switch (cameraRequest) {
+            case CAMERA_REQUEST2:
+                File f = null;
+                mCurrentPhotoPath = null;
+                try {
+                    f = setUpPhotoFile(id);
+                    mCurrentPhotoPath = f.getAbsolutePath();
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            BuildConfig.APPLICATION_ID + ".provider", f);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                } catch (IOException e) {
+                    android.util.Log.v(LOG_TAG, "IOException " + e.getMessage());
+                    e.printStackTrace();
+                    f = null;
+                    mCurrentPhotoPath = null;
+                }
+
+                break;
+
+            default:
+                break;
+        } // switch
+        android.util.Log.v(LOG_TAG, "dispatchTakePictureIntent2 ");
+        startActivityForResult(takePictureIntent, cameraRequest);
+    }
+
 
     private View addImageTexView(String field, Integer id) {
 
@@ -923,6 +1063,24 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "id===============" + activityTasklist.get(i).getId());
                 dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
 
+
+                if (enableEditing) {
+                    if (Ismultipleentry) {
+                        int Field_complete = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
+
+                            Checked_new = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().Checkboxdisablevalidation(Field_complete, consignmentCode, activityTypeId, intentTransactionId));
+                            CheckBox chk_new = (CheckBox) findViewById(Field_complete);
+                            Log.e("=================================>Checked_new", Checked_new + "");
+                            if (Checked_new != null && Checked_new.equalsIgnoreCase("true")) {
+                                if (chk_new.isChecked()) {
+                                    Toast.makeText(this, "Is the activity completed is done  For this  Activity", Toast.LENGTH_SHORT).show();
+                                    return false;
+                                }
+
+                        }
+                    }
+                }
+
             }
 //            if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox") || activityTasklist.get(i).getInputType().equalsIgnoreCase("Label") ||
@@ -958,11 +1116,30 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
 
             }
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File") ) {
 
+                          ImageView img = findViewById(id);
+                //dataValue.add(new KeyValues(activityTasklist.get(i).getId(),".jpg"));
+
+                if (mCurrentPhotoPath != null) {
+                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(),".jpg"));
+
+                }else{
+                    Toast.makeText(this, "Please  Add Image ", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
             if (activityTasklist.get(i).getActivityTypeId() == 12) {
 
-                int int52 = 52, int51 = 51, int53 = 53;
+                int int52 = 52, int51 = 51, int53 = 53, int54 = 54;;
+                EditText edt53 = findViewById(int53);
+                int lossValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int52)));
 
+                edt53.setText(lossValue + "");
+
+                EditText edt54 = findViewById(int54);
+                int Sowing_value = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int53)));
+                edt54.setText(Sowing_value + "");
                 int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int51))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int52)));
                 if (finalValue < 0) {
                     Toast.makeText(this, "Please  Enter Total No of Healthy Sprouts Less than or equal to  Total received Sprouts  ", Toast.LENGTH_SHORT).show();
@@ -1068,7 +1245,42 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getActivityTypeId() == 13) {
                 try {
                     int int60 = 60, int61 = 61, int62 = 62;
-                    ;
+                    EditText edt62 = findViewById(int62);
+                    try {
+                        int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int60))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
+
+                        edt62.setText(finalValue + "");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (enableEditing) {
+
+                        int value_61 = 0;
+                        try {
+                            value_61 = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowingEdit(consignmentCode, 61, intentTransactionId)));
+                            int finalValue = finalValue60 - value_61 - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
+                            edt62.setText(finalValue + "");
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+
+                        }
+
+
+                    } else {
+
+                        int value_61 = 0;
+                        try {
+                            value_61 = Integer.parseInt(dataAccessHandler.getSingleValue(Queries.sproutsforSowing(consignmentCode, 61)));
+                            int finalValue = finalValue60 - value_61 - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
+                            edt62.setText(finalValue + "");
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+
+                        }
+
+
+                    }
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int60))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int61)));
                     Log.d("TESTING  finalValue", +finalValue + "");
@@ -1115,9 +1327,48 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             }
 
+            if (activityTasklist.get(i).getActivityTypeId() == 20) {
+                try {
+                    int int502 = 502, int504 = 504, int505 = 505, int503 = 503;
+                    EditText edt505 = findViewById(int505);
+                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int502))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int503)));
+                    //    edt55.setText(finalValue + "");
+                    EditText edt504 = findViewById(int504);
+                    edt504.setText(finalValue + "");
+
+
+                    try {
+
+                        DecimalFormat df = new DecimalFormat("####0.00");
+                        // int percentage = (CommonUtils.getIntFromEditText(((EditText) findViewById(int503))) * 100 / CommonUtils.getIntFromEditText(((EditText) findViewById(int502))));
+                        //   double res = (amount / 100.0f) * 10;
+                        double  percentage =((double)CommonUtils.getIntFromEditText(((EditText) findViewById(int503))) * 100 / (double)CommonUtils.getIntFromEditText(((EditText) findViewById(int502))));
+
+                        edt505.setText(df.format(percentage)+ "");
+                        Log.e("Germnationpercentage=============", percentage + "");
+                    } catch (NumberFormatException e) {
+                        Log.e("Germnationpercentage=============", e.getMessage() + "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             if (activityTasklist.get(i).getActivityTypeId() == 32) {
                 try {
-                    int int506 = 506, int507 = 507, int508 = 508;
+                    int int506 = 506, int507 = 507, int508 = 508, int509 = 509;
+
+
+                    EditText edt508 = findViewById(int508);
+                    int germination_loss = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int507)));
+
+                    edt508.setText(germination_loss + "");
+
+
+
+                    EditText edt509 = findViewById(int509);
+                    int new_closingbal = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int508)));
+
+                    edt509.setText(new_closingbal + "");
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int506))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int507)));
                     Log.d("TESTING  finalValue", +finalValue + "");
@@ -1139,15 +1390,19 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
             if (activityTasklist.get(i).getActivityTypeId() == 42) {
                 try {
-                    int int510 = 510, int511 = 511, int512 = 512;
-
+                    int int510 = 510, int511 = 511, int512 = 512,int513 = 513;
+                    EditText edt512 = findViewById(int512);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int510))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int511)));
+                    edt512.setText(finalValue + "");
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please  Enter No of healthy Saplings Less than or equal to Current Closing Stock  ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt513 = findViewById(int513);
+
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int510))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int512)));
+                    edt513.setText(finalValue2 + "");
                     if (finalValue2 < 0) {
                         Toast.makeText(this, "Please  Enter germination Loss saplings Less than or equal to Current Closing Stock  ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1161,15 +1416,21 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             if (activityTasklist.get(i).getActivityTypeId() == 63) {
                 try {
-                    int int514 = 514, int515 = 515, int516 = 516;
+                    int int514 = 514, int515 = 515, int516 = 516,int517 = 517;
 
+                    EditText edt516 = findViewById(int516);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int515)));
                     Log.d("TESTING  finalValue", +finalValue + "");
+                    edt516.setText(finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt517 = findViewById(int517);
+
+
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int514))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int516)));
+                    edt517.setText(finalValue2 + "");
                     if (finalValue2 < 0) {
                         Toast.makeText(this, "Please Enter Mortality Loss-1 Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1184,15 +1445,22 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             if (activityTasklist.get(i).getActivityTypeId() == 94) {
                 try {
-                    int int518 = 518, int519 = 519, int520 = 520;
+                    int int518 = 518, int519 = 519, int520 = 520, int521 = 521;
 
+                    EditText edt520 = findViewById(int520);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int518))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int519)));
                     Log.d("TESTING  finalValue", +finalValue + "");
+                    edt520.setText(finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt521 = findViewById(int521);
+
+
                     int finalValue2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int518))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int520)));
+                    edt521.setText(finalValue2 + "");
                     if (finalValue2 < 0) {
                         Toast.makeText(this, "Please Enter Mortality Loss-2 Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1206,9 +1474,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
             if (activityTasklist.get(i).getActivityTypeId() == 126) {
                 try {
-                    int int522 = 522, int523 = 523;
+                    int int522 = 522, int523 = 523,int524 = 524;
+                    EditText edt524 = findViewById(int524);
 
-                    int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int522))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
+                    int finalValue =  CommonUtils.getIntFromEditText(((EditText) findViewById(int522))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int523)));
+                    Log.d("Transplationloss============", +finalValue + "");
+                    edt524.setText(finalValue + "");
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter Transplantation Loss Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1223,10 +1494,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             if (activityTasklist.get(i).getActivityTypeId() == 157) {
                 try {
-                    int int525 = 525, int526 = 526, int527 = 527;
+                    int int525 = 525, int526 = 526, int527 = 527,int528 = 528,int535 = 535;
+                    EditText edt528 = findViewById(int528);
 
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int526)));
                     Log.d("TESTING  finalValue", +finalValue + "");
+                    edt528.setText(finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or e qual to Current Closing Stock", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1238,7 +1511,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
-
+                    EditText edt535 = findViewById(int535);
+                    int culling_1 = CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int528)));
+                    Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " + culling_1);
+                    edt535.setText(culling_1 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1252,9 +1528,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 // Culling Loss 2
             if (activityTasklist.get(i).getActivityTypeId() == 183) {
                 try {
-                    int int3086 = 3086, int3087 = 3087, int3088 = 3088;
-
+                    int int3086 = 3086, int3087 = 3087, int3088 = 3088,int3089 = 3089,int3096 =3096;
+                    EditText edt3089 = findViewById(int3089);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3086))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3087)));
+                    edt3089.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1267,6 +1545,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3096 = findViewById(int3096);
+                    int Culling2 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3086))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3089)));
+                    Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " + Culling2);
+                    edt3096.setText(Culling2 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1281,9 +1564,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
             if (activityTasklist.get(i).getActivityTypeId() == 208) {
                 try {
-                    int int3097 = 3097, int3099 = 3099, int3098 = 3098;
-
+                    int int3097 = 3097, int3099 = 3099, int3098 = 3098,int3100 = 3100,int3107 = 3107;
+                    EditText edt3100 = findViewById(int3100);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3097))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3098)));
+                    edt3100.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1296,6 +1581,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt3107 = findViewById(int3107);
+                    int culling_3 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3097))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3100)));
+                    Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " + culling_3);
+                    edt3107.setText(culling_3 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1309,9 +1598,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             //SN-Culling loss-4
             if (activityTasklist.get(i).getActivityTypeId() == 222) {
                 try {
-                    int int3108 = 3108, int3109 = 3109, int3110 = 3110;
-
+                    int int3108 = 3108, int3109 = 3109, int3110 = 3110,int3111 = 3111,int3118 = 3118;
+                    EditText edt3111 = findViewById(int3111);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3109)));
+
+                    edt3111.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1324,6 +1616,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3118 = findViewById(int3118);
+                    int culling_4 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3111)));
+                    Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis culling_4 : " + culling_4);
+                    edt3118.setText(culling_4 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1337,9 +1634,13 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             //SN-Culling loss-5
             if (activityTasklist.get(i).getActivityTypeId() == 235) {
                 try {
-                    int int3119 = 3119, int3120 = 3120, int3121 = 3121;
+                    int int3119 = 3119, int3120 = 3120, int3121 = 3121,  int3122 = 3122,int3130 = 3130;
 
+                    EditText edt3122 = findViewById(int3122);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3119))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3120)));
+
+                    edt3122.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1352,6 +1653,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3130 = findViewById(int3130);
+                    int Cullingloss5 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3119))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3122)));
+                    Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " + Cullingloss5);
+                    edt3130.setText(Cullingloss5 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1366,9 +1672,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             //SN-Culling loss-6
             if (activityTasklist.get(i).getActivityTypeId() == 249) {
                 try {
-                    int int3131 = 3131, int3132 = 3132, int3133 = 3133;
-
+                    int int3131 = 3131, int3132 = 3132, int3133 = 3133,int3134 = 3134,int3141 = 3141;
+                    EditText edt3134 = findViewById(int3134);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3131))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3132)));
+
+                    edt3134.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1381,6 +1690,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3141 = findViewById(int3141);
+                    int  culling_6 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3131))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3134)));
+
+                    edt3141.setText(culling_6 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1395,9 +1709,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             //SN-Culling loss-7
             if (activityTasklist.get(i).getActivityTypeId() == 262) {
                 try {
-                    int int3142 = 3142, int3143 = 3143, int3144 = 3144;
-
+                    int int3142 = 3142, int3143 = 3143, int3144 = 3144,int3145 = 3145,int3152 = 3152;
+                    EditText edt3145 = findViewById(int3145);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3142))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3143)));
+
+                    edt3145.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1410,6 +1727,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt3152 = findViewById(int3152);
+                    int culling_7 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3142))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3145)));
+
+                    edt3152.setText(culling_7 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1425,9 +1746,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getActivityTypeId() == 277) {
                 Log.e("image size=>", imageRepo.size() + "");
                 try {
-                    int int3153 = 3153, int3154 = 3154, int3155 = 3155;
-
+                    int int3153 = 3153, int3154 = 3154, int3155 = 3155,int3156 = 3156,    int3163 = 3163;
+                    EditText edt3156 = findViewById(int3156);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3153))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3154)));
+
+                    edt3156.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1440,6 +1764,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3163 = findViewById(int3163);
+                    int culling_8 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3153))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3156)));
+
+                    edt3163.setText(culling_8 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1454,9 +1783,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getActivityTypeId() == 290) {
                 Log.e("image size=>", imageRepo.size() + "");
                 try {
-                    int int3164 = 3164, int3165 = 3165, int3166 = 3166;
+                    int int3164 = 3164, int3165 = 3165, int3166 = 3166,   int3167 = 3167,int3174 = 3174;
 
+                        EditText edt3167 = findViewById(int3167);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3164))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3165)));
+
+                    edt3167.setText(finalValue + "");
+
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1469,10 +1803,16 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt3174 = findViewById(int3174);
+                    int culling_9 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3164))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3167)));
+
+                    edt3174.setText(culling_9 + "");
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
                 if (imageRepo.size() == 0) {
                     Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                     return false;
@@ -1483,9 +1823,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                 Log.e("image size=>", imageRepo.size() + "");
                 try {
-                    int int3175 = 3175, int3176 = 3176, int3177 = 3177;
-
+                    int int3175 = 3175, int3176 = 3176, int3177 = 3177,int3178 = 3178,int3185 = 3185;
+                    EditText edt3178 = findViewById(int3178);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3175))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3176)));
+
+                    edt3178.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1498,6 +1841,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt3185 = findViewById(int3185);
+                    int culling_10 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3175))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3178)));
+
+                    edt3185.setText(culling_10 + "");
                     if (imageRepo.size() == 0) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1511,9 +1858,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getActivityTypeId() == 317) {
                 Log.e("image size=>", imageRepo.size() + "");
                 try {
-                    int int3186 = 3186, int3187 = 3187, int3188 = 3188;
-
+                    int int3186 = 3186, int3187 = 3187, int3188 = 3188,int3189 = 3189,int3196 = 3196;
+                    EditText edt3189 = findViewById(int3189);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3187)));
+
+                    edt3189.setText(finalValue + "");
+                   // int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3187)));
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1526,6 +1876,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3196 = findViewById(int3196);
+                    int culling_11 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3186))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3189)));
+
+                    edt3196.setText(culling_11 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1539,9 +1894,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (activityTasklist.get(i).getActivityTypeId() == 331) {
                 Log.e("image size=>", imageRepo.size() + "");
                 try {
-                    int int3197 = 3197, int3198 = 3198, int3199 = 3199;
-
+                    int int3197 = 3197, int3198 = 3198, int3199 = 3199,int3200 = 3200,int3207 = 3207;
+                    EditText edt3200 = findViewById(int3200);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3197))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3198)));
+
+                    edt3200.setText(finalValue + "");
+
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1554,6 +1912,11 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+
+                    EditText edt3207 = findViewById(int3207);
+                    int culling_12 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3197))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3200)));
+
+                    edt3207.setText(culling_12 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1568,9 +1931,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             //SN-Culling loss-13
             if (activityTasklist.get(i).getActivityTypeId() == 344) {
                 try {
-                    int int3208 = 3208, int3209 = 3209, int3210 = 3210;
+                    int int3208 = 3208, int3209 = 3209, int3210 = 3210,int3211 = 3211,int3218 = 3218;
 
+                    EditText edt3211 = findViewById(int3211);
                     int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int3208))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3209)));
+
+                    edt3211.setText(finalValue + "");
                     Log.d("TESTING  finalValue", +finalValue + "");
                     if (finalValue < 0) {
                         Toast.makeText(this, "Please Enter No of healthy Saplings Less than or equal to Current Closing Stock", Toast.LENGTH_SHORT).show();
@@ -1583,6 +1949,10 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Please Enter Weaklings Less than or equal to Current Closing Stock ", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    EditText edt3218 = findViewById(int3218);
+                    int culling_13 = CommonUtils.getIntFromEditText(((EditText) findViewById(int3208))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3211)));
+
+                    edt3218.setText(culling_13 + "");
                     if (imageRepo.size() == 0 || imageRepo == null) {
                         Toast.makeText(this, "Please add At Least one Image( Attachment) ", Toast.LENGTH_SHORT).show();
                         return false;
@@ -1757,9 +2127,9 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                 } else if (Integer.parseInt(activityTypeId) == 91) {
                     if (i == 2) {
-                        yesnoCHeckbox = 210;
 
-                        for (int f = 200; f < 211; f++) {
+
+                        for (int f = 200; f < 212; f++) {
 
                             try {
                                 findViewById(f).setVisibility(View.VISIBLE);
@@ -1775,7 +2145,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                                 e.printStackTrace();
                             }
                         }
-                        for (int f = 211; f < 225; f++) {
+                        for (int f = 210; f < 224; f++) {
 
                             try {
                                 findViewById(f).setVisibility(View.GONE);
@@ -1783,14 +2153,19 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
+                            try {
+                                EditText txt = findViewById(f);
+                                txt.setText("");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     } else if (i == 1) {
-                        yesnoCHeckbox = 224;
 
 
-                        for (int f = 200; f < 211; f++) {
+
+                        for (int f = 200; f < 212; f++) {
 
                             try {
                                 findViewById(f).setVisibility(View.GONE);
@@ -1805,8 +2180,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            try {
+                                EditText txt = findViewById(f);
+                                txt.setText("");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                        for (int f = 211; f < 225; f++) {
+                        for (int f = 211; f < 224; f++) {
 
                             try {
                                 findViewById(f).setVisibility(View.VISIBLE);
@@ -2275,7 +2656,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             String consignmentcode = extras.getString("consignmentcode");
             String ActivityTypeId = extras.getString("ActivityTypeId");
             enableEditing = extras.getBoolean("enableEditing");
-
+            Ismultipleentry = extras.getBoolean("multipleEntry");
             int statusTypeId;
             if (isjobDoneId != 0) {
                 CheckBox chk = findViewById(isjobDoneId);
@@ -2289,6 +2670,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             }
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM CHECKBOX  STATUS TYPEID : " + statusTypeId);
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis =>enableEditing: " + enableEditing);
+            Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_MUTIPLE_ENTRY_EDITDATA  ###### Ismultipleentry :" + Ismultipleentry);
 
 
             updateSingleEntryData(consignmentcode, ActivityTypeId, intentTransactionId, statusTypeId, enableEditing);
@@ -2297,7 +2679,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_MULTIPLE_ADD_NEW_TASK");
             String activityTypeId = extras.getString("ActivityTypeId");
             String consignmentcode = extras.getString("consignmentcode");
-            boolean Ismultipleentry = extras.getBoolean("Ismultipleentry");
+             Ismultipleentry = extras.getBoolean("multipleEntry");
             int statusTypeId;
             if (isjobDoneId != 0) {
                 CheckBox chk = findViewById(isjobDoneId);
@@ -2308,15 +2690,14 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 }
             } else {
                 statusTypeId = 346;
-            }
-
+            }Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM multipleentry 2542 : " + Ismultipleentry);
             Nurserycode = dataAccessHandler.getSingleValue(Queries.getnurserycode(consignmentcode));
             Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(Nurserycode));
             Consignment_ID = dataAccessHandler.getSingleIntValue(Queries.getID(consignmentcode));
             Activity_ID = dataAccessHandler.getGenerateActivityid(activityTypeId);
             Log.e("Sapcode===================2195 ", Sapcode+"========>"+Nurserycode);
             transactionIdNew = "TRAN" + Sapcode + Consignment_ID + CommonConstants.TAB_ID  + Activity_ID + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber(activityTypeId,consignmentcode)) + 1);
-
+            imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 1872" + transactionIdNew);
 
             String[] strArray = null;
@@ -2326,15 +2707,31 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             for (int i = 0; i < strArray.length; i++) {
                 System.out.println(strArray[i]);
             }
+            if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+                bindExistingData(transactionId);
+                //   updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, enableEditing);
+                imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
+            } else {
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis  ==> New Task Creation Started ");
+                transactionIdNew = "TRAN" + Sapcode + Consignment_ID + CommonConstants.TAB_ID  + Activity_ID +"-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getSaplingActivityMaxNumber(activityTypeId,consignmentcode)) + 1);
+                Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID : 209" + transactionIdNew);
+                imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
 
+            }
 
-            addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, true);
+            //TRAN+NurserySAPCode(3)+ConsignmentId(4)+TabCode-Seq No(ActivityCount)
+            if (imageRepo.size() != 0) {
+
+                addImageData(); //ToDO
+            }
+
+            addNewSingleEntryActivity(consignmentcode, activityTypeId, statusTypeId, transactionIdNew, Ismultipleentry);
 
         } else if (SCREEN_FROM == CommonConstants.FROM_SINGLE_ENTRY_EDITDATA) {
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
             String consignmentcode = extras.getString("consignmentcode");
             String activityTypeId = extras.getString("ActivityTypeId");
-            String multipleentry = extras.getString("multipleEntry");
+            Ismultipleentry = extras.getBoolean("multipleEntry");
 
             int statusTypeId;
             if (isjobDoneId != 0) {
@@ -2351,6 +2748,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM enableEditing  : " + enableEditing);
+            Log.d(ActivityTask.class.getSimpleName(), "==> Analysis => FROM multipleentry 2600 : " + Ismultipleentry);
             transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentcode, activityTypeId));
           //  updateSingleEntryData(consignmentcode, activityTypeId, transactionId, statusTypeId, enableEditing);
 
@@ -2435,6 +2833,34 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 dataAccessHandler.updateData("SaplingActivityXref", listKeyUpdate, true, " where TransactionId = " + "'" + _transactionId + "'" + " AND FieldId = " + dataValue.get(j).getId(), new ApplicationThread.OnComplete<String>() {
                     @Override
                     public void execute(boolean success, String result, String msg) {
+                        if (success) {
+//                            if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
+//
+//
+//                                DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
+//                                    @Override
+//                                    public void execute(boolean success, Object result, String msg) {
+//                                        if (success) {
+//
+//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    finish();
+//                                                }
+//                                            });
+//                                        } else {
+//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                });
+//                            }
+
+                        }
                         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   => Update of SaplingXref Done");
                         // Update Sapling Activity status
 
@@ -2482,6 +2908,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     dataAccessHandler.updateData("SaplingActivityStatus", statusList, true, " where ConsignmentCode = " + "'" + _consignmentcode + "' AND ActivityId ='" + _activityTypeId + "'", new ApplicationThread.OnComplete<String>() {
                         @Override
                         public void execute(boolean success, String result, String msg) {
+
                             Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityStatus INSERT COMPLETED");
                             Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Update Task Completed");
                             finish();
@@ -2515,7 +2942,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                                 DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
                                     @Override
                                     public void execute(boolean success, Object result, String msg) {
-                                        if (success) {
+                                        if (success)     {
                                             ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -2542,6 +2969,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                                     }
                                 });
                             }
+                            finish();
+                            Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                             Log.d(ActivityTask.class.getSimpleName(), "==> SaplingActivityHistoryf INSERT COMPLETED");
                         }
 
@@ -2580,8 +3009,18 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                     chk_is.setEnabled(true);
                     if(enableEditing){
-
-            chk_is.setChecked(false);}
+                     //   chk_is.setChecked(false);
+                        String reject_check = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().rejectcheck(Feild_id, intentTransactionId));
+                       Log.e("=================================>reject_check", reject_check + "");
+                        if (reject_check != null && reject_check.equalsIgnoreCase("true")) {
+                            chk_is.setEnabled(true);
+                        } else if (reject_check == null){
+                        chk_is.setChecked(false);}
+                        else{
+                            chk_is.setChecked(false);
+                      chk_is.setEnabled(false);
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -2612,6 +3051,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
                         try {
                             EditText txt = findViewById(widget.getId());
+
                             txt.setText("");
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -2652,12 +3092,16 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
             if (optional != null && !StringUtils.isEmpty(optional)) {
                 findViewById(widget.getId()).setVisibility(View.GONE);
                 findViewById(widget.getId() + 9000).setVisibility(View.GONE);
-
+//
                 try {
                     EditText txt = findViewById(widget.getId());
-                    if(!cleardata) {
+                    if(cleardata){
                         txt.setText("");
-                      }
+                    }
+                 // txt.setText("");
+
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2830,11 +3274,12 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
 
                 try {
+                    DecimalFormat df = new DecimalFormat("####0.00");
+                   // int percentage = (CommonUtils.getIntFromEditText(((EditText) findViewById(int503))) * 100 / CommonUtils.getIntFromEditText(((EditText) findViewById(int502))));
+                 //   double res = (amount / 100.0f) * 10;
+                    double  percentage =((double)CommonUtils.getIntFromEditText(((EditText) findViewById(int503))) * 100 / (double)CommonUtils.getIntFromEditText(((EditText) findViewById(int502))));
 
-                    int percentage = (CommonUtils.getIntFromEditText(((EditText) findViewById(int503))) * 100 / CommonUtils.getIntFromEditText(((EditText) findViewById(int502))));
-
-
-                    edt505.setText(percentage + "");
+                    edt505.setText(df.format(percentage )+ "");
                     Log.e("Germnationpercentage=============", percentage + "");
                 } catch (NumberFormatException e) {
                     Log.e("Germnationpercentage=============", e.getMessage() + "");
@@ -3020,8 +3465,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                 int finalValue = CommonUtils.getIntFromEditText(((EditText) findViewById(int525))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int528)));
                 Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " + finalValue);
                 edt535.setText(finalValue + "");
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception e) { e.printStackTrace();
             }
 
         }
@@ -3425,6 +3869,23 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 //                }
                 break;
             } // ACTION_TAKE_PHOTO_B
+            case CAMERA_REQUEST2: {
+                if (resultCode == RESULT_OK) {
+
+                    if (!isFinishing()) {
+                        try {
+                            handleBigCameraPhoto2();
+                        } catch (WindowManager.BadTokenException e) {
+                            Log.e("WindowManagerBad ", e.toString());
+                        }
+                    }
+
+                }
+//                if (resultCode == RESULT_OK && typeSelected == Manual_Weigh) {
+//                    handleBigCameraPhoto1();
+//                }
+                break;
+            } // ACTION_TAKE_PHOTO_B
 
         } // switch
     }
@@ -3437,8 +3898,49 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
 
         }
 
-    }
+    }    private void handleBigCameraPhoto2() {
 
+        if (mCurrentPhotoPath != null) {
+            setPic2();
+            galleryAddPic();
+
+        }
+
+    }
+    private void setPic2() {
+        Log.e("================>622",mCurrentPhotoPath);
+
+        int targetW = FileImage.getWidth();
+        int targetH = FileImage.getHeight();
+
+        /* Get the size of the image */
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        /* Figure out which way needs to be reduced less */
+        int scaleFactor = 1;
+        if ((targetW > 0) || (targetH > 0)) {
+            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+        }
+
+        /* Set bitmap options to scale the image decode target */
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        /* Decode the JPEG file into a Bitmap */
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+        bitmap = ImageUtility.rotatePicture(90, bitmap);
+
+        currentBitmap = bitmap;
+
+
+        FileImage.setImageBitmap(bitmap);
+    }
     private void setPic() {
         Log.e("================>622",mCurrentPhotoPath);
         /* There isn't enough memory to open up more than a couple camera photos */
@@ -3472,6 +3974,8 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
         bitmap = ImageUtility.rotatePicture(90, bitmap);
 
         currentBitmap = bitmap;
+
+
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2918:" + transactionId);
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2919:" + transactionIdNew);
 
@@ -3502,39 +4006,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
                     Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> CullingLossFileRepository INSERT COMPLETED");
                     Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> Add new Task Completed");
                     addImageData();
-                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
 
-
-                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
-                            @Override
-                            public void execute(boolean success, Object result, String msg) {
-                                if (success) {
-                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-                                            UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
-                                            finish();
-                                        }
-                                    });
-                                } else {
-                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            Toasty.error(ActivityTask.this, "Data sending failed", 10).show();
-//                                        Toast.makeText(RefreshSyncActivity.this, "Data sending failed", Toast.LENGTH_SHORT).show();
-                                            ProgressBar.hideProgressBar();
-                                            Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-                                            finish();
-
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
                //     Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -74,7 +74,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         dataAccessHandler = new DataAccessHandler(context);
-
+        android.util.Log.e("===============", "======currentData======77==" +mActivitiesList.get(position).getActivityName() +"==="+ mActivitiesList.get(position).getTargetDate());
         holder.activityName.setText(mActivitiesList.get(position).getActivityName());
         String status = "";
         if (mActivitiesList.get(position).getActivityStatus() == null || mActivitiesList.get(position).getActivityStatus().isEmpty()) {
@@ -161,6 +161,10 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                 e.printStackTrace();
             }
         }
+        else{
+            holder.expecteddate.setText("TBD");
+
+        }
 
 
 
@@ -182,6 +186,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
 
                 saplingActivitiesList = dataAccessHandler.getSaplingActivityData(Queries.getInstance().getSaplingActivityCounttQuery(ConsignmentCode, mActivitiesList.get(position).getActivityId() + ""));
                 Log.d("saplingActivitiesListSize", saplingActivitiesList.size() + "");
+                Log.e("=============>",mActivitiesList.get(position).getIsMultipleEntries());
 
                 if (validations(position)) {
                     if (mActivitiesList.get(position).getIsMultipleEntries().equalsIgnoreCase("true") && saplingActivitiesList.size() != 0) {
@@ -220,7 +225,7 @@ public class ActivitiesRecyclerviewAdapter extends RecyclerView.Adapter<Activiti
                         } else {
 //                      NEW ACTIVITY
                             Intent at = new Intent(context, ActivityTask.class);
-                            at.putExtra("multipleEntry", mActivitiesList.get(position).getIsMultipleEntries());
+                            at.putExtra("multipleEntry", false);
                             at.putExtra("consignmentcode", ConsignmentCode);
                             at.putExtra("ActivityTypeId", mActivitiesList.get(position).getActivityTypeId() + "");
                             at.putExtra("ActivityName", mActivitiesList.get(position).getActivityName() + "");

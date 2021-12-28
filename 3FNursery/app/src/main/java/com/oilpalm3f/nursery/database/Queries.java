@@ -100,8 +100,8 @@ public class Queries {
                 "  where  fu.PotentialScore>=7 order by lastVisitDate limit " + limit + " offset " + offset + ";";
     }
 
-    public static String getAlertsCount(int type) {
-        return "select count(*) from Alerts where AlertType = " + type + "";
+    public static String localimagepath(String transactionid,String Activitytypeid) {
+        return "Select FilePath from  SaplingActivityXref where TransactionId  ='" + transactionid + "' and Value = '" + Activitytypeid + "'";
     }
     public static String Checkboxdisable(int id , String Consignmentcode,String Activitytypeid) {
 
@@ -109,6 +109,19 @@ public class Queries {
                 "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
                 "Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
                 "where ConsignmentCode  ='" + Consignmentcode + "' and sx.FieldId = '" + id + "'  and  sx.Value ='true' and ActivityId = '" + Activitytypeid + "'";
+
+//        return "Select sx.Value from SaplingActivity s\n" +
+//                "             Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+//                "    \t\t where sx.FieldId = '" + id + "' AND ConsignmentCode = '" + Consignmentcode + "'";
+    }
+
+
+    public static String Checkboxdisablevalidation(int id , String Consignmentcode,String Activitytypeid, String Transactionid) {
+
+        return "Select  sx.Value  from  SaplingActivity S \n" +
+                "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
+                "Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+                "where ConsignmentCode  ='" + Consignmentcode + "' and sx.FieldId = '" + id + "'  and  sx.Value ='true' and ActivityId = '" + Activitytypeid + "'AND sx.TransactionId != '" + Transactionid + "'";
 
 //        return "Select sx.Value from SaplingActivity s\n" +
 //                "             Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
@@ -122,7 +135,14 @@ public class Queries {
 
 //
     }
+    public static String rejectcheck(int id , String transactionid) {
 
+        return "Select  Value  from  SaplingActivityXref  where TransactionId = '" + transactionid + "' and FieldId = '" + id + "'";
+
+//        return "Select sx.Value from SaplingActivity s\n" +
+//                "             Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
+//                "    \t\t where sx.FieldId = '" + id + "' AND ConsignmentCode = '" + Consignmentcode + "'";
+    }
     public static String  getFeildID(String Activitytypeid) {
 
         return "Select id from NurseryActivityField where Field like '%completed%' and ActivityTypeId = '" + Activitytypeid + "'";
@@ -130,11 +150,20 @@ public class Queries {
 //
     }
     public static String  getRequiedFeildID(String Activitytypeid) {
+        return "Select id from NurseryActivityField where Field like '% Requ%' and ActivityTypeId = '" + Activitytypeid + "'";
 
-        return "Select id from NurseryActivityField where Field like '% Required?%' and ActivityTypeId = '" + Activitytypeid + "'";
+      //  return "Select id from NurseryActivityField where Field like '% Required?%' and ActivityTypeId = '" + Activitytypeid + "'";  // rename Required  wrong (Requried)
 
 //
     }
+
+//    public static String  getFeildIDComp(String Activitytypeid) {
+//        return "Select id from NurseryActivityField where Field like '% Requ%' and ActivityTypeId = '" + Activitytypeid + "'";
+//
+//         return "Select Id from NurseryActivityField WHERE ActivityTypeId= '" + Activitytypeid + "' and  Field = 'Is the activity completed' ";  // rename Required  wrong (Requried)
+//
+////
+//    }
     public static String getAlertsMissingTreesInfoQuery(int limit, int offset) {
         return "  select p.Code,p.FarmerCode,f.FirstName,f.MiddleName,f.LastName,\n" +
                 " m.Name as MandalName,\n" +
@@ -825,7 +854,7 @@ public class Queries {
                 "       Buffer1Date , \n" +
                 "      Buffer2Date,\n" +
                 "        CASE WHEN ActivityDoneDate IS NULL THEN 0 --No Color    \n" +
-                "            WHEN DATE(Buffer1Date)>DATE(ActivityDoneDate) THEN 1 --Green Color    \n" +
+                "            WHEN DATE(Buffer1Date)>=DATE(ActivityDoneDate) THEN 1 --Green Color    \n" +
                 "           WHEN DATE(ActivityDoneDate) BETWEEN DATE(Buffer1Date) AND DATE(Buffer2Date) THEN 2--Yellow Color    \n" +
                 "            ELSE 3 END  as ColorIndicator--Red Color    \n" +
                 "      FROM (    \n" +
@@ -972,7 +1001,9 @@ public class Queries {
     public String getFileRepositoryRefresh() {
         return "select * from CullinglossFileRepository  where ServerUpdatedStatus = 0";
     }
-
+    public String getNurserylabourlogs() {
+        return "select * from NurseryLabourLog  where ServerUpdatedStatus = 0";
+    }
     public String getVistLogs() {
         return "Select * from VisitLog where ServerUpdatedStatus = 0";
     }
@@ -2027,6 +2058,12 @@ public class Queries {
                 "inner join TypeCdDmt t  on  t.TypeCdId = s.StatusTypeId \n" +
                 "where ConsignmentCode  ='" + code + "' and ActivityId = '" + activitytypeId +"' and TransactionId = '" + TransactionId + "'";
     }
+
+    public String  Nurserylabourlogcount(String date ,String nursery_code) {
+
+        return "Select Count(*) from NurseryLabourLog where Date(LogDate)= '" + date + "' and NurseryCode = '" + nursery_code + "'";
+    }
+
 
 }
 

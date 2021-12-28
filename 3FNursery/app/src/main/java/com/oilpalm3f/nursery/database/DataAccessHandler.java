@@ -71,6 +71,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
+import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
 import com.oilpalm3f.nursery.dbmodels.NurserySaplingDetails;
 import com.oilpalm3f.nursery.dbmodels.Nutrient;
 import com.oilpalm3f.nursery.dbmodels.Ownershipfilerepository;
@@ -452,6 +453,7 @@ public class DataAccessHandler<T> {
 
     public boolean checkValueExistedInDatabase(final String query) {
         Cursor mOprQuery = mDatabase.rawQuery(query, null);
+        Log.e("============>", "checkValueExistedInDatabase" + query+"");
         try {
             if (mOprQuery != null && mOprQuery.moveToFirst()) {
                 return (mOprQuery.getInt(0) > 0);
@@ -865,7 +867,7 @@ f
                 List<Map.Entry> entryList = new ArrayList<Map.Entry>((list.get(i)).entrySet());
                 String query = "update " + tableName + " set ";
                 String namestring = "";
-
+                Log.v(LOG_TAG, "@@@ query for namestring 1" + query);
                 System.out.println("\n==> Size of Entry list: " + entryList.size());
                 StringBuffer columns = new StringBuffer();
                 for (Map.Entry temp : entryList) {
@@ -874,7 +876,7 @@ f
                     columns.append(temp.getValue());
                     columns.append("',");
                 }
-
+                Log.v(LOG_TAG, "@@@ query for namestring " + namestring);
                 namestring = columns.deleteCharAt(columns.length() - 1).toString();
                 query = query + namestring + "" + whereCondition;
                 mDatabase.execSQL(query);
@@ -955,6 +957,8 @@ f
     }
 
     public String getCountValue(String query) {
+
+        Log.v(LOG_TAG, "@@@ getCountValue for " + query);
 //        mDatabase = palm3FoilDatabase.getWritableDatabase();
         Cursor mOprQuery = null;
         try {
@@ -2732,11 +2736,21 @@ f
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     SaplingActivityXrefModel saplingsactivityxrefDetails = new SaplingActivityXrefModel();
-                    saplingsactivityxrefDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+
+
+                    String filelocation = cursor.getString(cursor.getColumnIndex("FilePath"));
+                    if (filelocation != null) {
+                        try {
+                            saplingsactivityxrefDetails.setFilePath(CommonUtils.encodeFileToBase64Binary(new File(filelocation)));
+                        } catch (Exception exc) {
+
+                        }
+                    }
+                   // saplingsactivityxrefDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsactivityxrefDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     saplingsactivityxrefDetails.setFieldId(cursor.getInt(cursor.getColumnIndex("FieldId")));
                     saplingsactivityxrefDetails.setValue(cursor.getString(cursor.getColumnIndex("Value")));
-                    saplingsactivityxrefDetails.setFilePath(cursor.getString(cursor.getColumnIndex("FilePath")));
+               //     saplingsactivityxrefDetails.setFilePath(cursor.getString(cursor.getColumnIndex("FilePath")));
                     saplingsactivityxrefDetails.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
                     saplingsactivityxrefDetails.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
                     saplingsactivityxrefDetails.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
@@ -5141,7 +5155,7 @@ return Cullinglossrepolist;
        // String maxNum = getOnlyOneValueFromDb(query);
         String convertedNum = "";
         if (!TextUtils.isEmpty(maxNum)) {
-            convertedNum = CommonUtils.serialNumber(Integer.parseInt(maxNum) + 1, 3);
+            convertedNum = CommonUtils.serialNumber(Integer.parseInt(maxNum) , 3);
         } else {
             convertedNum = CommonUtils.serialNumber(1, 3);
         }
@@ -5151,6 +5165,49 @@ return Cullinglossrepolist;
         Log.v(LOG_TAG, "@@@ finalNumber code " + finalNumber);
         return finalNumber;
     }
+
+
+
+    public List<NurseryLabourLog> getnurserylabourlogs(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET Nursery :" + query);
+        List<NurseryLabourLog> Nurserylog = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryLabourLog nurserylabourLog  = new NurseryLabourLog();
+
+                    nurserylabourLog.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
+                    nurserylabourLog.setRegularMale(cursor.getDouble(cursor.getColumnIndex("RegularMale")));
+                    nurserylabourLog.setRegularFemale(cursor.getDouble(cursor.getColumnIndex("RegularFemale")));
+                    nurserylabourLog.setContractMale(cursor.getDouble(cursor.getColumnIndex("ContractMale")));
+                    nurserylabourLog.setContractFemale(cursor.getDouble(cursor.getColumnIndex("ContractFemale")));
+                    nurserylabourLog.setIsActive(cursor.getInt(cursor.getColumnIndex("IsActive")));
+                    nurserylabourLog.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    nurserylabourLog.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    nurserylabourLog.setUpdatedByUserId(cursor.getInt(cursor.getColumnIndex("UpdatedByUserId")));
+                    nurserylabourLog.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    nurserylabourLog.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+                    nurserylabourLog.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
+
+                    Nurserylog.add(nurserylabourLog);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return Nurserylog;
+    }
+
 }
 
 
