@@ -341,7 +341,8 @@ public class  CommonUtils {
 
         byte[] bytes = loadFile(file);
 
-        return Base64.encodeToString(bytes, Base64.NO_WRAP);
+        return Base64.encodeToString(bytes, Base64.NO_WRAP | Base64.URL_SAFE);
+
     }
 
     /**

@@ -18,7 +18,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".ui.NurseryVisitLogActivity"></activity>
+        <activity android:name=".ui.NurseryVisitLogActivity"
+            android:theme="@style/AppTheme.NoActionBar" ></activity>
         <activity
             android:name=".ui.NurseryLabourLogActivity"
             android:theme="@style/AppTheme.NoActionBar" />

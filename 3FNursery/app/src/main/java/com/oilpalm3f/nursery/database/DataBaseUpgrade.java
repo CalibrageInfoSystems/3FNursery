@@ -219,6 +219,24 @@ public class DataBaseUpgrade {
                 "NurseryCode VARCHAR \n"+
                 ")";
 
+        String NurseryVisitLog = "CREATE TABLE NurseryVisitLog( \n" +
+                "Id INTEGER, \n" +
+                "NurseryCode VARCHAR, \n" +
+                "LogTypeId INT, \n" +
+                "CosignmentCode VARCHAR , \n" +
+                "ClientName VARCHAR, \n" +
+                "MobileNumber VARCHAR , \n" +
+                "Location VARCHAR, \n" +
+                "Latitude FLOAT, \n" +
+                "Longitude FLOAT,\n" +
+                "Comments VARCHAR,\n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR,\n" +
+                "ServerUpdatedStatus INT,\n" +
+                "FileName VARCHAR, \n" +
+                "FileLocation VARCHAR, \n" +
+                "FileExtension VARCHAR \n" +
+                ")";
 
         try {
 
@@ -231,6 +249,7 @@ public class DataBaseUpgrade {
             db.execSQL(column4);
             db.execSQL(column5);
             db.execSQL(NurseryLabourLog);
+            db.execSQL(NurseryVisitLog);
 
         } catch (Exception e) {
             e.printStackTrace();

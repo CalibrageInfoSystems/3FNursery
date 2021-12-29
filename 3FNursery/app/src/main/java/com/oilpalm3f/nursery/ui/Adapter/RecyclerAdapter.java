@@ -70,12 +70,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         dataAccessHandler = new DataAccessHandler(ctx);
         holder.transactionid.setText(" :   " + saplingActivities_List.get(position).getName());
         holder.consignmentcode.setText(" :   " + saplingActivities_List.get(position).getConsignmentCode());
-        if(saplingActivities_List.get(position).getStatusTypeId() == 352 || saplingActivities_List.get(position).getStatusTypeId() == 349 || saplingActivities_List.get(position).getDesc() == null) {
-            holder.linear_layout.setVisibility(View.VISIBLE);
-        }
-        else{
-            holder.linear_layout.setVisibility(View.GONE);
-        }
+//        if(saplingActivities_List.get(position).getStatusTypeId() == 352 || saplingActivities_List.get(position).getStatusTypeId() == 349 || saplingActivities_List.get(position).getDesc() == null) {
+//            holder.linear_layout.setVisibility(View.VISIBLE);
+//        }
+//        else{
+//            holder.linear_layout.setVisibility(View.GONE);
+//        }
      if( saplingActivities_List.get(position).getDesc()!=null){
         holder.status.setText(" :   " +saplingActivities_List.get(position).getDesc());
      }

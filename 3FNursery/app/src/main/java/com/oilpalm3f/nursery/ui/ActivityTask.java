@@ -480,6 +480,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
             if ( dataValue.get(j).value == ".jpg"  ||  dataValue.get(j).value.equalsIgnoreCase(".jpg")){
+                Log.e("=============>",mCurrentPhotoPath+"");
             if(mCurrentPhotoPath!= null){
 
             mapXref.put("FilePath",mCurrentPhotoPath);}}
@@ -708,6 +709,10 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
         for (int i = 0; i < activityTasklist.size(); i++) {
             Log.e("==============>677", activityTasklist.get(i).getBucket());
+            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File") ) {
+                ll.addView(addTexView(activityTasklist.get(i).getField() + " * ", activityTasklist.get(i).getId())); // add  Texextview ui Dynamic}
+            }
+
                    if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File")  ||activityTasklist.get(i).getInputType() == "File" || activityTasklist.get(i).getInputType().contentEquals("File")){
                 Log.e("==============>702", activityTasklist.get(i).getBucket());
 
@@ -1118,8 +1123,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             }
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File") ) {
 
-                          ImageView img = findViewById(id);
-                //dataValue.add(new KeyValues(activityTasklist.get(i).getId(),".jpg"));
 
                 if (mCurrentPhotoPath != null) {
                     dataValue.add(new KeyValues(activityTasklist.get(i).getId(),".jpg"));

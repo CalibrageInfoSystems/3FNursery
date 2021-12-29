@@ -69,12 +69,13 @@
                             android:layout_height="match_parent"
                             android:text="Nursery"
                             android:textSize="18dp"
+                            android:layout_marginTop="5dp"
                             android:textAlignment="textStart"
                             android:textColor="@color/black"
                             android:textStyle="bold"/>
 
                         <Spinner
-                            android:id="@+id/nurserycodespin"
+                            android:id="@+id/nurserySpinner"
                             android:layout_weight="0.5"
                             android:layout_width="0dp"
                             android:layout_marginTop="5dp"
@@ -93,6 +94,7 @@
                         <TextView
                             android:layout_weight="0.5"
                             android:layout_width="0dp"
+                            android:layout_marginTop="5dp"
                             android:layout_height="match_parent"
                             android:text="Log Type"
                             android:textSize="18dp"
@@ -108,10 +110,9 @@
                             android:background="@drawable/spinner_bg"
                             android:layout_height="match_parent"
                             android:textColor="@color/black"
-                            android:text="NurseryName"/>
+                            android:text=""/>
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -122,26 +123,24 @@
                             android:layout_weight="0.5"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="Date"
+                            android:text="CosignmentCode "
                             android:textSize="18dp"
+                            android:layout_marginTop="5dp"
+                            android:textAlignment="textStart"
                             android:textColor="@color/black"
                             android:textStyle="bold"/>
 
-                        <EditText
-                            android:id="@+id/date"
+                        <Spinner
+                            android:id="@+id/consignmentcode"
                             android:layout_weight="0.5"
                             android:layout_width="0dp"
-                            android:textSize="20dp"
-                            android:inputType="date"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/spinner_bg"
                             android:layout_height="match_parent"
                             android:textColor="@color/black"
-                            android:text="Date"/>
+                            android:text=""/>
 
                     </LinearLayout>
-
-
-
-
 
                     <Button
                         android:id="@+id/submitBtn"

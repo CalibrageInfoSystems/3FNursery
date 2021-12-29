@@ -230,6 +230,9 @@ public class Queries {
     public String getTypeofLabourQuery() {
         return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '73'";
     }
+    public String getTypeofvisitLogQuery() {
+        return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '74'";
+    }
 
     public String getConsignmentMasterQuery() {
         return "select Id, NurseryCode, ConsignmentCode, OriginId from Sapling";
@@ -1994,7 +1997,7 @@ public class Queries {
                 "        )S on S.ActivityId  = NA.Id AND S.ConsignmentCode = NA.ConsignmentCode)R \n" +
                 "    \t\n" +
                 "    \tWHERE \n" +
-                "    \tTargetDate ='" + date + "'";
+                "    \tTargetDate ='" + date + "' AND ( StatusTypeId is NULL OR StatusTypeId in (352,349))";
 
 
     }
@@ -2062,6 +2065,15 @@ public class Queries {
     public String  Nurserylabourlogcount(String date ,String nursery_code) {
 
         return "Select Count(*) from NurseryLabourLog where Date(LogDate)= '" + date + "' and NurseryCode = '" + nursery_code + "'";
+    }
+    public String getAllConsignment(String Userid, String NurseryCode) {
+        return "select S.ConsignmentCode as ConsignmentCode from  UserConsignmentXref X \n" +
+                "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
+                "LEFT join LookUp L ON S.OriginId = L.Id \n" +
+                "LEFT join LookUp O ON S.VendorId = O.Id \n" +
+                "LEFT join LookUp K ON S.VarietyId = K.Id \n" +
+                "LEFT join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
+                "where X.UserId='" + Userid + "'  AND S.NurseryCode = '" + NurseryCode + "'  AND S.isActive ='1' GROUP By S.ConsignmentCode";
     }
 
 
