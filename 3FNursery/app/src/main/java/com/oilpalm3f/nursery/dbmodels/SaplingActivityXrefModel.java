@@ -16,25 +16,9 @@ public class SaplingActivityXrefModel {
     private  double LabourRate;
     private String FileExtension;
     private String ImageString;
-    private  String FileName;
 
-    public String getFileName() {
-        return FileName;
-    }
 
-    public void setFileName(String fileName) {
-        FileName = fileName;
-    }
 
-    public String getFileLocation() {
-        return FileLocation;
-    }
-
-    public void setFileLocation(String fileLocation) {
-        FileLocation = fileLocation;
-    }
-
-    private  String FileLocation;
 
     public String getImageString() {
         return ImageString;

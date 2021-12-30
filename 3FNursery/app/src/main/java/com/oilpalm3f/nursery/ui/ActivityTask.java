@@ -480,15 +480,17 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
-            mapXref.put("FilePath","");
+
 
                 Log.e("=============>",mCurrentPhotoPath+"");
             if ( dataValue.get(j).value == "NurseryImage"  ||  dataValue.get(j).value.equalsIgnoreCase("NurseryImage")) {
                 if (mCurrentPhotoPath != null) {
-                    mapXref.put("FileName ", "");
-                    mapXref.put("FileLocation", mCurrentPhotoPath);
-                    mapXref.put("FileExtension", ".jpg");
+
+                    mapXref.put("FilePath", mCurrentPhotoPath);
+
                 }
+            }else{
+                mapXref.put("FilePath","");
             }
 
             mapXref.put("IsActive", 1);

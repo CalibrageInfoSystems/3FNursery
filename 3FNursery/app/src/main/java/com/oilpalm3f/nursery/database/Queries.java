@@ -101,7 +101,7 @@ public class Queries {
     }
 
     public static String localimagepath(String transactionid,String Activitytypeid) {
-        return "Select FileLocation  from  SaplingActivityXref where TransactionId  ='" + transactionid + "' and Value = '" + Activitytypeid + "'";
+        return "Select FilePath from  SaplingActivityXref where TransactionId  ='" + transactionid + "' and Value = '" + Activitytypeid + "'";
     }
     public static String Checkboxdisable(int id , String Consignmentcode,String Activitytypeid) {
 
@@ -224,7 +224,7 @@ public class Queries {
     }
 
     public String getNurseryMasterQuery() {
-        return "select Id, Code, Name, PinCode from Nursery";
+        return "select Id, Code, Name, PinCode from Nursery  where SAPCode != 'null' ";
     }
 
     public String getTypeofLabourQuery() {

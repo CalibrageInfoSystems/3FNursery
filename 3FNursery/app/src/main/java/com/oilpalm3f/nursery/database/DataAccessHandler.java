@@ -2737,10 +2737,11 @@ f
                 do {
                     SaplingActivityXrefModel saplingsactivityxrefDetails = new SaplingActivityXrefModel();
 
-                    String filelocation = cursor.getString(cursor.getColumnIndex("FileLocation"));
+                    String filelocation = cursor.getString(cursor.getColumnIndex("FilePath"));
                     if (filelocation != null) {
                         try {
                             saplingsactivityxrefDetails.setImageString(CommonUtils.encodeFileToBase64Binary(new File(filelocation)));
+                            saplingsactivityxrefDetails.setFileExtension("jpg");
                         } catch (Exception exc) {
 
                         }
@@ -2800,8 +2801,8 @@ f
                     saplingsactivityxrefDetails.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
                     saplingsactivityxrefDetails.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
                     saplingsactivityxrefDetails.setLabourRate(cursor.getDouble(cursor.getColumnIndex("LabourRate")));
-                    saplingsactivityxrefDetails.setFileExtension(cursor.getString(cursor.getColumnIndex("FileExtension")));
-                    saplingsactivityxrefDetails.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
+
+                   // saplingsactivityxrefDetails.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
                  //   saplingsactivityxrefDetails.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
 
                     saplingActivityXrefDataDetails.add(saplingsactivityxrefDetails);

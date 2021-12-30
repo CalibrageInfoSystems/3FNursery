@@ -148,7 +148,10 @@ public class NurseryVisitLogActivity extends AppCompatActivity {
                     Log.d("Selected1===nurserycode", nursery_code);
                     listdata.clear();
                     consignmentList = dataAccessHandler.getConsignmentcode(Queries.getInstance().getAllConsignment(CommonConstants.USER_ID, nursery_code));
-                    Log.d("consignmentList===>", consignmentList.get(0).getConsignmentCode()+"");
+                    Log.d("consignmentList===>", consignmentList.size()+"");
+                    if(consignmentList.size() == 0){
+                        Toast.makeText(NurseryVisitLogActivity.this, "Zero consignments in this Nursery", Toast.LENGTH_SHORT).show();
+                    }
                     for (int ii = 0; ii < consignmentList.size(); ii++) {
 
                         listdata.add(consignmentList.get(ii).getConsignmentCode());
