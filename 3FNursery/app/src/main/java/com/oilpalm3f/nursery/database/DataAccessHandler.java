@@ -2741,7 +2741,7 @@ f
                     if (filelocation != null) {
                         try {
                             saplingsactivityxrefDetails.setImageString(CommonUtils.encodeFileToBase64Binary(new File(filelocation)));
-                            saplingsactivityxrefDetails.setFileExtension("jpg");
+                            saplingsactivityxrefDetails.setFileExtension(".jpg");
                         } catch (Exception exc) {
 
                         }
