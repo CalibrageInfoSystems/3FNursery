@@ -9,8 +9,8 @@ public class NurseryVisitLog {
     private String ClientName;
     private String MobileNumber;
     private String Location;
-    private String Latitude;
-    private String Longitude;
+    private Double Latitude;
+    private Double Longitude;
     private String Comments;
     private String FileName;
     private String FileLocation;
@@ -76,19 +76,19 @@ public class NurseryVisitLog {
         Location = location;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return Latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         Latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return Longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         Longitude = longitude;
     }
 

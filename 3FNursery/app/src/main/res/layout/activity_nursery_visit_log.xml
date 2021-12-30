@@ -154,7 +154,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="Client Name "
-                            android:textSize="16dp"
+                            android:textSize="18dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             />
@@ -181,7 +181,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="Mobile Number "
-                            android:textSize="16dp"
+                            android:textSize="18dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             />
@@ -209,7 +209,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="Location"
-                            android:textSize="16dp"
+                            android:textSize="18dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             />
@@ -235,20 +235,20 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="Latitude"
-                            android:textSize="16dp"
+                            android:textSize="18dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             />
                         <EditText
+                            android:focusable="false"
                             android:id="@+id/latitude"
                             android:layout_weight="0.5"
                             android:layout_width="0dp"
                             android:textSize="20dp"
-
                             android:textAlignment="textStart"
                             android:layout_height="match_parent"
                             android:textColor="@color/black"
-                            android:hint="Man Days -  Male"/>
+                           />
                     </LinearLayout>
 
                     <LinearLayout
@@ -263,52 +263,75 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="Longitude"
-                            android:textSize="16dp"
+                            android:textSize="18dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
 
                             />
 
                         <EditText
+                            android:focusable="false"
                             android:id="@+id/longitude"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5"
-
-                            android:hint="Longitude "
                             android:textAlignment="textStart"
                             android:textColor="@color/black"
                             android:textSize="20dp" />
                     </LinearLayout>
 
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:weightSum="1">-->
+
+<!--                        <TextView-->
+<!--                            android:gravity="center_vertical"-->
+<!--                            android:layout_weight="0.5"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:text="Comments *"-->
+<!--                            android:textSize="16dp"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textStyle="bold"-->
+
+<!--                            />-->
+
+<!--                        <EditText-->
+<!--                            android:id="@+id/comments"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_weight="0.5"-->
+
+<!--                            android:hint="Longitude "-->
+<!--                            android:textAlignment="textStart"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="20dp" />-->
+<!--                    </LinearLayout>-->
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:weightSum="1">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_top_layout"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:gravity="center_vertical"
-                            android:layout_weight="0.5"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:text="Comments *"
-                            android:textSize="16dp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-
-                            />
+                            style="@style/header_h1_text_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/comments" />
 
                         <EditText
                             android:id="@+id/comments"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-
-                            android:hint="Longitude "
-                            android:textAlignment="textStart"
-                            android:textColor="@color/black"
-                            android:textSize="20dp" />
+                            style="@style/editTxt_normal_address"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:digits="@string/digits"
+                            android:gravity="start"
+                            android:maxLength="150"
+                            android:layout_height="120dp"/>
                     </LinearLayout>
 
                     <LinearLayout
