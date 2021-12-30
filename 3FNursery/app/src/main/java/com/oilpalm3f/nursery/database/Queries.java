@@ -1007,6 +1007,10 @@ public class Queries {
     public String getNurserylabourlogs() {
         return "select * from NurseryLabourLog  where ServerUpdatedStatus = 0";
     }
+
+    public String getNurseryvisitlogs() {
+        return "select * from NurseryVisitLog  where ServerUpdatedStatus = 0";
+    }
     public String getVistLogs() {
         return "Select * from VisitLog where ServerUpdatedStatus = 0";
     }
@@ -2067,13 +2071,16 @@ public class Queries {
         return "Select Count(*) from NurseryLabourLog where Date(LogDate)= '" + date + "' and NurseryCode = '" + nursery_code + "'";
     }
     public String getAllConsignment(String Userid, String NurseryCode) {
-        return "select S.ConsignmentCode as ConsignmentCode from  UserConsignmentXref X \n" +
+        return "select  S.Id, S.ConsignmentCode as ConsignmentCode from  UserConsignmentXref X \n" +
                 "inner join sapling S ON X.ConsignmentCode = S.ConsignmentCode  \n" +
                 "LEFT join LookUp L ON S.OriginId = L.Id \n" +
                 "LEFT join LookUp O ON S.VendorId = O.Id \n" +
                 "LEFT join LookUp K ON S.VarietyId = K.Id \n" +
                 "LEFT join TypeCdDmt T ON T.TypeCdId = S.StatusTypeId " +
                 "where X.UserId='" + Userid + "'  AND S.NurseryCode = '" + NurseryCode + "'  AND S.isActive ='1' GROUP By S.ConsignmentCode";
+    }
+    public String getlogtypeid(String name) {
+        return "Select TypeCdId from TypeCdDmt where Desc  = '" + name + "'  And TableName ='NurseryVisitLog'";
     }
 
 

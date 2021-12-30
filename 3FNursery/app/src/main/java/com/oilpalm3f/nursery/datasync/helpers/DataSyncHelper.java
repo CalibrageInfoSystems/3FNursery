@@ -27,6 +27,7 @@ import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
+import com.oilpalm3f.nursery.dbmodels.NurseryVisitLog;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -330,7 +331,7 @@ public class DataSyncHelper {
         List<Irrigationhistorymodel> nurseryIrrigationHistory = (List<Irrigationhistorymodel>) dataAccessHandler.getIrrigationHistoryDetails(Queries.getInstance().getNurceryIrrigation_HistoryRefresh(), 1);
         List<CullinglossFileRepository> cullinglossrepoList = (List<CullinglossFileRepository>) dataAccessHandler.getCullinglossRepoDetails(Queries.getInstance().getFileRepositoryRefresh());
         List<NurseryLabourLog>nurseryLabourLogslist  = (List<NurseryLabourLog>) dataAccessHandler.getnurserylabourlogs(Queries.getInstance().getNurserylabourlogs());
-
+        List<NurseryVisitLog>nurseryvisitLogslist  = (List<NurseryVisitLog>) dataAccessHandler.getNurseryVisitLog(Queries.getInstance().getNurseryvisitlogs());
 
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityStatus, saplingActivityStatuslist);
@@ -343,6 +344,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryIrrigationhistory, nurseryIrrigationHistory);
         allRefreshDataMap.put(DatabaseKeys.TABLE_FILEREPOSITORY, cullinglossrepoList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryLabourLog, nurseryLabourLogslist);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_NURSERYVISITLOGS, nurseryvisitLogslist);
 
 
 

@@ -238,6 +238,11 @@ public class DataBaseUpgrade {
                 "FileExtension VARCHAR \n" +
                 ")";
 
+        String column6 = "Alter Table SaplingActivityXref Add Imagestring Varchar";
+        String column7 = "Alter Table SaplingActivityXref Add FileExtension Varchar(5)";
+        String column8 = "Alter Table SaplingActivityXref Add FileName  Varchar(100)";
+        String column9 = "Alter Table SaplingActivityXref Add FileLocation  Varchar(250)";
+
         try {
 
 
@@ -250,6 +255,10 @@ public class DataBaseUpgrade {
             db.execSQL(column5);
             db.execSQL(NurseryLabourLog);
             db.execSQL(NurseryVisitLog);
+            db.execSQL(column6);
+            db.execSQL(column7);
+            db.execSQL(column8);
+            db.execSQL(column9);
 
         } catch (Exception e) {
             e.printStackTrace();

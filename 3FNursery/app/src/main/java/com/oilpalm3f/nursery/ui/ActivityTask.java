@@ -65,6 +65,7 @@ import com.oilpalm3f.nursery.utils.UiUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -233,7 +234,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
             String consignmentcode = extras.getString("consignmentcode");
             String activityTypeId = extras.getString("ActivityTypeId");
-             Ismultipleentry = extras.getBoolean("multipleEntry");
+       Ismultipleentry = extras.getBoolean("multipleEntry");
             enableEditing = extras.getBoolean("enableEditing");
 
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> FROM_SINGLE_ENTRY_EDITDATA  ###### enableEditing :" + enableEditing);
@@ -315,7 +316,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             Log.d(ActivityTask.class.getSimpleName(), "==> Analysis name Of DisplayData :" + displayData.get(i).getInputType());
             if (displayData.get(i).getInputType().equalsIgnoreCase("File") || displayData.get(i).getInputType() == "File" || displayData.get(i).getInputType().contentEquals("File")) {
                 Log.e("==============>702", activityTasklist.get(i).getInputType());
-                String imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, ".jpg"));
+                String imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, "NurseryImage"));
                 Log.v(LOG_TAG, "imagepath ============" + imagepath);
                 if (imagepath != null) {
                     ImageView File_Image = (ImageView) findViewById(ImageId);
@@ -479,15 +480,16 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
-            if ( dataValue.get(j).value == ".jpg"  ||  dataValue.get(j).value.equalsIgnoreCase(".jpg")){
+            mapXref.put("FilePath","");
+
                 Log.e("=============>",mCurrentPhotoPath+"");
-            if(mCurrentPhotoPath!= null){
-
-            mapXref.put("FilePath",mCurrentPhotoPath);}}
-            else{
-                mapXref.put("FilePath","");
+            if ( dataValue.get(j).value == "NurseryImage"  ||  dataValue.get(j).value.equalsIgnoreCase("NurseryImage")) {
+                if (mCurrentPhotoPath != null) {
+                    mapXref.put("FileName ", "");
+                    mapXref.put("FileLocation", mCurrentPhotoPath);
+                    mapXref.put("FileExtension", ".jpg");
+                }
             }
-
 
             mapXref.put("IsActive", 1);
             mapXref.put("CreatedByUserId", CommonConstants.USER_ID);
@@ -1125,7 +1127,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
 
                 if (mCurrentPhotoPath != null) {
-                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(),".jpg"));
+                    dataValue.add(new KeyValues(activityTasklist.get(i).getId(),"NurseryImage"));
 
                 }else{
                     Toast.makeText(this, "Please  Add Image ", Toast.LENGTH_SHORT).show();
@@ -2734,7 +2736,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis  ==> SCREEN CAME FROM :FROM_SINGLE_ENTRY_EDITDATA");
             String consignmentcode = extras.getString("consignmentcode");
             String activityTypeId = extras.getString("ActivityTypeId");
-            Ismultipleentry = extras.getBoolean("multipleEntry");
+          //  Ismultipleentry = extras.getBoolean("multipleEntry");
 
             int statusTypeId;
             if (isjobDoneId != 0) {
@@ -3935,8 +3937,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
         bmOptions.inPurgeable = true;
 
         /* Decode the JPEG file into a Bitmap */
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, out);
         bitmap = ImageUtility.rotatePicture(90, bitmap);
 
         currentBitmap = bitmap;

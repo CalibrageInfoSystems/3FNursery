@@ -14,17 +14,42 @@ public class SaplingActivityXrefModel {
     private String UpdatedDate;
     private int ServerUpdatedStatus;
     private  double LabourRate;
+    private String FileExtension;
+    private String ImageString;
+    private  String FileName;
 
-//    private String ImageString;
-//
-//    public String getImageString() {
-//        return ImageString;
-//    }
-//
-//    public void setImageString(String imageString) {
-//        ImageString = imageString;
-//    }
+    public String getFileName() {
+        return FileName;
+    }
 
+    public void setFileName(String fileName) {
+        FileName = fileName;
+    }
+
+    public String getFileLocation() {
+        return FileLocation;
+    }
+
+    public void setFileLocation(String fileLocation) {
+        FileLocation = fileLocation;
+    }
+
+    private  String FileLocation;
+
+    public String getImageString() {
+        return ImageString;
+    }
+
+    public void setImageString(String imageString) {
+        ImageString = imageString;
+    }
+    public String getFileExtension() {
+        return FileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        FileExtension = fileExtension;
+    }
     public double getLabourRate() {
         return LabourRate;
     }

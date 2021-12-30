@@ -336,13 +336,13 @@ public class  CommonUtils {
         return bytes;
     }
 
+    //Converts image in filepath to base64
     public static String encodeFileToBase64Binary(File file)
             throws IOException {
 
         byte[] bytes = loadFile(file);
 
-        return Base64.encodeToString(bytes, Base64.NO_WRAP | Base64.URL_SAFE);
-
+        return Base64.encodeToString(bytes, Base64.NO_WRAP);
     }
 
     /**

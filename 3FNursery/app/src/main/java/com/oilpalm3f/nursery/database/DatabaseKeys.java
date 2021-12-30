@@ -21,7 +21,7 @@ public class DatabaseKeys {
     public static String TABLE_NurseryIrrigationhistory = "IrrigationLogStatusHistory";
 
     public static String TABLE_FILEREPOSITORY = "CullingLossFileRepository";
-    public static String TABLE_NURSERYSAPLING_DETAILS = "NurserySaplingDetails";
+    public static String TABLE_NURSERYVISITLOGS = "NurseryVisitLog";
     public static String TABLE_NurseryLabourLog = "NurseryLabourLog";
     public static String TABLE_PLOT = "Plot";
     public static String TABLE_PLOTCURRENTCROP = "PlotCurrentCrop";
