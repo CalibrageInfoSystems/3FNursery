@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -513,6 +514,23 @@ public class NurseryVisitLogActivity extends AppCompatActivity {
         if (nurserySpinner.getSelectedItemPosition() == 0){
 
             Toast.makeText(this, "Please Select Nursery", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (logtypespin.getSelectedItemPosition() == 0){
+
+            Toast.makeText(this, "Please Select Log Type", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(consignment_linear.getVisibility() == View.VISIBLE){
+            if (Consingmentspinner.getSelectedItemPosition() == 0){
+
+                Toast.makeText(this, "Please Select Consingment", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        if ( Comments.getText().toString().equalsIgnoreCase("") || TextUtils.isEmpty(Comments.getText().toString())){
+
+            Toast.makeText(this, "Please Enter Comments", Toast.LENGTH_SHORT).show();
             return false;
         }
 
