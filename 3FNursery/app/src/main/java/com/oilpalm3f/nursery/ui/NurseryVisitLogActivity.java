@@ -80,7 +80,7 @@ public class NurseryVisitLogActivity extends AppCompatActivity {
     Integer LogTypeId;
     EditText Clientname,mobilenumber,location,latitudeEdit,longitudeEdit, Comments;
     LocationManager locationManager;
-    String latitude, longitude;
+    Double latitude, longitude;
     private static final int REQUEST_LOCATION = 1;
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
@@ -265,7 +265,12 @@ public class NurseryVisitLogActivity extends AppCompatActivity {
                         LinkedHashMap mapStatus = new LinkedHashMap();
                         mapStatus.put("NurseryCode", nursery_code);
                     mapStatus.put("LogTypeId", LogTypeId);
-                    mapStatus.put("CosignmentCode", Consignment_code);
+                    if (Consignment_code != null) {
+                        mapStatus.put("CosignmentCode", Consignment_code);
+                    }else{
+                        mapStatus.put("CosignmentCode", "");
+                    }
+
                     mapStatus.put("ClientName", Clientname.getText().toString());
                     mapStatus.put("MobileNumber", mobilenumber.getText().toString());
                     mapStatus.put("Location", location.getText().toString());
@@ -418,10 +423,10 @@ public class NurseryVisitLogActivity extends AppCompatActivity {
             if (locationGPS != null) {
                 double lat = locationGPS.getLatitude();
                 double longi = locationGPS.getLongitude();
-                latitude = String.valueOf(lat);
-                longitude = String.valueOf(longi);
-                latitudeEdit.setText(latitude);
-                longitudeEdit.setText(longitude);
+                latitude = Double.valueOf(lat);
+                longitude = Double.valueOf(longi);
+                latitudeEdit.setText(String.valueOf(latitude));
+                longitudeEdit.setText(String.valueOf(longitude));
                 Log.d(ActivityTask.class.getSimpleName(), "Your Location: " + "\n" + "Latitude: " + latitude + "\n" + "Longitude: " + longitude);
 
             } else {
