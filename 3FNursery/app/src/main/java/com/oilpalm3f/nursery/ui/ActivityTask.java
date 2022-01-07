@@ -1116,7 +1116,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File") ) {
 
 
-                if (mCurrentPhotoPath != null) {
+                if (local_ImagePath != null) {
                     dataValue.add(new KeyValues(activityTasklist.get(i).getId(),"NurseryImage"));
 
                 }else{
