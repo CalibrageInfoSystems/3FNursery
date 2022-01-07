@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
     RelativeLayout irrigation;
-    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel,nurserylabourlogsrel,Nurseryvisitlogs;
+    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel,nurserylabourlogsrel,Nurseryvisitlogs,viewNurseryvisitlogs;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -66,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         checkactivityRel = findViewById(R.id.checkactivityRel);
         nurserylabourlogsrel = findViewById(R.id.nurserylabourlogsrel);
         Nurseryvisitlogs = findViewById(R.id.Nurseryvisitlogs);
+        viewNurseryvisitlogs = findViewById(R.id.viewNurseryvisitlogs);
         circleView = (CircleView) findViewById(R.id.countTxt);
         dataAccessHandler = new DataAccessHandler(this);
     }
@@ -164,6 +165,18 @@ public class HomeActivity extends AppCompatActivity {
 
                 Intent selectionscreen = new Intent(HomeActivity.this, NurseryVisitLogActivity.class);
                 startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
+
+            }
+        });
+
+        viewNurseryvisitlogs.setOnClickListener(new View.OnClickListener() {    // Nursery Selection
+            @Override
+            public void onClick(View view) {
+
+                Intent Visitlogs = new Intent(HomeActivity.this, ViewVisitlogs.class);
+                startActivity(Visitlogs);
 
                 //  showDialog(HomeActivity.this);
 

@@ -32,6 +32,7 @@ import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityXrefModel;
+import com.oilpalm3f.nursery.dbmodels.SaplingActivityXrefModelget;
 import com.oilpalm3f.nursery.dbmodels.Saplings;
 import com.oilpalm3f.nursery.ui.RefreshSyncActivity;
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
@@ -483,9 +484,9 @@ public class DataSyncHelper {
             }
             else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
         //    } else if (tableName.equalsIgnoreCase("SaplingActivityXref")) {
-                SaplingActivityXrefModel saplingActivityXredata = null;
+                SaplingActivityXrefModelget saplingActivityXredata = null;
                 try {
-                    saplingActivityXredata = (SaplingActivityXrefModel) dataList.get(innerCountCheck);
+                    saplingActivityXredata = (SaplingActivityXrefModelget) dataList.get(innerCountCheck);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                     e.printStackTrace();
@@ -523,7 +524,7 @@ public class DataSyncHelper {
                 Log.d(DataSyncHelper.LOG_TAG, "===> analysis ==> CHECK SAPLINGACTIVITYSTATUS TABLE EXIST :" + Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable2(tableName, "ConsignmentCode", saplingActivityStatusModel.getConsignmentCode(), "ActivityId", saplingActivityStatusModel.getActivityId() + ""));
             }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
-                SaplingActivityXrefModel saplingActivityXrefModel = (SaplingActivityXrefModel) dataList.get(innerCountCheck);
+                SaplingActivityXrefModelget saplingActivityXrefModel = (SaplingActivityXrefModelget) dataList.get(innerCountCheck);
                 saplingActivityXrefModel.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId = '" + saplingActivityXrefModel.getTransactionId() + "'  AND FieldId = '" + saplingActivityXrefModel.getFieldId() + "'";
                 try {
@@ -839,9 +840,9 @@ public class DataSyncHelper {
                                 dataToUpdate.put(tableName, saplingActivityDataList);
                         } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityXref)) {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<SaplingActivityXrefModel>>() {
+                            Type type = new TypeToken<List<SaplingActivityXrefModelget>>() {
                             }.getType();
-                            List<SaplingActivityXrefModel> saplingActivityXrefList = gson.fromJson(dataArray.toString(), type);
+                            List<SaplingActivityXrefModelget> saplingActivityXrefList = gson.fromJson(dataArray.toString(), type);
                             if (null != saplingActivityXrefList && saplingActivityXrefList.size() > 0)
                                 dataToUpdate.put(tableName, saplingActivityXrefList);
                         } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_SaplingActivityHistory)) {

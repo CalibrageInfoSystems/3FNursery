@@ -187,7 +187,6 @@ public class DataBaseUpgrade {
                 "Id INTEGER   PRIMARY KEY AUTOINCREMENT\n" +
                 "                                      NOT NULL,\n" +
                 "TransactionId VARCHAR, \n" +
-                "ImageString Varchar, \n" +
                 "FileName VARCHAR, \n" +
                 "FileLocation VARCHAR, \n" +
                 "FileExtension VARCHAR, \n" +
@@ -223,12 +222,9 @@ public class DataBaseUpgrade {
                 "Id INTEGER, \n" +
                 "NurseryCode VARCHAR, \n" +
                 "LogTypeId INT, \n" +
+                "LogDate  DateTime,\n" +
                 "CosignmentCode VARCHAR , \n" +
                 "ClientName VARCHAR, \n" +
-                "MobileNumber VARCHAR , \n" +
-                "Location VARCHAR, \n" +
-                "Latitude FLOAT, \n" +
-                "Longitude FLOAT,\n" +
                 "Comments VARCHAR,\n" +
                 "CreatedByUserId INT,\n" +
                 "CreatedDate VARCHAR,\n" +
@@ -237,9 +233,24 @@ public class DataBaseUpgrade {
                 "FileLocation VARCHAR, \n" +
                 "FileExtension VARCHAR \n" +
                 ")";
+//
+//        @Dasari  e 8 colomns neu add chesukona..?  ALTER TABLE Sapling
+//        ADD SproutPurchaseDate DateTime,
+//                SproutPurchasePrice Float,
+//                ClearingDate DateTime,
+//                ClearingCost Float,
+//                CustomDutyDate DateTime,
+//                CustomDutyCost Float,
+//                TransportationDate DateTime,
+//                TransportationCost Float
 
-
-
+        String column7 = "Alter Table Sapling Add SproutPurchasePrice Float";
+        String column8 = "Alter Table Sapling Add ClearingDate DATETIME";
+        String column9 = "Alter Table Sapling Add ClearingCost Float";
+        String column10 = "Alter Table Sapling Add CustomDutyDate DATETIME";
+        String column11 = "Alter Table Sapling Add CustomDutyCost Float";
+        String column12 = "Alter Table Sapling Add TransportationDate DATETIME";
+        String column13 = "Alter Table Sapling Add TransportationCost Float";
         try {
 
 
@@ -252,6 +263,13 @@ public class DataBaseUpgrade {
             db.execSQL(column5);
             db.execSQL(NurseryLabourLog);
             db.execSQL(NurseryVisitLog);
+            db.execSQL(column7);
+            db.execSQL(column8);
+            db.execSQL(column9);
+            db.execSQL(column10);
+            db.execSQL(column11);
+            db.execSQL(column12);
+            db.execSQL(column13);
 
         } catch (Exception e) {
             e.printStackTrace();

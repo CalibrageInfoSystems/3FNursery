@@ -913,7 +913,7 @@ public class Queries {
                 "     WHERE  Bucket ='Loss' GROUP BY ActivityTypeId) NAF \n" +
                 "          ON NAF.ActivityTypeId=N.Id \n" +
                 "        LEFT JOIN (SELECT ConsignmentCode,JobCompletedDate,ActivityId FROM SaplingActivityStatus S\n" +
-                "  WHERE ConsignmentCode = '" + consinmentCode + "' AND StatusTypeId in (346,347,348) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = N.ConsignmentCode   \n" +
+                "  WHERE ConsignmentCode = '" + consinmentCode + "' AND StatusTypeId in (346,347,348,354) )T ON T.ActivityId=NF.Id  AND T.ConsignmentCode = N.ConsignmentCode   \n" +
                 "        WHERE N.ConsignmentCode = '" + consinmentCode + "'   \n" +
                 "        )S on S.ActivityId  = NA.Id)R";
     }
@@ -2083,6 +2083,13 @@ public class Queries {
         return "Select TypeCdId from TypeCdDmt where Desc  = '" + name + "'  And TableName ='NurseryVisitLog'";
     }
 
+    public String getVisitLogdata(String fromDate, String todate) {
+        return "SELECT n.NurseryCode,N.name as name, n.LogDate,n.LogTypeId,n.CosignmentCode,n.ClientName,n.Comments ,n.FileLocation ,t.Desc\n" +
+                "    from NurseryVisitLog n\n" +
+                "\t  Inner Join TypeCdDmt t on t.TypeCdId = n.LogTypeId\n" +
+                "\t   inner join Nursery N ON N.Code = n.NurseryCode\n " +
+                "\t  where date(LogDate) BETWEEN  '" + fromDate + "'  and '" + todate + "'";
+    }
 
 }
 

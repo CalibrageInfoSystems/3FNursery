@@ -97,6 +97,7 @@ import com.oilpalm3f.nursery.dbmodels.SoilResource;
 import com.oilpalm3f.nursery.dbmodels.Uprootment;
 import com.oilpalm3f.nursery.dbmodels.UserDetails;
 import com.oilpalm3f.nursery.dbmodels.UserSync;
+import com.oilpalm3f.nursery.dbmodels.ViewVisitLog;
 import com.oilpalm3f.nursery.dbmodels.Village;
 import com.oilpalm3f.nursery.dbmodels.VisitLog;
 import com.oilpalm3f.nursery.dbmodels.WaterResource;
@@ -5378,10 +5379,8 @@ return Cullinglossrepolist;
                         nurseryVisitLogDetails.setLogTypeId(cursor.getInt(cursor.getColumnIndex("LogTypeId")));
                         nurseryVisitLogDetails.setCosignmentCode(cursor.getString(cursor.getColumnIndex("CosignmentCode")));
                         nurseryVisitLogDetails.setClientName(cursor.getString(cursor.getColumnIndex("ClientName")));
-                        nurseryVisitLogDetails.setMobileNumber(cursor.getString(cursor.getColumnIndex("MobileNumber")));
-                        nurseryVisitLogDetails.setLocation(cursor.getString(cursor.getColumnIndex("Location")));
-                        nurseryVisitLogDetails.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
-                        nurseryVisitLogDetails.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                        nurseryVisitLogDetails.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
+
                         nurseryVisitLogDetails.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
                         nurseryVisitLogDetails.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
                        // nurseryVisitLogDetails.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
@@ -5404,6 +5403,42 @@ return Cullinglossrepolist;
             }
             return nurserySaplingDetails;
         }
+
+
+    public List<ViewVisitLog> getviewNurseryVisitLog(final String query) {
+        Log.v(LOG_TAG, "@@@ Nurseryvisit details query " + query);
+        List<ViewVisitLog> nurserySaplingDetails = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    ViewVisitLog nurseryVisitLogDetails = new ViewVisitLog();
+                    nurseryVisitLogDetails.setNurseryname(cursor.getString(cursor.getColumnIndex("name")));
+                    nurseryVisitLogDetails.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
+                    nurseryVisitLogDetails.setLogTypeId(cursor.getInt(cursor.getColumnIndex("LogTypeId")));
+                    nurseryVisitLogDetails.setCosignmentCode(cursor.getString(cursor.getColumnIndex("CosignmentCode")));
+                    nurseryVisitLogDetails.setClientName(cursor.getString(cursor.getColumnIndex("ClientName")));
+                    nurseryVisitLogDetails.setLogDate(cursor.getString(cursor.getColumnIndex("LogDate")));
+                    nurseryVisitLogDetails.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    nurseryVisitLogDetails.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
+                    nurseryVisitLogDetails.setLogtype(cursor.getString(cursor.getColumnIndex("Desc")));
+
+                    nurserySaplingDetails.add(nurseryVisitLogDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nurserySaplingDetails;
+    }
     }
 
 

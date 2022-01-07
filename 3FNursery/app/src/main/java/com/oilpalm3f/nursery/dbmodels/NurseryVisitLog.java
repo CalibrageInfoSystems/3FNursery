@@ -7,10 +7,16 @@ public class NurseryVisitLog {
     private  int LogTypeId;
     private String CosignmentCode;
     private String ClientName;
-    private String MobileNumber;
-    private String Location;
-    private Double Latitude;
-    private Double Longitude;
+    private String LogDate;
+
+    public String getLogDate() {
+        return LogDate;
+    }
+
+    public void setLogDate(String logDate) {
+        LogDate = logDate;
+    }
+
     private String Comments;
     private String FileName;
     private String FileLocation;
@@ -60,37 +66,7 @@ public class NurseryVisitLog {
         ClientName = clientName;
     }
 
-    public String getMobileNumber() {
-        return MobileNumber;
-    }
 
-    public void setMobileNumber(String mobileNumber) {
-        MobileNumber = mobileNumber;
-    }
-
-    public String getLocation() {
-        return Location;
-    }
-
-    public void setLocation(String location) {
-        Location = location;
-    }
-
-    public Double getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        Latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        Longitude = longitude;
-    }
 
     public String getComments() {
         return Comments;

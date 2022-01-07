@@ -147,14 +147,5 @@
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
-    <TextView
 
-        android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
-        android:gravity="center"
-
-        android:text="No Data Found"
-        android:textStyle="bold" />
 </LinearLayout>

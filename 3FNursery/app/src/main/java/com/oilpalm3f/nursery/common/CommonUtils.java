@@ -838,7 +838,6 @@ public class  CommonUtils {
             TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             deviceId = mTelephony.getDeviceId();
         }
-
 //return deviceId;
 return "ddfe270e3940733e";
 //  // "351558072434907";

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -118,7 +120,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int rcvId = 100000002;
     int ImageId = 100000004;
     ArrayList<String> Check_listdata = new ArrayList<String>();
-    private String mCurrentPhotoPath , mCurrentPhotoPathfile;
+    private String mCurrentPhotoPath , local_ImagePath;
     String errorMsg = "";
     String Code, dependency_code;
     ImageView image,FileImage;
@@ -205,7 +207,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             bindExistingData(intentTransactionId);
 
             imageRepo =  dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(intentTransactionId));
-            if (imageRepo.size ()!= 0) {
+            if (imageRepo.size()!= 0) {
 
                 addImageData(); //ToDO
             }
@@ -291,12 +293,12 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                 imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
 
             }
-
+            Log.e("imageRepo===================", imageRepo.size()+"");
             //TRAN+NurserySAPCode(3)+ConsignmentId(4)+TabCode-Seq No(ActivityCount)
-//            if (imageRepo.size() != 0) {
-//
-//                addImageData(); //ToDO
-//            }
+            if (imageRepo.size() != 0) {
+
+                addImageData(); //ToDO
+            }
         }
         if (Integer.parseInt(activityTypeId) == 1 || Integer.parseInt(activityTypeId) == 2 || Integer.parseInt(activityTypeId) == 4) {
             Button btn = (Button) findViewById(ButtonId);
@@ -482,11 +484,11 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             mapXref.put("Value", dataValue.get(j).value);
 
 
-                Log.e("=============>",mCurrentPhotoPath+"");
+                Log.e("=============>",local_ImagePath+"");
             if ( dataValue.get(j).value == "NurseryImage"  ||  dataValue.get(j).value.equalsIgnoreCase("NurseryImage")) {
-                if (mCurrentPhotoPath != null) {
+                if (local_ImagePath != null) {
 
-                    mapXref.put("FilePath", mCurrentPhotoPath);
+                    mapXref.put("FilePath", local_ImagePath);
 
                 }
             }else{
@@ -502,30 +504,36 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             int id = dataValue.get(j).id;
             if (id == 8 || id == 15 || id == 46 || id == 55 || id == 63 || id == 68 || id == 74 || id == 81 || id == 85 || id == 90 || id == 97 || id == 103 || id == 114 || id == 123 || id == 132 || id == 141 || id == 151 || id == 166 || id == 175 || id == 183 || id == 192 || id == 225 || id == 229 || id == 237 || id == 243 || id == 247 || id == 255 || id == 261 || id == 265 || id == 271 || id == 282 || id == 291 || id == 300 || id == 309 || id == 319 || id == 334 || id == 343 || id == 352 || id == 360 || id == 370 || id == 375 || id == 379 || id == 387 || id == 393 || id == 399 || id == 405 || id == 416 || id == 425 || id == 434 || id == 443 || id == 453 || id == 468 || id == 477 || id == 486 || id == 494 || id == 538 || id == 553 || id == 568 || id == 583 || id == 598 || id == 613 || id == 628 || id == 643 || id == 658 || id == 673 || id == 688 || id == 703 || id == 718 || id == 733 || id == 748 || id == 763 || id == 778 || id == 793 || id == 801 || id == 809 || id == 817 || id == 825 || id == 833 || id == 841 || id == 849 || id == 857 || id == 865 || id == 873 || id == 881 || id == 889 || id == 897 || id == 905 || id == 913 || id == 921 || id == 931 || id == 941 || id == 951 || id == 961 || id == 971 || id == 981 || id == 991 || id == 1001 || id == 1011 || id == 1021 || id == 1031 || id == 1041 || id == 1051 || id == 1061 || id == 1071 || id == 1081 || id == 1090 || id == 1099 || id == 1108 || id == 1117 || id == 1126 || id == 1135 || id == 1144 || id == 1153 || id == 1162 || id == 1171 || id == 1180 || id == 1189 || id == 1198 || id == 1207 || id == 1216 || id == 1225 || id == 1232 || id == 1238 || id == 1244 || id == 1251 || id == 1257 || id == 1263 || id == 1270 || id == 1276 || id == 1282 || id == 1289 || id == 1295 || id == 1301 || id == 1307 || id == 1313 || id == 1319 || id == 1325 || id == 1331 || id == 1337 || id == 1343 || id == 1349 || id == 1355 || id == 1361 || id == 1367 || id == 1373 || id == 1384 || id == 1395 || id == 1404 || id == 1413 || id == 1422 || id == 1431 || id == 1440 || id == 1449 || id == 1459 || id == 1472 || id == 1478 || id == 1484 || id == 1490 || id == 1496 || id == 1502 || id == 1508 || id == 1514 || id == 1520 || id == 1526 || id == 1532 || id == 1538 || id == 1544 || id == 1550 || id == 1556 || id == 1562 || id == 1568 || id == 1574 || id == 1580 || id == 1586 || id == 1592 || id == 1598 || id == 1604 || id == 1619 || id == 1634 || id == 1649 || id == 1664 || id == 1679 || id == 1694 || id == 1709 || id == 1724 || id == 1739 || id == 1754 || id == 1762 || id == 1770 || id == 1778 || id == 1786 || id == 1794 || id == 1802 || id == 1810 || id == 1818 || id == 1826 || id == 1834 || id == 1843 || id == 1852 || id == 1861 || id == 1870 || id == 1879 || id == 1888 || id == 1897 || id == 1906 || id == 1915 || id == 1924 || id == 1934 || id == 1944 || id == 1954 || id == 1964 || id == 1974 || id == 1984 || id == 1994 || id == 2004 || id == 2014 || id == 2024 || id == 2033 || id == 2042 || id == 2051 || id == 2060 || id == 2069 || id == 2078 || id == 2087 || id == 2096 || id == 2105 || id == 2114 || id == 2125 || id == 2136 || id == 2147 || id == 2158 || id == 2169 || id == 2180 || id == 2191 || id == 2202 || id == 2213 || id == 2224 || id == 2233 || id == 2242 || id == 2251 || id == 2260 || id == 2269 || id == 2278 || id == 2287 || id == 2296 || id == 2305 || id == 2314 || id == 2323 || id == 2332 || id == 2341 || id == 2350 || id == 2359 || id == 2368 || id == 2377 || id == 2386 || id == 2395 || id == 2404 || id == 2413 || id == 2422 || id == 2431 || id == 2440 || id == 2449 || id == 2458 || id == 2467 || id == 2476 || id == 2485 || id == 2494 || id == 2504 || id == 2514 || id == 2524 || id == 2534 || id == 2544 || id == 2554 || id == 2564 || id == 2574 || id == 2584 || id == 2594 || id == 2600 || id == 2606 || id == 2612 || id == 2623 || id == 2634 || id == 2645 || id == 2656 || id == 2665 || id == 2674 || id == 2683 || id == 2692 || id == 2701 || id == 2710 || id == 2719 || id == 2728 || id == 2737 || id == 2746 || id == 2755 || id == 2764 || id == 2774 || id == 2784 || id == 2794 || id == 2804 || id == 2819 || id == 2834 || id == 2849 || id == 2864 || id == 2872 || id == 2880 || id == 2888 || id == 2896 || id == 2905 || id == 2914 || id == 2923 || id == 2932 || id == 2942 || id == 2952 || id == 2962 || id == 2972 || id == 2981 || id == 2990 || id == 2999 || id == 3008 || id == 3014 || id == 3020 || id == 3026 || id == 3032 || id == 3038 || id == 3044 || id == 3050 || id == 3056 || id == 3064 || id == 3079) {
 
-                if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null")))
-                    mapXref.put("LabourRate", male_reg);
+                if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+                    mapXref.put("LabourRate", male_reg);}
             }
+
             if (id == 9 || id == 16 || id == 47 || id == 56 || id == 64 || id == 69 || id == 75 || id == 82 || id == 86 || id == 91 || id == 98 || id == 104 || id == 115 || id == 124 || id == 133 || id == 142 || id == 152 || id == 167 || id == 176 || id == 184 || id == 193 || id == 226 || id == 230 || id == 238 || id == 244 || id == 248 || id == 256 || id == 262 || id == 266 || id == 272 || id == 283 || id == 292 || id == 301 || id == 310 || id == 320 || id == 335 || id == 344 || id == 353 || id == 361 || id == 371 || id == 376 || id == 380 || id == 388 || id == 394 || id == 400 || id == 406 || id == 417 || id == 426 || id == 435 || id == 444 || id == 454 || id == 469 || id == 478 || id == 487 || id == 495 || id == 539 || id == 554 || id == 569 || id == 584 || id == 599 || id == 614 || id == 629 || id == 644 || id == 659 || id == 674 || id == 689 || id == 704 || id == 719 || id == 734 || id == 749 || id == 764 || id == 779 || id == 794 || id == 802 || id == 810 || id == 818 || id == 826 || id == 834 || id == 842 || id == 850 || id == 858 || id == 866 || id == 874 || id == 882 || id == 890 || id == 898 || id == 906 || id == 914 || id == 922 || id == 932 || id == 942 || id == 952 || id == 962 || id == 972 || id == 982 || id == 992 || id == 1002 || id == 1012 || id == 1022 || id == 1032 || id == 1042 || id == 1052 || id == 1062 || id == 1072 || id == 1082 || id == 1091 || id == 1100 || id == 1109 || id == 1118 || id == 1127 || id == 1136 || id == 1145 || id == 1154 || id == 1163 || id == 1172 || id == 1181 || id == 1190 || id == 1199 || id == 1208 || id == 1217 || id == 1226 || id == 1233 || id == 1239 || id == 1245 || id == 1252 || id == 1258 || id == 1264 || id == 1271 || id == 1277 || id == 1283 || id == 1290 || id == 1296 || id == 1302 || id == 1308 || id == 1314 || id == 1320 || id == 1326 || id == 1332 || id == 1338 || id == 1344 || id == 1350 || id == 1356 || id == 1362 || id == 1368 || id == 1374 || id == 1385 || id == 1396 || id == 1405 || id == 1414 || id == 1423 || id == 1432 || id == 1441 || id == 1450 || id == 1460 || id == 1473 || id == 1479 || id == 1485 || id == 1491 || id == 1497 || id == 1503 || id == 1509 || id == 1515 || id == 1521 || id == 1527 || id == 1533 || id == 1539 || id == 1545 || id == 1551 || id == 1557 || id == 1563 || id == 1569 || id == 1575 || id == 1581 || id == 1587 || id == 1593 || id == 1599 || id == 1605 || id == 1620 || id == 1635 || id == 1650 || id == 1665 || id == 1680 || id == 1695 || id == 1710 || id == 1725 || id == 1740 || id == 1755 || id == 1763 || id == 1771 || id == 1779 || id == 1787 || id == 1795 || id == 1803 || id == 1811 || id == 1819 || id == 1827 || id == 1835 || id == 1844 || id == 1853 || id == 1862 || id == 1871 || id == 1880 || id == 1889 || id == 1898 || id == 1907 || id == 1916 || id == 1925 || id == 1935 || id == 1945 || id == 1955 || id == 1965 || id == 1975 || id == 1985 || id == 1995 || id == 2005 || id == 2015 || id == 2025 || id == 2034 || id == 2043 || id == 2052 || id == 2061 || id == 2070 || id == 2079 || id == 2088 || id == 2097 || id == 2106 || id == 2115 || id == 2126 || id == 2137 || id == 2148 || id == 2159 || id == 2170 || id == 2181 || id == 2192 || id == 2203 || id == 2214 || id == 2225 || id == 2234 || id == 2243 || id == 2252 || id == 2261 || id == 2270 || id == 2279 || id == 2288 || id == 2297 || id == 2306 || id == 2315 || id == 2324 || id == 2333 || id == 2342 || id == 2351 || id == 2360 || id == 2369 || id == 2378 || id == 2387 || id == 2396 || id == 2405 || id == 2414 || id == 2423 || id == 2432 || id == 2441 || id == 2450 || id == 2459 || id == 2468 || id == 2477 || id == 2486 || id == 2495 || id == 2505 || id == 2515 || id == 2525 || id == 2535 || id == 2545 || id == 2555 || id == 2565 || id == 2575 || id == 2585 || id == 2595 || id == 2601 || id == 2607 || id == 2613 || id == 2624 || id == 2635 || id == 2646 || id == 2657 || id == 2666 || id == 2675 || id == 2684 || id == 2693 || id == 2702 || id == 2711 || id == 2720 || id == 2729 || id == 2738 || id == 2747 || id == 2756 || id == 2765 || id == 2775 || id == 2785 || id == 2795 || id == 2805 || id == 2820 || id == 2835 || id == 2850 || id == 2865 || id == 2873 || id == 2881 || id == 2889 || id == 2897 || id == 2906 || id == 2915 || id == 2924 || id == 2933 || id == 2943 || id == 2953 || id == 2963 || id == 2973 || id == 2982 || id == 2991 || id == 3000 || id == 3009 || id == 3015 || id == 3021 || id == 3027 || id == 3033 || id == 3039 || id == 3045 || id == 3051 || id == 3057 || id == 3065 || id == 3080) {
-                if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null")))
-                    mapXref.put("LabourRate", femmale_reg);
+                if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+                    mapXref.put("LabourRate", femmale_reg);}
+
             }
             if (id == 10 || id == 17 || id == 48 || id == 57 || id == 65 || id == 70 || id == 76 || id == 83 || id == 87 || id == 92 || id == 99 || id == 105 || id == 116 || id == 125 || id == 134 || id == 143 || id == 153 || id == 168 || id == 177 || id == 185 || id == 194 || id == 227 || id == 231 || id == 239 || id == 245 || id == 249 || id == 257 || id == 263 || id == 267 || id == 273 || id == 284 || id == 293 || id == 302 || id == 311 || id == 321 || id == 336 || id == 345 || id == 354 || id == 362 || id == 372 || id == 377 || id == 381 || id == 389 || id == 395 || id == 401 || id == 407 || id == 418 || id == 427 || id == 436 || id == 445 || id == 455 || id == 470 || id == 479 || id == 488 || id == 496 || id == 540 || id == 555 || id == 570 || id == 585 || id == 600 || id == 615 || id == 630 || id == 645 || id == 660 || id == 675 || id == 690 || id == 705 || id == 720 || id == 735 || id == 750 || id == 765 || id == 780 || id == 795 || id == 803 || id == 811 || id == 819 || id == 827 || id == 835 || id == 843 || id == 851 || id == 859 || id == 867 || id == 875 || id == 883 || id == 891 || id == 899 || id == 907 || id == 915 || id == 923 || id == 933 || id == 943 || id == 953 || id == 963 || id == 973 || id == 983 || id == 993 || id == 1003 || id == 1013 || id == 1023 || id == 1033 || id == 1043 || id == 1053 || id == 1063 || id == 1073 || id == 1083 || id == 1092 || id == 1101 || id == 1110 || id == 1119 || id == 1128 || id == 1137 || id == 1146 || id == 1155 || id == 1164 || id == 1173 || id == 1182 || id == 1191 || id == 1200 || id == 1209 || id == 1218 || id == 1227 || id == 1234 || id == 1240 || id == 1246 || id == 1253 || id == 1259 || id == 1265 || id == 1272 || id == 1278 || id == 1284 || id == 1291 || id == 1297 || id == 1303 || id == 1309 || id == 1315 || id == 1321 || id == 1327 || id == 1333 || id == 1339 || id == 1345 || id == 1351 || id == 1357 || id == 1363 || id == 1369 || id == 1375 || id == 1386 || id == 1397 || id == 1406 || id == 1415 || id == 1424 || id == 1433 || id == 1442 || id == 1451 || id == 1461 || id == 1474 || id == 1480 || id == 1486 || id == 1492 || id == 1498 || id == 1504 || id == 1510 || id == 1516 || id == 1522 || id == 1528 || id == 1534 || id == 1540 || id == 1546 || id == 1552 || id == 1558 || id == 1564 || id == 1570 || id == 1576 || id == 1582 || id == 1588 || id == 1594 || id == 1600 || id == 1606 || id == 1621 || id == 1636 || id == 1651 || id == 1666 || id == 1681 || id == 1696 || id == 1711 || id == 1726 || id == 1741 || id == 1756 || id == 1764 || id == 1772 || id == 1780 || id == 1788 || id == 1796 || id == 1804 || id == 1812 || id == 1820 || id == 1828 || id == 1836 || id == 1845 || id == 1854 || id == 1863 || id == 1872 || id == 1881 || id == 1890 || id == 1899 || id == 1908 || id == 1917 || id == 1926 || id == 1936 || id == 1946 || id == 1956 || id == 1966 || id == 1976 || id == 1986 || id == 1996 || id == 2006 || id == 2016 || id == 2026 || id == 2035 || id == 2044 || id == 2053 || id == 2062 || id == 2071 || id == 2080 || id == 2089 || id == 2098 || id == 2107 || id == 2116 || id == 2127 || id == 2138 || id == 2149 || id == 2160 || id == 2171 || id == 2182 || id == 2193 || id == 2204 || id == 2215 || id == 2226 || id == 2235 || id == 2244 || id == 2253 || id == 2262 || id == 2271 || id == 2280 || id == 2289 || id == 2298 || id == 2307 || id == 2316 || id == 2325 || id == 2334 || id == 2343 || id == 2352 || id == 2361 || id == 2370 || id == 2379 || id == 2388 || id == 2397 || id == 2406 || id == 2415 || id == 2424 || id == 2433 || id == 2442 || id == 2451 || id == 2460 || id == 2469 || id == 2478 || id == 2487 || id == 2496 || id == 2506 || id == 2516 || id == 2526 || id == 2536 || id == 2546 || id == 2556 || id == 2566 || id == 2576 || id == 2586 || id == 2596 || id == 2602 || id == 2608 || id == 2614 || id == 2625 || id == 2636 || id == 2647 || id == 2658 || id == 2667 || id == 2676 || id == 2685 || id == 2694 || id == 2703 || id == 2712 || id == 2721 || id == 2730 || id == 2739 || id == 2748 || id == 2757 || id == 2766 || id == 2776 || id == 2786 || id == 2796 || id == 2806 || id == 2821 || id == 2836 || id == 2851 || id == 2866 || id == 2874 || id == 2882 || id == 2890 || id == 2898 || id == 2907 || id == 2916 || id == 2925 || id == 2934 || id == 2944 || id == 2954 || id == 2964 || id == 2974 || id == 2983 || id == 2992 || id == 3001 || id == 3010 || id == 3016 || id == 3022 || id == 3028 || id == 3034 || id == 3040 || id == 3046 || id == 3052 || id == 3058 || id == 3066 || id == 3081) {
-                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null")))
-                    mapXref.put("LabourRate", male_contract);
+                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+                    mapXref.put("LabourRate", male_contract);}
+
             }
             if (id == 11 || id == 18 || id == 49 || id == 58 || id == 66 || id == 71 || id == 77 || id == 84 || id == 88 || id == 93 || id == 100 || id == 106 || id == 117 || id == 126 || id == 135 || id == 144 || id == 154 || id == 169 || id == 178 || id == 186 || id == 195 || id == 228 || id == 232 || id == 240 || id == 246 || id == 250 || id == 258 || id == 264 || id == 268 || id == 274 || id == 285 || id == 294 || id == 303 || id == 312 || id == 322 || id == 337 || id == 346 || id == 355 || id == 363 || id == 373 || id == 378 || id == 382 || id == 390 || id == 396 || id == 402 || id == 408 || id == 419 || id == 428 || id == 437 || id == 446 || id == 456 || id == 471 || id == 480 || id == 489 || id == 497 || id == 541 || id == 556 || id == 571 || id == 586 || id == 601 || id == 616 || id == 631 || id == 646 || id == 661 || id == 676 || id == 691 || id == 706 || id == 721 || id == 736 || id == 751 || id == 766 || id == 781 || id == 796 || id == 804 || id == 812 || id == 820 || id == 828 || id == 836 || id == 844 || id == 852 || id == 860 || id == 868 || id == 876 || id == 884 || id == 892 || id == 900 || id == 908 || id == 916 || id == 924 || id == 934 || id == 944 || id == 954 || id == 964 || id == 974 || id == 984 || id == 994 || id == 1004 || id == 1014 || id == 1024 || id == 1034 || id == 1044 || id == 1054 || id == 1064 || id == 1074 || id == 1084 || id == 1093 || id == 1102 || id == 1111 || id == 1120 || id == 1129 || id == 1138 || id == 1147 || id == 1156 || id == 1165 || id == 1174 || id == 1183 || id == 1192 || id == 1201 || id == 1210 || id == 1219 || id == 1228 || id == 1235 || id == 1241 || id == 1247 || id == 1254 || id == 1260 || id == 1266 || id == 1273 || id == 1279 || id == 1285 || id == 1292 || id == 1298 || id == 1304 || id == 1310 || id == 1316 || id == 1322 || id == 1328 || id == 1334 || id == 1346 || id == 1352 || id == 1358 || id == 1364 || id == 1370 || id == 1376 || id == 1387 || id == 1398 || id == 1407 || id == 1416 || id == 1425 || id == 1434 || id == 1443 || id == 1452 || id == 1462 || id == 1475 || id == 1481 || id == 1487 || id == 1493 || id == 1499 || id == 1505 || id == 1511 || id == 1517 || id == 1523 || id == 1529 || id == 1535 || id == 1541 || id == 1547 || id == 1553 || id == 1559 || id == 1565 || id == 1571 || id == 1577 || id == 1583 || id == 1589 || id == 1595 || id == 1601 || id == 1607 || id == 1622 || id == 1637 || id == 1652 || id == 1667 || id == 1682 || id == 1697 || id == 1712 || id == 1727 || id == 1742 || id == 1757 || id == 1765 || id == 1773 || id == 1781 || id == 1789 || id == 1797 || id == 1805 || id == 1813 || id == 1821 || id == 1829 || id == 1837 || id == 1846 || id == 1855 || id == 1864 || id == 1873 || id == 1882 || id == 1891 || id == 1900 || id == 1909 || id == 1918 || id == 1927 || id == 1937 || id == 1947 || id == 1957 || id == 1967 || id == 1977 || id == 1987 || id == 1997 || id == 2007 || id == 2017 || id == 2027 || id == 2036 || id == 2045 || id == 2054 || id == 2063 || id == 2072 || id == 2081 || id == 2090 || id == 2099 || id == 2108 || id == 2117 || id == 2128 || id == 2139 || id == 2150 || id == 2161 || id == 2172 || id == 2183 || id == 2194 || id == 2205 || id == 2216 || id == 2227 || id == 2236 || id == 2245 || id == 2254 || id == 2263 || id == 2272 || id == 2281 || id == 2290 || id == 2299 || id == 2308 || id == 2317 || id == 2326 || id == 2335 || id == 2344 || id == 2353 || id == 2362 || id == 2371 || id == 2380 || id == 2389 || id == 2398 || id == 2407 || id == 2416 || id == 2425 || id == 2434 || id == 2443 || id == 2452 || id == 2461 || id == 2470 || id == 2479 || id == 2488 || id == 2497 || id == 2507 || id == 2517 || id == 2527 || id == 2537 || id == 2547 || id == 2557 || id == 2567 || id == 2577 || id == 2587 || id == 2597 || id == 2603 || id == 2609 || id == 2615 || id == 2626 || id == 2637 || id == 2648 || id == 2659 || id == 2668 || id == 2677 || id == 2686 || id == 2695 || id == 2704 || id == 2713 || id == 2722 || id == 2731 || id == 2740 || id == 2749 || id == 2758 || id == 2767 || id == 2777 || id == 2787 || id == 2797 || id == 2807 || id == 2822 || id == 2837 || id == 2852 || id == 2867 || id == 2875 || id == 2883 || id == 2891 || id == 2899 || id == 2908 || id == 2917 || id == 2926 || id == 2935 || id == 2945 || id == 2955 || id == 2965 || id == 2975 || id == 2984 || id == 2993 || id == 3002 || id == 3011 || id == 3017 || id == 3023 || id == 3029 || id == 3035 || id == 3041 || id == 3047 || id == 3053 || id == 3059 || id == 3067 || id == 3082) {
-                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null")))
-                    mapXref.put("LabourRate", female_contract);
+                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+                    mapXref.put("LabourRate", female_contract);}
+
             }
             if (id == 32 || id == 33 || id == 34 || id == 35) {
                 // Small poly Bag filling
-                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null")))
-                    mapXref.put("LabourRate", smallPolyBag);
+                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+                    mapXref.put("LabourRate", smallPolyBag);}
+
             }
             if (id == 211 || id == 212 || id == 213 || id == 214) {
                 // Small poly Bag filling
-                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null")))
-                    mapXref.put("LabourRate", bigPolyBag);
+                if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+                    mapXref.put("LabourRate", bigPolyBag);}
+
             }
 
             listKey.add(mapXref);
@@ -787,6 +795,8 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
         FileImage.setId(ImageId);
 
 
+
+
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(200, 200);
         FileImage.setLayoutParams(lp);
         FileImage.setImageResource(R.drawable.addimage);
@@ -805,7 +815,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                             REQUEST_CAM_PERMISSIONS
                     );
                 } else {
-                    dispatchTakeFilePictureIntent(CAMERA_REQUEST2, id);
+                    takePhotoFromCamera();
                 }
             });
 
@@ -813,33 +823,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
         }
 
-    private void dispatchTakeFilePictureIntent(int cameraRequest, Integer id) {
-        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        switch (cameraRequest) {
-            case CAMERA_REQUEST2:
-                File f = null;
-                mCurrentPhotoPath = null;
-                try {
-                    f = setUpPhotoFile(id);
-                    mCurrentPhotoPath = f.getAbsolutePath();
-                    Uri photoURI = FileProvider.getUriForFile(this,
-                            BuildConfig.APPLICATION_ID + ".provider", f);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-
-                } catch (IOException e) {
-                    android.util.Log.v(LOG_TAG, "IOException " + e.getMessage());
-                    e.printStackTrace();
-                    f = null;
-                    mCurrentPhotoPath = null;
-                }
-
-                break;
-
-            default:
-                break;
-        } // switch
-        android.util.Log.v(LOG_TAG, "dispatchTakePictureIntent2 ");
-        startActivityForResult(takePictureIntent, cameraRequest);
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA_REQUEST2);
     }
 
 
@@ -876,7 +862,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                         REQUEST_CAM_PERMISSIONS
                 );
             } else {
-                dispatchTakePictureIntent(CAMERA_REQUEST, id);
+                dispatchTakeFilePictureIntent(CAMERA_REQUEST, id);
             }
         });
 
@@ -932,14 +918,15 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
     }
 
-    private void dispatchTakePictureIntent(int actionCode, int Id) {
+
+    private void dispatchTakeFilePictureIntent(int cameraRequest, Integer id) {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        switch (actionCode) {
+        switch (cameraRequest) {
             case CAMERA_REQUEST:
                 File f = null;
                 mCurrentPhotoPath = null;
                 try {
-                    f = setUpPhotoFile(Id);
+                    f = setUpPhotoFile(id);
                     mCurrentPhotoPath = f.getAbsolutePath();
                     Uri photoURI = FileProvider.getUriForFile(this,
                             BuildConfig.APPLICATION_ID + ".provider", f);
@@ -957,15 +944,16 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             default:
                 break;
         } // switch
-        android.util.Log.v(LOG_TAG, "dispatchTakePictureIntent ");
-        startActivityForResult(takePictureIntent, actionCode);
+        android.util.Log.v(LOG_TAG, "dispatchTakePictureIntent2 ");
+        startActivityForResult(takePictureIntent, cameraRequest);
     }
+
 
     private File setUpPhotoFile(int id) throws IOException {
 
         File f = createImageFile(id);
-        mCurrentPhotoPath = f.getAbsolutePath();
-        Log.e("================>622", mCurrentPhotoPath);
+      mCurrentPhotoPath = f.getAbsolutePath();
+      //  Log.e("================>622", mCurrentPhotoPath);
         return f;
     }
 
@@ -2827,7 +2815,19 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                 updateXref.put("FieldId", dataValue.get(j).id);
                 updateXref.put("Value", dataValue.get(j).value);
 
-                updateXref.put("FilePath", "");
+                Log.e("=============>",local_ImagePath+"");
+                if ( dataValue.get(j).value == "NurseryImage"  ||  dataValue.get(j).value.equalsIgnoreCase("NurseryImage")) {
+                    if (local_ImagePath != null) {
+
+                        updateXref.put("FilePath", local_ImagePath);
+
+                    }
+                }else{
+                    updateXref.put("FilePath","");
+                }
+
+
+               // updateXref.put("FilePath", "");
                 updateXref.put("IsActive", 1);
 //                updateXref.put("CreatedByUserId", CommonConstants.USER_ID);
                 updateXref.put("CreatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -3860,32 +3860,33 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case CAMERA_REQUEST: {
-                if (resultCode == RESULT_OK) {
-
-                    if (!isFinishing()) {
-                        try {
-                            handleBigCameraPhoto();
-                        } catch (WindowManager.BadTokenException e) {
-                            Log.e("WindowManagerBad ", e.toString());
-                        }
+                if (!isFinishing()) {
+                    try {
+                        handleBigCameraPhoto();
+                    } catch (WindowManager.BadTokenException e) {
+                        Log.e("WindowManagerBad ", e.toString());
                     }
-
                 }
+
 //                if (resultCode == RESULT_OK && typeSelected == Manual_Weigh) {
 //                    handleBigCameraPhoto1();
 //                }
                 break;
             } // ACTION_TAKE_PHOTO_B
             case CAMERA_REQUEST2: {
-                if (resultCode == RESULT_OK) {
 
-                    if (!isFinishing()) {
-                        try {
-                            handleBigCameraPhoto2();
-                        } catch (WindowManager.BadTokenException e) {
-                            Log.e("WindowManagerBad ", e.toString());
-                        }
-                    }
+
+                    if (resultCode == RESULT_OK) {
+
+
+                        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                        FileImage.setImageBitmap(thumbnail);
+                        saveImage(thumbnail);
+                        //Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+
+
+
+
 
                 }
 //                if (resultCode == RESULT_OK && typeSelected == Manual_Weigh) {
@@ -3897,6 +3898,40 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
         } // switch
     }
 
+
+
+        public String saveImage(Bitmap myBitmap) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+            File wallpaperDirectory = new File(
+                    Environment.getExternalStorageDirectory() + "/3F_Pictures/" + "NurseryPhotos_loss");
+            // have the object build the directory structure, if needed.
+            if (!wallpaperDirectory.exists()) {
+                wallpaperDirectory.mkdirs();
+            }
+
+            try {
+                File f = new File(wallpaperDirectory, Calendar.getInstance().getTimeInMillis() + ".jpg");
+                f.createNewFile();
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+                MediaScannerConnection.scanFile(this,
+                        new String[]{f.getPath()},
+                        new String[]{"image/jpeg"}, null);
+                fo.close();
+                android.util.Log.d("TAG", "File Saved::--->1" + f.getAbsolutePath());
+                local_ImagePath = f.getAbsolutePath();
+                android.util.Log.d("TAG", "File Saved::--->2" + local_ImagePath);
+                return f.getAbsolutePath();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return "";
+        }
+
+
+
     private void handleBigCameraPhoto() {
         Log.e("================>622",mCurrentPhotoPath);
         if (mCurrentPhotoPath != null) {
@@ -3905,50 +3940,10 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
         }
 
-    }    private void handleBigCameraPhoto2() {
-
-        if (mCurrentPhotoPath != null) {
-            setPic2();
-            galleryAddPic();
-
-        }
-
     }
-    private void setPic2() {
-        Log.e("================>622",mCurrentPhotoPath);
-
-        int targetW = FileImage.getWidth();
-        int targetH = FileImage.getHeight();
-
-        /* Get the size of the image */
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        /* Figure out which way needs to be reduced less */
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-        }
-
-        /* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        /* Decode the JPEG file into a Bitmap */
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, out);
-        bitmap = ImageUtility.rotatePicture(90, bitmap);
-
-        currentBitmap = bitmap;
 
 
-        FileImage.setImageBitmap(bitmap);
-    }
+
     private void setPic() {
         Log.e("================>622",mCurrentPhotoPath);
         /* There isn't enough memory to open up more than a couple camera photos */
@@ -3983,13 +3978,13 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
         currentBitmap = bitmap;
 
-
+       // image.setImageBitmap(currentBitmap);
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2918:" + transactionId);
         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   New Transaction ID  2919:" + transactionIdNew);
 
         List<LinkedHashMap> repodetails = new ArrayList<>();
         LinkedHashMap lossrepo = new LinkedHashMap();
-        lossrepo.put("ImageString", "null");
+
         transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentCode, activityTypeId));
             if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
                 Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   transactionId  2919:" + transactionId);
