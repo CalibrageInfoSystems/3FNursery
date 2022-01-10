@@ -79,18 +79,7 @@ public class MainLoginScreen extends AppCompatActivity {
         final UserDetails userDetails = (UserDetails) dataAccessHandler.getUserDetails(query, 0);
 
         if (null != userDetails ) {
-//            if (CommonUtils.isLocationPermissionGranted(MainLoginScreen.this) ) {
-//                startService(new Intent(this, FalogService.class));
-//            }
-            // Updated Services For Android Q ###  CIS ## 21/05/21\\
 
-//            if (CommonUtils.isLocationPermissionGranted(MainLoginScreen.this) ) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    getApplicationContext().startForegroundService(new Intent(this, FalogService.class));
-//                } else {
-//                    getApplicationContext().startService(new Intent(this, FalogService.class));
-//                }
-//            }
             userID.setText(userDetails.getUserName());
             passwordEdit.setText(userDetails.getPassword());
 

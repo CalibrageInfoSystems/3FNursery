@@ -26,7 +26,7 @@ public class TestActivity extends AppCompatActivity {
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
 
 
-        
+
 
         for(int i =0; i <10; i ++) {
             ll.addView(textview(i, "mallem mahesh :"+i));

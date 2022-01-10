@@ -131,7 +131,7 @@ public class ViewVisitlogs extends AppCompatActivity {
 
 
 
-        displayActivityData(); // Irrigation data display
+        displayActivityData(); // Visits log data display
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

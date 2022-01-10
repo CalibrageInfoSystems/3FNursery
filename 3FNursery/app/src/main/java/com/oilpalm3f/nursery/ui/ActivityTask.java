@@ -84,23 +84,16 @@ import es.dmoral.toasty.Toasty;
 import static com.oilpalm3f.nursery.common.CommonUtils.REQUEST_CAM_PERMISSIONS;
 
 public class ActivityTask extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, ImageClickListener, TextWatcher {
-
+    private static final String LOG_TAG = ActivityTask.class.getName();
     String activityTypeId, consignmentCode, activityName, isMultipleentry, transactionIdFromMultiple;
-
     private List<ActivityTasks> activityTasklist = new ArrayList<>();
     private DataAccessHandler dataAccessHandler;
     LinkedHashMap<String, Pair> typeofLabourdatamap = null;
-    Boolean isSingleentry = false, addactivity = false;
-    private static final String LOG_TAG = ActivityTask.class.getName();
-    private List<SaplingActivity> saplingActivitiesList = new ArrayList<>();
-    int SaplingActivityCount;
     List<KeyValues> dataValue = new ArrayList<>();
-    int random_int = 0;
     int maxnumber;
     int Arrival_Sprouts, Received_sprouts;
     TextView textView5;
-    String TransactionID;
-    int sapactivitysize, sapactivitysizeinc;
+
     private List<ExistingData> existingData = new ArrayList<>();
     private List<DisplayData> displayData = new ArrayList<>();
     boolean isUpdate = false;
@@ -113,23 +106,21 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     ActivityTasks showHideActivity;
     CheckBox chkShowHide;
     String Comments,Userid,Date_history;
-    boolean Check_true = true;
     int yesnoCHeckbox = -10;
     int ButtonId = 100000001;
     int ImagId = 100000003;
     int rcvId = 100000002;
     int ImageId = 100000004;
-    ArrayList<String> Check_listdata = new ArrayList<String>();
     private String mCurrentPhotoPath , local_ImagePath;
     String errorMsg = "";
-    String Code, dependency_code;
+    String Code;
     ImageView image,FileImage;
     String Checked,Checked_new;
     int finalValue62, finalValue60;
     List<CullinglossFileRepository> imageRepo = new ArrayList<>();
     RVAdapter_ImageList adapter_imageList;
     private Bitmap currentBitmap = null;
-    private Bitmap currentBitmap2 = null;
+
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -137,8 +128,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     };
     boolean enableEditing,Ismultipleentry;
     private List<String> multiplelist = new ArrayList<>();
-    private List historyModelArrayList = new ArrayList<>();
-
     String transactionIdNew, transactionId;
     String intentTransactionId;
     int Arrivalsprouts;
@@ -426,10 +415,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
     private boolean goValidate() {
         Log.d("##############################", "YESNO CHECK VALUE :" + yesnoCHeckbox);
-//        if (yesnoCHeckbox > 0 || Integer.parseInt(activityTypeId) == 7 || Integer.parseInt(activityTypeId) == 9 ||  Integer.parseInt(activityTypeId) == 10 || Integer.parseInt(activityTypeId) == 12 )
-//            return GroupValidate();
-//        else
-//            return validate();
 
         return GroupValidate();
     }
@@ -452,33 +437,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             mapXref.put("TransactionId", _transactionId);
             Log.e("selectedPo================",selectedPo+"=========value" + dataValue.get(j).value);
 
-//            if (activityTypeId.equalsIgnoreCase("9") &&( dataValue.get(j).id == 31) ){
-//
-//                Log.e("selectedPo==================31",selectedPo+"=========value" + dataValue.get(j).value);
-//                if(selectedPo == 2){
-//
-//                    mapXref.put("FieldId", 31);
-//                    mapXref.put("Value",dataValue.get(j).value);}
-//                else{
-//
-//                   mapXref.put("FieldId", 31);
-//                mapXref.put("Value","false");}
-//
-//
-//
-//            }
-//           else if (activityTypeId.equalsIgnoreCase("9") &&( dataValue.get(j).id == 45 ) ){
-//
-//                Log.e("selectedPo==================45",selectedPo+"=========value" + dataValue.get(j).value);
-//if(selectedPo == 1){
-//                    mapXref.put("FieldId", 45);
-//                    mapXref.put("Value",dataValue.get(j).value);}
-//else{
-//    mapXref.put("FieldId", 45);
-//    mapXref.put("Value","false");
-//}
-//
-//            }
+
 
             mapXref.put("FieldId", dataValue.get(j).id);
             mapXref.put("Value", dataValue.get(j).value);
@@ -546,31 +505,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                 Log.d(ActivityTask.class.getSimpleName(), "==>  Analysis ==> SaplingActivityXref INSERT COMPLETED");
 
                 if (success) {
-//                    if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
 //
-//
-//                        DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
-//                            @Override
-//                            public void execute(boolean success, Object result, String msg) {
-//                                if (success) {
-//
-//                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                          finish();
-//                                        }
-//                                    });
-//                                } else {
-//                                    ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
-//                                        }
-//                                    });
-//                                }
-//                            }
-//                        });
-//                    }
                     LinkedHashMap sapling = new LinkedHashMap();
                     sapling.put("TransactionId", _transactionId);
                     sapling.put("ConsignmentCode", _consignmentCode);
@@ -800,10 +735,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(200, 200);
         FileImage.setLayoutParams(lp);
         FileImage.setImageResource(R.drawable.addimage);
-//            Glide.with(this)
-//                    .load(R.drawable.addimage)
-//                    .override(200, 200)
-//                    .into(FileImage);
 
 
         FileImage.setOnClickListener(v1 -> {
@@ -975,68 +906,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
     }
 
 
-    private boolean validate() {
-        dataValue = new ArrayList<>();
-
-        for (int i = 0; i < activityTasklist.size(); i++) {
-            int id = activityTasklist.get(i).getId();
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Check box")) {
-
-                CheckBox chk = (CheckBox) findViewById(id);
-                Log.d("TESTING", "IS CHECKED  " + chk.isChecked() + "");
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), chk.isChecked() + ""));
-
-            }
-            if (findViewById(id).getVisibility() == View.VISIBLE && activityTasklist.get(i).getInputType().equalsIgnoreCase("TextBox")) {
-
-                EditText et = findViewById(id);
-
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), et.getText() + ""));
-
-                if (TextUtils.isEmpty(et.getText().toString())) {
-                    //TOdo  need to check already exist or not
-                    Toast.makeText(this, "Please Enter  " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-
-            }
-            if (activityTasklist.get(i).getInputType().equalsIgnoreCase("Dropdown") || activityTasklist.get(i).getInputType().equalsIgnoreCase("dropdown")) {
-
-                Spinner spinnner = findViewById(id);
-                 selectedPo = spinnner.getSelectedItemPosition();
-                dataValue.add(new KeyValues(activityTasklist.get(i).getId(), spinnner.getSelectedItem().toString()));
-                Log.d(ActivityTask.class.getSimpleName(), "DropDownn Selected String :" + spinnner.getSelectedItem().toString()  + selectedPo);
-                if (spinnner.getSelectedItemPosition() == 0) {
-                    //TOdo  need to check already exist or not
-
-                    Toast.makeText(this, "Please Select " + activityTasklist.get(i).getField(), Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-
-            }
-
-
-        }
-
-        return true;
-
-    }
-
-//    private boolean validateyesNO() {
-//        CheckBox chk = findViewById(yesnoCHeckbox);
-//        if(chk.isChecked())
-//        {
-//            if (!GroupValidate()) {
-//                return false;
-//            }
-//        }else
-//        {
-//            validate()
-//        }
-//
-//        return true;
-//
-//    }
 
     private boolean GroupValidate() {
         // TOdo comment Testing
@@ -1185,14 +1054,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                 } else {
                     try {
 
-//                    value = Arrival_Sprouts - CommonUtils.getIntFromEditText(((EditText) findViewById(int51)));
-//                        Log.e("============>1st difference ", value + "");
-//
-//
-//                        if (value < 0) {
-//                            Toast.makeText(this, "Please  Enter  Total received Sprouts  Less than or equal to Sprouts arrived Count (PN-Arrival Of Sprouts)", Toast.LENGTH_SHORT).show();
-//                            return false;
-//                        }
 
                         int count = 0;
                         try {
@@ -2258,21 +2119,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
         return cb;
     }
 
-    public CheckBox yesNoChekcbox(String content, int id) {
-        chkShowHide = new CheckBox(this);
-        chkShowHide.setText(content);
-        chkShowHide.setId(id);
-        chkShowHide.setSelected(true);
-
-        return chkShowHide;
-    }
-
-    public CheckBox isJoneDoneChecbox(String content, int id) {
-        CheckBox cb = new CheckBox(this);
-        cb.setText(content);
-        cb.setId(id);
-        return cb;
-    }
 
 
     public TextInputLayout addEdittext(String content, int id, String dataType) {
@@ -2297,38 +2143,12 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
             localeDecimalInput(et);
 
-//
-//
-//            et.setKeyListener(DigitsKeyListener.getInstance("0123456789.,"));;
-////            et.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-////            et.setRawInputType(InputType.TYPE_CLASS_NUMBER);
-//         et.setFilters(new InputFilter[] { new InputFilter.LengthFilter(7) });
+
         }
 
 
         et.setOnFocusChangeListener(this::onFocusChange);
-//        et.addTextChangedListener(new TextWatcher() {
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                et.requestFocus();
-//
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start,
-//                                          int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start,
-//                                      int before, int count) {
-//                if(s.length() != 0){
-//
-//                }
-//                 //   field1.setText("");
-//            }
-//        });
+
 
         if (id == 60 || id == 62 || id == 506 || id == 510 || id == 514 || id == 518 || id == 522 || id == 525 || id == 3086 || id == 3097 || id == 3108 || id == 3119 || id == 3131 || id == 3142 || id == 3153 || id == 3164
                 || id == 3175
@@ -2841,31 +2661,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                     @Override
                     public void execute(boolean success, String result, String msg) {
                         if (success) {
-//                            if (CommonUtils.isNetworkAvailable(ActivityTask.this)) {
-//
-//
-//                                DataSyncHelper.performRefreshTransactionsSync(ActivityTask.this, new ApplicationThread.OnComplete() {
-//                                    @Override
-//                                    public void execute(boolean success, Object result, String msg) {
-//                                        if (success) {
-//
-//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    finish();
-//                                                }
-//                                            });
-//                                        } else {
-//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    UiUtils.showCustomToastMessage("Data sync failed", ActivityTask.this, 1);
-//                                                }
-//                                            });
-//                                        }
-//                                    }
-//                                });
-//                            }
+
 
                         }
                         Log.d(ActivityTask.class.getSimpleName(), "==> Analysis   => Update of SaplingXref Done");
@@ -3086,12 +2882,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
     private void checkBoxChecked(boolean cleardata) {
 
 
-        //  Activity Typeid : 37
-        // if(){
-        // checkbox  = .setsele
-        // }
-
-
         for (ActivityTasks widget : activityTasklist) {
 
             String optional = dataAccessHandler.getSingleValueInt(Queries.getIsoptionalField2(widget.getId()));
@@ -3137,46 +2927,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:2397==== " + yesnoCHeckbox);
 
-//            if (widget.getActivityTypeId() == Integer.parseInt(activityTypeId)) {
-//                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
-//                int requied_Id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRequiedFeildID(activityTypeId));
-//                Log.e("==============>Feild_id", Feild_id + "");
-//                Log.e("==============>Feild_id==requied_Id", requied_Id + "");
-//
-//                CheckBox chk_is = findViewById(Feild_id);
-//                CheckBox chk_req = findViewById(requied_Id);
-//                if (chk_req.isChecked()) {
-//                    chk_is.setChecked(true);
-//                    chk_is.setEnabled(false);
-//                    Toast.makeText(this,
-//                            "required Checked", Toast.LENGTH_LONG).show();
-//                } else {
-//                    chk_is.setChecked(true);
-//                    chk_is.setEnabled(false);
-//
-//                Toast.makeText(this,
-//                        "required  not  Checked", Toast.LENGTH_LONG).show();
-//
-//        }
-//    }
-
-//      if(widget.getActivityTypeId() == 12) {
-//          int LossCheckbox = 59;
-//          CheckBox chk = findViewById(LossCheckbox);
-//
-//
-//          if (chk.isChecked()) {
-//              Toast.makeText(this,
-//                      "Checked", Toast.LENGTH_LONG).show();
-//
-//          } else {
-//
-//              chk.setChecked(false);
-//              Toast.makeText(this, "Please  Enter PN-Arrival Of Sprouts Equall to  Total received Sprouts ", Toast.LENGTH_SHORT).show();
-//
-//          }
-//
-//      }
         }
     }
 
@@ -3579,19 +3329,6 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
         }
 
-//        else if ( id == 3113  || id == 3114 || id == 3115 || id == 3116 || id == 3117 || id == 3118 || id == 3111) {
-//            // DOne
-//            try {
-//                int int3111 = 3111, int3118 = 3118, int3108 = 3108;
-//                EditText edt3118 = findViewById(int3118);
-//                int finalValue =CommonUtils.getIntFromEditText(((EditText) findViewById(int3108))) - CommonUtils.getIntFromEditText(((EditText) findViewById(int3111)));
-//                Log.d(ActivityTask.class.getSimpleName(), " ===> Analysis finalValue535 : " +finalValue );
-//                edt3118.setText(finalValue + "");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
         if (id == 3122 || id == 3124 || id == 3125 || id == 3126 || id == 3127 || id == 3130 || id == 3129) {
             // DOne
             try {
@@ -3889,11 +3626,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
 
                 }
-//                if (resultCode == RESULT_OK && typeSelected == Manual_Weigh) {
-//                    handleBigCameraPhoto1();
-//                }
+//
                 break;
-            } // ACTION_TAKE_PHOTO_B
+            }
 
         } // switch
     }
@@ -4014,22 +3749,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                 }
             }
         });
-            //   image.setImageBitmap(bitmap);
 
-//		/* Associate the Bitmap to the ImageView */
-//        if (null != rotatedBitmap) {
-//            String convertedImage = CommonUtils.getBase64String(rotatedBitmap);
-//            Log.v(LOG_TAG, "@@@ converted image "+convertedImage.length());
-//            slipImage.setImageBitmap(rotatedBitmap);
-//            currentBitmap = rotatedBitmap;
-//        } else {
-//            currentBitmap = bitmap;
-//            slipImage.setImageBitmap(bitmap);
-//        }
 
-     //   image.setVisibility(View.VISIBLE);
-      //  slipIcon.setVisibility(View.GONE);
-     //   image.invalidate();
+
     }
 
 
