@@ -66,7 +66,7 @@ public class IrrigationActivity extends AppCompatActivity {
 
         date.setText(" : " + formattedDate);
 
-//        consignment_num.setText(" : " + CommonConstants.ConsignmentID);
+
         if (getIntent() != null) {
 
          CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
@@ -194,7 +194,6 @@ public class IrrigationActivity extends AppCompatActivity {
                     status.put("CreatedByUserId", Userid);
                     status.put("CreatedDate", Date_history);
 
-//                status.put("UpdatedDate", CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
                     status.put("ServerUpdatedStatus", 0);
 
                     final List<LinkedHashMap> historyList = new ArrayList<>();
@@ -214,8 +213,7 @@ public class IrrigationActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
                                                         Toast.makeText(IrrigationActivity.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
-//                                                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-//                                                    UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
+//
                                                         finish();
                                                     }
                                                 });
@@ -224,8 +222,7 @@ public class IrrigationActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
 
-                                                        //  Toasty.error(ActivityTask.this, "Data sending failed", 10).show();
-//                                        Toast.makeText(RefreshSyncActivity.this, "Data sending failed", Toast.LENGTH_SHORT).show();
+
                                                         ProgressBar.hideProgressBar();
                                                         //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
                                                         finish();
@@ -236,7 +233,7 @@ public class IrrigationActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-
+                                finish();
 
                                 Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
                         }
@@ -253,11 +250,7 @@ public class IrrigationActivity extends AppCompatActivity {
                         String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
                         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
                         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
-//                        if (male_reg.equalsIgnoreCase("0")  || femmale_reg.equalsIgnoreCase("0") ||
-//                                male_contract.equalsIgnoreCase("0")  || female_contract.equalsIgnoreCase("0")  &&  male_reg != null && femmale_reg != null &&  male_contract == null || female_contract == null ) {
-//                            Toast.makeText(getApplicationContext(), "Please Add Labour Rate", Toast.LENGTH_SHORT).show();
-//
-//                        }
+
                         Log.d(LOG_TAG, "==> Analysis ==>  lobour rates ==> " + male_reg + femmale_reg + male_contract + female_contract);
                         LinkedHashMap mapStatus = new LinkedHashMap();
                         mapStatus.put("Id", 0);

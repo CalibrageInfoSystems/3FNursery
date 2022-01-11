@@ -21,7 +21,6 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.Alerts;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DataCountModel;
-import com.oilpalm3f.nursery.dbmodels.ImageDetails;
 import com.oilpalm3f.nursery.dbmodels.Irrigationhistorymodel;
 import com.oilpalm3f.nursery.dbmodels.LocationTracker;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
@@ -63,7 +62,6 @@ import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.oilpalm3f.nursery.cloudhelper.HttpClient.getOkHttpClient;
-import static com.oilpalm3f.nursery.common.CommonConstants.selectedPlotCode;
 
 public class DataSyncHelper {
     private static final String USER_AGENT = "Mozilla/5.0";
@@ -277,45 +275,6 @@ public class DataSyncHelper {
         }
     }
 
-    public static void sendImageDetails(final Context context, final List<ImageDetails> imagesData, final DataAccessHandler dataAccessHandler, final ApplicationThread.OnComplete onComplete) {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String dat = gson.toJson(imagesData.get(imagesCount));
-        JSONObject transObj = null;
-        try {
-            transObj = new JSONObject(dat);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.v(LOG_TAG, "@@@@ check.." + transObj.toString());
-
-        CloudDataHandler.placeDataInCloud(context, transObj, Config.live_url + Config.imageUploadURL, new ApplicationThread.OnComplete<String>() {
-            @Override
-            public void execute(boolean success, String result, String msg) {
-                if (success) {
-                    dataAccessHandler.executeRawQuery(Queries.getInstance().updatedImageDetailsStatus(imagesData.get(imagesCount).getCollectionCode(), imagesData.get(imagesCount).getFarmerCode(),
-                            100));
-                    imagesCount++;
-                    if (imagesCount == imagesData.size()) {
-                        ProgressBar.hideProgressBar();
-                        onComplete.execute(true, "", "sync success");
-                    } else {
-                        sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
-                    }
-                } else {
-                    imagesCount++;
-                    if (imagesCount == imagesData.size()) {
-                        ProgressBar.hideProgressBar();
-                        onComplete.execute(true, "", "sync success");
-                        selectedPlotCode.clear();
-                    } else {
-                        sendImageDetails(context, imagesData, dataAccessHandler, onComplete);
-                    }
-                    onComplete.execute(false, result, "sync failed due to " + msg);
-                }
-            }
-        });
-    }
 
 
     private static void getRefreshSyncTransDataMap(final Context context, final ApplicationThread.OnComplete onComplete) {

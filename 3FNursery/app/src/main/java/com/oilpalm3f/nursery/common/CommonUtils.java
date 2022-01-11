@@ -234,43 +234,6 @@ public class  CommonUtils {
         imm.hideSoftInputFromWindow(editField.getWindowToken(), 0);
     }
 
-//       tableNames.add(DatabaseKeys.TABLE_ACTIVITYLOG);
-//        tableNames.add(DatabaseKeys.TABLE_ADDRESS);
-//        tableNames.add(DatabaseKeys.TABLE_ACTIVITYRIGHIT);
-//        tableNames.add(DatabaseKeys.TABLE_BANK);
-//        tableNames.add(DatabaseKeys.TABLE_CLASSTYPE);
-//        tableNames.add(DatabaseKeys.TABLE_COLLECTION);
-//        tableNames.add(DatabaseKeys.TABLE_COLLECTIONCENTER);
-//        tableNames.add(DatabaseKeys.TABLE_COMPANY);
-//        tableNames.add(DatabaseKeys.TABLE_COMPLAINT);
-//        tableNames.add(DatabaseKeys.TABLE_COMPLAINTREPOSITORY);
-//        tableNames.add(DatabaseKeys.TABLE_COMPLAINTSTATUSHISTORY);
-//        tableNames.add(DatabaseKeys.TABLE_COMPLAINTTYPEXREF);
-//        tableNames.add(DatabaseKeys.TABLE_CONSIGNMENT);
-//        tableNames.add(DatabaseKeys.TABLE_CONSIGNMENTSTATUSHISTORY);
-//        tableNames.add(DatabaseKeys.TABLE_COOKINGOIL);
-//        tableNames.add(DatabaseKeys.TABLE_COOKINGOILBRAND);
-//        tableNames.add(DatabaseKeys.TABLE_COUNTRY);
-//        tableNames.add(DatabaseKeys.TABLE_CROPMAINTENANCEHISTORY );
-//
-//        tableNames.add(DatabaseKeys.TABLE_CROPVARIETY);
-//        tableNames.add(DatabaseKeys.TABLE_CROPVARIETYTYPE);
-//        tableNames.add(DatabaseKeys.TABLE_DIGITALCONTRACT);
-//        tableNames.add(DatabaseKeys.TABLE_DISEASE);
-//        tableNames.add(DatabaseKeys.TABLE_DISTRICT);
-//        tableNames.add(DatabaseKeys.TABLE_FARMER);
-//        tableNames.add(DatabaseKeys.TABLE_FARMERBANK);
-//        tableNames.add(DatabaseKeys.TABLE_FARMERHISTORY);
-//        tableNames.add(DatabaseKeys.TABLE_FERTLIZER);
-//        tableNames.add(DatabaseKeys.TABLE_FERTLIZER_PROVIDER);
-//        tableNames.add(DatabaseKeys.TABLE_FERTLIZER_TYPE);
-//        tableNames.add(DatabaseKeys.TABLE_FILEREPOSITORY);
-//        tableNames.add(DatabaseKeys.TABLE_CONSIGNMENT);
-//        tableNames.add(DatabaseKeys.TABLE_CONSIGNMENTSTATUSHISTORY);
-//        tableNames.add(DatabaseKeys.TABLE_COOKINGOIL);
-//        tableNames.add(DatabaseKeys.TABLE_COOKINGOILBRAND);
-//        tableNames.add(DatabaseKeys.TABLE_COUNTRY);
-//        tableNames.add(DatabaseKeys.TABLE_CROPMAINTENANCEHISTORY );
 
     /**
      * Checking SD card is available or not in mobile
@@ -838,8 +801,8 @@ public class  CommonUtils {
             TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             deviceId = mTelephony.getDeviceId();
         }
-return deviceId;
-//return "ddfe270e3940733e";
+//return deviceId;
+return "ddfe270e3940733e";
 //  // "351558072434907";
         // return telephonyManager.getDeviceId();
     }

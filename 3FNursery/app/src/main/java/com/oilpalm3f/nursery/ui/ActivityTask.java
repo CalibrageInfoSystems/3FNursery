@@ -2,7 +2,6 @@ package com.oilpalm3f.nursery.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,14 +51,8 @@ import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DisplayData;
-import com.oilpalm3f.nursery.dbmodels.ExistingData;
-import com.oilpalm3f.nursery.dbmodels.Imagemodel;
-import com.oilpalm3f.nursery.dbmodels.MutipleData;
-import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
-import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.ui.Adapter.RVAdapter_ImageList;
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
-import com.oilpalm3f.nursery.uihelper.ProgressDialogFragment;
 import com.oilpalm3f.nursery.utils.ImageUtility;
 import com.oilpalm3f.nursery.utils.UiUtils;
 
@@ -77,9 +69,6 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-
-import es.dmoral.toasty.Toasty;
 
 import static com.oilpalm3f.nursery.common.CommonUtils.REQUEST_CAM_PERMISSIONS;
 
@@ -94,7 +83,6 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     int Arrival_Sprouts, Received_sprouts;
     TextView textView5;
 
-    private List<ExistingData> existingData = new ArrayList<>();
     private List<DisplayData> displayData = new ArrayList<>();
     boolean isUpdate = false;
     int activityStatus;
@@ -2136,7 +2124,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
         }
         if (dataType.equalsIgnoreCase("String")) {
-            et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1000)});
+            et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
 
             et.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         } else if (dataType.equalsIgnoreCase("Float")) {
@@ -2436,6 +2424,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
         DecimalFormatSymbols symbols = decFormat.getDecimalFormatSymbols();
         final String defaultSeperator = Character.toString(symbols.getDecimalSeparator());
         editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
         editText.setKeyListener(DigitsKeyListener.getInstance("0123456789." + defaultSeperator));
         editText.setKeyListener(DigitsKeyListener.getInstance(false, true));
 
@@ -2914,15 +2903,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
 
 
-//            if (widget.getActivityTypeId() == Integer.parseInt(activityTypeId)) {
-//                int Feild_id = dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getFeildID(activityTypeId));
-//                Log.e("==============>Feild_id", Feild_id + "");
-//
-//                CheckBox chk_is = findViewById(Feild_id);
-//
-//                chk_is.setChecked(true);
-//                chk_is.setEnabled(false);
-//            }
+
 
 
             Log.d(ActivityTask.class.getSimpleName(), "===> Analysis YES NO CHK  ID:2397==== " + yesnoCHeckbox);

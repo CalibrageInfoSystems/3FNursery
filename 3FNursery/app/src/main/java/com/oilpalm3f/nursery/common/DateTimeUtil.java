@@ -13,9 +13,8 @@ import java.util.TimeZone;
 
 
 
-public class DateTimeUtil {
+public class   DateTimeUtil {
     private static final String TAG = "DateUtils";
-
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "h:mm a";
     public static final String DATE_FORMAT_3 = "yyyy-MM-dd";

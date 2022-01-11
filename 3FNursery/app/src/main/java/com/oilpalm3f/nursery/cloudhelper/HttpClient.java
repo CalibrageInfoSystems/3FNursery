@@ -36,7 +36,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 
-public class HttpClient {
+public class  HttpClient {
     public static final String OFFLINE = "3";
     private static final String LOG_TAG = HttpClient.class.getName();
     @SuppressLint("ConstantLocale")

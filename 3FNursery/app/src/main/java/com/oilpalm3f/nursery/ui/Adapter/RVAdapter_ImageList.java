@@ -1,13 +1,9 @@
 package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,33 +15,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.oilpalm3f.nursery.R;
-import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.cloudhelper.Log;
-import com.oilpalm3f.nursery.common.CommonConstants;
-import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
-import com.oilpalm3f.nursery.dbmodels.Imagemodel;
-import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
-import com.oilpalm3f.nursery.ui.Activities;
-import com.oilpalm3f.nursery.ui.ActivityTask;
 import com.oilpalm3f.nursery.ui.ImageClickListener;
-import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
-import com.oilpalm3f.nursery.uihelper.ProgressBar;
 import com.oilpalm3f.nursery.utils.ImageUtility;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.oilpalm3f.nursery.common.CommonUtils.REQUEST_CAM_PERMISSIONS;
 
 public class RVAdapter_ImageList extends RecyclerView.Adapter<RVAdapter_ImageList.ViewHolder> {
 
