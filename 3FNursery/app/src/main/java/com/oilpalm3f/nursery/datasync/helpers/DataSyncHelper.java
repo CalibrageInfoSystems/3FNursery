@@ -876,36 +876,6 @@ public class DataSyncHelper {
                         } else {
                             UiUtils.showCustomToastMessage("Please check network connection", context, 1);
                         }
-//                        Integer resetFarmerCount = Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getFarmerCount()));
-//                        Integer resetPlotCount = Integer.parseInt(dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().getPlotCount()));
-
-//                        if ((FarmerDataCount == FarmerResetCount) && (PlotDataCount == PlotResetCount)) {
-//                            if (resetFarmerCount != null && resetPlotCount != null) {
-//
-//                                UiUtils.showCustomToastMessage("Data synced successfully", context, 0);
-//                                updateSyncDate(context, CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-//
-//                            } else {
-//                                UiUtils.showCustomToastMessage("Data is not Synced Properly Again its DownLoading the Data ", context, 1);
-//
-//
-//                            }
-//
-//                        } else {
-//                            UiUtils.showCustomToastMessage("Data is not Synced Properly Again its DownLoading the Data", context, 1);
-//                            if (CommonUtils.isNetworkAvailable(context)) {
-//                                updateSyncDate(context, null);
-//                                for (String s : RefreshSyncActivity.allRefreshDataMap) {
-//                                    dataAccessHandler.executeRawQuery("DELETE FROM " + s);
-//                                    Log.v(LOG_TAG, "delete table" + s);
-//                                }
-//                                progressDialogFragment = new ProgressDialogFragment();
-//                                startTransactionSync(context, progressDialogFragment);
-//
-//                            } else {
-//                                UiUtils.showCustomToastMessage("Please check network connection", context, 1);
-//                            }
-//                        }
 
                     } else {
                         reverseSyncTransCount = 0;

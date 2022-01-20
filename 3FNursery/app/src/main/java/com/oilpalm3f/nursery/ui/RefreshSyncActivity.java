@@ -45,10 +45,9 @@ import es.dmoral.toasty.Toasty;
 
 public class RefreshSyncActivity extends AppCompatActivity implements View.OnClickListener {
 
-
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog,nurseryvisitlog;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog,nurseryvisitlog,statuscount;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -117,6 +116,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         cullingLossFileRepository =findViewById(R.id.cullingLossFileRepository);
         irrigationLoghistory = findViewById(R.id.irrigationLoghistory);
         Irrigationlabourlog =findViewById(R.id.Irrigationlabourlog);
+        statuscount = findViewById(R.id.statuscount);
         btnsend = findViewById(R.id.btsynctoserver);
         btnmastersync = findViewById(R.id.btnmastersync);
         btnDBcopy = findViewById(R.id.btcopydatabase);
@@ -213,6 +213,9 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             cullingLossFileRepository.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("CullingLossFileRepository")));
             Irrigationlabourlog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryLabourLog")));
             nurseryvisitlog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryVisitLog")));
+            statuscount .setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityStatus")));
+
+            Log.e("=============>",Queries.getInstance().getRefreshCountQuery("CullingLossFileRepository"));
 
 //            //getVistLogRecords
 //            String getVistLogRecords = dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("VisitLog"));
@@ -419,28 +422,6 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         if (resul > -1) {
             Log.v("@@@MM", "Success");
         }
-
-    }
-
-    public void addUserResetSyncDetails() {
-
-        SimpleDateFormat simpledatefrmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String currentTime = simpledatefrmt.format(new Date());
-
-        userSync = new UserSync();
-        userSync.setUserId(Integer.parseInt(CommonConstants.USER_ID));
-        userSync.setApp("3fMainApp");
-        userSync.setDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        userSync.setMasterSync(0);
-        userSync.setTransactionSync(0);
-        userSync.setResetData(1);
-        userSync.setIsActive(1);
-        userSync.setCreatedByUserId(Integer.parseInt(CommonConstants.USER_ID));
-        userSync.setCreatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        userSync.setUpdatedByUserId(Integer.parseInt(CommonConstants.USER_ID));
-        userSync.setUpdatedDate(CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        userSync.setServerUpdatedStatus(0);
-        dataAccessHandler.addUserSync(userSync);
 
     }
 

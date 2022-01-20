@@ -33,7 +33,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class  HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
     RelativeLayout irrigation;

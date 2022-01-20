@@ -108,7 +108,7 @@ public class ActivityTask extends AppCompatActivity implements View.OnClickListe
     List<CullinglossFileRepository> imageRepo = new ArrayList<>();
     RVAdapter_ImageList adapter_imageList;
     private Bitmap currentBitmap = null;
-
+    String imagepath;
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -902,6 +902,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
         if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
             imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
+             imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, "NurseryImage"));
+            Log.v(LOG_TAG, "imagepath ============" + imagepath);
+
         } else {
             imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
 
@@ -971,9 +974,12 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
             }
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File") ) {
+                transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentCode, activityTypeId));
+                Log.e("transactionId===================", transactionId);
+                imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, "NurseryImage"));
+                Log.v(LOG_TAG, "imagepath ============" + imagepath);
+                if (local_ImagePath != null || imagepath != null) {
 
-
-                if (local_ImagePath != null) {
                     dataValue.add(new KeyValues(activityTasklist.get(i).getId(),"NurseryImage"));
 
                 }else{
@@ -2895,7 +2901,7 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
             } else {
                 findViewById(widget.getId()).setVisibility(View.VISIBLE);
                 try {
-                    findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
+                           findViewById(widget.getId() + 9000).setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

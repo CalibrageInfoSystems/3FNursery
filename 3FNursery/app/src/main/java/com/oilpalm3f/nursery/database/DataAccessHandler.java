@@ -1794,7 +1794,7 @@ f
                 do {
 
                     SaplingActivityHistoryModel saplingsactivityhistoryDetails = new SaplingActivityHistoryModel();
-                    saplingsactivityhistoryDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                  //  saplingsactivityhistoryDetails.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     saplingsactivityhistoryDetails.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     saplingsactivityhistoryDetails.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     saplingsactivityhistoryDetails.setComments(cursor.getString(cursor.getColumnIndex("Comments")));

@@ -82,7 +82,7 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class  CommonUtils {
+public class   CommonUtils {
 
     public static final int REQUEST_CAM_PERMISSIONS = 1;
     public static final int FROM_CAMERA = 1;
@@ -802,8 +802,8 @@ public class  CommonUtils {
             deviceId = mTelephony.getDeviceId();
         }
 //return deviceId;
-return "ddfe270e3940733e";
-//  // "351558072434907";
+return "ddfe270e3940733e"; // roja
+//return "351558071913596";
         // return telephonyManager.getDeviceId();
     }
 

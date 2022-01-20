@@ -2,21 +2,21 @@ package com.oilpalm3f.nursery.dbmodels;
 
 public class SaplingActivityHistoryModel {
 
-    private Integer Id;
+ //   private Integer Id;
     private String TransactionId;
     private Integer StatusTypeId;
     private String Comments;
     private int CreatedByUserId;
     private String CreatedDate;
     private int ServerUpdatedStatus;
-
-    public Integer getId() {
-        return Id;
-    }
-
-    public void setId(Integer id) {
-        Id = id;
-    }
+//
+//    public Integer getId() {
+//        return Id;
+//    }
+//
+//    public void setId(Integer id) {
+//        Id = id;
+//    }
 
     public String getTransactionId() {
         return TransactionId;
