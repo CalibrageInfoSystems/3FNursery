@@ -93,7 +93,7 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
             @Override
             public void onClick(View view) {
 
-                if(CommonConstants.COMMINGFROM == CommonConstants.NEWACTIVITYSCREEEN){
+                if(CommonConstants.COMMINGFROM == CommonConstants.NEWACTIVITYSCREEEN){  // Coming From New Activity
 
                     Intent intent = new Intent(context, Activities.class);
                     intent.putExtra("nurceryId", nurceryId);
@@ -102,10 +102,8 @@ public class ConsignmentRecyclerviewAdapter extends RecyclerView.Adapter<Consign
                     context.startActivity(intent);
 
                 } else {
-//                   model.setSelected(!model.isSelected());
-//                    holder.mainlyt.setBackgroundColor(model.isSelected() ? Color.CYAN : Color.WHITE);
 
-                    Intent intent = new Intent(context, IrrigationActivity.class);
+                    Intent intent = new Intent(context, IrrigationActivity.class); // Coming From New Primary Irrigation
                     CommonConstants.ConsignmentID = consignmentList.get(position).getId();
                     CommonConstants.ConsignmentCode = consignmentList.get(position).getConsignmentCode();
                     intent.putExtra("consignmentCode", consignmentList.get(position).getConsignmentCode());

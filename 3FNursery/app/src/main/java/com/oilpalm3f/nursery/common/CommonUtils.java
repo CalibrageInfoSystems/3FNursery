@@ -801,8 +801,8 @@ public class   CommonUtils {
             TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             deviceId = mTelephony.getDeviceId();
         }
-//return deviceId;
-return "ddfe270e3940733e"; // roja
+return deviceId;
+//return "ddfe270e3940733e"; // roja
 //return "351558071913596";
         // return telephonyManager.getDeviceId();
     }
@@ -852,7 +852,7 @@ return "ddfe270e3940733e"; // roja
             Log.e(LOG_TAG, "version error " + e.getMessage());
         }
         return pInfo.versionName;
-    }
+      }
 
     public static double getOnlyTwoDecimals(final Double inputValue) {
         return Math.round(100 * (inputValue)) / (double) 100;
@@ -1777,26 +1777,6 @@ return "ddfe270e3940733e"; // roja
         }
     }
 
-    public static String getAudioFilePath(final String fileName) {
-        File audioFile = new File(CommonUtils.get3FFileRootPath() + "/3F_Audio/" + "ComplaintsAudios" + "/" + fileName);
-        return audioFile.getAbsolutePath();
-    }
-
-    public static void checkAndDeleteFile(String filePath) {
-        File fileToDelete = new File(filePath);
-//        boolean deleted = fileToDelete.delete();
-        if (fileToDelete.exists()) {
-            Log.v(LOG_TAG, "@@@@ file is existed " + filePath);
-            boolean deleted = fileToDelete.delete();
-        } else {
-            Log.e(LOG_TAG, "@@@@ file is not existed " + filePath);
-        }
-    }
-
-    public static boolean isFileExisted(String filePath) {
-        File file = new File(filePath);
-        return file.exists();
-    }
    public  static  int getIntFromEditText(EditText editText)
     {
         int value= 0;
@@ -1814,16 +1794,5 @@ return "ddfe270e3940733e"; // roja
         return value;
     }
 
-    public static void changeLanguage(Context mContext, String languaetype) {
 
-        Locale locale = new Locale(languaetype);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        mContext.getResources().updateConfiguration(config,
-                mContext.getResources().getDisplayMetrics());
-        //   startActivity(new Intent(CollectionCenterHomeScreen.this, CollectionCenterHomeScreen.class));
-
-
-    }
 }

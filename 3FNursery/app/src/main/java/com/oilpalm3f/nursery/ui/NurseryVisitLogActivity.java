@@ -78,26 +78,22 @@ public class  NurseryVisitLogActivity extends AppCompatActivity {
     Button submitBtn;
     String nursery_code, Consignment_code;
     List<NurseryDetails> nurseryDetails;
-   // LinkedHashMap<String, Pair> consignmentList = null;
-   List<ConsignmentData> consignmentList = new ArrayList<>();
+    List<ConsignmentData> consignmentList = new ArrayList<>();
     ArrayList<String> listdata ;
     Integer LogTypeId;
     String currentDate,sendcurrentDate;
     DatePickerDialog picker;
     EditText Clientname,LogDate, Comments;
-    LocationManager locationManager;
-    Double latitude, longitude;
-    private static final int REQUEST_LOCATION = 1;
+
     private int GALLERY = 1, CAMERA = 2;
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private static final int CAMERA_REQUEST = 1888;
-    public static  String  mCurrentPhotoPath  = null;
+
     ImageView imageview;
-    private  File finalFile;
+
     private Bitmap currentBitmap = null;
     private LinearLayout consignment_linear;
     public static  String  local_ImagePath  ;

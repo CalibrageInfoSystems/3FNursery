@@ -748,11 +748,7 @@ public class DataSyncHelper {
                 if (statusCode == HttpURLConnection.HTTP_OK) {
 
                     if (TextUtils.isEmpty(date)) {
-                        if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_COMPLAINTTYPEXREF)) {
-                            Log.v(LOG_TAG, "@@@@ Data insertion status comp ");
-                        } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_COMPLAINTREPOSITORY)) {
-                            Log.v(LOG_TAG, "@@@@ Data insertion status comp2 ");
-                        }
+
                         List dataToInsert = new ArrayList();
                         for (int i = 0; i < dataArray.length(); i++) {
                             JSONObject eachDataObject = dataArray.getJSONObject(i);

@@ -69,7 +69,7 @@ public class IrrigationActivity extends AppCompatActivity {
 
         if (getIntent() != null) {
 
-         CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
+          CONSINEMENTCODES = getIntent().getStringExtra("consignmentCode");
             Flag = getIntent().getIntExtra("camefrom", 1); // if Flag 2 ,irrigation log edit on rejection
             transactionId = getIntent().getStringExtra("transactionId");
             Log.d(IrrigationActivity.LOG_TAG, "Consignment Code :" + CONSINEMENTCODES);

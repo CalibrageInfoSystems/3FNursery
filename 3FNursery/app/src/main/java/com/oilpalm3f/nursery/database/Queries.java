@@ -1573,113 +1573,15 @@ public class Queries {
         return "select Latitude, Longitude from LocationTracker ORDER BY Id DESC LIMIT 1";
     }
 
-    public String onlyValueFromDb(String tableName, String columnName, String whereCondition) {
-        return "SELECT " + columnName + " from " + tableName + " where " + whereCondition;
-    }
-
-    public String queryLandLordBankData(final String plotCode) {
-        return "select * from LandlordBank where PlotCode = '" + plotCode + "'";
-    }
-
-    public String queryPlotLandlordData(final String plotCode) {
-        return "select * from PlotLandlord where PlotCode = '" + plotCode + "'";
-    }
 
 
-    public String getLatestCropMaintanaceHistoryCode(String plotcode) {
-        return "select Code, max(CreatedDate) date from CropmaintenanceHistory where plotcode='" + plotcode + "'";
-    }
-
-    public String getCropMaintenanceHistoryData(String historyCode, String tableName) {
-        return "select * from " + tableName + " where CropMaintenanceCode =  '" + historyCode + "' and PlotCode = '" + CommonConstants.PLOT_CODE + "'";
-    }
-
-    public String getRecommndCropMaintenanceHistoryData(String historyCode, String tableName) {
-        return "select * from " + tableName + " where CropMaintenanceCode =  '" + historyCode + "' and PlotCode = '" + CommonConstants.PLOT_CODE + "'";
-    }
-
-    public String getPestXrefData(String pestCode) {
-        return "select * from PestChemicalXref where PestCode = '" + pestCode + "'";
-    }
-
-
-    public String getComplaintData() {
-        return "select * from Complaints where ServerUpdatedStatus=0";
-    }
-
-    public String getComplaintDataByCode(String complaintCode) {
-        return "select * from Complaints where Code = '" + complaintCode + "'";
-    }
-
-    public String getComplaintStatusHistoryByCode(String complaintCode) {
-        return "select * from ComplaintStatusHistory where ComplaintCode = '" + complaintCode + "'" + " and IsActive = '1'";
-    }
-
-    public String getComplaintStatusHistoryAll(String complaintCode) {
-        return "select * from ComplaintStatusHistory where ComplaintCode = '" + complaintCode + "'";
-    }
-
-    public String getComplaintXrefByCode(String complaintCode) {
-        return "select * from ComplaintTypeXref where ComplaintCode = '" + complaintCode + "'";
-    }
-
-    public String getComplaintTypeXref() {
-        return "select * from ComplaintTypeXref where ServerUpdatedStatus=0";
-    }
-
-    public String getComplaintStatusHistory() {
-        return "select * from ComplaintStatusHistory  where ServerUpdatedStatus=0";
-    }
-
-    public String getComplaintRepository() {
-        return "select * from ComplaintRepository  where ServerUpdatedStatus=0";
-    }
-
-    public String getComplaintRepositoryByCode(String complaintCode) {
-        return "select * from ComplaintRepository where ComplaintCode = '" + complaintCode + "'";
-    }
-
-    public String getComplaintRepositoryByCodeForAudio(String complaintCode) {
-        return "select * from ComplaintRepository where ComplaintCode = '" + complaintCode + "'" + " and FileExtension ='.mp3'";
-    }
 
     public String UpgradeCount() {
         //number of Users
         return "select count(*) from UserInfo";
     }
 
-    public String getComplaintToDisplay(boolean isPlot, String plotcode) {
-        String wherecondition;
-        if (isPlot) {
-            wherecondition = "and cp.plotcode = " + "'" + plotcode + "'";
-        } else {
-            wherecondition = "";
-        }
-        return "select cp.Code, cx.ComplaintTypeId, csh.AssigntoUserId, csh.StatusTypeId,cp.CriticalityByTypeId, cp.CreatedDate, cp.PlotCode,\n" +
-                "(select FirstName from Farmer f where f.Code = (select FarmerCode from Plot p where p.Code = cp.PlotCode)) as FarmerFirstName,\n" +
-                "(select LastName from Farmer f where f.Code = (select FarmerCode from Plot p where p.Code = cp.PlotCode)) as FarmerLastName,\n" +
-                "(select Name from Village where Id = (select VillageId from Farmer f where f.Code = (select FarmerCode from Plot p where p.Code = cp.PlotCode))) as FarmerVillageName,\n" +
-                "(select Desc from TypeCdDmt where TypeCdId = cx.ComplaintTypeId) ComplaintType,\n" +
-                "(select Desc from TypeCdDmt where TypeCdId = csh.StatusTypeId) ComplaintStatusType, \n" +
-                "(select UserName from UserInfo ui where  ui.Id = cp.CreatedByUserId) as CreatedName\n" +
-                "from Complaints cp\n" +
-                "inner join\n" +
-                "ComplaintTypeXref cx on cp.code = cx.ComplaintCode\n" +
-                "inner join\n" +
-                "ComplaintStatusHistory csh on csh.ComplaintCode = cp.Code where csh.IsActive = '1' " + wherecondition + " group by csh.ComplaintCode order by cp.CreatedDate DESC";
-    }
 
-    public String getKRAsDisplayQuery(int userId) {
-        if (userId == 0) {
-            return "select ut.UserKRAId, ut.KRACode, ut.KRAName, ut.UOM, ut.AnnualTarget, " +
-                    "ut.AchievedTarget, ut.UserId, umt.MonthNumber, umt.MonthlyTarget, " +
-                    "umt.AchievedTarget from UserTarget ut\n" +
-                    "left join UserMonthlyTarget umt on ut.KRACode = umt.KRACode";
-        }
-
-        return "select ut.UserKRAId, ut.KRACode, ut.KRAName, ut.UOM, ut.AnnualTarget, ut.AchievedTarget, ut.UserId, umt.MonthNumber, umt.MonthlyTarget, umt.AchievedTarget from UserTarget ut\n" +
-                "left join UserMonthlyTarget umt on ut.KRACode = umt.KRACode where ut.UserId = '" + userId + "'";
-    }
 
     public String getUnreadNotificationsCountQuery() {
         return "select count(*) from Alerts where isRead = 0";
@@ -1695,31 +1597,6 @@ public class Queries {
         return "select * from Alerts where ServerUpdatedStatus = 0";
     }
 
-    public String retakeGeoBoundry(final String PlotCode) {
-        return "select IsRetakeGeoTagRequired from Plot where Code ='" + PlotCode + "'";
-    }
-
-
-    public static String plotAgeAndPlotLocation(final String PlotCode, final String currentDate) {
-
-        return "Select Cast (( JulianDay('" + currentDate + "') - JulianDay(p.DateofPlanting)) As Integer)/365 as plotAge,addr.StateId \n " +
-                "FROM Plot p \n" +
-                " inner join Address addr on p.AddressCode = addr.Code \n" +
-                "inner join State s on addr.StateId = s.Id \n" +
-                "WHERE p.Code = '" + PlotCode + "'";
-    }
-
-    public static String CalculateExpectedYield(final int FincYear, final String PlotAge, final String stateId, final String curremtMonth) {
-
-        return "SELECT Round(sum(MonthlyPercentage/100 * YieldPerHectar),2) as ExpectedYield \n" +
-                " FROM Benchmark WHERE Year = '" + FincYear + "' AND Age = '" + PlotAge + "' AND StateId = '" + stateId + "' \n" +
-                "and  MonthSequenceNumber <= (select MonthSequenceNumber from  Benchmark \n" +
-                " WHERE Year = '" + FincYear + "' AND Age = '" + PlotAge + "' AND StateId = '" + stateId + "' and MonthName = '" + curremtMonth + "' )";
-    }
-
-    public String ExpectedYield(final String plotCode, String YPHValue) {
-        return "select Round(TotalPalmArea * '" + YPHValue + "',2) as areaunderpalm FROM Plot WHERE  Code = '" + plotCode + "'";
-    }
 
     public String getFarmerCount() {
         return "Select count(*) from farmer";
@@ -1729,66 +1606,6 @@ public class Queries {
         return "Select count(*) from Plot";
     }
 
-
-    public String getClusterName(final String VillageId) {
-        return "SELECT Name from Cluster WHERE Id =  (Select ClusterId FROM VillageClusterxref WHERE VillageId = '" + VillageId + "')";
-    }
-
-    public String getGapFillingTreeCount(final String plotCode, final String latestDate) {
-        return "select sum(TreesCount) \n" +
-                "  from Plantation \n" +
-                "  where Datetime('" + latestDate + "') < Datetime(CreatedDate) and PlotCode ='" + plotCode + "'  AND ReasonTypeId = 330 ";
-    }
-
-    public String getExpectedTreeCount(final String plotCode) {
-        return "Select PlamsCount,CreatedDate FROM Uprootment Where PlotCode ='" + plotCode + "' ORDER BY CreatedDate DESC LIMIT 1";
-    }
-
-
-    public String getTotalPlotArea(final String plotCode) {
-        return "select TotalPlotArea FROM Plot where Code = '" + plotCode + "'";
-    }
-
-    public String getNurserySaplings(final String plotCode) {
-        return "select NurseryId,CropVarietyId,SaplingSourceId," +
-                "SaplingVendorId,NoOfSaplingsDispatched from NurserySaplingDetails where PlotCode = '" + plotCode + "'";
-    }
-
-    public String getNurserySaplingsArea(final String plotCode) {
-        return "select sum(NoOfSaplingsDispatched) from NurserySaplingDetails where PlotCode = '" + plotCode + "'";
-    }
-
-    public String getVisitCount(final String plotCode) {
-        return "select SUM(CASE WHEN UpdatedDate  BETWEEN date('now', 'localtime', '-3 months', 'start of year', '+3 months') AND " +
-                "date('now', 'localtime', '-3 months', 'start of year', '+1 year', '+3 months', '-1 day') THEN 1 ELSE 0 END),MAX(UpdatedDate) as  CreatedDate " +
-                "from CropMaintenanceHistory where  PlotCode = '" + plotCode + "'";
-    }
-
-    public String getAdvanceReceivedArea(final String plotCode) {
-        return "select sum(AdvanceReceivedArea) from AdvancedDetails where PlotCode = '" + plotCode + "'";
-    }
-
-    public String getNumber(String number) {
-        return " select Code,FirstName,LastName,MiddleName from farmer where ContactNumber ='" + number + "' ";
-    }
-
-    public String getBAnkNumber(String accountno) {
-        return "select Farmer.Code,Farmer.FirstName,Farmer.LastName,Farmer.MiddleName,Farmer.GuardianName from Farmer inner join  FarmerBank on Farmer.Code=FarmerBank.FarmerCode where \n" +
-                "FarmerBank.AccountNumber='" + accountno + "'";
-    }
-
-    public String getIdProofNumber(String idProofNumber) {
-        return "select Farmer.Code,Farmer.FirstName,Farmer.LastName,Farmer.MiddleName,Farmer.GuardianName from Farmer inner join  IdentityProof on Farmer.Code=IdentityProof.FarmerCode where \n" +
-                "IdentityProof.IdProofNumber='" + idProofNumber + "'";
-    }
-
-    public String getRating(int typeID, int id) {
-        return "select Remarks from LookUp where LookUpTypeId = '" + typeID + "' and Id = '" + id + "'";
-    }
-
-    public String getPerOfTree(int typeID, String des) {
-        return "select TypeCdId from TypeCdDmt where ClassTypeId = '" + typeID + "' and Desc = '" + des + "'";
-    }
 
     public String getIrrigationStatus(String fromDate, String todate) {
         return "SELECT n.IrrigationCode, n.LogDate,n.RegularMale,n.RegularFemale,n.ContractMale,n.ContractFemale,n.StatusTypeId,n.Comments ,n.RegularMaleRate ,n.RegularFeMaleRate , n.ContractMaleRate , n.ContractFeMaleRate, t.Desc\n" +
@@ -1860,12 +1677,7 @@ public class Queries {
         return "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='" + NurseryCode + "'";
     }
 
-    public String getupdateddates() {
-        return "select Date(CreatedDate) from SaplingActivity";
-    }
-//    public String getdata(String date ) {
-//        return "select TransactionId,ConsignmentCode,StatusTypeId from SaplingActivity  where date(UpdatedDate) ='"+date+"'";
-//    }
+
 
     public static String getField(String Id) {
         return "Select Field from NurseryActivityField where Id = " + Id;
@@ -1936,11 +1748,7 @@ public class Queries {
                 "\tWHERE \n" +
                 "\tTargetDate is not null ";
     }
-    public String getActivityCompletedOrnot(String activityid,String filed_id,String consignment_id){
-        return "Select  sx.Value  from SaplingActivity s\n" +
-                "        Inner join SaplingActivityXref sx on sx.TransactionId =s.TransactionId\n" +
-                "        where sx.FieldId = 59 AND ConsignmentCode = 'AR/Indegenous/Unipalm/DELI X LAME/Oct-21/C -01'  and ActivityId = '12'  and  sx.Value ='true'";
-    }
+
     public String getdata(String date) {
         return "SELECT \n" +
                 "    \tActivityId,        \n" +

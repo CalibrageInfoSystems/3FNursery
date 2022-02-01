@@ -137,69 +137,7 @@ public class Palm3FoilDatabase extends SQLiteOpenHelper {
 
     }
 
-    public boolean UpdateGeoTagLatLng(String UpdatedByUserId,  String UpdatedDate,double Latitude,double Longitude) {
-//        SQLiteDatabase db = this.getWritableDatabase();
 
-        try {
-            openDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("UpdatedByUserId",UpdatedByUserId);
-            contentValues.put("UpdatedDate",UpdatedDate);
-            contentValues.put("Latitude",Latitude);
-            contentValues.put("Longitude",Longitude);
-            contentValues.put("ServerUpdatedStatus",0);
-
-            mSqLiteDatabase.update(DatabaseKeys.TABLE_GEOBOUNDARIES, contentValues,
-                    "PlotCode" + "=?" + " and "  +
-                            "GeoCategoryTypeId" + "=?",
-                    new String[] {
-                            CommonConstants.PLOT_CODE,
-                            "207"}) ;
-//            mSqLiteDatabase.update(DatabaseKeys.TABLE_GEOBOUNDARIES, contentValues, " PlotCode = " + CommonConstants.PLOT_CODE + " AND " + " GeoCategoryTypeId = 207 ", null);
-//            mSqLiteDatabase.insert(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, null, contentValues);
-            Log.v("userdata","data for user"+contentValues);
-
-        }catch (Exception e)
-        {
-            Log.v("ReTagDeoTag","Data Update failed due to"+e);
-        }
-        return true;
-    }
-
-    public void UpdateFarmerhistory(String UpdatedByUserId, String UpdatedDate, String IsActive) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-
-        try {
-            openDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("UpdatedByUserId",UpdatedByUserId);
-            contentValues.put("UpdatedDate",UpdatedDate);
-            contentValues.put("IsActive",IsActive);
-
-            mSqLiteDatabase.update("FarmerHistory", contentValues, "PlotCode = " + CommonConstants.PLOT_CODE + " AND IsActive = 1", null);
-//            mSqLiteDatabase.insert(DatabaseKeys.TABLE_Location_TRACKING_DETAILS, null, contentValues);
-            Log.v("userdata","data for user"+contentValues);
-        }catch (Exception e){
-            Log.v("Farmer History","Data Update failed due to"+e);
-        }
-
-    }
-
-    public void insertErrorLogs(String tableName, String error){
-        try {
-            openDatabase();
-            ContentValues errorValues = new ContentValues();
-            errorValues.put("TableName",tableName);
-            errorValues.put("Error",error);
-            errorValues.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-            mSqLiteDatabase.insert("ErrorLogs",null,errorValues);
-            Log.v("Error Details","Error Details inserted ");
-        }catch (SQLiteException se){
-            Log.v("Error Details","Error Details failed to Inserted "+se);
-            se.printStackTrace();
-        }
-
-    }
 
     //FLOG_TRACKING......
     public boolean insertLatLong (double Latitude, double Longitude,String IsActive,String CreatedByUserId, String CreatedDate,String UpdatedByUserId,  String UpdatedDate, String IMEINumber, String ServerUpdatedStatus) {

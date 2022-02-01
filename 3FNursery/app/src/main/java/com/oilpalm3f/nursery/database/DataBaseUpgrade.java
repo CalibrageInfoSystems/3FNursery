@@ -251,6 +251,9 @@ public class DataBaseUpgrade {
         String column11 = "Alter Table Sapling Add CustomDutyCost Float";
         String column12 = "Alter Table Sapling Add TransportationDate DATETIME";
         String column13 = "Alter Table Sapling Add TransportationCost Float";
+        String column14 = "Alter Table Sapling Add PONumber VARCHAR(50)";
+
+
         try {
 
 
@@ -270,6 +273,7 @@ public class DataBaseUpgrade {
             db.execSQL(column11);
             db.execSQL(column12);
             db.execSQL(column13);
+            db.execSQL(column14);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -61,93 +61,6 @@ public class CloudDataHandler {
 
 
 
-    public static synchronized void getKrasDataFromCloud(final JSONObject values,  String url, final ApplicationThread.OnComplete<String> onComplete) {
-        ApplicationThread.bgndPost(CloudDataHandler.class.getName(), "placeDataInCloud..", new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpClient.getKrasDataToServerjson(url, values, new ApplicationThread.OnComplete<String>() {
-                        @Override
-                        public void execute(boolean success, String result, String msg) {
-                            if (success) {
-                                try {
-                                    onComplete.execute(true, result, msg);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    onComplete.execute(true, result, msg);
-                                }
-                            } else{
-                                onComplete.execute(success, result, msg);
-                            }
-
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.v(LOG_TAG, "@Error while getting " + e.getMessage());
-                }
-            }
-        });
-
-    }
-
-    public static void getKraData(final ApplicationThread.OnComplete<HashMap<String, List>> onComplete, final LinkedHashMap<String, List> dataMap) {
-        final JSONObject requestObject = new JSONObject();
-        final Calendar calendar = Calendar.getInstance();
-        final FiscalDate fiscalDate = new FiscalDate(calendar);
-        final String financialYear = fiscalDate.getFinancialYear(calendar);
-        final String financialStartingMonth = fiscalDate.financialYearStartMonth(calendar);
-        final String financialEndingMonth = fiscalDate.financialYearEndMonth(calendar);
-
-        try {
-            requestObject.put("UserId", CommonConstants.USER_ID);
-            requestObject.put("FinancialYear", financialYear);
-            requestObject.put("FromDate", financialStartingMonth);
-            requestObject.put("ToDate", financialEndingMonth);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "" + e.getMessage());
-        }
-
-
-        getKrasDataFromCloud( requestObject, Config.live_url + Config.GETMONTHLYTARGETSBYUSERIDANDFINANCIALYEAR, new ApplicationThread.OnComplete<String>() {
-            @Override
-            public void execute(boolean success, String result, String msg) {
-                Log.v(LOG_TAG, "@@@@ response.." + result);
-                try {
-                    if (success) {
-                        JSONArray resultArray = new JSONArray(result);
-                        dataMap.put("UserMonthlyTarget", CommonUtils.toList(resultArray));
-                    }
-
-                    final JSONObject requestObject2 = new JSONObject();
-                    try {
-                        requestObject2.put("UserId", CommonConstants.USER_ID);
-                        requestObject2.put("FinancialYear", financialYear);
-                        requestObject2.put("FromDate", financialStartingMonth);
-                        requestObject2.put("ToDate", financialEndingMonth);
-                    } catch (JSONException e) {
-                        Log.e(LOG_TAG, "" + e.getMessage());
-                    }
-                    getKrasDataFromCloud(requestObject2, Config.live_url + Config.GETTARGETSBYUSERIDANDFINANCIALYEAR, new ApplicationThread.OnComplete<String>() {
-                        @Override
-                        public void execute(boolean success, String result, String msg) {
-                            Log.v(LOG_TAG, "@@@@ response.2." + result);
-                            if (success) {
-                                try {
-                                    JSONArray resultArray = new JSONArray(result);
-                                    dataMap.put("UserTarget",  CommonUtils.toList(resultArray));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            onComplete.execute(true, dataMap, "kra's data");
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, ""+e.getMessage());
-                }
-            }
-        });
-    }
 
 
     public static void getRecordStatus(final String url, final ApplicationThread.OnComplete<String> onComplete) {
@@ -190,14 +103,9 @@ public class CloudDataHandler {
                                 while (keysToCopyIterator.hasNext()) {
 
                                     String key = (String) keysToCopyIterator.next();
-                                    if (key.equalsIgnoreCase("CollectionFarmer") ||key.equalsIgnoreCase("CollectionFarmerBank")
-                                            ||key.equalsIgnoreCase("CollectionFarmerIdentityProof")||key.equalsIgnoreCase("CollectionFileRepository")
-                                            || key.equalsIgnoreCase("UserMonthlyTarget")|| key.equalsIgnoreCase("UserKRA"))
-                                    {
-                                        Log.v(LOG_TAG,"response is null-->"+ key);
-                                    }else {
+
                                         keysList.add(key);
-                                    }
+
 //                                    String key = (String) keysToCopyIterator.next();
 //                                    keysList.add(key);
                                 }

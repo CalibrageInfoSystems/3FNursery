@@ -12,13 +12,6 @@ public class CullinglossFileRepository {
     private String CreatedDate;
     private int ServerUpdatedStatus;
 
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
 
     public String getImageString() {
         return ImageString;
@@ -86,4 +79,11 @@ public class CullinglossFileRepository {
         TransactionId = transactionId;
     }
 
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
 }

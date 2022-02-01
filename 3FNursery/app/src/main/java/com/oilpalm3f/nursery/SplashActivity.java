@@ -84,7 +84,12 @@ public class SplashActivity extends AppCompatActivity {
                 break;
         }
     }
+    /**
+     * Master in Splash Screen
+     *
 
+     * @return true if available else false
+     */
     public void startMasterSync() {
 
         if (CommonUtils.isNetworkAvailable(this) && !sharedPreferences.getBoolean(CommonConstants.IS_MASTER_SYNC_SUCCESS,false)) {

@@ -898,17 +898,32 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
     private boolean GroupValidate() {
         // TOdo comment Testing
 //
-        imageRepo = new ArrayList<>();
 
-        if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
-            imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
-             imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, "NurseryImage"));
+
+if(Ismultipleentry){
+        if (null != intentTransactionId && !intentTransactionId.isEmpty() && !TextUtils.isEmpty(intentTransactionId)) {
+            imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(intentTransactionId, "NurseryImage"));
             Log.v(LOG_TAG, "imagepath ============" + imagepath);
 
         } else {
-            imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
+            imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionIdNew, "NurseryImage"));
 
+        }}
+else{
+    imageRepo = new ArrayList<>();
+
+        if (null != transactionId && !transactionId.isEmpty() && !TextUtils.isEmpty(transactionId)) {
+            imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionId));
+            imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, "NurseryImage"));
+            Log.v(LOG_TAG, "imagepath ============" + imagepath);
+        } else {
+            imageRepo = dataAccessHandler.getCullinglossRepoDetails(Queries.getimagepath(transactionIdNew));
+            imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionIdNew, "NurseryImage"));
         }
+}
+        Log.e("transactionId===================exsit913", intentTransactionId + "single ==" + transactionId);
+        Log.e("transactionId===================New914", transactionIdNew);
+        Log.v(LOG_TAG, "transactionId===================imagepath915" + imagepath);
 
         dataValue = new ArrayList<>();
 
@@ -974,11 +989,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
 
             }
             if (activityTasklist.get(i).getInputType().equalsIgnoreCase("File") ) {
-                transactionId = dataAccessHandler.getSingleValue(Queries.getInstance().getTransactionIdUsingConsimentCode(consignmentCode, activityTypeId));
-                Log.e("transactionId===================", transactionId);
-                imagepath = dataAccessHandler.getOnlyOneValueFromDb(Queries.getInstance().localimagepath(transactionId, "NurseryImage"));
-                Log.v(LOG_TAG, "imagepath ============" + imagepath);
-                if (local_ImagePath != null || imagepath != null) {
+
+                Log.v(LOG_TAG, "transactionId===================imagepath" + imagepath);
+                if (local_ImagePath != null || imagepath != null)  {
 
                     dataValue.add(new KeyValues(activityTasklist.get(i).getId(),"NurseryImage"));
 
