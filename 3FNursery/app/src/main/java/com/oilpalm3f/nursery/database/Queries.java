@@ -1674,9 +1674,15 @@ public class Queries {
     }
 
     public static String getBigBag(String NurseryCode) {
-        return "select Value from LabourRate where key = 'PN - Bag Filing  Rate / Bag' and NurseryCode ='" + NurseryCode + "'";
+        return "select Value from LabourRate where key = 'SN - Bag Filing  Rate / Bag' and NurseryCode ='" + NurseryCode + "'";
+    }
+    public static String getTractorHireCharges(String NurseryCode) {
+        return "select Value from LabourRate where key = 'Tractor Hire Charges / Hour' and NurseryCode ='" + NurseryCode + "'";
     }
 
+    public static String DieselCharges(String NurseryCode) {
+        return "select Value from LabourRate where key = 'Diesel Charges for Tractor / Liter' and NurseryCode ='" + NurseryCode + "'";
+    }
 
 
     public static String getField(String Id) {
