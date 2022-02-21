@@ -3,6 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.oilpalm3f.nursery">
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.media.action.IMAGE_CAPTURE" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".Oil3FPalmMainApplication"
         android:allowBackup="true"
@@ -18,11 +43,19 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:appComponentFactory">
+
         <activity android:name=".ui.NurseryrmTransactionsScreen"
             android:theme="@style/AppTheme.NoActionBar" ></activity>
         <activity
             android:name=".ui.NurseryrmActivities"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.RMActivityFields"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true" />
+
         <activity
             android:name=".ui.ViewVisitlogs"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -67,7 +100,8 @@
         </activity>
         <activity
             android:name=".ui.Activities"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+             />
         <activity
             android:name=".ui.SelectionScreen"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -81,6 +115,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        <activity android:name=".ui.RMActivityFields"-->
+<!--            android:theme="@style/AppTheme.NoActionBar"-->
+<!--            android:windowSoftInputMode="adjustPan">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
             android:name=".ui.MainLoginScreen"
             android:label="@string/title_activity_main_login_screen"
@@ -101,6 +145,7 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
+
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -126,5 +171,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+=======
+>>>>>>> f3b212ec4d28186275884216b114d2917071a9ff
 
 </manifest>
