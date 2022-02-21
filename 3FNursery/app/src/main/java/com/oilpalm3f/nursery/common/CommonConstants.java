@@ -47,7 +47,7 @@ public class CommonConstants {
     public  static  int NEWACTIVITYSCREEEN = 0;
     public  static  int PRE_CONSIGNMENT = 1;
     public  static  int POST_CONSIGNMENT = 2;
-
+    public  static  int Nursery_RM = 3;
 
 
 

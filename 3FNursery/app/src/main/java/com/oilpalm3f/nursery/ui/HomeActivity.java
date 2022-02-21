@@ -37,7 +37,7 @@ public class  HomeActivity extends AppCompatActivity {
 
     RelativeLayout newactivity;
     RelativeLayout irrigation;
-    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel,nurserylabourlogsrel,Nurseryvisitlogs,viewNurseryvisitlogs;
+    RelativeLayout irrigation_post,IrrigationRel,checkactivityRel,nurserylabourlogsrel,Nurseryvisitlogs,viewNurseryvisitlogs,nurseryrm;
     LinkedHashMap<String, Pair> nurserydatamap = null;
     LinkedHashMap<String, Pair> consignmentdatamap = null;
     List<NurseryDetails> nurseryDetails;
@@ -66,6 +66,7 @@ public class  HomeActivity extends AppCompatActivity {
         checkactivityRel = findViewById(R.id.checkactivityRel);
         nurserylabourlogsrel = findViewById(R.id.nurserylabourlogsrel);
         Nurseryvisitlogs = findViewById(R.id.Nurseryvisitlogs);
+        nurseryrm = findViewById(R.id.nurseryrm);
         viewNurseryvisitlogs = findViewById(R.id.viewNurseryvisitlogs);
         circleView = (CircleView) findViewById(R.id.countTxt);
         dataAccessHandler = new DataAccessHandler(this);
@@ -182,7 +183,18 @@ public class  HomeActivity extends AppCompatActivity {
 
             }
         });
+        nurseryrm.setOnClickListener(new View.OnClickListener() {  // Nursery Selection
+            @Override
+            public void onClick(View view) {
 
+                CommonConstants.COMMINGFROM = CommonConstants.Nursery_RM;
+                Intent selectionscreen = new Intent(HomeActivity.this, NurserySelectionScreen.class);
+                startActivity(selectionscreen);
+
+                //  showDialog(HomeActivity.this);
+
+            }
+        });
     }
 
     public static void resetPrevRegData() {

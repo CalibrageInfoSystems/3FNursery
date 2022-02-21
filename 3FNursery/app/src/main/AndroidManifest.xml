@@ -18,8 +18,14 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".ui.ViewVisitlogs"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.NurseryrmTransactionsScreen"
+            android:theme="@style/AppTheme.NoActionBar" ></activity>
+        <activity
+            android:name=".ui.NurseryrmActivities"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.ViewVisitlogs"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.NurseryVisitLogActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -98,9 +104,9 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

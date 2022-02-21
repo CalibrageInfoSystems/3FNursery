@@ -15,6 +15,9 @@ import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.dbmodels.NurseryData;
+import com.oilpalm3f.nursery.ui.Activities;
+import com.oilpalm3f.nursery.ui.NurseryrmActivities;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +57,27 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {    // Intent  Consignment Selection Screen
             @Override
             public void onClick(View view) {
-                CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
-                Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
-                intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
-                CommonConstants.NurseryCode = nurserysList.get(position).getCode();
-                CommonConstants.NurseryName = nurserysList.get(position).getName();
-                context.startActivity(intent);
+
+                if(CommonConstants.COMMINGFROM == CommonConstants.Nursery_RM){  // Coming From New Activity
+
+                    Intent intent = new Intent(context, NurseryrmActivities.class);
+                    intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
+//                    intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
+//                    intent.putExtra("EstimatedQty",consignmentList.get(position).getEstimatedQuantity()+"" );
+                    context.startActivity(intent);
+
+                } else {
+
+                    CommonConstants.NurseryCode  = nurserysList.get(position).getCode();
+                    Intent intent = new Intent(context, ConsignmentSelectionScreen.class);
+                    intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
+                    CommonConstants.NurseryCode = nurserysList.get(position).getCode();
+                    CommonConstants.NurseryName = nurserysList.get(position).getName();
+                    context.startActivity(intent);
+
+                }
+
+
             }
         });
 
