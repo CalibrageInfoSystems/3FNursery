@@ -12,24 +12,30 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oilpalm3f.nursery.R;
+import com.oilpalm3f.nursery.cloudhelper.Log;
+import com.oilpalm3f.nursery.common.CommonConstants;
+import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 import com.oilpalm3f.nursery.utils.UiUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class RMActivityFields extends AppCompatActivity {
-
+    public static final String LOG_TAG = RMActivityFields.class.getSimpleName();
     Spinner typespinner, uomSpinner;
     LinearLayout labourlyt, otherlyt;
     EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside;
     EditText expensetype, quantity;
     ImageView imageView;
     Button submitBtn;
-
-
+    int Flag;
+    String transactionId,Activity_Name;
+TextView activity_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,9 @@ public class RMActivityFields extends AppCompatActivity {
 
         init();
         setviews();
+
+
+
     }
 
     private void init() {
@@ -55,7 +64,7 @@ public class RMActivityFields extends AppCompatActivity {
         expensetype = findViewById(R.id.expensetype);
         quantity = findViewById(R.id.quantity);
         imageView = findViewById(R.id.rmimageview);
-
+        activity_name = findViewById(R.id.activityname);
         submitBtn = findViewById(R.id.rmsubmitBtn);
 
     }
@@ -64,6 +73,30 @@ public class RMActivityFields extends AppCompatActivity {
 
         labourlyt.setVisibility(View.GONE);
         otherlyt.setVisibility(View.GONE);
+
+        if (getIntent() != null) {
+
+            Activity_Name = getIntent().getStringExtra("Name");
+            Flag = getIntent().getIntExtra("camefrom", 1); // if Flag 2 , edit on rejection
+            transactionId = getIntent().getStringExtra("transactionId");
+            Log.d(LOG_TAG, "Name==========> :" + Activity_Name);
+            Log.d(LOG_TAG, "Flag=====" + Flag);
+            if (Flag == 2) {
+
+
+                activity_name.setText(Activity_Name+"");
+                mandaysmale.setText("5");
+                mandaysfemale.setText("6");
+                mandaysmaleoutside.setText("4");
+                mandaysfemaleoutside.setText("9");
+                String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
+
+
+            } else {
+
+            }
+
+        }
 
         String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
         List<String> typeSpinnerList = Arrays.asList(typeSpinnerArr);
@@ -74,26 +107,30 @@ public class RMActivityFields extends AppCompatActivity {
         typespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (Flag == 2) {
+                    typespinner.setSelection(1);
+                }
+                    if (typespinner.getSelectedItemPosition() == 0) {
 
-                if (typespinner.getSelectedItemPosition() == 0) {
+                        labourlyt.setVisibility(View.GONE);
+                        otherlyt.setVisibility(View.GONE);
 
-                    labourlyt.setVisibility(View.GONE);
-                    otherlyt.setVisibility(View.GONE);
+                    } else if (typespinner.getSelectedItemPosition() == 1) {
+                        labourlyt.setVisibility(View.VISIBLE);
+                        otherlyt.setVisibility(View.GONE);
+                    } else {
 
-                } else if (typespinner.getSelectedItemPosition() == 1) {
-                    labourlyt.setVisibility(View.VISIBLE);
-                    otherlyt.setVisibility(View.GONE);
-                } else {
-
-                    labourlyt.setVisibility(View.GONE);
-                    otherlyt.setVisibility(View.VISIBLE);
+                        labourlyt.setVisibility(View.GONE);
+                        otherlyt.setVisibility(View.VISIBLE);
+                    }
                 }
 
-            }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                if (Flag == 2) {
+                    typespinner.setSelection(1);
+                }
             }
         });
 
@@ -110,6 +147,7 @@ public class RMActivityFields extends AppCompatActivity {
                 if (validations()){
 
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });

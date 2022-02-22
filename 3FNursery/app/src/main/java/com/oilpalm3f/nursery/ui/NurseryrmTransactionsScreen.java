@@ -88,7 +88,7 @@ TextView activity_name;
 //        a = new NurseryRMTransctions( "TRANRM00010001",1," ","","24/02/2022");
 //        Transactionlist.add(a);
 
-        rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(this, Transactionlist);
+        rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(this, Transactionlist,activityName);
         Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
 
     }

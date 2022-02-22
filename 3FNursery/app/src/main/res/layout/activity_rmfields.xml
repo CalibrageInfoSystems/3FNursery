@@ -62,7 +62,7 @@
                             android:textStyle="bold"
                             />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/activityname"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"

@@ -26,7 +26,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
     public Context mContext;
     private List<NurseryRMTransctions> RMTransactionlist;
-    // private RequestAdapterListener listener;
+ String Activityname;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView transactionId, status, comment, createddate;
@@ -47,9 +47,9 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
     }
 
 
-    public RMTransactionRecyclerViewAdapter(Context context, List<NurseryRMTransctions> RMTransaction_list) {
+    public RMTransactionRecyclerViewAdapter(Context context, List<NurseryRMTransctions> RMTransaction_list, String Activity_name) {
         this.mContext = context;
-//        this.listener = listener;
+        this.Activityname = Activity_name;
         this.RMTransactionlist = RMTransaction_list;
 
     }
@@ -81,7 +81,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
 
                     Intent intent = new Intent(mContext, RMActivityFields.class);
-                   // intent.putExtra("consignmentCode",  IrrigationlogList.get(position).getIrrigationCode());
+                 intent.putExtra("Name", Activityname);
                     intent.putExtra("camefrom",  2);
                     intent.putExtra("transactionId",   RMTransactionlist.get(position).getTransactionId());
                     mContext.startActivity(intent);
