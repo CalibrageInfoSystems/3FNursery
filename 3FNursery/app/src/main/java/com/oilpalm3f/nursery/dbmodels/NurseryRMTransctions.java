@@ -10,7 +10,7 @@ public class NurseryRMTransctions {
     private int CreatedByUserId;
     private  String Desc;
 
-    public NurseryRMTransctions(String transactionId, int activityId, int statusTypeId, String comment, String desc, String createdDate) {
+    public NurseryRMTransctions(String transactionId, int activityId, int statusTypeId,  String desc,String comment, String createdDate) {
         TransactionId = transactionId;
         ActivityId = activityId;
         StatusTypeId = statusTypeId;

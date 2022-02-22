@@ -1,6 +1,7 @@
 package com.oilpalm3f.nursery.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +40,9 @@ TextView activity_name;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nurseryrm_transactions_screen);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Nursery R&M");
+        setSupportActionBar(toolbar);
         Bundle extras = getIntent().getExtras();  // SETUP title For Activity
         if (extras != null) {
             try {
@@ -81,9 +85,11 @@ TextView activity_name;
     private void nurseryrmTransactions() {
         NurseryRMTransctions a = new NurseryRMTransctions( "TRANRM00010001",1,346,"Job Completed","new RM","22/02/2022");
         Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010002",1,348,"Approved","test Approved","21/02/2022");
+        a = new NurseryRMTransctions( "TRANRM00010002",1,347,"Nursery Manager Approved","test Approved","21/02/2022");
         Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010003",1,349,"Rejected","Rejected","22/02/2022");
+        a = new NurseryRMTransctions( "TRANRM00010003",1,348,"State Head Approved","test Approved","21/02/2022");
+        Transactionlist.add(a);
+        a = new NurseryRMTransctions( "TRANRM00010004",1,349,"Rejected","Rejected","22/02/2022");
         Transactionlist.add(a);
         //a = new NurseryRMTransctions( "TRANRM00010001",1,"","","24/02/2022");
 //        Transactionlist.add(a); a = new NurseryRMTransctions( "TRANRM00010001",1,"","","24/02/2022");

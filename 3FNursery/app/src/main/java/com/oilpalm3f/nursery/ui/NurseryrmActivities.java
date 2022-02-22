@@ -45,9 +45,9 @@ public class NurseryrmActivities extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nurseryrm_activities);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setTitle("Nursery R&M");
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Nursery R&M");
+        setSupportActionBar(toolbar);
         initviews();
         setviews();
     }
@@ -97,55 +97,15 @@ public class NurseryrmActivities extends AppCompatActivity {
 
         NurseryRMActivity a = new NurseryRMActivity( "Shade Net R & M");
         request_List.add(a);
-       a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
         a = new NurseryRMActivity( "Fencing R & M");
         request_List.add(a);
-
-        a = new NurseryRMActivity( "Fencing R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Fencing R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Fencing R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Fencing R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Fencing R & M");
+        a = new NurseryRMActivity( "Fencing_A R & M");
         request_List.add(a);
         a = new NurseryRMActivity( "Electricity R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Electricity R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Electricity R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Electricity R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Electricity R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Irrigation Setup R & M");
         request_List.add(a);
         a = new NurseryRMActivity( "Irrigation Setup R & M");
         request_List.add(a);
 
-        a = new NurseryRMActivity( "Irrigation Setup R & M");
-        request_List.add(a);
-
-        a = new NurseryRMActivity( "Irrigation Setup R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Irrigation Setup R & M");
-        request_List.add(a);
 
 
 
