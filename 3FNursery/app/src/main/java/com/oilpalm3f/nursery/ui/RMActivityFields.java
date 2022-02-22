@@ -9,6 +9,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
@@ -141,6 +142,7 @@ TextView activity_name;
                 quantity.setText("5");
                 submitBtn.setVisibility(View.GONE);
                 imageView.setImageResource(R.drawable.info);
+                cost.setText("500");
 
             } else {
                 activity_name.setText(Activity_Name+"");
@@ -280,6 +282,14 @@ TextView activity_name;
 
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+//        final int width = myBitmap.getWidth();
+//        final int height = myBitmap.getHeight();
+//        Bitmap portraitBitmap = Bitmap.createBitmap(height, width, Bitmap.Config.ARGB_8888);
+//        Canvas c = new Canvas(portraitBitmap);
+//        c.rotate(90, height/2, width/2);
+//        c.drawBitmap(myBitmap, 0,0,null);
+
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 
         File wallpaperDirectory = new File(
