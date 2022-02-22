@@ -70,6 +70,9 @@ TextView activity_name;
             @Override
             public void onClick(View view) {
                 Intent selectionscreen = new Intent(NurseryrmTransactionsScreen.this, RMActivityFields.class);
+                selectionscreen.putExtra("Name", activityName);
+                selectionscreen.putExtra("camefrom",  1);
+                selectionscreen.putExtra("transactionId",   "");
                 startActivity(selectionscreen);
             }
         });

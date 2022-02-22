@@ -129,11 +129,11 @@ TextView activity_name;
                 mandaysfemale.setText("6");
                 mandaysmaleoutside.setText("4");
                 mandaysfemaleoutside.setText("9");
-                String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
+
 
 
             } else {
-
+                activity_name.setText(Activity_Name+"");
             }
 
         }
