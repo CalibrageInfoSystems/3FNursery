@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
@@ -34,6 +37,7 @@ public class NurseryrmActivities extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private DataAccessHandler dataAccessHandler;
     TextView othertext;
+    EditText Activitynameedit;
     LinearLayout otherlinear;
     private List<NurseryRMActivity> request_List = new ArrayList<>();
     NurseryrmActivitiesAdapter nurseryrmListAdapter;
@@ -54,6 +58,7 @@ public class NurseryrmActivities extends AppCompatActivity {
         ActivityRecyclerView = findViewById(R.id.ActivityRecyclerView);
         otherlinear = findViewById(R.id.other_linear);
         ok_btn = findViewById(R.id.ok_btn);
+        Activitynameedit = findViewById(R.id.Activitynameedit);
         ActivityRecyclerView.setHasFixedSize(true);
         ActivityRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -68,15 +73,25 @@ public class NurseryrmActivities extends AppCompatActivity {
                 otherlinear.setVisibility(View.VISIBLE);
             }
         });
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent selectionscreen = new Intent(NurseryrmActivities.this, NurseryrmTransactionsScreen.class);
-                startActivity(selectionscreen);
-            }
-        });
 
-    }
+            ok_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!Activitynameedit.getText().toString().isEmpty() && !Activitynameedit.getText().toString().equals("null")) {
+                    Intent NurseryrmTransactions = new Intent(NurseryrmActivities.this, NurseryrmTransactionsScreen.class);
+                    NurseryrmTransactions.putExtra("RmActivityname", Activitynameedit.getText().toString());
+                    startActivity(NurseryrmTransactions);
+                    }
+                    else{
+
+                        Toast.makeText(NurseryrmActivities.this, "Please Enter Nursery RM Activity Name", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        }
+
 
     private void nurseryrmActivities() {
 

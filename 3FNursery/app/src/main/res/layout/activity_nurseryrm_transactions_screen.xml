@@ -14,14 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textSize="20dp"
-
+android:id="@+id/activityname"
         android:textColor="@color/black"
-        android:text="Completed Transactions"/>
+        android:text="Activity Name"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_weight="0.9"
         android:layout_margin="5dp"
-        android:id="@+id/multipleentries"
+        android:id="@+id/Transactionrcv"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 

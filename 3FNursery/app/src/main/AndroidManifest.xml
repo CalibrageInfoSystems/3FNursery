@@ -45,10 +45,14 @@
         tools:replace="android:appComponentFactory">
 
         <activity android:name=".ui.NurseryrmTransactionsScreen"
-            android:theme="@style/AppTheme.NoActionBar" ></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true" ></activity>
         <activity
             android:name=".ui.NurseryrmActivities"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true" />
 
         <activity
             android:name=".ui.RMActivityFields"
