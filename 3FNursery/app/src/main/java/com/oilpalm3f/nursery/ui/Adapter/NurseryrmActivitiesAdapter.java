@@ -1,6 +1,7 @@
 package com.oilpalm3f.nursery.ui.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
+import com.oilpalm3f.nursery.ui.NurseryrmActivities;
+import com.oilpalm3f.nursery.ui.NurseryrmTransactionsScreen;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,7 +59,13 @@ public class NurseryrmActivitiesAdapter extends RecyclerView.Adapter<NurseryrmAc
 
         holder.name.setText(rmactivitylist.getActivityName());
 
-
+holder.name.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent selectionscreen = new Intent(mContext, NurseryrmTransactionsScreen.class);
+        mContext.startActivity(selectionscreen);
+    }
+});
 
         //     Picasso.with(context).load(settings.getImage()).error(R.drawable.ic_user).transform(new CircleTransform()).into(holder.thumbnail);
 
