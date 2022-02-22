@@ -132,6 +132,16 @@ TextView activity_name;
 
 
 
+            }
+           else if (Flag == 3) {
+
+
+                activity_name.setText(Activity_Name+"");
+                expensetype.setText("test");
+                quantity.setText("5");
+                submitBtn.setVisibility(View.GONE);
+                imageView.setImageResource(R.drawable.info);
+
             } else {
                 activity_name.setText(Activity_Name+"");
             }
@@ -149,6 +159,9 @@ TextView activity_name;
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (Flag == 2) {
                     typespinner.setSelection(1);
+                }
+               else if (Flag == 3) {
+                    typespinner.setSelection(2);
                 }
                     if (typespinner.getSelectedItemPosition() == 0) {
 
@@ -180,7 +193,23 @@ TextView activity_name;
         ArrayAdapter<String> uomSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, uomSpinnerList);
         uomSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         uomSpinner.setAdapter(uomSpinnerAdapter);
+        uomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+             if (Flag == 3) {
+                    uomSpinner.setSelection(2);
+                }
 
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                if (Flag == 3) {
+                    uomSpinner.setSelection(2);
+                }
+            }
+        });
 
 
         imageView.setOnClickListener(v1 -> {

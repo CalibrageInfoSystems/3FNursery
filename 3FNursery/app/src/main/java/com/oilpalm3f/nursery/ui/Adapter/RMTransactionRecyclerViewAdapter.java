@@ -95,6 +95,25 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
 
         }
+        else{
+            holder.mainlyt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //  List<NurseryIrrigationLogXref> IrrigationLogXreflist =new ArrayList<>();
+
+
+                    Intent intent = new Intent(mContext, RMActivityFields.class);
+                    intent.putExtra("Name", Activityname);
+                    intent.putExtra("camefrom",  3);
+                    intent.putExtra("transactionId",   RMTransactionlist.get(position).getTransactionId());
+                    mContext.startActivity(intent);
+
+
+
+
+                }
+            });
+        }
 
 
 
