@@ -438,7 +438,7 @@
                                 />
 
                             <ImageView
-                                android:id="@+id/imageview"
+                                android:id="@+id/rmimageview"
                                 android:layout_width="0dp"
                                 android:layout_height="150dp"
                                 android:layout_weight="0.5"
@@ -452,7 +452,7 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/submitBtn"
+                        android:id="@+id/rmsubmitBtn"
                         style="@style/basicBtnStyle"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
