@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,26 +47,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RMActivityFields extends AppCompatActivity {
     public static final String LOG_TAG = RMActivityFields.class.getSimpleName();
     Spinner typespinner, uomSpinner;
-    LinearLayout labourlyt, otherlyt;
+    LinearLayout labourlyt, otherlyt, nameactivity;
     EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside;
-    EditText expensetype, quantity;
+    EditText expensetype, quantity, date;
     ImageView imageView;
-    Button submitBtn;
+    Button submitBtn, cancelBtn;
 
     int Flag;
-    String transactionId,Activity_Name;
-TextView activity_name;
-
+    String transactionId,Activity_Name, Nurseryname;
+TextView activity_name, nurseryname;
+    DatePickerDialog picker;
     int labourcost = 10;
     TextView cost;
-
+    String currentDate,sendcurrentDate;
 
 
     private int GALLERY = 1, CAMERA = 2;
@@ -91,6 +97,10 @@ TextView activity_name;
 
     private void init() {
 
+        nameactivity = findViewById(R.id.nameactivity);
+        nurseryname = findViewById(R.id.nurseryname);
+        date = findViewById(R.id.rmdate);
+
         typespinner = findViewById(R.id.typeSpinner);
         uomSpinner = findViewById(R.id.uomspinner);
 
@@ -110,6 +120,7 @@ TextView activity_name;
         cost = findViewById(R.id.cost);
 
         submitBtn = findViewById(R.id.rmsubmitBtn);
+        cancelBtn = findViewById(R.id.rmcancelBtn);
 
     }
 
@@ -117,6 +128,37 @@ TextView activity_name;
 
         labourlyt.setVisibility(View.GONE);
         otherlyt.setVisibility(View.GONE);
+        Log.d("Nurserynameeeee", CommonConstants.NurseryName + "");
+
+        currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        sendcurrentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Log.i("LOG_RESPONSE date ", currentDate+"========"+sendcurrentDate);
+        date.setText(currentDate);
+        date.setInputType(InputType.TYPE_NULL);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(RMActivityFields.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                                date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+
+                                sendcurrentDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth ;
+                                Log.i("LOG_RESPONSE date ", "========"+sendcurrentDate);
+                            }
+                        }, year, month, day);
+                picker.show();
+                picker.getDatePicker().setMaxDate(System.currentTimeMillis());
+            }
+        });
+
 
         if (getIntent() != null) {
 
@@ -126,29 +168,30 @@ TextView activity_name;
             Log.d(LOG_TAG, "Name==========> :" + Activity_Name);
             Log.d(LOG_TAG, "Flag=====" + Flag);
             if (Flag == 2) {
-
-
+                nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name+"");
                 mandaysmale.setText("5");
                 mandaysfemale.setText("6");
                 mandaysmaleoutside.setText("4");
                 mandaysfemaleoutside.setText("9");
 
-
-
             }
            else if (Flag == 3) {
-
-
+                nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name+"");
                 expensetype.setText("test");
                 quantity.setText("5");
                 submitBtn.setVisibility(View.GONE);
                 imageView.setImageResource(R.drawable.info);
                 cost.setText("500");
-
             } else {
                 activity_name.setText(Activity_Name+"");
+                nurseryname.setText(CommonConstants.NurseryName + "");
+                if (Activity_Name.equalsIgnoreCase("Other") ){
+                    nameactivity.setVisibility(View.VISIBLE);
+                }else{
+                    nameactivity.setVisibility(View.GONE);
+                }
             }
 
         }
@@ -256,6 +299,14 @@ TextView activity_name;
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RMActivityFields.this, HomeActivity.class);
+                startActivity(intent);
             }
         });
 
