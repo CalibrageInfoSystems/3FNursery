@@ -58,7 +58,7 @@
                             android:layout_height="match_parent"
                             android:text="Nursery Name"
                             android:textSize="18dp"
-                            android:lines="2"
+
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             />
@@ -68,7 +68,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5"
-                            android:lines="2"
+                            android:inputType="textMultiLine"
                             android:textAlignment="textStart"
                             android:textColor="@color/black"
                             android:textSize="20dp" />
