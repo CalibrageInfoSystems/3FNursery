@@ -19,6 +19,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryRMTransctions;
 import com.oilpalm3f.nursery.ui.NurseryrmTransactionsScreen;
 import com.oilpalm3f.nursery.ui.RMActivityFields;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView transactionId, status, comment, createddate;
-        ImageView editicon, infoicon;
+        ImageView editicon, statusSymbol;
         LinearLayout mainlyt, lyt_coments;
 
         public MyViewHolder(View view) {
@@ -40,7 +41,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
             this.status = (TextView) itemView.findViewById(R.id.status);
             this.comment = (TextView) itemView.findViewById(R.id.comment);
             editicon = itemView.findViewById(R.id.editicon);
-            infoicon = itemView.findViewById(R.id.infoicon);
+            statusSymbol = itemView.findViewById(R.id.statusSymbol);
             this.createddate = (TextView) itemView.findViewById(R.id.createddate);
             this.mainlyt = itemView.findViewById(R.id.mainlyt);
         }
@@ -74,6 +75,8 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
 
         if(RMTransactionlist.get(position).getStatusTypeId() == 349 ){
+            holder.statusSymbol.setImageResource(R.drawable.rejected);
+
             holder.mainlyt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -96,6 +99,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
         }
         else{
+            holder.statusSymbol.setImageResource(R.drawable.done);
             holder.mainlyt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -117,7 +121,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
 
 
-        //     Picasso.with(context).load(settings.getImage()).error(R.drawable.ic_user).transform(new CircleTransform()).into(holder.thumbnail);
+       //  Picasso.with(context).load(settings.getImage()).error(R.drawable.ic_user).transform(new CircleTransform()).into(holder.thumbnail);
 
     }
 

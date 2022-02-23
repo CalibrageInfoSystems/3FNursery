@@ -53,7 +53,7 @@ public class RMActivityFields extends AppCompatActivity {
     Spinner typespinner, uomSpinner;
     LinearLayout labourlyt, otherlyt;
     EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside;
-    EditText expensetype, quantity;
+    EditText expensetype, quantity,comment;
     ImageView imageView;
     Button submitBtn;
 
@@ -104,6 +104,7 @@ TextView activity_name;
 
         expensetype = findViewById(R.id.expensetype);
         quantity = findViewById(R.id.quantity);
+        comment = findViewById(R.id.comments);
         imageView = findViewById(R.id.rmimageview);
 
         activity_name = findViewById(R.id.activityname);
@@ -133,13 +134,13 @@ TextView activity_name;
                 mandaysfemale.setText("6");
                 mandaysmaleoutside.setText("4");
                 mandaysfemaleoutside.setText("9");
-
+                comment.setText("testing R&m Commets");
 
 
             }
            else if (Flag == 3) {
 
-
+                comment.setText("testing R&m Commets");
                 activity_name.setText(Activity_Name+"");
                 expensetype.setText("test");
                 quantity.setText("5");
@@ -147,8 +148,15 @@ TextView activity_name;
                 imageView.setImageResource(R.drawable.info);
                 cost.setText("500");
 
+                expensetype.setEnabled(false);
+                quantity.setEnabled(false);
+              //  comment.setEnabled(false);
+                comment.setFocusableInTouchMode(false);
+                comment.setFocusable(false);
+
             } else {
                 activity_name.setText(Activity_Name+"");
+
             }
 
         }

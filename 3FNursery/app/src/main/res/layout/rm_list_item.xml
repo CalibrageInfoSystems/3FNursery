@@ -24,6 +24,14 @@
         android:text="Roja"
         android:layout_margin="@dimen/margin_10"
         android:textSize="20dp"/>
+        <ImageView
+            android:id="@+id/overflow"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+        android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:layout_margin="@dimen/margin_10"
+            android:src="@drawable/arrow_right" />
 
     </androidx.cardview.widget.CardView>
 

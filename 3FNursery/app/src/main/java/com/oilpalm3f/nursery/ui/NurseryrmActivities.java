@@ -56,9 +56,7 @@ public class NurseryrmActivities extends AppCompatActivity {
         dataAccessHandler = new DataAccessHandler(this);
         othertext= findViewById(R.id.othertext);
         ActivityRecyclerView = findViewById(R.id.ActivityRecyclerView);
-        otherlinear = findViewById(R.id.other_linear);
-        ok_btn = findViewById(R.id.ok_btn);
-        Activitynameedit = findViewById(R.id.Activitynameedit);
+
         ActivityRecyclerView.setHasFixedSize(true);
         ActivityRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -70,24 +68,12 @@ public class NurseryrmActivities extends AppCompatActivity {
         othertext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                otherlinear.setVisibility(View.VISIBLE);
+                Intent NurseryrmTransactions = new Intent(NurseryrmActivities.this, NurseryrmTransactionsScreen.class);
+                NurseryrmTransactions.putExtra("RmActivityname", othertext.getText().toString());
+                startActivity(NurseryrmTransactions);
             }
         });
 
-            ok_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!Activitynameedit.getText().toString().isEmpty() && !Activitynameedit.getText().toString().equals("null")) {
-                    Intent NurseryrmTransactions = new Intent(NurseryrmActivities.this, NurseryrmTransactionsScreen.class);
-                    NurseryrmTransactions.putExtra("RmActivityname", Activitynameedit.getText().toString());
-                    startActivity(NurseryrmTransactions);
-                    }
-                    else{
-
-                        Toast.makeText(NurseryrmActivities.this, "Please Enter Nursery RM Activity Name", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
 
 
         }
@@ -99,7 +85,7 @@ public class NurseryrmActivities extends AppCompatActivity {
         request_List.add(a);
         a = new NurseryRMActivity( "Fencing R & M");
         request_List.add(a);
-        a = new NurseryRMActivity( "Fencing_A R & M");
+        a = new NurseryRMActivity( "Fencing_AND R & M");
         request_List.add(a);
         a = new NurseryRMActivity( "Electricity R & M");
         request_List.add(a);

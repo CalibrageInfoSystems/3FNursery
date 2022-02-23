@@ -83,13 +83,13 @@ TextView activity_name;
     }
 
     private void nurseryrmTransactions() {
-        NurseryRMTransctions a = new NurseryRMTransctions( "TRANRM00010001",1,346,"Job Completed","new RM","22/02/2022");
+        NurseryRMTransctions a = new NurseryRMTransctions( "TRANRM00010001",1,346,"Job Completed","Other","22/02/2022");
         Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010002",1,347,"Nursery Manager Approved","test Approved","21/02/2022");
+        a = new NurseryRMTransctions( "TRANRM00010002",1,347,"Nursery Manager Approved","Other","21/02/2022");
         Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010003",1,348,"State Head Approved","test Approved","21/02/2022");
+        a = new NurseryRMTransctions( "TRANRM00010003",1,348,"State Head Approved","Other","21/02/2022");
         Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010004",1,349,"Rejected","Rejected","22/02/2022");
+        a = new NurseryRMTransctions( "TRANRM00010004",1,349,"Rejected","Labour","22/02/2022");
         Transactionlist.add(a);
         //a = new NurseryRMTransctions( "TRANRM00010001",1,"","","24/02/2022");
 //        Transactionlist.add(a); a = new NurseryRMTransctions( "TRANRM00010001",1,"","","24/02/2022");

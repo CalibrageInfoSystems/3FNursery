@@ -53,13 +53,12 @@
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
                     />
-                <ImageView
-                    android:id="@+id/infoicon"
-                    android:src="@drawable/infoo"
-                    android:layout_weight="0.1"
-                    android:layout_width="0dp"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content"/>
+<!--                <ImageView-->
+<!--                    android:id="@+id/statusSymbol"-->
+<!--                    android:src="@drawable/infoo"-->
+<!--                    android:layout_weight="0.1"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"/>-->
             </LinearLayout>
 
 
@@ -88,12 +87,19 @@
                     android:textColor="@color/black"></TextView>
                 <TextView
                     android:id="@+id/status"
-                    android:layout_weight="0.68"
+                    android:layout_weight="0.58"
                     android:layout_width="0dp"
                     android:textSize="20dp"
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
                     />
+                <ImageView
+                    android:id="@+id/statusSymbol"
+                    android:src="@drawable/infoo"
+                    android:layout_weight="0.1"
+                    android:layout_width="0dp"
+
+                    android:layout_height="30dp"/>
 
             </LinearLayout>
 
@@ -105,13 +111,14 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:layout_weight="0.3"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="Comment"
-                    android:textSize="20dp"
+                    android:layout_weight="0.3"
+                    android:text="Type"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/dot4"
                     android:layout_weight="0.02"
@@ -176,6 +183,7 @@
 
 
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
