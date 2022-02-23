@@ -334,12 +334,12 @@
                                 android:id="@+id/comments"
                                 style="@style/editTxt_normal_address"
                                 android:layout_width="match_parent"
+                                android:layout_height="120dp"
                                 android:layout_weight="1"
                                 android:digits="@string/digits"
                                 android:gravity="start"
-                                android:text="Roja"
                                 android:maxLength="150"
-                                android:layout_height="120dp"/>
+                                />
                         </LinearLayout>
 
                     </LinearLayout>

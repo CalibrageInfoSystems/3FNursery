@@ -61,7 +61,7 @@ public class RMActivityFields extends AppCompatActivity {
     EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside;
 
 
-    EditText expensetype, quantity, date,comment;
+    EditText expensetype, quantity, date,comment,nameofactivity,othercomments;
 
     ImageView imageView;
     Button submitBtn, cancelBtn;
@@ -114,12 +114,12 @@ TextView activity_name, nurseryname;
         mandaysfemale = findViewById(R.id.mandaysfemale);
         mandaysmaleoutside = findViewById(R.id.mandaysmaleoutside);
         mandaysfemaleoutside = findViewById(R.id.mandaysfemaleoutside);
-
+        nameofactivity =findViewById(R.id.nameofactivity);
         expensetype = findViewById(R.id.expensetype);
         quantity = findViewById(R.id.quantity);
         comment = findViewById(R.id.comments);
         imageView = findViewById(R.id.rmimageview);
-
+        othercomments = findViewById(R.id.othercomments);;
         activity_name = findViewById(R.id.activityname);
         cost = findViewById(R.id.cost);
 
@@ -180,12 +180,17 @@ TextView activity_name, nurseryname;
                 mandaysfemaleoutside.setText("9");
 
                 comment.setText("testing R&m Commets");
-
+                if (Activity_Name.equalsIgnoreCase("Other") ){
+                    nameactivity.setVisibility(View.VISIBLE);
+                    nameofactivity.setText("Other R&M Activity");
+                }else{
+                    nameactivity.setVisibility(View.GONE);
+                }
 
             }
            else if (Flag == 3) {
 
-                comment.setText("testing R&m Commets");
+                othercomments.setText("testing R&m Commets");
 
                 nurseryname.setText(CommonConstants.NurseryName + "");
 
@@ -199,10 +204,14 @@ TextView activity_name, nurseryname;
 
                 expensetype.setEnabled(false);
                 quantity.setEnabled(false);
-              //  comment.setEnabled(false);
-                comment.setFocusableInTouchMode(false);
-                comment.setFocusable(false);
+               othercomments.setEnabled(false);
 
+                if (Activity_Name.equalsIgnoreCase("Other") ){
+                    nameactivity.setVisibility(View.VISIBLE);
+                    nameofactivity.setText("Test R&M Activity");
+                }else{
+                    nameactivity.setVisibility(View.GONE);
+                }
             }  else {
                 activity_name.setText(Activity_Name+"");
                 nurseryname.setText(CommonConstants.NurseryName + "");
