@@ -202,6 +202,10 @@ TextView activity_name, nurseryname;
                 cost.setText("500");
 
 
+                nameofactivity.setEnabled(false);
+                date.setEnabled(false);
+                typespinner.setEnabled(false);
+                uomSpinner.setEnabled(false);
                 expensetype.setEnabled(false);
                 quantity.setEnabled(false);
                othercomments.setEnabled(false);
@@ -403,6 +407,14 @@ TextView activity_name, nurseryname;
 
 
     public boolean validations() {
+
+        if (Activity_Name.equalsIgnoreCase("Other") ){
+
+            if (TextUtils.isEmpty(nameofactivity.getText().toString())) {
+                UiUtils.showCustomToastMessage("Please Enter Name of the Activity", RMActivityFields.this, 0);
+                return false;
+            }
+        }
 
         if (typespinner.getSelectedItemPosition() == 0) {
             UiUtils.showCustomToastMessage("Please Select Type", RMActivityFields.this, 0);
