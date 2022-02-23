@@ -142,7 +142,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
->>>>>>> 44c28c1ac799db43982b86abc6a1dc2d152a7d88
                         android:weightSum="1">
 
                         <TextView
@@ -182,6 +181,7 @@
                             android:layout_height="match_parent"
                             android:text="Type *"
                             android:textSize="18dp"
+                            android:gravity="center_vertical"
                             android:textAlignment="textStart"
                             android:textColor="@color/black"
                             android:textStyle="bold"/>
@@ -200,6 +200,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
+                        android:visibility="gone"
                         android:id="@+id/labourslyt">
 
                         <LinearLayout
@@ -350,7 +351,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:id="@+id/otherslyt"
-                        android:visibility="gone">
+                       >
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -359,15 +360,15 @@
                             android:weightSum="1">
 
                             <TextView
-                                android:gravity="center_vertical"
-                                android:layout_weight="0.5"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_weight="0.5"
+                                android:gravity="center_vertical"
                                 android:text="Expense Type *"
-                                android:textSize="18dp"
                                 android:textColor="@color/black"
-                                android:textStyle="bold"
-                                />
+
+                                android:textSize="18dp"
+                                android:textStyle="bold" />
 
                             <EditText
                                 android:id="@+id/expensetype"
@@ -375,6 +376,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5"
                                 android:hint="Expense Type"
+                                android:gravity="center_vertical"
                                 android:inputType="text"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
@@ -393,6 +395,7 @@
                                 android:layout_height="match_parent"
                                 android:text="UOM *"
                                 android:textSize="18dp"
+                                android:gravity="center_vertical"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
                                 android:textStyle="bold"/>
@@ -401,6 +404,7 @@
                                 android:id="@+id/uomspinner"
                                 android:layout_weight="0.5"
                                 android:layout_width="0dp"
+                                android:gravity="center_vertical"
                                 android:layout_marginTop="5dp"
                                 android:background="@drawable/spinner_bg"
                                 android:layout_height="match_parent"
@@ -431,6 +435,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5"
                                 android:hint="Quantity"
+                                android:gravity="center_vertical"
                                 android:inputType="numberDecimal"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
@@ -460,6 +465,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5"
                                 android:textAlignment="textStart"
+                                android:gravity="center_vertical"
                                 android:textColor="@color/black"
                                 android:textSize="20dp" />
                         </LinearLayout>
