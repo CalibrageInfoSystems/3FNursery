@@ -205,7 +205,7 @@ TextView activity_name, nurseryname;
                 expensetype.setEnabled(false);
                 quantity.setEnabled(false);
                othercomments.setEnabled(false);
-
+                imageView.setEnabled(false);
                 if (Activity_Name.equalsIgnoreCase("Other") ){
                     nameactivity.setVisibility(View.VISIBLE);
                     nameofactivity.setText("Test R&M Activity");
