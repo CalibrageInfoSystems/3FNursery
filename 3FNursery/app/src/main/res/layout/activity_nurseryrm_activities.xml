@@ -53,21 +53,22 @@
 
                 <TextView
 
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:text="Other"
-                    android:padding="@dimen/margin_10"
                     android:id="@+id/othertext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_10"
-                    android:textSize="20dp"/>
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/margin_10"
+                    android:text="Other"
+                    android:textColor="@color/black"
+                    android:textSize="20dp" />
                 <ImageView
                     android:id="@+id/overflow"
                     android:layout_width="30dp"
                     android:layout_height="40dp"
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
+                    android:paddingLeft="-5dp"
                     android:layout_margin="@dimen/margin_10"
                     android:src="@drawable/arrow_right" />
 
