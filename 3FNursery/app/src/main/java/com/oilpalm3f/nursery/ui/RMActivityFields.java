@@ -320,7 +320,12 @@ TextView activity_name, nurseryname;
             @Override
             public void afterTextChanged(Editable editable) {
 
-                cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
+                if(!TextUtils.isEmpty(quantity.getText().toString())) {
+
+                    cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
+                }else {
+                    cost.setText("0");
+                }
             }
         });
 
