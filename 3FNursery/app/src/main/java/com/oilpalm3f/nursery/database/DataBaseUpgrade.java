@@ -71,12 +71,12 @@ public class DataBaseUpgrade {
     public static void upgradeDb1(final SQLiteDatabase db) {
         Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
-       // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
+        // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
 
-        String  IrrigationLog1 =  "Alter Table NurseryIrrigationLog Add RegularMaleRate FLOAT";
-        String  IrrigationLog2 =  "Alter Table NurseryIrrigationLog Add RegularFeMaleRate FLOAT";
-        String  IrrigationLog3 =  "Alter Table NurseryIrrigationLog Add ContractMaleRate FLOAT";
-        String  IrrigationLog4 =  "Alter Table NurseryIrrigationLog Add ContractFeMaleRate FLOAT";
+        String IrrigationLog1 = "Alter Table NurseryIrrigationLog Add RegularMaleRate FLOAT";
+        String IrrigationLog2 = "Alter Table NurseryIrrigationLog Add RegularFeMaleRate FLOAT";
+        String IrrigationLog3 = "Alter Table NurseryIrrigationLog Add ContractMaleRate FLOAT";
+        String IrrigationLog4 = "Alter Table NurseryIrrigationLog Add ContractFeMaleRate FLOAT";
 
 
         String column1 = "Alter Table Sapling Add StatusTypeId int";
@@ -84,9 +84,7 @@ public class DataBaseUpgrade {
         String column3 = "Alter Table Sapling Add ArrivedQuantity int";
         String column4 = "Alter Table Sapling Add SowingDate datetime";
         String column5 = "Alter Table Sapling Add TransplantingDate datetime";
-       String column6 = "Alter Table NurseryActivity Add DependentActivityCode VARCHAR(10)";
-
-
+        String column6 = "Alter Table NurseryActivity Add DependentActivityCode VARCHAR(10)";
 
 
         String CREATE_LABOUR_RATE = "CREATE TABLE LabourRate(\n" +
@@ -98,8 +96,6 @@ public class DataBaseUpgrade {
                 "CreatedByUserId int NOT NULL ,\n" +
                 "CreatedDate INT datetime NOT NULL\n" +
                 ")";
-
-
 
 
         try {
@@ -115,19 +111,19 @@ public class DataBaseUpgrade {
             db.execSQL(column5);
 
 
-
             db.execSQL(CREATE_LABOUR_RATE);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public static  void  upgradeDB2(final  SQLiteDatabase db){
+
+    public static void upgradeDB2(final SQLiteDatabase db) {
         Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
         // String alterGeoBoundariesTable1 = "ALTER TABLE GeoBoundaries ADD COLUMN CropMaintenanceCode VARCHAR (60)";
 
-        String  column1 =  "Alter table Saplingactivitystatus add JobCompletedDate DATETIME";
+        String column1 = "Alter table Saplingactivitystatus add JobCompletedDate DATETIME";
         try {
 
             db.execSQL(column1);
@@ -138,12 +134,12 @@ public class DataBaseUpgrade {
     }
 
 
-    public static  void  upgradeDB3(final  SQLiteDatabase db){
+    public static void upgradeDB3(final SQLiteDatabase db) {
         Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
-        String column2= "Alter table Nursery add  CostCenter varchar(50)";
-        String column3= "alter table Nursery add SAPCode varchar(5) ";
-        String  column1 =  "Alter table NurseryActivity add Bucket VARCHAR(50)";
+        String column2 = "Alter table Nursery add  CostCenter varchar(50)";
+        String column3 = "alter table Nursery add SAPCode varchar(5) ";
+        String column1 = "Alter table NurseryActivity add Bucket VARCHAR(50)";
         String column4 = "Alter table Sapling add SAPCode varchar(50)";
 
         String alertsTable = "CREATE TABLE Alerts( \n" +
@@ -164,7 +160,6 @@ public class DataBaseUpgrade {
                 ")";
 
 
-
         try {
 
             db.execSQL(column1);
@@ -179,7 +174,7 @@ public class DataBaseUpgrade {
         }
     }
 
-    public static  void  upgradeDB4(final  SQLiteDatabase db){
+    public static void upgradeDB4(final SQLiteDatabase db) {
         Log.d(LOG_TAG, "******* upgradeDataBase " + Palm3FoilDatabase.DATA_VERSION);
 
 
@@ -215,7 +210,7 @@ public class DataBaseUpgrade {
                 "UpdatedByUserId INT, \n" +
                 "UpdatedDate VARCHAR,\n" +
                 "ServerUpdatedStatus INT,\n" +
-                "NurseryCode VARCHAR \n"+
+                "NurseryCode VARCHAR \n" +
                 ")";
 
         String NurseryVisitLog = "CREATE TABLE NurseryVisitLog( \n" +
@@ -253,10 +248,47 @@ public class DataBaseUpgrade {
         String column13 = "Alter Table Sapling Add TransportationCost Float";
         String column14 = "Alter Table Sapling Add PONumber VARCHAR(50)";
 
+        String RMTransactions = "CREATE TABLE RMTransactions( \n" +
+                "Id INTEGER, \n" +
+                "TransactionId VARCHAR, \n" +
+                "NurseryCode VARCHAR, \n" +
+                "ActivityId INT , \n" +
+                "ActivityName VARCHAR, \n" +
+                "ActivityTypeId INT , \n" +
+                "SatusTypeId INT , \n" +
+                "TransactionDate DATETIME , \n" +
+                "MaleRegular INT , \n" +
+                "FemaleRegular INT , \n" +
+                "MaleOutside INT , \n" +
+                "FemaleOutside INT , \n" +
+                "MaleRegularCost FLOAT , \n" +
+                "FemaleRegularCost FLOAT , \n" +
+                "MaleOutsideCost FLOAT , \n" +
+                "FemaleoutsideCost FLOAT , \n" +
+                "ExpenseType VARCHAR , \n" +
+                "UOMId INT , \n" +
+                "Quatity FLOAT , \n" +
+                "TotalCost FLOAT , \n" +
+                "Comments VARCHAR , \n" +
+                "FileName VARCHAR, \n" +
+                "FileLocation VARCHAR, \n" +
+                "FileExtension VARCHAR, \n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR,\n" +
+                "UpdatedByUserId INT, \n" +
+                "UpdatedDate VARCHAR,\n" +
+                "ServerUpdatedStatus INT \n" +
+                ")";
+
+        String RMTransactionStatusHistory = "CREATE TABLE RMTransactionStatusHistory( \n" +
+                "Id INTEGER, \n" +
+                "TransactionId VARCHAR, \n" +
+                "SatusTypeId INT , \n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR \n" +
+                ")";
 
         try {
-
-
             db.execSQL(cullingLossFileRepository);
             db.execSQL(CurrentClosingStock);
             db.execSQL(column1);
@@ -274,6 +306,9 @@ public class DataBaseUpgrade {
             db.execSQL(column12);
             db.execSQL(column13);
             db.execSQL(column14);
+
+            db.execSQL(RMTransactions);
+            db.execSQL(RMTransactionStatusHistory);
 
         } catch (Exception e) {
             e.printStackTrace();
