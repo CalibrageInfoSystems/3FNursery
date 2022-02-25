@@ -1,20 +1,39 @@
 package com.oilpalm3f.nursery.dbmodels;
 
 public class NurseryRMActivity {
-    private Integer Id;
 
+    private Integer TypeCdId,ClassTypeId;
+    private  String Desc,TableName;
 
-
-    private  String ActivityName;
-    public NurseryRMActivity(String activityName) {
-        ActivityName = activityName;
+    public Integer getTypeCdId() {
+        return TypeCdId;
     }
 
-    public String getActivityName() {
-        return ActivityName;
+    public void setTypeCdId(Integer typeCdId) {
+        TypeCdId = typeCdId;
     }
 
-    public void setActivityName(String activityName) {
-        ActivityName = activityName;
+    public Integer getClassTypeId() {
+        return ClassTypeId;
+    }
+
+    public void setClassTypeId(Integer classTypeId) {
+        ClassTypeId = classTypeId;
+    }
+
+    public String getDesc() {
+        return Desc;
+    }
+
+    public void setDesc(String desc) {
+        Desc = desc;
+    }
+
+    public String getTableName() {
+        return TableName;
+    }
+
+    public void setTableName(String tableName) {
+        TableName = tableName;
     }
 }

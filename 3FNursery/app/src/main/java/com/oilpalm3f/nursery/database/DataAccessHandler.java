@@ -30,6 +30,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
+import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryVisitLog;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
@@ -1875,6 +1876,37 @@ return Cullinglossrepolist;
             }
         }
         return nurserySaplingDetails;
+    }
+
+
+    public List<NurseryRMActivity> getNurseryRMActivities(final String query) {    // Get Nursery Details
+        List<NurseryRMActivity> nurseryrmData = new ArrayList<>();
+        Log.d(LOG_TAG, "=== > Analysis ==> getNurseryRMActivity:" + query);
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryRMActivity nurseryDataDetails = new NurseryRMActivity();
+                    nurseryDataDetails.setTypeCdId(cursor.getInt(cursor.getColumnIndex("TypeCdId")));
+                    nurseryDataDetails.setClassTypeId(cursor.getInt(cursor.getColumnIndex("ClassTypeId")));
+                    nurseryDataDetails.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
+                    nurseryDataDetails.setTableName(cursor.getString(cursor.getColumnIndex("TableName")));
+
+                    nurseryrmData.add(nurseryDataDetails);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nurseryrmData;
     }
     }
 

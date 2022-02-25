@@ -160,6 +160,7 @@
                             android:layout_width="0dp"
                             android:textSize="20dp"
                             android:inputType="date"
+                            android:editable="false"
                             android:layout_height="match_parent"
                             android:textColor="@color/black"
                             android:text="Date"/>
@@ -330,7 +331,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Comments" />
+                                android:text="Comments *" />
 
                             <EditText
                                 android:id="@+id/comments"
@@ -393,7 +394,7 @@
                                 android:layout_weight="0.5"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:text="UOM *"
+                                android:text="UOM "
                                 android:textSize="18dp"
                                 android:gravity="center_vertical"
                                 android:textAlignment="textStart"
@@ -423,7 +424,7 @@
                                 android:layout_weight="0.5"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:text="Quantity *"
+                                android:text="Quantity "
                                 android:textSize="18dp"
                                 android:textColor="@color/black"
                                 android:textStyle="bold"
@@ -458,16 +459,16 @@
                                 android:textColor="@color/black"
                                 android:textStyle="bold"
                                 />
-
-                            <TextView
+                            <EditText
                                 android:id="@+id/cost"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5"
+                                android:hint="Name"
                                 android:textAlignment="textStart"
-                                android:gravity="center_vertical"
                                 android:textColor="@color/black"
                                 android:textSize="20dp" />
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -480,8 +481,9 @@
                                 style="@style/header_h1_text_title"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Comments" />
+                                android:layout_gravity="center_vertical"
+                                android:text="Comments *" />
+
 
                             <EditText
                                 android:id="@+id/othercomments"

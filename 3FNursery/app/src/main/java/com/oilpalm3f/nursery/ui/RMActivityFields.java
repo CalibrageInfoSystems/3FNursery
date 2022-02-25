@@ -58,7 +58,7 @@ public class RMActivityFields extends AppCompatActivity {
     public static final String LOG_TAG = RMActivityFields.class.getSimpleName();
     Spinner typespinner, uomSpinner;
     LinearLayout labourlyt, otherlyt, nameactivity;
-    EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside;
+    EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside,cost;
 
 
     EditText expensetype, quantity, date,comment,nameofactivity,othercomments;
@@ -71,7 +71,7 @@ public class RMActivityFields extends AppCompatActivity {
 TextView activity_name, nurseryname;
     DatePickerDialog picker;
     int labourcost = 10;
-    TextView cost;
+
     String currentDate,sendcurrentDate;
 
 
@@ -306,28 +306,28 @@ TextView activity_name, nurseryname;
             }
         });
 
-        quantity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                if(!TextUtils.isEmpty(quantity.getText().toString())) {
-
-                    cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
-                }else {
-                    cost.setText("0");
-                }
-            }
-        });
+//        quantity.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//                if(!TextUtils.isEmpty(quantity.getText().toString())) {
+//
+//                    cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
+//                }else {
+//                    cost.setText("0");
+//                }
+//            }
+//        });
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -427,6 +427,11 @@ TextView activity_name, nurseryname;
         }
 
         if (typespinner.getSelectedItemPosition() == 1) {
+            if(labourlyt.getVisibility()== View.VISIBLE){
+                if (TextUtils.isEmpty(comment.getText().toString())){
+                    UiUtils.showCustomToastMessage("Please Enter Comments", RMActivityFields.this, 0);
+                    return false;
+                }}
 
             if (mandaysmale.length() != 0 || mandaysfemale.length() != 0 || mandaysmaleoutside.length() != 0 || mandaysfemaleoutside.length() != 0) {
                 //UiUtils.showCustomToastMessage("Please enter atleast one value", RMActivityFields.this, 0);
@@ -445,16 +450,16 @@ TextView activity_name, nurseryname;
                 return false;
             }
 
-            if (uomSpinner.getSelectedItemPosition() == 0) {
-                UiUtils.showCustomToastMessage("Please Select UOM Type", RMActivityFields.this, 0);
+            if (TextUtils.isEmpty(cost.getText().toString())){
+                UiUtils.showCustomToastMessage("Please Enter Cost", RMActivityFields.this, 0);
                 return false;
             }
 
-            if (TextUtils.isEmpty(quantity.getText().toString())){
-                UiUtils.showCustomToastMessage("Please Enter Quantity", RMActivityFields.this, 0);
+            if(otherlyt.getVisibility()== View.VISIBLE){
+            if (TextUtils.isEmpty(othercomments.getText().toString())){
+                UiUtils.showCustomToastMessage("Please Enter Comments", RMActivityFields.this, 0);
                 return false;
-            }
-
+            }}
             if (local_ImagePath == null){
 
                 UiUtils.showCustomToastMessage("Please Capture Image", RMActivityFields.this, 0);

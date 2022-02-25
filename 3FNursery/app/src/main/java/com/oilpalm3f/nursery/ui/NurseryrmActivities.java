@@ -17,7 +17,9 @@ import android.widget.Toast;
 import com.oilpalm3f.nursery.ConsignmentSelectionScreen;
 import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
+import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
+import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
 import com.oilpalm3f.nursery.ui.Adapter.NotificationDisplayAdapter;
@@ -39,7 +41,7 @@ public class NurseryrmActivities extends AppCompatActivity {
     TextView othertext;
     EditText Activitynameedit;
     LinearLayout otherlinear;
-    private List<NurseryRMActivity> request_List = new ArrayList<>();
+    private List<NurseryRMActivity>rmActivity_List = new ArrayList<>();
     NurseryrmActivitiesAdapter nurseryrmListAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +58,16 @@ public class NurseryrmActivities extends AppCompatActivity {
         dataAccessHandler = new DataAccessHandler(this);
         othertext= findViewById(R.id.othertext);
         ActivityRecyclerView = findViewById(R.id.ActivityRecyclerView);
-
+        otherlinear= findViewById(R.id.otherlinear);
         ActivityRecyclerView.setHasFixedSize(true);
         ActivityRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
     private void setviews() {
-
+        rmActivity_List = dataAccessHandler.getNurseryRMActivities(Queries.getInstance().getrmActivities());
 
         nurseryrmActivities();
 
-        othertext.setOnClickListener(new View.OnClickListener() {
+        otherlinear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent NurseryrmTransactions = new Intent(NurseryrmActivities.this, NurseryrmTransactionsScreen.class);
@@ -81,21 +83,9 @@ public class NurseryrmActivities extends AppCompatActivity {
 
     private void nurseryrmActivities() {
 
-        NurseryRMActivity a = new NurseryRMActivity( "Shade Net R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Fencing R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Fencing_AND R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Electricity R & M");
-        request_List.add(a);
-        a = new NurseryRMActivity( "Irrigation Setup R & M");
-        request_List.add(a);
 
 
-
-
-        nurseryrmListAdapter =    new NurseryrmActivitiesAdapter(this, request_List);
+        nurseryrmListAdapter =    new NurseryrmActivitiesAdapter(this, rmActivity_List);
         ActivityRecyclerView.setAdapter(nurseryrmListAdapter);
     }
 }

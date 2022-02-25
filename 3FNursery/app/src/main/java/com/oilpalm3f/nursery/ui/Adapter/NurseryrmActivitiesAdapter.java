@@ -61,7 +61,7 @@ public class NurseryrmActivitiesAdapter extends RecyclerView.Adapter<NurseryrmAc
     public void onBindViewHolder(MyViewHolder holder, final int position) {
       final NurseryRMActivity rmactivitylist = RMActivitylist.get(position);
 
-        holder.name.setText(rmactivitylist.getActivityName());
+        holder.name.setText(rmactivitylist.getDesc());
 
 
         holder.mainlyt.setOnClickListener(new View.OnClickListener() {    // Intent  Consignment Selection Screen
@@ -72,7 +72,7 @@ public class NurseryrmActivitiesAdapter extends RecyclerView.Adapter<NurseryrmAc
 
 
                     Intent intent = new Intent(mContext, NurseryrmTransactionsScreen.class);
-                    intent.putExtra("RmActivityname",RMActivitylist.get(position).getActivityName());
+                    intent.putExtra("RmActivityname",RMActivitylist.get(position).getDesc());
                 mContext.startActivity(intent);
 
 
