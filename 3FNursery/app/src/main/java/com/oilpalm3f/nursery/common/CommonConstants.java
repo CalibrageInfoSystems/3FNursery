@@ -14,6 +14,7 @@ public class CommonConstants {
     public static String collectionType = "";
     public static String migrationSync = "true";
 
+    public static String DATE_FORMAT_DDMMYYYY = "yyyy-MM-dd";
     public static String DATE_FORMAT_DDMMYYYY_HHMMSS = "yyyy-MM-dd HH:mm:ss";
     public static String DATE_FORMAT_DDMMYYYY_HHMMSS_SSS ="yyyy-MM-dd HH:mm:ss.SSS";
     public static String DATE_FORMAT_1 = "dd-MM-yyyy HH:mm a";

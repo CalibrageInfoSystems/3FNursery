@@ -177,7 +177,7 @@ public class NurseryLabourLogActivity extends AppCompatActivity {
                     mapStatus.put("NurseryCode", nursery_code);
 
                     final List<LinkedHashMap> nurserylabour_log = new ArrayList<>();
-                    nurserylabour_log.add(mapStatus);
+                    nurserylabour_log.add(mapStatus) ;
 
                     Log.e("==============>",nurserylabour_log+"");
                     dataAccessHandler.insertMyDataa("NurseryLabourLog", nurserylabour_log, new ApplicationThread.OnComplete<String>() {
