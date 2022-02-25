@@ -1908,6 +1908,8 @@ public class Queries {
     public String getrmActivities() {
         return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '77'";
     }
-
+    public String getrmActivitttransaction() {
+        return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '77'";
+    }
     }
 

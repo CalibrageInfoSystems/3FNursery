@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import com.oilpalm3f.nursery.R;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
+import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMTransctions;
@@ -40,9 +42,9 @@ public class NurseryrmTransactionsScreen extends AppCompatActivity {
     String activityTypeId, activityName,  status;
     int statusId;
 TextView activity_name;
-    private List<NurseryRMTransctions> Transactionlist = new ArrayList<>();
+    private List<NurseryRMTransctions> RmTransactionlist = new ArrayList<>();
 
-    String btn_visibility;
+    String last_30day;
     int Feild_id;
   RMTransactionRecyclerViewAdapter rmtransactionRecyclerViewAdapter;
 
@@ -53,7 +55,8 @@ TextView activity_name;
     private Button searchBtn;
     private String searchQuery = "";
     public static String SearchCollectionwithoutPlotQuery = "";
-
+    DatePickerDialog picker;
+    String currentDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,53 +93,67 @@ TextView activity_name;
 
     private void setviews() {
 
-        String currentDate = CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-        fromDateEdt.setText(sdf.format(new Date()));
-        toDateEdt.setText(sdf.format(new Date()));
+       // RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivities());
+       // multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(consignmentcode, activityTypeId));
 
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(0);
-            }
-        };
+        currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+     //   sendcurrentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+  Log.i("LOG_RESPONSE date ", currentDate);
 
-        final DatePickerDialog.OnDateSetListener toDate = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(1);
-            }
-        };
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -30);
 
-        //To Date on Click Listener
-        toDateEdt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NurseryrmTransactionsScreen.this, toDate, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH));  //date is dateSetListener as per your code in question
-                datePickerDialog.show();
-            }
-        });
-        //From Date on Click Listener
+        Date date = calendar.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
+        last_30day = format.format(date);
+     //   sendweekdate =  formate.format(date);
+        Log.i("LOG_RESPONSE ===week", last_30day);
+        fromDateEdt.setText(last_30day);
+        toDateEdt.setText(currentDate);
+
         fromDateEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NurseryrmTransactionsScreen.this, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH));  //date is dateSetListener as per your code in question
-                datePickerDialog.show();
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(NurseryrmTransactionsScreen.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                fromDateEdt.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
+                picker.getDatePicker().setMaxDate(System.currentTimeMillis());
             }
         });
+
+        toDateEdt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(NurseryrmTransactionsScreen.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                toDateEdt.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
+                picker.getDatePicker().setMaxDate(System.currentTimeMillis());
+            }
+        });
+
+
+
 
         nurseryrmTransactions();
 
@@ -170,22 +187,10 @@ TextView activity_name;
     }
 
     private void nurseryrmTransactions() {
-        NurseryRMTransctions a = new NurseryRMTransctions( "TRANRM00010001",1,346,"Job Completed","Other","22/02/2022");
-        Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010002",1,347,"Nursery Manager Approved","Other","21/02/2022");
-        Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010003",1,348,"State Head Approved","Other","21/02/2022");
-        Transactionlist.add(a);
-        a = new NurseryRMTransctions( "TRANRM00010004",1,349,"Rejected","Labour","22/02/2022");
-        Transactionlist.add(a);
-        //a = new NurseryRMTransctions( "TRANRM00010001",1,"","","24/02/2022");
-//        Transactionlist.add(a); a = new NurseryRMTransctions( "TRANRM00010001",1,"","","24/02/2022");
-//        Transactionlist.add(a);
-//        a = new NurseryRMTransctions( "TRANRM00010001",1," ","","24/02/2022");
-//        Transactionlist.add(a);
 
-        rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(this, Transactionlist,activityName);
-        Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
+
+//        rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(this, RmTransactionlist,activityName);
+//        Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
 
     }
 }

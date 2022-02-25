@@ -31,6 +31,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
+import com.oilpalm3f.nursery.dbmodels.NurseryRMTransctions;
 import com.oilpalm3f.nursery.dbmodels.NurseryVisitLog;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
@@ -1879,7 +1880,7 @@ return Cullinglossrepolist;
     }
 
 
-    public List<NurseryRMActivity> getNurseryRMActivities(final String query) {    // Get Nursery Details
+    public List<NurseryRMActivity> getNurseryRMActivities(final String query) {    // Get Nursery RM Activities
         List<NurseryRMActivity> nurseryrmData = new ArrayList<>();
         Log.d(LOG_TAG, "=== > Analysis ==> getNurseryRMActivity:" + query);
         Cursor cursor = null;
@@ -1908,7 +1909,39 @@ return Cullinglossrepolist;
         }
         return nurseryrmData;
     }
+
+    public List<NurseryRMTransctions> getNurseryrmTransactionsg(final String query) {
+        Log.v(LOG_TAG, "@@@ Nurseryvisit details query " + query);
+        List<NurseryRMTransctions> nurseryrmtransactions = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    NurseryRMTransctions rmtransactions = new NurseryRMTransctions();
+                    rmtransactions.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    rmtransactions.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
+                    rmtransactions.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    rmtransactions.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    nurseryrmtransactions.add(rmtransactions);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nurseryrmtransactions;
     }
+
+
+
+}
 
 
 
