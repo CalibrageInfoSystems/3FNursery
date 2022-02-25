@@ -484,6 +484,11 @@ public class Queries {
         return "select MAX(cast(substr(IrrigationCode, INSTR(IrrigationCode,'-') + 1, length(IrrigationCode)) as INTEGER)) as Maxnumber from NurseryIrrigationLog";
     }
 
+    public String getRMActivityMaxNumber( String nurserycode,String activitytypeid) {
+
+        return "select MAX(cast(substr(TransactionId, INSTR(TransactionId,'-') + 1, length(TransactionId)) as INTEGER)) as Maxnumber from RMTransactions WHERE NurseryCode = '" + nurserycode + "' and ActivityId ='" + activitytypeid + "'";
+    }
+
     public String marketSurveyDataCheck(String farmerCode) {
         return "select * from MarketSurveyAndReferrals where FarmerCode = '" + farmerCode + "'";
     }
@@ -1903,6 +1908,14 @@ public class Queries {
                 "\t  Inner Join TypeCdDmt t on t.TypeCdId = n.LogTypeId\n" +
                 "\t   inner join Nursery N ON N.Code = n.NurseryCode\n " +
                 "\t  where date(LogDate) BETWEEN  '" + fromDate + "'  and '" + todate + "'";
+    }
+
+    public String getActivityTypeofRMQuery() {
+        return "Select TypeCdId, ClassTypeId, Desc from TypeCdDmt where ClassTypeId = '78'";
+    }
+
+    public String getUOMTypeofRMQuery() {
+        return "select Id, LookUpTypeId, Name from LookUp where LookUpTypeId = '381'";
     }
 
 }

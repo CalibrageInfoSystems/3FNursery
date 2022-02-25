@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,7 +36,9 @@ import android.widget.Toast;
 
 import com.oilpalm3f.nursery.R;
 
+import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.common.CommonConstants;
+import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
@@ -48,6 +51,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,13 +64,9 @@ public class RMActivityFields extends AppCompatActivity {
     Spinner typespinner, uomSpinner;
     LinearLayout labourlyt, otherlyt, nameactivity;
     EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside;
-
-
     EditText expensetype, quantity, date, comment, nameofactivity, othercomments;
-
     ImageView imageView;
     Button submitBtn, cancelBtn;
-
     int Flag;
     String transactionId, Activity_Name, Nurseryname;
     TextView activity_name, nurseryname;
@@ -74,16 +74,24 @@ public class RMActivityFields extends AppCompatActivity {
     int labourcost = 10;
     TextView cost;
     String currentDate, sendcurrentDate;
-
-
     private int GALLERY = 1, CAMERA = 2;
+
+    String activityTypeId, uomId;
+    String activityId = "368";
+    String transactionid;
+
+
+    private DataAccessHandler dataAccessHandler;
+    LinkedHashMap<String, Pair> activityTypeDataMap = null;
+    LinkedHashMap<String, Pair> uomTypeDataMap = null;
+
+
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     public static String local_ImagePath = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +102,11 @@ public class RMActivityFields extends AppCompatActivity {
         setSupportActionBar(toolbar);
         init();
         setviews();
-
-
     }
 
     private void init() {
+
+        dataAccessHandler = new DataAccessHandler(this);
 
         nameactivity = findViewById(R.id.nameactivity);
         nurseryname = findViewById(R.id.nurseryname);
@@ -120,7 +128,7 @@ public class RMActivityFields extends AppCompatActivity {
         comment = findViewById(R.id.comments);
         imageView = findViewById(R.id.rmimageview);
         othercomments = findViewById(R.id.othercomments);
-        ;
+
         activity_name = findViewById(R.id.activityname);
         cost = findViewById(R.id.cost);
 
@@ -133,7 +141,9 @@ public class RMActivityFields extends AppCompatActivity {
 
         labourlyt.setVisibility(View.GONE);
         otherlyt.setVisibility(View.GONE);
+
         Log.d("Nurserynameeeee", CommonConstants.NurseryName + "");
+        Log.d("NurseryCodeeeee", CommonConstants.NurseryCode + "");
 
         currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         sendcurrentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -229,15 +239,29 @@ public class RMActivityFields extends AppCompatActivity {
 
         }
 
-        String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
-        List<String> typeSpinnerList = Arrays.asList(typeSpinnerArr);
-        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, typeSpinnerList);
-        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typespinner.setAdapter(typeSpinnerAdapter);
+//        String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
+//        List<String> typeSpinnerList = Arrays.asList(typeSpinnerArr);
+//        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, typeSpinnerList);
+//        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        typespinner.setAdapter(typeSpinnerAdapter);
+
+        activityTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getActivityTypeofRMQuery());
+        ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(activityTypeDataMap, "Type"));
+        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typespinner.setAdapter(typeArrayAdapter);
 
         typespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if (typespinner.getSelectedItemPosition() != 0) {
+
+                    int selectedPos = typespinner.getSelectedItemPosition();
+                    Log.d("selectedType", typespinner.getSelectedItem().toString());
+                    Log.d("selectedTypeId", activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1]);
+                    activityTypeId = activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1];
+                }
+
                 if (Flag == 2) {
                     typespinner.setSelection(1);
                 } else if (Flag == 3) {
@@ -268,14 +292,31 @@ public class RMActivityFields extends AppCompatActivity {
         });
 
 
-        String[] uomSpinnerArr = getResources().getStringArray(R.array.uom_values);
-        List<String> uomSpinnerList = Arrays.asList(uomSpinnerArr);
-        ArrayAdapter<String> uomSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, uomSpinnerList);
-        uomSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        uomSpinner.setAdapter(uomSpinnerAdapter);
+//        String[] uomSpinnerArr = getResources().getStringArray(R.array.uom_values);
+//        List<String> uomSpinnerList = Arrays.asList(uomSpinnerArr);
+//        ArrayAdapter<String> uomSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, uomSpinnerList);
+//        uomSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        uomSpinner.setAdapter(uomSpinnerAdapter);
+
+        uomTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getUOMTypeofRMQuery());
+        ArrayAdapter<String> uomArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(uomTypeDataMap, "UOM"));
+        uomArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        uomSpinner.setAdapter(uomArrayAdapter);
+
         uomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if (uomSpinner.getSelectedItemPosition() != 0) {
+
+                    int selectedPos = uomSpinner.getSelectedItemPosition();
+                    Log.d("selecteduom", uomSpinner.getSelectedItem().toString());
+                    Log.d("selecteduomId", uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1]);
+                    uomId = uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1];
+
+                }
+
+
                 if (Flag == 3) {
                     uomSpinner.setSelection(2);
                 }
@@ -348,6 +389,9 @@ public class RMActivityFields extends AppCompatActivity {
             }
         });
 
+         transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
+
+
     }
 
     /* "TransactionId VARCHAR, \n" +
@@ -358,22 +402,32 @@ public class RMActivityFields extends AppCompatActivity {
 
     private void saveRMTransactionsStatus() {
         LinkedHashMap mapStatus = new LinkedHashMap();
-        mapStatus.put("TransactionId","");
-        mapStatus.put("SatusTypeId","");
+        mapStatus.put("TransactionId",transactionid);
+        mapStatus.put("StatusTypeId",346);
         mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
         mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         mapStatus.put("ServerUpdatedStatus",0);
     }
 
     private void saveRMTransactionsData() {
+
+        String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
+        String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
+        String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
+        String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+
+        //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
+        Log.d("TransactionId", transactionid);
+
+
         LinkedHashMap mapStatus = new LinkedHashMap();
-        mapStatus.put("TransactionId","");
+        mapStatus.put("TransactionId",transactionid);
 
         mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
-        mapStatus.put("ActivityId","");
+        mapStatus.put("ActivityId",activityId);
         mapStatus.put("ActivityName",Activity_Name);
-        mapStatus.put("ActivityTypeId","");
-        mapStatus.put("SatusTypeId","");
+        mapStatus.put("ActivityTypeId",Integer.parseInt(activityTypeId));
+        mapStatus.put("StatusTypeId",346);
         mapStatus.put("TransactionDate",currentDate);
 
         if(mandaysmale.getText().length() == 0){
@@ -400,26 +454,40 @@ public class RMActivityFields extends AppCompatActivity {
             mapStatus.put("FemaleOutside",mandaysfemaleoutside.getText());
         }
 
-        mapStatus.put("MaleRegularCost","");
-        mapStatus.put("FemaleRegularCost","");
-        mapStatus.put("MaleOutsideCost","");
-        mapStatus.put("FemaleoutsideCost","");
+        mapStatus.put("MaleRegularCost",Double.parseDouble(male_reg));
+        mapStatus.put("FemaleRegularCost",Double.parseDouble(femmale_reg));
+        mapStatus.put("MaleOutsideCost",0.0);
+        mapStatus.put("FemaleoutsideCost",0.0);
+
+
         mapStatus.put("ExpenseType",expensetype.getText());
 
         if(uomSpinner.getSelectedItemPosition() == 0){
             mapStatus.put("UOMId","");
         }else{
-            mapStatus.put("UOMId",0);//0or1
+            mapStatus.put("UOMId",Integer.parseInt(uomId));
         }
 
         if(quantity.getText().equals("")){
             mapStatus.put("Quatity","");
         }else{
-            mapStatus.put("Quatity",quantity.getText());
+            mapStatus.put("Quantity",quantity.getText());
         }
 
-        mapStatus.put("TotalCost",cost.getText());
-        mapStatus.put("Comments",comment.getText());
+        if (!TextUtils.isEmpty(cost.getText().toString())){
+            mapStatus.put("TotalCost",cost.getText());
+        }else{
+            mapStatus.put("TotalCost"," ");
+        }
+
+        if(typespinner.getSelectedItemPosition() == 1) {
+            mapStatus.put("Comments",comment.getText());
+        }
+
+        if(typespinner.getSelectedItemPosition() == 2) {
+            mapStatus.put("Comments",othercomments.getText());
+        }
+
 
         if(typespinner.getSelectedItemPosition() == 2){
             mapStatus.put("FileName","");
@@ -436,6 +504,21 @@ public class RMActivityFields extends AppCompatActivity {
         mapStatus.put("UpdatedByUserId",CommonConstants.USER_ID);
         mapStatus.put("UpdatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         mapStatus.put("ServerUpdatedStatus",0);
+
+        final List<LinkedHashMap> rmactivityarr = new ArrayList<>();
+        rmactivityarr.add(mapStatus);
+
+        dataAccessHandler.insertMyDataa("RMTransactions",
+                rmactivityarr, new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+
+                        if (success) {
+                            Toast.makeText(RMActivityFields.this, "Insert Successful", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    });
+
     }
 
     private void takePhotoFromCamera() {

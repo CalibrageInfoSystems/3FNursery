@@ -249,13 +249,14 @@ public class DataBaseUpgrade {
         String column14 = "Alter Table Sapling Add PONumber VARCHAR(50)";
 
         String RMTransactions = "CREATE TABLE RMTransactions( \n" +
-                "Id INTEGER, \n" +
+                "Id INTEGER   PRIMARY KEY AUTOINCREMENT\n" +
+                "                                      NOT NULL,\n" +
                 "TransactionId VARCHAR, \n" +
                 "NurseryCode VARCHAR, \n" +
                 "ActivityId INT , \n" +
                 "ActivityName VARCHAR, \n" +
                 "ActivityTypeId INT , \n" +
-                "SatusTypeId INT , \n" +
+                "StatusTypeId INT , \n" +
                 "TransactionDate DATETIME , \n" +
                 "MaleRegular INT , \n" +
                 "FemaleRegular INT , \n" +
@@ -281,9 +282,10 @@ public class DataBaseUpgrade {
                 ")";
 
         String RMTransactionStatusHistory = "CREATE TABLE RMTransactionStatusHistory( \n" +
-                "Id INTEGER, \n" +
+                "Id INTEGER   PRIMARY KEY AUTOINCREMENT\n" +
+                "                                      NOT NULL,\n" +
                 "TransactionId VARCHAR, \n" +
-                "SatusTypeId INT , \n" +
+                "StatusTypeId INT , \n" +
                 "CreatedByUserId INT,\n" +
                 "CreatedDate VARCHAR, \n" +
                 "ServerUpdatedStatus INT \n" +
