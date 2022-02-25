@@ -161,6 +161,7 @@
                             android:textSize="20dp"
                             android:inputType="date"
                             android:editable="false"
+                            android:focusable="false"
                             android:layout_height="match_parent"
                             android:textColor="@color/black"
                             android:text="Date"/>
@@ -464,7 +465,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.5"
-                                android:hint="Name"
+                                android:hint=""
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
                                 android:textSize="20dp" />

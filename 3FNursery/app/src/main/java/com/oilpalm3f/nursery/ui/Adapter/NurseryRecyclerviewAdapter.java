@@ -63,6 +63,7 @@ public class NurseryRecyclerviewAdapter extends RecyclerView.Adapter<NurseryRecy
                     Intent intent = new Intent(context, NurseryrmActivities.class);
                     intent.putExtra("NurseryCode",nurserysList.get(position).getCode());
                     CommonConstants.NurseryName = nurserysList.get(position).getName();
+                    CommonConstants.NurseryCode = nurserysList.get(position).getCode();
 //                    intent.putExtra("ConsignmentCode", consignmentList.get(position).getConsignmentCode());
 //                    intent.putExtra("EstimatedQty",consignmentList.get(position).getEstimatedQuantity()+"" );
                     context.startActivity(intent);

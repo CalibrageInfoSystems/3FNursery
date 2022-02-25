@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,7 +36,9 @@ import android.widget.Toast;
 
 import com.oilpalm3f.nursery.R;
 
+import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.common.CommonConstants;
+import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
@@ -48,9 +51,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,31 +63,44 @@ public class RMActivityFields extends AppCompatActivity {
     public static final String LOG_TAG = RMActivityFields.class.getSimpleName();
     Spinner typespinner, uomSpinner;
     LinearLayout labourlyt, otherlyt, nameactivity;
+
     EditText mandaysmale, mandaysfemale, mandaysmaleoutside, mandaysfemaleoutside,cost;
 
 
     EditText expensetype, quantity, date,comment,nameofactivity,othercomments;
 
+
     ImageView imageView;
     Button submitBtn, cancelBtn;
-
     int Flag;
-    String transactionId,Activity_Name, Nurseryname;
-TextView activity_name, nurseryname;
+    String transactionId, Activity_Name, Nurseryname;
+    TextView activity_name, nurseryname;
     DatePickerDialog picker;
     int labourcost = 10;
 
     String currentDate,sendcurrentDate;
 
+ //   TextView cost;
 
     private int GALLERY = 1, CAMERA = 2;
+
+    String activityTypeId, uomId;
+    String activityId = "368";
+    String transactionid;
+
+
+    private DataAccessHandler dataAccessHandler;
+    LinkedHashMap<String, Pair> activityTypeDataMap = null;
+    LinkedHashMap<String, Pair> uomTypeDataMap = null;
+
+
+
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    public static  String  local_ImagePath  = null ;
-
+    public static String local_ImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +111,11 @@ TextView activity_name, nurseryname;
         setSupportActionBar(toolbar);
         init();
         setviews();
-
-
-
     }
 
     private void init() {
+
+        dataAccessHandler = new DataAccessHandler(this);
 
         nameactivity = findViewById(R.id.nameactivity);
         nurseryname = findViewById(R.id.nurseryname);
@@ -114,12 +131,13 @@ TextView activity_name, nurseryname;
         mandaysfemale = findViewById(R.id.mandaysfemale);
         mandaysmaleoutside = findViewById(R.id.mandaysmaleoutside);
         mandaysfemaleoutside = findViewById(R.id.mandaysfemaleoutside);
-        nameofactivity =findViewById(R.id.nameofactivity);
+        nameofactivity = findViewById(R.id.nameofactivity);
         expensetype = findViewById(R.id.expensetype);
         quantity = findViewById(R.id.quantity);
         comment = findViewById(R.id.comments);
         imageView = findViewById(R.id.rmimageview);
-        othercomments = findViewById(R.id.othercomments);;
+        othercomments = findViewById(R.id.othercomments);
+
         activity_name = findViewById(R.id.activityname);
         cost = findViewById(R.id.cost);
 
@@ -132,11 +150,13 @@ TextView activity_name, nurseryname;
 
         labourlyt.setVisibility(View.GONE);
         otherlyt.setVisibility(View.GONE);
+
         Log.d("Nurserynameeeee", CommonConstants.NurseryName + "");
+        Log.d("NurseryCodeeeee", CommonConstants.NurseryCode + "");
 
         currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         sendcurrentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        Log.i("LOG_RESPONSE date ", currentDate+"========"+sendcurrentDate);
+        Log.i("LOG_RESPONSE date ", currentDate + "========" + sendcurrentDate);
         date.setText(currentDate);
         date.setInputType(InputType.TYPE_NULL);
         date.setOnClickListener(new View.OnClickListener() {
@@ -154,8 +174,8 @@ TextView activity_name, nurseryname;
 
                                 date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
-                                sendcurrentDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth ;
-                                Log.i("LOG_RESPONSE date ", "========"+sendcurrentDate);
+                                sendcurrentDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                Log.i("LOG_RESPONSE date ", "========" + sendcurrentDate);
                             }
                         }, year, month, day);
                 picker.show();
@@ -173,28 +193,27 @@ TextView activity_name, nurseryname;
             Log.d(LOG_TAG, "Flag=====" + Flag);
             if (Flag == 2) {
                 nurseryname.setText(CommonConstants.NurseryName + "");
-                activity_name.setText(Activity_Name+"");
+                activity_name.setText(Activity_Name + "");
                 mandaysmale.setText("5");
                 mandaysfemale.setText("6");
                 mandaysmaleoutside.setText("4");
                 mandaysfemaleoutside.setText("9");
 
                 comment.setText("testing R&m Commets");
-                if (Activity_Name.equalsIgnoreCase("Other") ){
+                if (Activity_Name.equalsIgnoreCase("Other")) {
                     nameactivity.setVisibility(View.VISIBLE);
                     nameofactivity.setText("Other R&M Activity");
-                }else{
+                } else {
                     nameactivity.setVisibility(View.GONE);
                 }
 
-            }
-           else if (Flag == 3) {
+            } else if (Flag == 3) {
 
                 othercomments.setText("testing R&m Commets");
 
                 nurseryname.setText(CommonConstants.NurseryName + "");
 
-                activity_name.setText(Activity_Name+"");
+                activity_name.setText(Activity_Name + "");
                 expensetype.setText("test");
                 quantity.setText("5");
                 submitBtn.setVisibility(View.GONE);
@@ -208,20 +227,20 @@ TextView activity_name, nurseryname;
                 uomSpinner.setEnabled(false);
                 expensetype.setEnabled(false);
                 quantity.setEnabled(false);
-               othercomments.setEnabled(false);
+                othercomments.setEnabled(false);
                 imageView.setEnabled(false);
-                if (Activity_Name.equalsIgnoreCase("Other") ){
+                if (Activity_Name.equalsIgnoreCase("Other")) {
                     nameactivity.setVisibility(View.VISIBLE);
                     nameofactivity.setText("Test R&M Activity");
-                }else{
+                } else {
                     nameactivity.setVisibility(View.GONE);
                 }
-            }  else {
-                activity_name.setText(Activity_Name+"");
+            } else {
+                activity_name.setText(Activity_Name + "");
                 nurseryname.setText(CommonConstants.NurseryName + "");
-                if (Activity_Name.equalsIgnoreCase("Other") ){
+                if (Activity_Name.equalsIgnoreCase("Other")) {
                     nameactivity.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     nameactivity.setVisibility(View.GONE);
                 }
 
@@ -229,35 +248,48 @@ TextView activity_name, nurseryname;
 
         }
 
-        String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
-        List<String> typeSpinnerList = Arrays.asList(typeSpinnerArr);
-        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, typeSpinnerList);
-        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typespinner.setAdapter(typeSpinnerAdapter);
+//        String[] typeSpinnerArr = getResources().getStringArray(R.array.typespin_values);
+//        List<String> typeSpinnerList = Arrays.asList(typeSpinnerArr);
+//        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, typeSpinnerList);
+//        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        typespinner.setAdapter(typeSpinnerAdapter);
+
+        activityTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getActivityTypeofRMQuery());
+        ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(activityTypeDataMap, "Type"));
+        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typespinner.setAdapter(typeArrayAdapter);
 
         typespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if (typespinner.getSelectedItemPosition() != 0) {
+
+                    int selectedPos = typespinner.getSelectedItemPosition();
+                    Log.d("selectedType", typespinner.getSelectedItem().toString());
+                    Log.d("selectedTypeId", activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1]);
+                    activityTypeId = activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1];
+                }
+
                 if (Flag == 2) {
                     typespinner.setSelection(1);
-                }
-               else if (Flag == 3) {
+                } else if (Flag == 3) {
                     typespinner.setSelection(2);
                 }
-                    if (typespinner.getSelectedItemPosition() == 0) {
+                if (typespinner.getSelectedItemPosition() == 0) {
 
-                        labourlyt.setVisibility(View.GONE);
-                        otherlyt.setVisibility(View.GONE);
+                    labourlyt.setVisibility(View.GONE);
+                    otherlyt.setVisibility(View.GONE);
 
-                    } else if (typespinner.getSelectedItemPosition() == 1) {
-                        labourlyt.setVisibility(View.VISIBLE);
-                        otherlyt.setVisibility(View.GONE);
-                    } else {
+                } else if (typespinner.getSelectedItemPosition() == 1) {
+                    labourlyt.setVisibility(View.VISIBLE);
+                    otherlyt.setVisibility(View.GONE);
+                } else {
 
-                        labourlyt.setVisibility(View.GONE);
-                        otherlyt.setVisibility(View.VISIBLE);
-                    }
+                    labourlyt.setVisibility(View.GONE);
+                    otherlyt.setVisibility(View.VISIBLE);
                 }
+            }
 
 
             @Override
@@ -269,15 +301,32 @@ TextView activity_name, nurseryname;
         });
 
 
-        String[] uomSpinnerArr = getResources().getStringArray(R.array.uom_values);
-        List<String> uomSpinnerList = Arrays.asList(uomSpinnerArr);
-        ArrayAdapter<String> uomSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, uomSpinnerList);
-        uomSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        uomSpinner.setAdapter(uomSpinnerAdapter);
+//        String[] uomSpinnerArr = getResources().getStringArray(R.array.uom_values);
+//        List<String> uomSpinnerList = Arrays.asList(uomSpinnerArr);
+//        ArrayAdapter<String> uomSpinnerAdapter = new ArrayAdapter<>(RMActivityFields.this, android.R.layout.simple_spinner_item, uomSpinnerList);
+//        uomSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        uomSpinner.setAdapter(uomSpinnerAdapter);
+
+        uomTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getUOMTypeofRMQuery());
+        ArrayAdapter<String> uomArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(uomTypeDataMap, "UOM"));
+        uomArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        uomSpinner.setAdapter(uomArrayAdapter);
+
         uomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-             if (Flag == 3) {
+
+                if (uomSpinner.getSelectedItemPosition() != 0) {
+
+                    int selectedPos = uomSpinner.getSelectedItemPosition();
+                    Log.d("selecteduom", uomSpinner.getSelectedItem().toString());
+                    Log.d("selecteduomId", uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1]);
+                    uomId = uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1];
+
+                }
+
+
+                if (Flag == 3) {
                     uomSpinner.setSelection(2);
                 }
 
@@ -306,6 +355,7 @@ TextView activity_name, nurseryname;
             }
         });
 
+
 //        quantity.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -329,11 +379,36 @@ TextView activity_name, nurseryname;
 //            }
 //        });
 
+        quantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+//                if (!TextUtils.isEmpty(quantity.getText().toString())) {
+//
+//                    cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
+//                } else {
+//                    cost.setText("0");
+//                }
+            }
+        });
+
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validations()){
-
+                if (validations()) {
+                    saveRMTransactionsData();
+                    saveRMTransactionsStatus();
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -348,6 +423,136 @@ TextView activity_name, nurseryname;
             }
         });
 
+         transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
+
+
+    }
+
+    /* "TransactionId VARCHAR, \n" +
+                "SatusTypeId INT , \n" +
+                "CreatedByUserId INT,\n" +
+                "CreatedDate VARCHAR, \n" +
+                "ServerUpdatedStatus INT \n" +*/
+
+    private void saveRMTransactionsStatus() {
+        LinkedHashMap mapStatus = new LinkedHashMap();
+        mapStatus.put("TransactionId",transactionid);
+        mapStatus.put("StatusTypeId",346);
+        mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
+        mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        mapStatus.put("ServerUpdatedStatus",0);
+    }
+
+    private void saveRMTransactionsData() {
+
+        String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
+        String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
+        String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
+        String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+
+        //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
+        Log.d("TransactionId", transactionid);
+
+
+        LinkedHashMap mapStatus = new LinkedHashMap();
+        mapStatus.put("TransactionId",transactionid);
+
+        mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
+        mapStatus.put("ActivityId",activityId);
+        mapStatus.put("ActivityName",Activity_Name);
+        mapStatus.put("ActivityTypeId",Integer.parseInt(activityTypeId));
+        mapStatus.put("StatusTypeId",346);
+        mapStatus.put("TransactionDate",currentDate);
+
+        if(mandaysmale.getText().length() == 0){
+            mapStatus.put("MaleRegular","");
+        }else{
+            mapStatus.put("MaleRegular",mandaysmale.getText());
+        }
+
+        if(mandaysfemale.getText().length() == 0){
+            mapStatus.put("FemaleRegular","");
+        }else{
+            mapStatus.put("FemaleRegular",mandaysfemale.getText());
+        }
+
+        if(mandaysmaleoutside.getText().length() == 0){
+            mapStatus.put("MaleOutside","");
+        }else{
+            mapStatus.put("MaleOutside",mandaysmaleoutside.getText());
+        }
+
+        if(mandaysfemaleoutside.getText().length() == 0){
+            mapStatus.put("FemaleOutside","");
+        }else{
+            mapStatus.put("FemaleOutside",mandaysfemaleoutside.getText());
+        }
+
+        mapStatus.put("MaleRegularCost",Double.parseDouble(male_reg));
+        mapStatus.put("FemaleRegularCost",Double.parseDouble(femmale_reg));
+        mapStatus.put("MaleOutsideCost",0.0);
+        mapStatus.put("FemaleoutsideCost",0.0);
+
+
+        mapStatus.put("ExpenseType",expensetype.getText());
+
+        if(uomSpinner.getSelectedItemPosition() == 0){
+            mapStatus.put("UOMId","");
+        }else{
+            mapStatus.put("UOMId",Integer.parseInt(uomId));
+        }
+
+        if(quantity.getText().equals("")){
+            mapStatus.put("Quatity","");
+        }else{
+            mapStatus.put("Quantity",quantity.getText());
+        }
+
+        if (!TextUtils.isEmpty(cost.getText().toString())){
+            mapStatus.put("TotalCost",cost.getText());
+        }else{
+            mapStatus.put("TotalCost"," ");
+        }
+
+        if(typespinner.getSelectedItemPosition() == 1) {
+            mapStatus.put("Comments",comment.getText());
+        }
+
+        if(typespinner.getSelectedItemPosition() == 2) {
+            mapStatus.put("Comments",othercomments.getText());
+        }
+
+
+        if(typespinner.getSelectedItemPosition() == 2){
+            mapStatus.put("FileName","");
+            mapStatus.put("FileLocation",local_ImagePath);
+            mapStatus.put("FileExtension",".jpg");
+        }else {
+            mapStatus.put("FileName","");
+            mapStatus.put("FileLocation","");
+            mapStatus.put("FileExtension","");
+        }
+
+        mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
+        mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        mapStatus.put("UpdatedByUserId",CommonConstants.USER_ID);
+        mapStatus.put("UpdatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        mapStatus.put("ServerUpdatedStatus",0);
+
+        final List<LinkedHashMap> rmactivityarr = new ArrayList<>();
+        rmactivityarr.add(mapStatus);
+
+        dataAccessHandler.insertMyDataa("RMTransactions",
+                rmactivityarr, new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+
+                        if (success) {
+                            Toast.makeText(RMActivityFields.this, "Insert Successful", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    });
+
     }
 
     private void takePhotoFromCamera() {
@@ -358,7 +563,7 @@ TextView activity_name, nurseryname;
     //Handling on Activity Result
     @SuppressLint("MissingSuperCall")
     @Override
-    public void onActivityResult ( int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == this.RESULT_CANCELED) {
@@ -413,7 +618,7 @@ TextView activity_name, nurseryname;
 
     public boolean validations() {
 
-        if (Activity_Name.equalsIgnoreCase("Other") ){
+        if (Activity_Name.equalsIgnoreCase("Other")) {
 
             if (TextUtils.isEmpty(nameofactivity.getText().toString())) {
                 UiUtils.showCustomToastMessage("Please Enter Name of the Activity", RMActivityFields.this, 0);
@@ -436,16 +641,16 @@ TextView activity_name, nurseryname;
             if (mandaysmale.length() != 0 || mandaysfemale.length() != 0 || mandaysmaleoutside.length() != 0 || mandaysfemaleoutside.length() != 0) {
                 //UiUtils.showCustomToastMessage("Please enter atleast one value", RMActivityFields.this, 0);
                 return true;
-            }else{
+            } else {
 
                 UiUtils.showCustomToastMessage("Please enter atleast one value", RMActivityFields.this, 0);
                 return false;
             }
         }
 
-        if (typespinner.getSelectedItemPosition() == 2){
+        if (typespinner.getSelectedItemPosition() == 2) {
 
-            if (TextUtils.isEmpty(expensetype.getText().toString())){
+            if (TextUtils.isEmpty(expensetype.getText().toString())) {
                 UiUtils.showCustomToastMessage("Please Enter Expense Type", RMActivityFields.this, 0);
                 return false;
             }
@@ -455,19 +660,28 @@ TextView activity_name, nurseryname;
                 return false;
             }
 
+
             if(otherlyt.getVisibility()== View.VISIBLE){
             if (TextUtils.isEmpty(othercomments.getText().toString())){
                 UiUtils.showCustomToastMessage("Please Enter Comments", RMActivityFields.this, 0);
                 return false;
             }}
-            if (local_ImagePath == null){
+
+
+            if (TextUtils.isEmpty(quantity.getText().toString())) {
+                UiUtils.showCustomToastMessage("Please Enter Quantity", RMActivityFields.this, 0);
+                return false;
+            }
+
+            if (local_ImagePath == null) {
+
 
                 UiUtils.showCustomToastMessage("Please Capture Image", RMActivityFields.this, 0);
                 return false;
             }
 
         }
-            return true;
+        return true;
     }
 
 }
