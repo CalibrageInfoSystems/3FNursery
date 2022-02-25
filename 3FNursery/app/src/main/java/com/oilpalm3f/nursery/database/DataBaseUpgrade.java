@@ -267,7 +267,7 @@ public class DataBaseUpgrade {
                 "FemaleoutsideCost FLOAT , \n" +
                 "ExpenseType VARCHAR , \n" +
                 "UOMId INT , \n" +
-                "Quatity FLOAT , \n" +
+                "Quantity FLOAT , \n" +
                 "TotalCost FLOAT , \n" +
                 "Comments VARCHAR , \n" +
                 "FileName VARCHAR, \n" +
@@ -285,7 +285,8 @@ public class DataBaseUpgrade {
                 "TransactionId VARCHAR, \n" +
                 "SatusTypeId INT , \n" +
                 "CreatedByUserId INT,\n" +
-                "CreatedDate VARCHAR \n" +
+                "CreatedDate VARCHAR, \n" +
+                "ServerUpdatedStatus INT \n" +
                 ")";
 
         try {
