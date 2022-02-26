@@ -27,7 +27,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
     public Context mContext;
     private List<NurseryRMTransctions> RMTransactionlist;
- String Activityname;
+ String Activityname,RmActivityId;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView transactionId, status, comment, createddate;
@@ -48,10 +48,11 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
     }
 
 
-    public RMTransactionRecyclerViewAdapter(Context context, List<NurseryRMTransctions> RMTransaction_list, String Activity_name) {
+    public RMTransactionRecyclerViewAdapter(Context context, List<NurseryRMTransctions> RMTransaction_list, String Activity_name,String RmActivityId) {
         this.mContext = context;
         this.Activityname = Activity_name;
         this.RMTransactionlist = RMTransaction_list;
+        this.RmActivityId = RmActivityId;
 
     }
 
@@ -91,6 +92,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
                  intent.putExtra("Name", Activityname);
                     intent.putExtra("camefrom",  2);
                     intent.putExtra("transactionId",   RMTransactionlist.get(position).getTransactionId());
+                    intent.putExtra("ActivityId",   RmActivityId);
                     mContext.startActivity(intent);
 
 
@@ -113,6 +115,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
                     Intent intent = new Intent(mContext, RMActivityFields.class);
                     intent.putExtra("Name", Activityname);
                     intent.putExtra("camefrom",  3);
+                    intent.putExtra("ActivityId",   RmActivityId);
                     intent.putExtra("transactionId",   RMTransactionlist.get(position).getTransactionId());
                     mContext.startActivity(intent);
 
@@ -133,6 +136,7 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
                     Intent intent = new Intent(mContext, RMActivityFields.class);
                     intent.putExtra("Name", Activityname);
                     intent.putExtra("camefrom",  3);
+                    intent.putExtra("ActivityId",   RmActivityId);
                     intent.putExtra("transactionId",   RMTransactionlist.get(position).getTransactionId());
                     mContext.startActivity(intent);
 

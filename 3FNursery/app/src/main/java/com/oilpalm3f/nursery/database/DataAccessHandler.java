@@ -1925,6 +1925,7 @@ return Cullinglossrepolist;
                     rmtransactions.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     rmtransactions.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     rmtransactions.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
+                    rmtransactions.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
                     nurseryrmtransactions.add(rmtransactions);
                 } while (cursor.moveToNext());
 

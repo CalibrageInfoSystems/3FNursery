@@ -1914,10 +1914,10 @@ public class Queries {
     public String getrmActivities() {
         return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '77'";
     }
-    public String getrmActivitttransaction(String fromDate, String todate ) {
-        return "Select R.TransactionId,R.ActivityTypeId,R.StatusTypeId,R.CreatedDate,t.Desc  from RMTransactions R\n" +
+    public String getrmActivitttransaction(String fromDate, String todate ,String Id) {
+        return "Select R.TransactionId,R.ActivityTypeId,R.ActivityId,R.StatusTypeId,R.CreatedDate,t.Desc  from RMTransactions R\n" +
                 "  Inner Join TypeCdDmt t on t.TypeCdId = R.StatusTypeId\n" +
-                " where   date(R.CreatedDate) BETWEEN  '" + fromDate + "'  and '" + todate + "'";
+                " where   date(R.CreatedDate) BETWEEN  '" + fromDate + "'  and '" + todate + "' and R.ActivityId = '" + Id + "'";
     }
 
 

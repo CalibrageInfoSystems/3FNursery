@@ -41,8 +41,8 @@ public class NurseryrmTransactionsScreen extends AppCompatActivity {
     RecyclerView Transactionrcv;
     private DataAccessHandler dataAccessHandler;
     Button addBtn;
-    String activityTypeId, activityName,  status;
-    int statusId;
+    String activityTypeId, activityName,  RmActivityId;
+
 TextView activity_name;
     private List<NurseryRMTransctions> RmTransactionlist = new ArrayList<>();
     String   Fromdate,Todate;
@@ -71,7 +71,8 @@ TextView activity_name;
         if (extras != null) {
             try {
                 activityName = extras.getString("RmActivityname");
-                Log.d("activity_Name========>", activityName);
+                RmActivityId = extras.getString("RmActivityId");
+                Log.d("activity_Name========>", activityName + "==="+ RmActivityId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -167,7 +168,9 @@ TextView activity_name;
                 Intent selectionscreen = new Intent(NurseryrmTransactionsScreen.this, RMActivityFields.class);
                 selectionscreen.putExtra("Name", activityName);
                 selectionscreen.putExtra("camefrom",  1);
-                selectionscreen.putExtra("transactionId",   "");
+                selectionscreen.putExtra("transactionId",   RmActivityId);
+                selectionscreen.putExtra("ActivityId",   RmActivityId);
+
                 startActivity(selectionscreen);
             }
         });
@@ -190,7 +193,7 @@ TextView activity_name;
                     e.printStackTrace();
                 }
 
-                RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(Fromdate,Todate));
+                RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(Fromdate,Todate,RmActivityId));
 
               //  irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(Fromdate,Todate));
 
@@ -198,7 +201,7 @@ TextView activity_name;
                     Transactionrcv.setVisibility(View.VISIBLE);
                     nodata.setVisibility(View.GONE);
                     Transactionrcv.setLayoutManager(new LinearLayoutManager(NurseryrmTransactionsScreen.this));
-                    rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(NurseryrmTransactionsScreen.this, RmTransactionlist,activityName);
+                    rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(NurseryrmTransactionsScreen.this, RmTransactionlist,activityName,RmActivityId);
                     Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
                 }else{
                     Transactionrcv.setVisibility(View.GONE);
@@ -228,12 +231,12 @@ TextView activity_name;
 
     private void nurseryrmTransactions() {
 
-        RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(sendlastmonth,sendcurrentDate));
+        RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(sendlastmonth,sendcurrentDate,RmActivityId));
         if(RmTransactionlist.size() != 0){
             Transactionrcv.setVisibility(View.VISIBLE);
             nodata.setVisibility(View.GONE);
             Transactionrcv.setLayoutManager(new LinearLayoutManager(NurseryrmTransactionsScreen.this));
-            rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(NurseryrmTransactionsScreen.this, RmTransactionlist,activityName);
+            rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(NurseryrmTransactionsScreen.this, RmTransactionlist,activityName,RmActivityId);
             Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
         }else{
             Transactionrcv.setVisibility(View.GONE);
@@ -242,4 +245,17 @@ TextView activity_name;
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        nurseryrmTransactions();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
 }

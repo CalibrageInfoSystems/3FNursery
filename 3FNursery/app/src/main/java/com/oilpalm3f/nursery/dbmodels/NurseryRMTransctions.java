@@ -3,6 +3,16 @@ package com.oilpalm3f.nursery.dbmodels;
 public class NurseryRMTransctions {
 
     private  String TransactionId;
+
+    public int getActivityId() {
+        return ActivityId;
+    }
+
+    public void setActivityId(int activityId) {
+        ActivityId = activityId;
+    }
+
+    private int ActivityId;
     private int ActivityTypeId;
     private  int StatusTypeId;
     private String CreatedDate;

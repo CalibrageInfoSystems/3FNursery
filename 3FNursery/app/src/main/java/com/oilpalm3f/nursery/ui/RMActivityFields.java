@@ -85,9 +85,9 @@ public class RMActivityFields extends AppCompatActivity {
     private int GALLERY = 1, CAMERA = 2;
 
     String activityTypeId, uomId;
-    String activityId = "368";
+    String activityId ;
     String transactionid;
-
+    String Sapcode;
 
     private DataAccessHandler dataAccessHandler;
     LinkedHashMap<String, Pair> activityTypeDataMap = null;
@@ -189,7 +189,8 @@ public class RMActivityFields extends AppCompatActivity {
             Activity_Name = getIntent().getStringExtra("Name");
             Flag = getIntent().getIntExtra("camefrom", 1); // if Flag 2 , edit on rejection
             transactionId = getIntent().getStringExtra("transactionId");
-            Log.d(LOG_TAG, "Name==========> :" + Activity_Name);
+            activityId = getIntent().getStringExtra("ActivityId");
+            Log.d(LOG_TAG, "Name==========> :" + Activity_Name +"==="+activityId);
             Log.d(LOG_TAG, "Flag=====" + Flag);
             if (Flag == 2) {
                 nurseryname.setText(CommonConstants.NurseryName + "");
@@ -394,8 +395,8 @@ public class RMActivityFields extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-         transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
+        Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(CommonConstants.NurseryCode));
+         transactionid = "TRANRM"+ CommonConstants.TAB_ID + Sapcode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityId)) + 1);
 
 
     }
@@ -459,11 +460,14 @@ public class RMActivityFields extends AppCompatActivity {
         }else{
             mapStatus.put("FemaleOutside",mandaysfemaleoutside.getText());
         }
-
-        mapStatus.put("MaleRegularCost",Double.parseDouble(male_reg));
-        mapStatus.put("FemaleRegularCost",Double.parseDouble(femmale_reg));
-        mapStatus.put("MaleOutsideCost",0.0);
-        mapStatus.put("FemaleoutsideCost",0.0);
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+        mapStatus.put("MaleRegularCost",Double.parseDouble(male_reg));}
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+        mapStatus.put("FemaleRegularCost",Double.parseDouble(femmale_reg));}
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+        mapStatus.put("MaleOutsideCost",male_contract);}
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+        mapStatus.put("FemaleoutsideCost",female_contract);}
 
 
         mapStatus.put("ExpenseType",expensetype.getText());

@@ -73,6 +73,7 @@ public class NurseryrmActivitiesAdapter extends RecyclerView.Adapter<NurseryrmAc
 
                     Intent intent = new Intent(mContext, NurseryrmTransactionsScreen.class);
                     intent.putExtra("RmActivityname",RMActivitylist.get(position).getDesc());
+                intent.putExtra("RmActivityId",RMActivitylist.get(position).getTypeCdId()+"");
                     mContext.startActivity(intent);
 
 
