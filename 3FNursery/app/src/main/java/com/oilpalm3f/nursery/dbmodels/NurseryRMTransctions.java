@@ -6,9 +6,15 @@ public class NurseryRMTransctions {
     private int ActivityTypeId;
     private  int StatusTypeId;
     private String CreatedDate;
+private String Desc;
 
+    public String getDesc() {
+        return Desc;
+    }
 
-
+    public void setDesc(String desc) {
+        Desc = desc;
+    }
 
     public String getTransactionId() {
         return TransactionId;

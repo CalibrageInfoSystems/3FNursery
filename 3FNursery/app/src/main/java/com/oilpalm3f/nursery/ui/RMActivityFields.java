@@ -356,29 +356,6 @@ public class RMActivityFields extends AppCompatActivity {
         });
 
 
-//        quantity.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//                if(!TextUtils.isEmpty(quantity.getText().toString())) {
-//
-//                    cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
-//                }else {
-//                    cost.setText("0");
-//                }
-//            }
-//        });
-
         quantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -393,12 +370,7 @@ public class RMActivityFields extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
-//                if (!TextUtils.isEmpty(quantity.getText().toString())) {
-//
-//                    cost.setText(Integer.parseInt(quantity.getText().toString()) * labourcost + "");
-//                } else {
-//                    cost.setText("0");
-//                }
+
             }
         });
 

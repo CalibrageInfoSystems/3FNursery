@@ -69,8 +69,12 @@ public class RMTransactionRecyclerViewAdapter extends RecyclerView.Adapter<RMTra
 
 
         holder.transactionId.setText("" + RMTransactionlist.get(position).getTransactionId());
-        holder.comment.setText("" +RMTransactionlist.get(position).getActivityTypeId());
-     holder.status.setText("" +RMTransactionlist.get(position).getStatusTypeId());
+        if(RMTransactionlist.get(position).getActivityTypeId() == 379){
+        holder.comment.setText("Other");}
+        else if(RMTransactionlist.get(position).getActivityTypeId() == 378){
+
+            holder.comment.setText("Labour" );}
+     holder.status.setText("" +RMTransactionlist.get(position).getDesc());
         holder.createddate.setText("" +RMTransactionlist.get(position).getCreatedDate());
 
 

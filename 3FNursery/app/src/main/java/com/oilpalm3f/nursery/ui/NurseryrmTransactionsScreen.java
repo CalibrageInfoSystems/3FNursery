@@ -24,10 +24,12 @@ import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.dbmodels.LandlevellingFields;
 import com.oilpalm3f.nursery.dbmodels.MutipleData;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMTransctions;
+import com.oilpalm3f.nursery.ui.Adapter.IrrigationstatusRecyclerviewAdapter;
 import com.oilpalm3f.nursery.ui.Adapter.MultipleEntriesRecyclerViewAdapter;
 import com.oilpalm3f.nursery.ui.Adapter.NurseryrmActivitiesAdapter;
 import com.oilpalm3f.nursery.ui.Adapter.RMTransactionRecyclerViewAdapter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,7 +45,7 @@ public class NurseryrmTransactionsScreen extends AppCompatActivity {
     int statusId;
 TextView activity_name;
     private List<NurseryRMTransctions> RmTransactionlist = new ArrayList<>();
-
+    String   Fromdate,Todate;
     String last_30day;
     int Feild_id;
   RMTransactionRecyclerViewAdapter rmtransactionRecyclerViewAdapter;
@@ -56,11 +58,12 @@ TextView activity_name;
     private String searchQuery = "";
     public static String SearchCollectionwithoutPlotQuery = "";
     DatePickerDialog picker;
-    String currentDate;
+    String currentDate, sendcurrentDate ,sendlastmonth;
+    TextView nodata;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nurseryrm_transactions_screen);
+        setContentView(R.layout.activity_nurseryrm_transactions_screen_test);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Nursery R&M");
         setSupportActionBar(toolbar);
@@ -86,18 +89,19 @@ TextView activity_name;
         Transactionrcv = findViewById(R.id.Transactionrcv);
         Transactionrcv.setHasFixedSize(true);
         Transactionrcv.setLayoutManager(new LinearLayoutManager(this));
-
+        searchBtn = findViewById(R.id.searchBtn);
         fromDateEdt = (EditText) findViewById(R.id.fromDate);
         toDateEdt = (EditText) findViewById(R.id.toDate);
+        nodata = findViewById( R.id.nodata);
     }
 
     private void setviews() {
 
-       // RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivities());
+
        // multiplelist = dataAccessHandler.getMultipleDataDetails(Queries.getInstance().getMultiplerecordsDetailsQuery(consignmentcode, activityTypeId));
 
         currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-     //   sendcurrentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+   sendcurrentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
   Log.i("LOG_RESPONSE date ", currentDate);
 
         Calendar calendar = Calendar.getInstance();
@@ -107,7 +111,7 @@ TextView activity_name;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
         last_30day = format.format(date);
-     //   sendweekdate =  formate.format(date);
+        sendlastmonth =  formate.format(date);
         Log.i("LOG_RESPONSE ===week", last_30day);
         fromDateEdt.setText(last_30day);
         toDateEdt.setText(currentDate);
@@ -167,6 +171,42 @@ TextView activity_name;
                 startActivity(selectionscreen);
             }
         });
+
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String fromString = fromDateEdt.getText().toString().trim();
+                String  toString = toDateEdt.getText().toString().trim();
+                SimpleDateFormat fromUser = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                try {
+
+                    Fromdate = myFormat.format(fromUser.parse(fromString));
+                    Todate = myFormat.format(fromUser.parse(toString));
+                    Log.d("collection", "RESPONSE reformattedStr======" + Fromdate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(Fromdate,Todate));
+
+              //  irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(Fromdate,Todate));
+
+                if(RmTransactionlist.size() != 0){
+                    Transactionrcv.setVisibility(View.VISIBLE);
+                    nodata.setVisibility(View.GONE);
+                    Transactionrcv.setLayoutManager(new LinearLayoutManager(NurseryrmTransactionsScreen.this));
+                    rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(NurseryrmTransactionsScreen.this, RmTransactionlist,activityName);
+                    Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
+                }else{
+                    Transactionrcv.setVisibility(View.GONE);
+                    nodata.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
     }
 
     private void updateLabel(int type) {
@@ -188,9 +228,18 @@ TextView activity_name;
 
     private void nurseryrmTransactions() {
 
+        RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(sendlastmonth,sendcurrentDate));
+        if(RmTransactionlist.size() != 0){
+            Transactionrcv.setVisibility(View.VISIBLE);
+            nodata.setVisibility(View.GONE);
+            Transactionrcv.setLayoutManager(new LinearLayoutManager(NurseryrmTransactionsScreen.this));
+            rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(NurseryrmTransactionsScreen.this, RmTransactionlist,activityName);
+            Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
+        }else{
+            Transactionrcv.setVisibility(View.GONE);
+            nodata.setVisibility(View.VISIBLE);
+        }
 
-//        rmtransactionRecyclerViewAdapter =    new RMTransactionRecyclerViewAdapter(this, RmTransactionlist,activityName);
-//        Transactionrcv.setAdapter(rmtransactionRecyclerViewAdapter);
 
     }
 }
