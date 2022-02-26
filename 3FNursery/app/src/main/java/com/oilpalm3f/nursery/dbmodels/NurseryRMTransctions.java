@@ -17,6 +17,15 @@ public class NurseryRMTransctions {
     private  int StatusTypeId;
     private String CreatedDate;
 private String Desc;
+private  String NurseryCode;
+
+    public String getNurseryCode() {
+        return NurseryCode;
+    }
+
+    public void setNurseryCode(String nurseryCode) {
+        NurseryCode = nurseryCode;
+    }
 
     public String getDesc() {
         return Desc;

@@ -1928,6 +1928,7 @@ return Cullinglossrepolist;
                     rmtransactions.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     rmtransactions.setDesc(cursor.getString(cursor.getColumnIndex("Desc")));
                     rmtransactions.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    rmtransactions.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
                     nurseryrmtransactions.add(rmtransactions);
                 } while (cursor.moveToNext());
 
@@ -2038,6 +2039,52 @@ return Cullinglossrepolist;
         return RMTransactionsStatus;
     }
 
+    public List<RMTransactions> getRMTransactions(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET Nursery :" + query);
+        List<RMTransactions> RMTransactionsLog = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    RMTransactions rmTransactions  = new RMTransactions();
+            rmTransactions.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+
+                    rmTransactions.setActivityName(cursor.getString(cursor.getColumnIndex("ActivityName")));
+                    rmTransactions.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
+
+                    rmTransactions.setMaleRegular(cursor.getInt(cursor.getColumnIndex("MaleRegular")));
+                    rmTransactions.setFemaleRegular(cursor.getInt(cursor.getColumnIndex("FemaleRegular")));
+
+                    rmTransactions.setMaleOutside(cursor.getInt(cursor.getColumnIndex("MaleOutside")));
+                    rmTransactions.setFemaleOutside(cursor.getInt(cursor.getColumnIndex("FemaleOutside")));
+
+                    rmTransactions.setExpenseType(cursor.getString(cursor.getColumnIndex("ExpenseType")));
+                    rmTransactions.setUOMId(cursor.getInt(cursor.getColumnIndex("UOMId")));
+                    rmTransactions.setQuantity(cursor.getDouble(cursor.getColumnIndex("Quantity")));
+                    rmTransactions.setTotalCost(cursor.getDouble(cursor.getColumnIndex("TotalCost")));
+                    rmTransactions.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+
+                    rmTransactions.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
+
+
+
+                    RMTransactionsLog.add(rmTransactions);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return RMTransactionsLog;
+    }
 
 
 }

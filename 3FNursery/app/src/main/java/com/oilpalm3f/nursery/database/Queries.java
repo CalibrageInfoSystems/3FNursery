@@ -1914,10 +1914,10 @@ public class Queries {
     public String getrmActivities() {
         return "Select TypeCdId,ClassTypeId,Desc,TableName from TypeCdDmt where ClassTypeId = '77'";
     }
-    public String getrmActivitttransaction(String fromDate, String todate ,String Id) {
-        return "Select R.TransactionId,R.ActivityTypeId,R.ActivityId,R.StatusTypeId,R.CreatedDate,t.Desc  from RMTransactions R\n" +
+    public String getrmActivitttransaction(String fromDate, String todate ,String Id, String NurseryCode) {
+        return "Select R.TransactionId,R.ActivityTypeId,R.ActivityId,R.NurseryCode,R.StatusTypeId,R.CreatedDate,t.Desc  from RMTransactions R\n" +
                 "  Inner Join TypeCdDmt t on t.TypeCdId = R.StatusTypeId\n" +
-                " where   date(R.CreatedDate) BETWEEN  '" + fromDate + "'  and '" + todate + "' and R.ActivityId = '" + Id + "'";
+                " where   date(R.CreatedDate) BETWEEN  '" + fromDate + "'  and '" + todate + "' and R.ActivityId = '" + Id + "' and R.NurseryCode = '" + NurseryCode + "'";
     }
 
 
@@ -1927,6 +1927,12 @@ public class Queries {
 
     public String getUOMTypeofRMQuery() {
         return "select Id, LookUpTypeId, Name from LookUp where LookUpTypeId = '381'";
+    }
+
+    public String getRmTransactiondata(String TransactionId) {
+        return "Select TransactionId,ActivityName ,ActivityTypeId,MaleRegular,FemaleRegular,MaleOutside," +
+                "FemaleOutside,ExpenseType, UOMId,Quantity,TotalCost,Comments,FileLocation  " +
+                "from RMTransactions  WHERE TransactionId = '" + TransactionId + "'";
     }
 
 }

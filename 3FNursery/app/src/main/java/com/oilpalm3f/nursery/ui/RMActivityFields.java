@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.media.MediaScannerConnection;
 import android.os.Build;
@@ -40,6 +41,8 @@ import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
+import com.oilpalm3f.nursery.dbmodels.RMTransactions;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import com.oilpalm3f.nursery.common.CommonUtils;
@@ -101,6 +104,9 @@ public class RMActivityFields extends AppCompatActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     public static String local_ImagePath = null;
+
+
+    private List<RMTransactions>RMTransactionData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +198,9 @@ public class RMActivityFields extends AppCompatActivity {
             activityId = getIntent().getStringExtra("ActivityId");
             Log.d(LOG_TAG, "Name==========> :" + Activity_Name +"==="+activityId);
             Log.d(LOG_TAG, "Flag=====" + Flag);
+
+            RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
+            Log.v(LOG_TAG, "===202"+RMTransactionData.size()+"");
             if (Flag == 2) {
                 nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name + "");
@@ -201,7 +210,7 @@ public class RMActivityFields extends AppCompatActivity {
                 mandaysfemaleoutside.setText("9");
 
                 comment.setText("testing R&m Commets");
-                if (Activity_Name.equalsIgnoreCase("Other")) {
+                if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                     nameofactivity.setText("Other R&M Activity");
                 } else {
@@ -209,17 +218,24 @@ public class RMActivityFields extends AppCompatActivity {
                 }
 
             } else if (Flag == 3) {
-
-                othercomments.setText("testing R&m Commets");
-
+                Log.v(LOG_TAG, "===220"+RMTransactionData.size()+"");
+                Log.v(LOG_TAG, "===221"+RMTransactionData.get(0).getComments());
+                othercomments.setText(RMTransactionData.get(0).getComments());
+                comment.setText(RMTransactionData.get(0).getComments());
                 nurseryname.setText(CommonConstants.NurseryName + "");
-
                 activity_name.setText(Activity_Name + "");
-                expensetype.setText("test");
-                quantity.setText("5");
+                mandaysmale.setText(RMTransactionData.get(0).getMaleRegular()+"");
+                mandaysfemale.setText(RMTransactionData.get(0).getFemaleRegular()+"");
+                mandaysmaleoutside.setText(RMTransactionData.get(0).getMaleOutside()+"");
+                mandaysfemaleoutside.setText(RMTransactionData.get(0).getFemaleOutside()+"");
+                expensetype.setText(RMTransactionData.get(0).getExpenseType()+"");
+                quantity.setText(RMTransactionData.get(0).getQuantity()+"");
+                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
+
+                imageView.setImageBitmap(bitmap);
                 submitBtn.setVisibility(View.GONE);
-                imageView.setImageResource(R.drawable.info);
-                cost.setText("500");
+
+                cost.setText(RMTransactionData.get(0).getTotalCost()+"");
 
 
                 nameofactivity.setEnabled(false);
@@ -230,16 +246,19 @@ public class RMActivityFields extends AppCompatActivity {
                 quantity.setEnabled(false);
                 othercomments.setEnabled(false);
                 imageView.setEnabled(false);
-                if (Activity_Name.equalsIgnoreCase("Other")) {
+                if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                     nameofactivity.setText("Test R&M Activity");
                 } else {
                     nameactivity.setVisibility(View.GONE);
                 }
+
+
+
             } else {
                 activity_name.setText(Activity_Name + "");
                 nurseryname.setText(CommonConstants.NurseryName + "");
-                if (Activity_Name.equalsIgnoreCase("Other")) {
+                if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                 } else {
                     nameactivity.setVisibility(View.GONE);
@@ -271,11 +290,14 @@ public class RMActivityFields extends AppCompatActivity {
                     Log.d("selectedTypeId", activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1]);
                     activityTypeId = activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1];
                 }
+                if (Flag == 3) {
+                    if (RMTransactionData.get(0).getActivityTypeId() == 379) {
+                        typespinner.setSelection(2);
+                    } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
 
-                if (Flag == 2) {
-                    typespinner.setSelection(1);
-                } else if (Flag == 3) {
-                    typespinner.setSelection(2);
+                        typespinner.setSelection(1);
+
+                    }
                 }
                 if (typespinner.getSelectedItemPosition() == 0) {
 
@@ -295,9 +317,7 @@ public class RMActivityFields extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                if (Flag == 2) {
-                    typespinner.setSelection(1);
-                }
+
             }
         });
 
@@ -325,27 +345,29 @@ public class RMActivityFields extends AppCompatActivity {
                     uomId = uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1];
 
                 }
-
-
                 if (Flag == 3) {
-                    uomSpinner.setSelection(2);
-                }
+                    if (RMTransactionData.get(0).getUOMId() == 261) {
+                        uomSpinner.setSelection(1);
+                    } else if (RMTransactionData.get(0).getUOMId() == 262) {
 
+                        uomSpinner.setSelection(2);
+                    } else {
+                        uomSpinner.setSelection(3);
+                    }
+                }
             }
 
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                if (Flag == 3) {
-                    uomSpinner.setSelection(2);
-                }
+
             }
         });
 
 
         imageView.setOnClickListener(v1 -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (!CommonUtils.isPermissionAllowed(this, Manifest.permission.CAMERA))) {
-                android.util.Log.v(LOG_TAG, "Camera Permissions Not Granted");
+              Log.v(LOG_TAG, "Camera Permissions Not Granted");
                 ActivityCompat.requestPermissions(
                         this,
                         PERMISSIONS_STORAGE,
@@ -381,7 +403,7 @@ public class RMActivityFields extends AppCompatActivity {
             public void onClick(View view) {
                 if (validations()) {
                     saveRMTransactionsData();
-                    saveRMTransactionsStatus();
+                  //  saveRMTransactionsStatus();
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -644,10 +666,6 @@ public class RMActivityFields extends AppCompatActivity {
             }}
 
 
-            if (TextUtils.isEmpty(quantity.getText().toString())) {
-                UiUtils.showCustomToastMessage("Please Enter Quantity", RMActivityFields.this, 0);
-                return false;
-            }
 
             if (local_ImagePath == null) {
 

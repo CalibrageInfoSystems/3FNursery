@@ -193,7 +193,7 @@ TextView activity_name;
                     e.printStackTrace();
                 }
 
-                RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(Fromdate,Todate,RmActivityId));
+                RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(Fromdate,Todate,RmActivityId,CommonConstants.NurseryCode));
 
               //  irrigationloglist = dataAccessHandler.getirigationlogs(Queries.getInstance().getIrrigationStatus(Fromdate,Todate));
 
@@ -230,8 +230,8 @@ TextView activity_name;
     }
 
     private void nurseryrmTransactions() {
-
-        RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(sendlastmonth,sendcurrentDate,RmActivityId));
+        Log.d("NurseryCodeeeee", CommonConstants.NurseryCode + "");
+        RmTransactionlist = dataAccessHandler.getNurseryrmTransactionsg(Queries.getInstance().getrmActivitttransaction(sendlastmonth,sendcurrentDate,RmActivityId,CommonConstants.NurseryCode));
         if(RmTransactionlist.size() != 0){
             Transactionrcv.setVisibility(View.VISIBLE);
             nodata.setVisibility(View.GONE);
