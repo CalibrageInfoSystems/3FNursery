@@ -58,7 +58,7 @@ public class NurseryrmActivities extends AppCompatActivity {
         dataAccessHandler = new DataAccessHandler(this);
         othertext= findViewById(R.id.othertext);
         ActivityRecyclerView = findViewById(R.id.ActivityRecyclerView);
-        otherlinear= findViewById(R.id.otherlinear);
+
         ActivityRecyclerView.setHasFixedSize(true);
         ActivityRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -67,14 +67,7 @@ public class NurseryrmActivities extends AppCompatActivity {
 
         nurseryrmActivities();
 
-        otherlinear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent NurseryrmTransactions = new Intent(NurseryrmActivities.this, NurseryrmTransactionsScreen.class);
-                NurseryrmTransactions.putExtra("RmActivityname", othertext.getText().toString());
-                startActivity(NurseryrmTransactions);
-            }
-        });
+
 
 
 
