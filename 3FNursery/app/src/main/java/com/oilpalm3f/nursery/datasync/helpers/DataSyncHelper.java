@@ -27,6 +27,8 @@ import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogForDb;
 import com.oilpalm3f.nursery.dbmodels.NurseryIrrigationLogXref;
 import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryVisitLog;
+import com.oilpalm3f.nursery.dbmodels.RMTransactions;
+import com.oilpalm3f.nursery.dbmodels.RMTransactionsStatusHistory;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -535,9 +537,32 @@ public class DataSyncHelper {
                     Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "Id", alertsList.getId()+""));
-            }
+            }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {
+                RMTransactions rmTransactions = (RMTransactions) dataList.get(innerCountCheck);
+                rmTransactions.setServerUpdatedStatus(1);
+                whereCondition = " where  TransactionId = '" + rmTransactions.getTransactionId() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(rmTransactions));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "TransactionId", rmTransactions.getTransactionId()));
 
-            if (dataList.size() != innerCountCheck) {
+            }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactionStatusHistory)) {
+                RMTransactionsStatusHistory rmTransactionsStatusHistory = (RMTransactionsStatusHistory) dataList.get(innerCountCheck);
+                rmTransactionsStatusHistory.setServerUpdatedStatus(1);
+                whereCondition = " where  TransactionId = '" + rmTransactionsStatusHistory.getTransactionId() + "'";
+                try {
+                    ccData = new JSONObject(gson.toJson(rmTransactionsStatusHistory));
+                    dataToInsert.add(CommonUtils.toMap(ccData));
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "####" + e.getLocalizedMessage());
+                }
+                recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "TransactionId", rmTransactionsStatusHistory.getTransactionId()));
+
+            }
+                if (dataList.size() != innerCountCheck) {
                 updateOrInsertData(tableName, dataToInsert, whereCondition, recordExisted, dataAccessHandler, new ApplicationThread.OnComplete() {
                     @Override
                     public void execute(boolean success, Object result, String msg) {
@@ -829,6 +854,20 @@ public class DataSyncHelper {
                             List<Alerts> alters = gson.fromJson(dataArray.toString(), type);
                             if (null != alters && alters.size() > 0)
                                 dataToUpdate.put(tableName, alters);
+                        }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {  // TODO need to check
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<RMTransactions>>() {
+                            }.getType();
+                            List<RMTransactions> rmTransactions = gson.fromJson(dataArray.toString(), type);
+                            if (null != rmTransactions && rmTransactions.size() > 0)
+                                dataToUpdate.put(tableName, rmTransactions);
+                        }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactionStatusHistory)) {  // TODO need to check
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<RMTransactionsStatusHistory>>() {
+                            }.getType();
+                            List<RMTransactionsStatusHistory> rmTransactionsStatusHistories = gson.fromJson(dataArray.toString(), type);
+                            if (null != rmTransactionsStatusHistories && rmTransactionsStatusHistories.size() > 0)
+                                dataToUpdate.put(tableName, rmTransactionsStatusHistories);
                         }
                     }
                     resultMessage = "success";
