@@ -33,6 +33,8 @@ import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMTransctions;
 import com.oilpalm3f.nursery.dbmodels.NurseryVisitLog;
+import com.oilpalm3f.nursery.dbmodels.RMTransactions;
+import com.oilpalm3f.nursery.dbmodels.RMTransactionsStatusHistory;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -1938,6 +1940,101 @@ return Cullinglossrepolist;
             }
         }
         return nurseryrmtransactions;
+    }
+
+    public List<RMTransactions> getRMTransactionsData(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET Nursery :" + query);
+        List<RMTransactions> RMTransactionsLog = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    RMTransactions rmTransactions  = new RMTransactions();
+
+                    rmTransactions.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    rmTransactions.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    rmTransactions.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
+                    rmTransactions.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
+                    rmTransactions.setActivityName(cursor.getString(cursor.getColumnIndex("ActivityName")));
+                    rmTransactions.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
+                    rmTransactions.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    rmTransactions.setTransactionDate(cursor.getString(cursor.getColumnIndex("TransactionDate")));
+                    rmTransactions.setMaleRegular(cursor.getInt(cursor.getColumnIndex("MaleRegular")));
+                    rmTransactions.setFemaleRegular(cursor.getInt(cursor.getColumnIndex("FemaleRegular")));
+
+                    rmTransactions.setMaleOutside(cursor.getInt(cursor.getColumnIndex("MaleOutside")));
+                    rmTransactions.setFemaleOutside(cursor.getInt(cursor.getColumnIndex("FemaleOutside")));
+                    rmTransactions.setMaleRegularCost(cursor.getDouble(cursor.getColumnIndex("MaleRegularCost")));
+                    rmTransactions.setFemaleRegularCost(cursor.getDouble(cursor.getColumnIndex("FemaleRegularCost")));
+                    rmTransactions.setMaleOutside(cursor.getInt(cursor.getColumnIndex("MaleOutsideCost")));
+                    rmTransactions.setFemaleoutsideCost(cursor.getInt(cursor.getColumnIndex("FemaleoutsideCost")));
+                    rmTransactions.setExpenseType(cursor.getString(cursor.getColumnIndex("ExpenseType")));
+                    rmTransactions.setUOMId(cursor.getInt(cursor.getColumnIndex("UOMId")));
+                    rmTransactions.setQuantity(cursor.getDouble(cursor.getColumnIndex("Quantity")));
+                    rmTransactions.setTotalCost(cursor.getDouble(cursor.getColumnIndex("TotalCost")));
+                    rmTransactions.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+
+                    rmTransactions.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
+                    rmTransactions.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
+                    rmTransactions.setFileExtension(cursor.getString(cursor.getColumnIndex("FileExtension")));
+
+                    rmTransactions.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    rmTransactions.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    rmTransactions.setUpdatedByUserId(cursor.getString(cursor.getColumnIndex("UpdatedByUserId")));
+                    rmTransactions.setUpdatedDate(cursor.getString(cursor.getColumnIndex("UpdatedDate")));
+                    rmTransactions.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    RMTransactionsLog.add(rmTransactions);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return RMTransactionsLog;
+    }
+
+
+    public List<RMTransactionsStatusHistory> getRMTransactionsStatusHistoryData(final String query) {
+        Log.d(DataAccessHandler.class.getSimpleName(), "====> Analysis ==> GET Nursery :" + query);
+        List<RMTransactionsStatusHistory> RMTransactionsStatus = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = mDatabase.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+
+                    RMTransactionsStatusHistory rmTransactionsStatusHistory  = new RMTransactionsStatusHistory();
+
+                    rmTransactionsStatusHistory.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                    rmTransactionsStatusHistory.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
+                    rmTransactionsStatusHistory.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
+                    rmTransactionsStatusHistory.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
+                    rmTransactionsStatusHistory.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    rmTransactionsStatusHistory.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
+
+                    RMTransactionsStatus.add(rmTransactionsStatusHistory);
+                } while (cursor.moveToNext());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return RMTransactionsStatus;
     }
 
 

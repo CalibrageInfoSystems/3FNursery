@@ -19,6 +19,8 @@ public class DatabaseKeys {
     public static String TABLE_NURSERYVISITLOGS = "NurseryVisitLog";
     public static String TABLE_NurseryLabourLog = "NurseryLabourLog";
     public static String TABLE_PLOT = "Plot";
+    public static String TABLE_RMTransactions = "RMTransactions";
+    public static String TABLE_RMTransactionStatusHistory = "RMTransactionStatusHistory";
 
     public static String TABLE_FARMER= "Farmer";
 
