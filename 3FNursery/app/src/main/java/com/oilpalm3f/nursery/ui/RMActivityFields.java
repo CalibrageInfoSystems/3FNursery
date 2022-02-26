@@ -41,12 +41,14 @@ import com.oilpalm3f.nursery.cloudhelper.ApplicationThread;
 import com.oilpalm3f.nursery.common.CommonConstants;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
+import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
 import com.oilpalm3f.nursery.dbmodels.RMTransactions;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 
 import com.oilpalm3f.nursery.common.CommonUtils;
 
+import com.oilpalm3f.nursery.uihelper.ProgressBar;
 import com.oilpalm3f.nursery.utils.UiUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -81,7 +83,7 @@ public class RMActivityFields extends AppCompatActivity {
     DatePickerDialog picker;
     int labourcost = 10;
 
-    String currentDate,sendcurrentDate;
+    String currentDate,sendcurrentDate,Userid,Date_history;
 
  //   TextView cost;
 
@@ -89,7 +91,7 @@ public class RMActivityFields extends AppCompatActivity {
 
     String activityTypeId, uomId;
     String activityId ;
-    String transactionid;
+    String transactionid,Transactionid_New;
     String Sapcode;
 
     private DataAccessHandler dataAccessHandler;
@@ -204,6 +206,7 @@ public class RMActivityFields extends AppCompatActivity {
             if (Flag == 2) {
                 nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name + "");
+                UpdateRMTransactionsData(transactionId);
                 mandaysmale.setText("5");
                 mandaysfemale.setText("6");
                 mandaysmaleoutside.setText("4");
@@ -418,10 +421,195 @@ public class RMActivityFields extends AppCompatActivity {
             }
         });
         Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(CommonConstants.NurseryCode));
-         transactionid = "TRANRM"+ CommonConstants.TAB_ID + Sapcode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityId)) + 1);
+        Transactionid_New = "TRANRM"+ CommonConstants.TAB_ID + Sapcode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityId)) + 1);
 
 
     }
+
+    private void UpdateRMTransactionsData(String transactionid ) {
+        String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
+        String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
+        String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
+        String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+        Userid =  dataAccessHandler.getSingleValue(Queries.getRMuserid(transactionId));
+        Date_history =  dataAccessHandler.getSingleValue(Queries.getRMupdateddate(transactionId));
+        //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
+        Log.d("TransactionId", transactionid);
+
+
+        LinkedHashMap mapStatus = new LinkedHashMap();
+        mapStatus.put("TransactionId",transactionid);
+
+        mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
+        mapStatus.put("ActivityId",activityId);
+        mapStatus.put("ActivityName",Activity_Name);
+        mapStatus.put("ActivityTypeId",Integer.parseInt(activityTypeId));
+        mapStatus.put("StatusTypeId",346);
+        mapStatus.put("TransactionDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY));
+
+        if(mandaysmale.getText().length() == 0){
+            mapStatus.put("MaleRegular","");
+        }else{
+            mapStatus.put("MaleRegular",mandaysmale.getText());
+        }
+
+        if(mandaysfemale.getText().length() == 0){
+            mapStatus.put("FemaleRegular","");
+        }else{
+            mapStatus.put("FemaleRegular",mandaysfemale.getText());
+        }
+
+        if(mandaysmaleoutside.getText().length() == 0){
+            mapStatus.put("MaleOutside","");
+        }else{
+            mapStatus.put("MaleOutside",mandaysmaleoutside.getText());
+        }
+
+        if(mandaysfemaleoutside.getText().length() == 0){
+            mapStatus.put("FemaleOutside","");
+        }else{
+            mapStatus.put("FemaleOutside",mandaysfemaleoutside.getText());
+        }
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+            mapStatus.put("MaleRegularCost",Double.parseDouble(male_reg));}
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+            mapStatus.put("FemaleRegularCost",Double.parseDouble(femmale_reg));}
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+            mapStatus.put("MaleOutsideCost",male_contract);}
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+            mapStatus.put("FemaleoutsideCost",female_contract);}
+
+
+        mapStatus.put("ExpenseType",expensetype.getText());
+
+        if(uomSpinner.getSelectedItemPosition() == 0){
+            mapStatus.put("UOMId","");
+        }else{
+            mapStatus.put("UOMId",Integer.parseInt(uomId));
+        }
+
+        if(quantity.getText().equals("")){
+            mapStatus.put("Quatity","");
+        }else{
+            mapStatus.put("Quantity",quantity.getText());
+        }
+
+        if (!TextUtils.isEmpty(cost.getText().toString())){
+            mapStatus.put("TotalCost",cost.getText());
+        }else{
+            mapStatus.put("TotalCost"," ");
+        }
+
+        if(typespinner.getSelectedItemPosition() == 1) {
+            mapStatus.put("Comments",comment.getText());
+        }
+
+        if(typespinner.getSelectedItemPosition() == 2) {
+            mapStatus.put("Comments",othercomments.getText());
+        }
+
+
+        if(typespinner.getSelectedItemPosition() == 2){
+            mapStatus.put("FileName","");
+            mapStatus.put("FileLocation",local_ImagePath);
+            mapStatus.put("FileExtension",".jpg");
+        }else {
+            mapStatus.put("FileName","");
+            mapStatus.put("FileLocation","");
+            mapStatus.put("FileExtension","");
+        }
+
+        mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
+        mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        mapStatus.put("UpdatedByUserId",CommonConstants.USER_ID);
+        mapStatus.put("UpdatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
+        mapStatus.put("ServerUpdatedStatus",0);
+
+        final List<LinkedHashMap> rmactivityarr = new ArrayList<>();
+        rmactivityarr.add(mapStatus);
+
+
+
+        String whereCondition ="where  TransactionId = '"+transactionid+"'  ";
+        dataAccessHandler.updateData("RMTransactions",
+                rmactivityarr,false, whereCondition,  new ApplicationThread.OnComplete<String>() {
+                    @Override
+                    public void execute(boolean success, String result, String msg) {
+                        if (success) {
+
+                            Toast.makeText(RMActivityFields.this, "Data Saved Successfully ", Toast.LENGTH_SHORT).show();
+                            Intent newIntent = new Intent(RMActivityFields.this, HomeActivity.class);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(newIntent);
+                        }else{
+                            Toast.makeText(RMActivityFields.this, "Data Saved Failed try again :" + msg, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+                });
+
+
+
+      //  "Id"
+
+
+    LinkedHashMap status = new LinkedHashMap();
+                    status.put("TransactionId", transactionId);
+                    status.put("StatusTypeId", 349);
+                    status.put("CreatedByUserId", Userid);
+                    status.put("CreatedDate", Date_history);
+                    status.put("ServerUpdatedStatus", 0);
+
+    final List<LinkedHashMap> historyList = new ArrayList<>();
+                    historyList.add(status);
+                    dataAccessHandler.insertMyDataa("RMTransactionStatusHistory", historyList, new ApplicationThread.OnComplete<String>() {
+        @Override
+        public void execute(boolean success, String result, String msg) {
+            if (success) {
+                if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
+
+
+                    DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
+                        @Override
+                        public void execute(boolean success, Object result, String msg) {
+                            if (success) {
+                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+//
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                    @Override
+                                    public void run() {
+
+
+                                        ProgressBar.hideProgressBar();
+                                        //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                finish();
+
+                com.oilpalm3f.nursery.cloudhelper.Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
+        }
+    });
+
+    }
+
+
+
+
 
     /* "TransactionId VARCHAR, \n" +
                 "SatusTypeId INT , \n" +
@@ -446,11 +634,11 @@ public class RMActivityFields extends AppCompatActivity {
         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
 
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
-        Log.d("TransactionId", transactionid);
+        Log.d("TransactionId", Transactionid_New);
 
 
         LinkedHashMap mapStatus = new LinkedHashMap();
-        mapStatus.put("TransactionId",transactionid);
+        mapStatus.put("TransactionId",Transactionid_New);
 
         mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
         mapStatus.put("ActivityId",activityId);

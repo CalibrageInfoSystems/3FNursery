@@ -1939,7 +1939,15 @@ public class Queries {
                 "FemaleOutside,ExpenseType, UOMId,Quantity,TotalCost,Comments,FileLocation  " +
                 "from RMTransactions  WHERE TransactionId = '" + TransactionId + "'";
     }
+    public static String getRMuserid(String TransactionId) {
+        return "SELECT  R.UpdatedByUserId  from RMTransactions  R\n" +
+                "Inner Join TypeCdDmt t on t.TypeCdId = R.StatusTypeId where TransactionId ='" + TransactionId + "'";
+    }
 
+    public static String getRMupdateddate(String TransactionId) {
+        return "SELECT  R.UpdatedDate  from RMTransactions  R\n" +
+                "Inner Join TypeCdDmt t on t.TypeCdId = R.StatusTypeId where TransactionId ='" + TransactionId + "'";
+    }
 }
 
 
