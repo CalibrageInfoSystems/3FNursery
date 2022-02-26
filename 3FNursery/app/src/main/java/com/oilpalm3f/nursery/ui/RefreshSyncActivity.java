@@ -47,7 +47,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog,nurseryvisitlog,statuscount;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog,nurseryvisitlog,statuscount, rmactivities;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -126,6 +126,8 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         btnmastersync.setEnabled(true);
         btresetdatabase.setEnabled(true);
         btnDBcopy.setEnabled(true);
+
+        rmactivities = findViewById(R.id.randmactivities);
 
         btnsend.setOnLongClickListener(view -> {
             Log.v(LOG_TAG, "long pressed");
@@ -214,7 +216,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             Irrigationlabourlog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryLabourLog")));
             nurseryvisitlog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryVisitLog")));
             statuscount .setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityStatus")));
-
+            rmactivities.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("RMTransactions")));
             Log.e("=============>",Queries.getInstance().getRefreshCountQuery("CullingLossFileRepository"));
 
 //            //getVistLogRecords

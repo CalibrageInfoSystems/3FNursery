@@ -1955,6 +1955,15 @@ return Cullinglossrepolist;
 
                     RMTransactions rmTransactions  = new RMTransactions();
 
+                    String filelocation = cursor.getString(cursor.getColumnIndex("FileLocation"));
+                    if (filelocation != null) {
+                        try {
+                            rmTransactions.setByteImage(CommonUtils.encodeFileToBase64Binary(new File(filelocation)));
+                        } catch (Exception exc) {
+
+                        }
+                    }
+
                     rmTransactions.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     rmTransactions.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     rmTransactions.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
@@ -1970,7 +1979,7 @@ return Cullinglossrepolist;
                     rmTransactions.setFemaleOutside(cursor.getInt(cursor.getColumnIndex("FemaleOutside")));
                     rmTransactions.setMaleRegularCost(cursor.getDouble(cursor.getColumnIndex("MaleRegularCost")));
                     rmTransactions.setFemaleRegularCost(cursor.getDouble(cursor.getColumnIndex("FemaleRegularCost")));
-                    rmTransactions.setMaleOutside(cursor.getInt(cursor.getColumnIndex("MaleOutsideCost")));
+                    rmTransactions.setMaleOutsideCost(cursor.getInt(cursor.getColumnIndex("MaleOutsideCost")));
                     rmTransactions.setFemaleoutsideCost(cursor.getInt(cursor.getColumnIndex("FemaleoutsideCost")));
                     rmTransactions.setExpenseType(cursor.getString(cursor.getColumnIndex("ExpenseType")));
                     rmTransactions.setUOMId(cursor.getInt(cursor.getColumnIndex("UOMId")));
@@ -1979,7 +1988,7 @@ return Cullinglossrepolist;
                     rmTransactions.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
 
                     rmTransactions.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
-                    rmTransactions.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
+                    //rmTransactions.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
                     rmTransactions.setFileExtension(cursor.getString(cursor.getColumnIndex("FileExtension")));
 
                     rmTransactions.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));

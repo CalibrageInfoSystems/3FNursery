@@ -435,7 +435,7 @@ public class RMActivityFields extends AppCompatActivity {
         mapStatus.put("ActivityName",Activity_Name);
         mapStatus.put("ActivityTypeId",Integer.parseInt(activityTypeId));
         mapStatus.put("StatusTypeId",346);
-        mapStatus.put("TransactionDate",currentDate);
+        mapStatus.put("TransactionDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY));
 
         if(mandaysmale.getText().length() == 0){
             mapStatus.put("MaleRegular","");

@@ -294,6 +294,7 @@ public class DataSyncHelper {
         List<CullinglossFileRepository> cullinglossrepoList = (List<CullinglossFileRepository>) dataAccessHandler.getCullinglossRepoDetails(Queries.getInstance().getFileRepositoryRefresh());
         List<NurseryLabourLog>nurseryLabourLogslist  = (List<NurseryLabourLog>) dataAccessHandler.getnurserylabourlogs(Queries.getInstance().getNurserylabourlogs());
         List<NurseryVisitLog>nurseryvisitLogslist  = (List<NurseryVisitLog>) dataAccessHandler.getNurseryVisitLog(Queries.getInstance().getNurseryvisitlogs());
+        List<RMTransactions> rmTransactionsList = (List<RMTransactions>) dataAccessHandler.getRMTransactionsData(Queries.getInstance().getRMTransactionRecrods());
 
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityStatus, saplingActivityStatuslist);
@@ -307,6 +308,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_FILEREPOSITORY, cullinglossrepoList);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryLabourLog, nurseryLabourLogslist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NURSERYVISITLOGS, nurseryvisitLogslist);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_RMTransactions, rmTransactionsList);
 
 
 

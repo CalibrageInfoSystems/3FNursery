@@ -1016,6 +1016,11 @@ public class Queries {
     public String getNurseryvisitlogs() {
         return "select * from NurseryVisitLog  where ServerUpdatedStatus = 0";
     }
+
+    public String getRMTransactionRecrods() {
+        return "select * from RMTransactions  where ServerUpdatedStatus = 0";
+    }
+
     public String getVistLogs() {
         return "Select * from VisitLog where ServerUpdatedStatus = 0";
     }
