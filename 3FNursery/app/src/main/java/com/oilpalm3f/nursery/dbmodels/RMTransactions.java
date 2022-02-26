@@ -9,7 +9,6 @@ public class RMTransactions {
     private int ActivityTypeId;
     private  int StatusTypeId;
     private String TransactionDate;
-    private  String Comment;
     private int MaleRegular;
     private int FemaleRegular;
     private int MaleOutside;
@@ -31,6 +30,16 @@ public class RMTransactions {
     private String UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
+
+    private String ByteImage;
+
+    public String getByteImage() {
+        return ByteImage;
+    }
+
+    public void setByteImage(String byteImage) {
+        ByteImage = byteImage;
+    }
 
     public String getUpdatedByUserId() {
         return UpdatedByUserId;
@@ -110,14 +119,6 @@ public class RMTransactions {
 
     public void setTransactionDate(String transactionDate) {
         TransactionDate = transactionDate;
-    }
-
-    public String getComment() {
-        return Comment;
-    }
-
-    public void setComment(String comment) {
-        Comment = comment;
     }
 
     public int getMaleRegular() {
