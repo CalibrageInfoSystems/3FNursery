@@ -28,8 +28,25 @@ public class RMTransactions {
     private String FileExtension;
     private int CreatedByUserId;
     private String CreatedDate;
+    private String UpdatedByUserId;
+    private String UpdatedDate;
     private int ServerUpdatedStatus;
 
+    public String getUpdatedByUserId() {
+        return UpdatedByUserId;
+    }
+
+    public void setUpdatedByUserId(String updatedByUserId) {
+        UpdatedByUserId = updatedByUserId;
+    }
+
+    public String getUpdatedDate() {
+        return UpdatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        UpdatedDate = updatedDate;
+    }
 
     public int getId() {
         return Id;
