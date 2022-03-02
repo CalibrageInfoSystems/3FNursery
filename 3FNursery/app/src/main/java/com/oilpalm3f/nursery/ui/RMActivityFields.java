@@ -248,9 +248,15 @@ public class RMActivityFields extends AppCompatActivity {
                     uomSpinner.setSelection(3);
 
                 }
+                if (typespinner.getSelectedItemPosition() == 2) {
 
-           comment.setText(RMTransactionData.get(0).getComments()+"");
-                othercomments.setText(RMTransactionData.get(0).getComments()+"");
+                    othercomments.setText(RMTransactionData.get(0).getComments() + "");
+
+                }
+                else{
+                    comment.setText(RMTransactionData.get(0).getComments()+"");
+                }
+
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                 nameofactivity.setText((RMTransactionData.get(0).getActivityName()+""));
@@ -294,6 +300,15 @@ public class RMActivityFields extends AppCompatActivity {
                 } else {
                     uomSpinner.setSelection(3);
 
+                }
+
+                if (typespinner.getSelectedItemPosition() == 2) {
+
+                    othercomments.setText(RMTransactionData.get(0).getComments() + "");
+
+                }
+                else{
+                    comment.setText(RMTransactionData.get(0).getComments()+"");
                 }
                 Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
@@ -364,16 +379,8 @@ public class RMActivityFields extends AppCompatActivity {
 
 
                 }
-//                if (Flag == 3 || Flag == 2) {
-//                    if (RMTransactionData.get(0).getActivityTypeId() == 379) {
-//                        typespinner.setSelection(2);
-//
-//                    } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
-//
-//                        typespinner.setSelection(1);
-//
-//                    }
-//                }
+
+
                 if (typespinner.getSelectedItemPosition() == 0) {
 
                     labourlyt.setVisibility(View.GONE);
@@ -382,8 +389,17 @@ public class RMActivityFields extends AppCompatActivity {
                 } else if (typespinner.getSelectedItemPosition() == 1) {
                     labourlyt.setVisibility(View.VISIBLE);
                     otherlyt.setVisibility(View.GONE);
+                    expensetype.setText("");
+                    cost.setText("");
+                    quantity.setText("");
+                    othercomments.setText("");
+                    uomSpinner.setSelection(0);
                 } else {
-
+                    mandaysmale.setText("");
+                    mandaysfemale.setText("");
+                    mandaysmaleoutside.setText("");
+                    mandaysfemaleoutside.setText("");
+                    comment.setText("");
                     labourlyt.setVisibility(View.GONE);
                     otherlyt.setVisibility(View.VISIBLE);
                 }
@@ -417,20 +433,7 @@ public class RMActivityFields extends AppCompatActivity {
                     uomId = uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1];
 
                 }
-//                if (Flag == 3|| Flag == 2) {
-//                    if (RMTransactionData.get(0).getUOMId() == 261) {
-//                        uomSpinner.setSelection(1);
-//
-//
-//                    } else if (RMTransactionData.get(0).getUOMId() == 262) {
-//
-//                        uomSpinner.setSelection(2);
-//
-//                    } else {
-//                        uomSpinner.setSelection(3);
-//
-//                    }
-//                }
+
             }
 
 
@@ -633,9 +636,6 @@ else {
 
 
 
-      //  "Id"
-
-
     LinkedHashMap status = new LinkedHashMap();
                     status.put("TransactionId", transactionId);
                     status.put("StatusTypeId", 349);
@@ -649,40 +649,40 @@ else {
         @Override
         public void execute(boolean success, String result, String msg) {
             if (success) {
-                if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
-
-
-                    DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
-                        @Override
-                        public void execute(boolean success, Object result, String msg) {
-                            if (success) {
-                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+//                if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
 //
-                                        finish();
-                                    }
-                                });
-                            } else {
-                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-                                    @Override
-                                    public void run() {
-
-
-                                        ProgressBar.hideProgressBar();
-                                        //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-                                        finish();
-
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
+//
+//                    DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
+//                        @Override
+//                        public void execute(boolean success, Object result, String msg) {
+//                            if (success) {
+//                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+////
+//                                        finish();
+//                                    }
+//                                });
+//                            } else {
+//                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//
+//
+//                                        ProgressBar.hideProgressBar();
+//                                        //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+//                                        finish();
+//
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    });
+//                }
                 finish();
 
-                com.oilpalm3f.nursery.cloudhelper.Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
+          Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
         }
     });
 
@@ -886,6 +886,12 @@ else {
         }
 
         if (typespinner.getSelectedItemPosition() == 1) {
+            expensetype.setText("");
+            cost.setText("");
+            quantity.setText("");
+            othercomments.setText("");
+            uomSpinner.setSelection(0);
+
             if(labourlyt.getVisibility()== View.VISIBLE){
                 if (TextUtils.isEmpty(comment.getText().toString())){
                     UiUtils.showCustomToastMessage("Please Enter Comments", RMActivityFields.this, 0);
@@ -903,6 +909,12 @@ else {
         }
 
         if (typespinner.getSelectedItemPosition() == 2) {
+            mandaysmale.setText("");
+            mandaysfemale.setText("");
+            mandaysmaleoutside.setText("");
+            mandaysfemaleoutside.setText("");
+            comment.setText("");
+
 
             if (TextUtils.isEmpty(expensetype.getText().toString())) {
                 UiUtils.showCustomToastMessage("Please Enter Expense Type", RMActivityFields.this, 0);
