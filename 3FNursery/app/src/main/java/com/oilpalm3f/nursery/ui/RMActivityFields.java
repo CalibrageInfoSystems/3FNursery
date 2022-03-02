@@ -191,6 +191,15 @@ public class RMActivityFields extends AppCompatActivity {
             }
         });
 
+        activityTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getActivityTypeofRMQuery());
+        ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(activityTypeDataMap, "Type"));
+        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typespinner.setAdapter(typeArrayAdapter);
+
+        uomTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getUOMTypeofRMQuery());
+        ArrayAdapter<String> uomArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(uomTypeDataMap, "UOM"));
+        uomArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        uomSpinner.setAdapter(uomArrayAdapter);
 
         if (getIntent() != null) {
 
@@ -200,6 +209,7 @@ public class RMActivityFields extends AppCompatActivity {
             activityId = getIntent().getStringExtra("ActivityId");
             Log.d(LOG_TAG, "Name==========> :" + Activity_Name +"==="+activityId);
             Log.d(LOG_TAG, "Flag=====" + Flag);
+            Log.d(LOG_TAG, "transactionId=====prev" + transactionId);
 
             RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
             Log.v(LOG_TAG, "===202"+RMTransactionData.size()+"");
@@ -212,33 +222,43 @@ public class RMActivityFields extends AppCompatActivity {
                 mandaysfemaleoutside.setText(RMTransactionData.get(0).getFemaleOutside()+"");
                 expensetype.setText(RMTransactionData.get(0).getExpenseType()+"");
                 quantity.setText(RMTransactionData.get(0).getQuantity()+"");
+                if (RMTransactionData.get(0).getActivityTypeId() == 379) {
+                    typespinner.setSelection(2);
+
+                } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
+
+                    typespinner.setSelection(1);
+
+                }
                 Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
                 imageView.setImageBitmap(bitmap);
 
 
                 cost.setText(RMTransactionData.get(0).getTotalCost()+"");
+                if (RMTransactionData.get(0).getUOMId() == 261) {
+                    uomSpinner.setSelection(1);
 
 
-            //    comment.setText("testing R&m Commets");
+                } else if (RMTransactionData.get(0).getUOMId() == 262) {
+
+                    uomSpinner.setSelection(2);
+
+                } else {
+                    uomSpinner.setSelection(3);
+
+                }
+
+           comment.setText(RMTransactionData.get(0).getComments()+"");
+                othercomments.setText(RMTransactionData.get(0).getComments()+"");
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                 nameofactivity.setText((RMTransactionData.get(0).getActivityName()+""));
                 } else {
                     nameactivity.setVisibility(View.GONE);
                 }
-                submitBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (validations()) {
+                Log.d(LOG_TAG, "transactionId=====prev232" + transactionId);
 
-                                UpdateRMTransactionsData(transactionId);
-
-                            Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-                });
 
             } else if (Flag == 3) {
                 Log.v(LOG_TAG, "===220"+RMTransactionData.size()+"");
@@ -253,6 +273,28 @@ public class RMActivityFields extends AppCompatActivity {
                 mandaysfemaleoutside.setText(RMTransactionData.get(0).getFemaleOutside()+"");
                 expensetype.setText(RMTransactionData.get(0).getExpenseType()+"");
                 quantity.setText(RMTransactionData.get(0).getQuantity()+"");
+
+                if (RMTransactionData.get(0).getActivityTypeId() == 379) {
+                    typespinner.setSelection(2);
+
+                } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
+
+                    typespinner.setSelection(1);
+
+                }
+
+                if (RMTransactionData.get(0).getUOMId() == 261) {
+                    uomSpinner.setSelection(1);
+
+
+                } else if (RMTransactionData.get(0).getUOMId() == 262) {
+
+                    uomSpinner.setSelection(2);
+
+                } else {
+                    uomSpinner.setSelection(3);
+
+                }
                 Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
                 imageView.setImageBitmap(bitmap);
@@ -261,6 +303,8 @@ public class RMActivityFields extends AppCompatActivity {
                 cost.setText(RMTransactionData.get(0).getTotalCost()+"");
 
 
+                comment.setText(RMTransactionData.get(0).getComments()+"");
+                othercomments.setText(RMTransactionData.get(0).getComments()+"");
                 nameofactivity.setEnabled(false);
                 date.setEnabled(false);
                 typespinner.setEnabled(false);
@@ -268,6 +312,7 @@ public class RMActivityFields extends AppCompatActivity {
                 expensetype.setEnabled(false);
                 quantity.setEnabled(false);
                 othercomments.setEnabled(false);
+                comment.setEnabled(false);
                 imageView.setEnabled(false);
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
@@ -276,7 +321,14 @@ public class RMActivityFields extends AppCompatActivity {
                     nameactivity.setVisibility(View.GONE);
                 }
 
+                if (RMTransactionData.get(0).getActivityTypeId() == 379) {
+                    typespinner.setSelection(2);
 
+                } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
+
+                    typespinner.setSelection(1);
+
+                }
 
             } else {
                 activity_name.setText(Activity_Name + "");
@@ -297,10 +349,7 @@ public class RMActivityFields extends AppCompatActivity {
 //        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        typespinner.setAdapter(typeSpinnerAdapter);
 
-        activityTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getActivityTypeofRMQuery());
-        ArrayAdapter<String> typeArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(activityTypeDataMap, "Type"));
-        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typespinner.setAdapter(typeArrayAdapter);
+
 
         typespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -315,16 +364,16 @@ public class RMActivityFields extends AppCompatActivity {
 
 
                 }
-                if (Flag == 3 || Flag == 2) {
-                    if (RMTransactionData.get(0).getActivityTypeId() == 379) {
-                        typespinner.setSelection(2);
-
-                    } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
-
-                        typespinner.setSelection(1);
-
-                    }
-                }
+//                if (Flag == 3 || Flag == 2) {
+//                    if (RMTransactionData.get(0).getActivityTypeId() == 379) {
+//                        typespinner.setSelection(2);
+//
+//                    } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
+//
+//                        typespinner.setSelection(1);
+//
+//                    }
+//                }
                 if (typespinner.getSelectedItemPosition() == 0) {
 
                     labourlyt.setVisibility(View.GONE);
@@ -354,10 +403,7 @@ public class RMActivityFields extends AppCompatActivity {
 //        uomSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        uomSpinner.setAdapter(uomSpinnerAdapter);
 
-        uomTypeDataMap = dataAccessHandler.getPairData(Queries.getInstance().getUOMTypeofRMQuery());
-        ArrayAdapter<String> uomArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, CommonUtils.arrayFromPair(uomTypeDataMap, "UOM"));
-        uomArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        uomSpinner.setAdapter(uomArrayAdapter);
+
 
         uomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -371,20 +417,20 @@ public class RMActivityFields extends AppCompatActivity {
                     uomId = uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1];
 
                 }
-                if (Flag == 3|| Flag == 2) {
-                    if (RMTransactionData.get(0).getUOMId() == 261) {
-                        uomSpinner.setSelection(1);
-                        uomId = "261";
-
-                    } else if (RMTransactionData.get(0).getUOMId() == 262) {
-
-                        uomSpinner.setSelection(2);
-                        uomId = "262";
-                    } else {
-                        uomSpinner.setSelection(3);
-                        uomId = "263";
-                    }
-                }
+//                if (Flag == 3|| Flag == 2) {
+//                    if (RMTransactionData.get(0).getUOMId() == 261) {
+//                        uomSpinner.setSelection(1);
+//
+//
+//                    } else if (RMTransactionData.get(0).getUOMId() == 262) {
+//
+//                        uomSpinner.setSelection(2);
+//
+//                    } else {
+//                        uomSpinner.setSelection(3);
+//
+//                    }
+//                }
             }
 
 
@@ -427,14 +473,19 @@ public class RMActivityFields extends AppCompatActivity {
             }
         });
 
+        Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(CommonConstants.NurseryCode));
+        Transactionid_New = "TRANRM"+ CommonConstants.TAB_ID + Sapcode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityId)) + 1);
+
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validations()) {
-
-                    saveRMTransactionsData();
-                  //  saveRMTransactionsStatus();
+if(Flag == 2){
+    UpdateRMTransactionsData(transactionId);}
+else {
+    saveRMTransactionsData(Transactionid_New);
+}
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -448,9 +499,6 @@ public class RMActivityFields extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Sapcode = dataAccessHandler.getSingleValue(Queries.getSapcode(CommonConstants.NurseryCode));
-        Transactionid_New = "TRANRM"+ CommonConstants.TAB_ID + Sapcode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityId)) + 1);
-
 
     }
 
@@ -466,7 +514,7 @@ public class RMActivityFields extends AppCompatActivity {
 
     //    int Activity_typeID =
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
-        Log.d("TransactionId", transactionId);
+        Log.d("TransactionId===update", transactionId);
 
 
         LinkedHashMap mapStatus = new LinkedHashMap();
@@ -645,7 +693,7 @@ public class RMActivityFields extends AppCompatActivity {
 
 
 
-    private void saveRMTransactionsData() {
+    private void saveRMTransactionsData(String newtransactionId) {
 
         String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
         String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
@@ -653,11 +701,11 @@ public class RMActivityFields extends AppCompatActivity {
         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
 
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
-        Log.d("TransactionId", Transactionid_New);
+        Log.d("TransactionId======new", newtransactionId);
 
 
         LinkedHashMap mapStatus = new LinkedHashMap();
-        mapStatus.put("TransactionId",Transactionid_New);
+        mapStatus.put("TransactionId",newtransactionId);
 
         mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
         mapStatus.put("ActivityId",activityId);
