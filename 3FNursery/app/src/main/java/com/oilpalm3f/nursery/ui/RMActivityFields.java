@@ -230,6 +230,7 @@ public class RMActivityFields extends AppCompatActivity {
                     typespinner.setSelection(1);
 
                 }
+                local_ImagePath = RMTransactionData.get(0).getFileLocation();
                 Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
                 imageView.setImageBitmap(bitmap);
@@ -394,6 +395,7 @@ public class RMActivityFields extends AppCompatActivity {
                     quantity.setText("");
                     othercomments.setText("");
                     uomSpinner.setSelection(0);
+                    imageView.setImageResource(R.drawable.addimage);
                 } else {
                     mandaysmale.setText("");
                     mandaysfemale.setText("");
@@ -621,11 +623,11 @@ else {
                     public void execute(boolean success, String result, String msg) {
                         if (success) {
 
-                            Toast.makeText(RMActivityFields.this, "Data Saved Successfully ", Toast.LENGTH_SHORT).show();
-                            Intent newIntent = new Intent(RMActivityFields.this, HomeActivity.class);
-                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(newIntent);
+//                            Toast.makeText(RMActivityFields.this, "Data Saved Successfully ", Toast.LENGTH_SHORT).show();
+//                            Intent newIntent = new Intent(RMActivityFields.this, HomeActivity.class);
+//                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            startActivity(newIntent);
                         }else{
                             Toast.makeText(RMActivityFields.this, "Data Saved Failed try again :" + msg, Toast.LENGTH_SHORT).show();
                         }
