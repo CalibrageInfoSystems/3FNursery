@@ -206,19 +206,39 @@ public class RMActivityFields extends AppCompatActivity {
             if (Flag == 2) {
                 nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name + "");
-                UpdateRMTransactionsData(transactionId);
-                mandaysmale.setText("5");
-                mandaysfemale.setText("6");
-                mandaysmaleoutside.setText("4");
-                mandaysfemaleoutside.setText("9");
+                mandaysmale.setText(RMTransactionData.get(0).getMaleRegular()+"");
+                mandaysfemale.setText(RMTransactionData.get(0).getFemaleRegular()+"");
+                mandaysmaleoutside.setText(RMTransactionData.get(0).getMaleOutside()+"");
+                mandaysfemaleoutside.setText(RMTransactionData.get(0).getFemaleOutside()+"");
+                expensetype.setText(RMTransactionData.get(0).getExpenseType()+"");
+                quantity.setText(RMTransactionData.get(0).getQuantity()+"");
+                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
-                comment.setText("testing R&m Commets");
+                imageView.setImageBitmap(bitmap);
+
+
+                cost.setText(RMTransactionData.get(0).getTotalCost()+"");
+
+
+            //    comment.setText("testing R&m Commets");
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
-                    nameofactivity.setText("Other R&M Activity");
+                nameofactivity.setText((RMTransactionData.get(0).getActivityName()+""));
                 } else {
                     nameactivity.setVisibility(View.GONE);
                 }
+                submitBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (validations()) {
+
+                                UpdateRMTransactionsData(transactionId);
+
+                            Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                });
 
             } else if (Flag == 3) {
                 Log.v(LOG_TAG, "===220"+RMTransactionData.size()+"");
@@ -251,7 +271,7 @@ public class RMActivityFields extends AppCompatActivity {
                 imageView.setEnabled(false);
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
-                    nameofactivity.setText("Test R&M Activity");
+                    nameofactivity.setText((RMTransactionData.get(0).getActivityName()+""));
                 } else {
                     nameactivity.setVisibility(View.GONE);
                 }
@@ -292,10 +312,13 @@ public class RMActivityFields extends AppCompatActivity {
                     Log.d("selectedType", typespinner.getSelectedItem().toString());
                     Log.d("selectedTypeId", activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1]);
                     activityTypeId = activityTypeDataMap.keySet().toArray(new String[activityTypeDataMap.size()])[selectedPos - 1];
+
+
                 }
-                if (Flag == 3) {
+                if (Flag == 3 || Flag == 2) {
                     if (RMTransactionData.get(0).getActivityTypeId() == 379) {
                         typespinner.setSelection(2);
+
                     } else if (RMTransactionData.get(0).getActivityTypeId() == 378) {
 
                         typespinner.setSelection(1);
@@ -348,14 +371,18 @@ public class RMActivityFields extends AppCompatActivity {
                     uomId = uomTypeDataMap.keySet().toArray(new String[uomTypeDataMap.size()])[selectedPos - 1];
 
                 }
-                if (Flag == 3) {
+                if (Flag == 3|| Flag == 2) {
                     if (RMTransactionData.get(0).getUOMId() == 261) {
                         uomSpinner.setSelection(1);
+                        uomId = "261";
+
                     } else if (RMTransactionData.get(0).getUOMId() == 262) {
 
                         uomSpinner.setSelection(2);
+                        uomId = "262";
                     } else {
                         uomSpinner.setSelection(3);
+                        uomId = "263";
                     }
                 }
             }
@@ -405,6 +432,7 @@ public class RMActivityFields extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validations()) {
+
                     saveRMTransactionsData();
                   //  saveRMTransactionsStatus();
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
@@ -426,24 +454,29 @@ public class RMActivityFields extends AppCompatActivity {
 
     }
 
-    private void UpdateRMTransactionsData(String transactionid ) {
+    private void UpdateRMTransactionsData(String transactionId ) {
+
         String male_reg = dataAccessHandler.getSingleValue(Queries.getregmalerate(CommonConstants.NurseryCode));
         String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
         Userid =  dataAccessHandler.getSingleValue(Queries.getRMuserid(transactionId));
         Date_history =  dataAccessHandler.getSingleValue(Queries.getRMupdateddate(transactionId));
+        RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
+
+    //    int Activity_typeID =
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
-        Log.d("TransactionId", transactionid);
+        Log.d("TransactionId", transactionId);
 
 
         LinkedHashMap mapStatus = new LinkedHashMap();
-        mapStatus.put("TransactionId",transactionid);
+        mapStatus.put("TransactionId",transactionId);
 
         mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
         mapStatus.put("ActivityId",activityId);
-        mapStatus.put("ActivityName",Activity_Name);
-        mapStatus.put("ActivityTypeId",Integer.parseInt(activityTypeId));
+        if (Activity_Name.equalsIgnoreCase("Others")) {
+            mapStatus.put("ActivityName",nameofactivity.getText().toString());}
+        mapStatus.put("ActivityTypeId",RMTransactionData.get(0).getActivityTypeId());
         mapStatus.put("StatusTypeId",346);
         mapStatus.put("TransactionDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY));
 
@@ -485,7 +518,7 @@ public class RMActivityFields extends AppCompatActivity {
         if(uomSpinner.getSelectedItemPosition() == 0){
             mapStatus.put("UOMId","");
         }else{
-            mapStatus.put("UOMId",Integer.parseInt(uomId));
+            mapStatus.put("UOMId",262);
         }
 
         if(quantity.getText().equals("")){
@@ -530,7 +563,7 @@ public class RMActivityFields extends AppCompatActivity {
 
 
 
-        String whereCondition ="where  TransactionId = '"+transactionid+"'  ";
+        String whereCondition ="where  TransactionId = '"+transactionId+"'  ";
         dataAccessHandler.updateData("RMTransactions",
                 rmactivityarr,false, whereCondition,  new ApplicationThread.OnComplete<String>() {
                     @Override
@@ -611,20 +644,6 @@ public class RMActivityFields extends AppCompatActivity {
 
 
 
-    /* "TransactionId VARCHAR, \n" +
-                "SatusTypeId INT , \n" +
-                "CreatedByUserId INT,\n" +
-                "CreatedDate VARCHAR, \n" +
-                "ServerUpdatedStatus INT \n" +*/
-
-    private void saveRMTransactionsStatus() {
-        LinkedHashMap mapStatus = new LinkedHashMap();
-        mapStatus.put("TransactionId",transactionid);
-        mapStatus.put("StatusTypeId",346);
-        mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
-        mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
-        mapStatus.put("ServerUpdatedStatus",0);
-    }
 
     private void saveRMTransactionsData() {
 
@@ -642,7 +661,8 @@ public class RMActivityFields extends AppCompatActivity {
 
         mapStatus.put("NurseryCode",CommonConstants.NurseryCode);
         mapStatus.put("ActivityId",activityId);
-        mapStatus.put("ActivityName",Activity_Name);
+        if (Activity_Name.equalsIgnoreCase("Others")) {
+            mapStatus.put("ActivityName",nameofactivity.getText().toString());}
         mapStatus.put("ActivityTypeId",Integer.parseInt(activityTypeId));
         mapStatus.put("StatusTypeId",346);
         mapStatus.put("TransactionDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY));

@@ -290,6 +290,9 @@ public class DataBaseUpgrade {
                 "CreatedDate VARCHAR, \n" +
                 "ServerUpdatedStatus INT \n" +
                 ")";
+        String column15 = "Alter Table RMTransactions Add Remarks VARCHAR(500)";
+        String column16 = "Alter Table RMTransactionStatusHistory Add Remarks VARCHAR(500)";
+
 
         try {
             db.execSQL(cullingLossFileRepository);
@@ -312,6 +315,8 @@ public class DataBaseUpgrade {
 
             db.execSQL(RMTransactions);
             db.execSQL(RMTransactionStatusHistory);
+            db.execSQL(column15);
+            db.execSQL(column16);
 
         } catch (Exception e) {
             e.printStackTrace();
