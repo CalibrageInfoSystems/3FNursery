@@ -231,7 +231,7 @@ public class RMActivityFields extends AppCompatActivity {
 
                 }
                 local_ImagePath = RMTransactionData.get(0).getFileLocation();
-                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
+                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation() + ".jpg");
 
                 imageView.setImageBitmap(bitmap);
 
@@ -846,7 +846,7 @@ else {
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 
         File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory() + "/3F_Pictures/" + "NurseryPhotos_visit");
+                Environment.getExternalStorageDirectory() + "/3F_Pictures/" + "RM_Transactions");
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
@@ -874,7 +874,7 @@ else {
 
     public boolean validations() {
 
-        if (Activity_Name.equalsIgnoreCase("Other")) {
+        if (Activity_Name.equalsIgnoreCase("Others")) {
 
             if (TextUtils.isEmpty(nameofactivity.getText().toString())) {
                 UiUtils.showCustomToastMessage("Please Enter Name of the Activity", RMActivityFields.this, 0);
