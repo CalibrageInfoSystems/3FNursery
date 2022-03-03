@@ -506,7 +506,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1.0"
-                    android:text="RMTransactionStatusHistory"
+                    android:text="RM Transaction Status History"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
