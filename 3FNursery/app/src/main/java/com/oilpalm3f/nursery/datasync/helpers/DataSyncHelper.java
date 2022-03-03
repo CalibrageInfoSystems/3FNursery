@@ -295,7 +295,7 @@ public class DataSyncHelper {
         List<NurseryLabourLog>nurseryLabourLogslist  = (List<NurseryLabourLog>) dataAccessHandler.getnurserylabourlogs(Queries.getInstance().getNurserylabourlogs());
         List<NurseryVisitLog>nurseryvisitLogslist  = (List<NurseryVisitLog>) dataAccessHandler.getNurseryVisitLog(Queries.getInstance().getNurseryvisitlogs());
         List<RMTransactions> rmTransactionsList = (List<RMTransactions>) dataAccessHandler.getRMTransactionsData(Queries.getInstance().getRMTransactionRecrods());
-
+        List<RMTransactionsStatusHistory> rmTransactionshistoryList = (List<RMTransactionsStatusHistory>) dataAccessHandler.getRMTransactionsStatusHistoryData(Queries.getInstance().getRMTransactionhistoryRecrods());
         LinkedHashMap<String, List> allRefreshDataMap = new LinkedHashMap<>();
         allRefreshDataMap.put(DatabaseKeys.TABLE_SaplingActivityStatus, saplingActivityStatuslist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_SAPLING, saplingsList);
@@ -309,6 +309,7 @@ public class DataSyncHelper {
         allRefreshDataMap.put(DatabaseKeys.TABLE_NurseryLabourLog, nurseryLabourLogslist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_NURSERYVISITLOGS, nurseryvisitLogslist);
         allRefreshDataMap.put(DatabaseKeys.TABLE_RMTransactions, rmTransactionsList);
+        allRefreshDataMap.put(DatabaseKeys.TABLE_RMTransactionStatusHistory, rmTransactionshistoryList);
 
 
 

@@ -47,7 +47,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
 
     private static final String LOG_TAG = RefreshSyncActivity.class.getName();
     private static int consignmentCount = 0, collectionsCount = 0, collectionPlotsCountInt = 0;
-    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog,nurseryvisitlog,statuscount, rmactivities;
+    private TextView tvsapling, tvsaplingActivity, tvsaplinghistory, tvsaplingxref,irrigationLog,irrigationLogXref,cullingLossFileRepository,irrigationLoghistory,Irrigationlabourlog,nurseryvisitlog,statuscount, rmactivities,rmstatushistory;
     private Button btnsend, btnmastersync, btnDBcopy, transSyncBtn, btresetdatabase;
     private DataAccessHandler dataAccessHandler;
     private List<String> collectionCodes, consignmentCodes, farmerCodes, farmerBankCodes, idproofCodes, addressCodes, plotCodes, plotCurrentCropCodes, neighbourPlotCodes, waterResourceCodes,
@@ -87,7 +87,8 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap.add(DatabaseKeys.TABLE_NurseryIrrigationhistory);
         allRefreshDataMap.add(DatabaseKeys.TABLE_FILEREPOSITORY);
         allRefreshDataMap.add(DatabaseKeys.TABLE_ALERTS);
-
+        allRefreshDataMap.add(DatabaseKeys.TABLE_RMTransactions);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_RMTransactionStatusHistory);
 
         dataAccessHandler = new DataAccessHandler(this);
 
@@ -123,6 +124,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         transSyncBtn = findViewById(R.id.transSyncBtn);
         btresetdatabase = findViewById(R.id.btresetdatabase);
         nurseryvisitlog = findViewById(R.id.nurseryvisitlog);
+        rmstatushistory = findViewById(R.id.rmstatushistory);
         btnmastersync.setEnabled(true);
         btresetdatabase.setEnabled(true);
         btnDBcopy.setEnabled(true);
@@ -217,6 +219,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
             nurseryvisitlog.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("NurseryVisitLog")));
             statuscount .setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("SaplingActivityStatus")));
             rmactivities.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("RMTransactions")));
+            rmstatushistory.setText(dataAccessHandler.getCountValue(Queries.getInstance().getRefreshCountQuery("RMTransactionStatusHistory")));
             Log.e("=============>",Queries.getInstance().getRefreshCountQuery("CullingLossFileRepository"));
 
 //            //getVistLogRecords

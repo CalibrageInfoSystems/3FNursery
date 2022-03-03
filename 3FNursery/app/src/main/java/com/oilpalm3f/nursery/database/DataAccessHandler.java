@@ -2031,6 +2031,7 @@ return Cullinglossrepolist;
                     rmTransactionsStatusHistory.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     rmTransactionsStatusHistory.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
                     rmTransactionsStatusHistory.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
+                    rmTransactionsStatusHistory.setRemarks(cursor.getString(cursor.getColumnIndex("Remarks")));
                     rmTransactionsStatusHistory.setServerUpdatedStatus(cursor.getInt(cursor.getColumnIndex("ServerUpdatedStatus")));
 
                     RMTransactionsStatus.add(rmTransactionsStatusHistory);

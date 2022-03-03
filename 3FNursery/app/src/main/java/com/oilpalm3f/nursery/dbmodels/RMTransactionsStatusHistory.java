@@ -7,6 +7,16 @@ public class RMTransactionsStatusHistory {
     private int StatusTypeId;
     private int CreatedByUserId;
     private String CreatedDate;
+
+    public String getRemarks() {
+        return Remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        Remarks = remarks;
+    }
+
+    private  String Remarks;
     private int ServerUpdatedStatus;
 
     public int getId() {

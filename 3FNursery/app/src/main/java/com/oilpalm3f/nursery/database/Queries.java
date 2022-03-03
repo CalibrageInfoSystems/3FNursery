@@ -1021,6 +1021,9 @@ public class Queries {
         return "select * from RMTransactions  where ServerUpdatedStatus = 0";
     }
 
+    public String getRMTransactionhistoryRecrods() {
+        return "select * from RMTransactionStatusHistory  where ServerUpdatedStatus = 0";
+    }
     public String getVistLogs() {
         return "Select * from VisitLog where ServerUpdatedStatus = 0";
     }
@@ -1947,6 +1950,11 @@ public class Queries {
     public static String getRMupdateddate(String TransactionId) {
         return "SELECT  R.UpdatedDate  from RMTransactions  R\n" +
                 "Inner Join TypeCdDmt t on t.TypeCdId = R.StatusTypeId where TransactionId ='" + TransactionId + "'";
+    }
+
+    public static String getRejectstring(String TransactionId) {
+        return "SELECT  R.Remarks  from RMTransactions  R \n" +
+                "                Inner Join TypeCdDmt t on t.TypeCdId = R.StatusTypeId where TransactionId ='" + TransactionId + "'";
     }
 }
 

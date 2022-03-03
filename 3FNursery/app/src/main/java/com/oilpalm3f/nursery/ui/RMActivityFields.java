@@ -230,10 +230,6 @@ public class RMActivityFields extends AppCompatActivity {
                     typespinner.setSelection(1);
 
                 }
-                local_ImagePath = RMTransactionData.get(0).getFileLocation();
-                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation() + ".jpg");
-
-                imageView.setImageBitmap(bitmap);
 
 
                 cost.setText(RMTransactionData.get(0).getTotalCost()+"");
@@ -257,7 +253,9 @@ public class RMActivityFields extends AppCompatActivity {
                 else{
                     comment.setText(RMTransactionData.get(0).getComments()+"");
                 }
+                Bitmap bitmap = BitmapFactory.decodeFile("");
 
+                imageView.setImageBitmap(bitmap);
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                 nameofactivity.setText((RMTransactionData.get(0).getActivityName()+""));
@@ -516,6 +514,8 @@ else {
         Userid =  dataAccessHandler.getSingleValue(Queries.getRMuserid(transactionId));
         Date_history =  dataAccessHandler.getSingleValue(Queries.getRMupdateddate(transactionId));
         RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
+        String Remarks = dataAccessHandler.getSingleValue(Queries.getInstance().getRejectstring(transactionId));
+        Log.d("TransactionId===Remarks", transactionId +"========="+Remarks);
 
     //    int Activity_typeID =
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
@@ -643,6 +643,8 @@ else {
                     status.put("StatusTypeId", 349);
                     status.put("CreatedByUserId", Userid);
                     status.put("CreatedDate", Date_history);
+                    status.put("Remarks", Remarks);
+
                     status.put("ServerUpdatedStatus", 0);
 
     final List<LinkedHashMap> historyList = new ArrayList<>();
@@ -684,7 +686,7 @@ else {
 //                }
                 finish();
 
-          Log.d(ActivityTask.class.getSimpleName(), "==> IrrigationLogStatusHistory INSERT COMPLETED");}
+          Log.d(ActivityTask.class.getSimpleName(), "==> RMTransactionStatusHistory INSERT COMPLETED");}
         }
     });
 
