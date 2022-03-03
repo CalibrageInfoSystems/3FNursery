@@ -253,7 +253,7 @@ public class RMActivityFields extends AppCompatActivity {
                 else{
                     comment.setText(RMTransactionData.get(0).getComments()+"");
                 }
-                Bitmap bitmap = BitmapFactory.decodeFile("");
+                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
                 imageView.setImageBitmap(bitmap);
                 if (Activity_Name.equalsIgnoreCase("Others")) {

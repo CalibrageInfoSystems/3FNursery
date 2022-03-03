@@ -2,7 +2,7 @@ package com.oilpalm3f.nursery.dbmodels;
 
 public class RMTransactionsStatusHistory {
 
-    private int Id;
+  //  private int Id;
     private String TransactionId;
     private int StatusTypeId;
     private int CreatedByUserId;
@@ -19,13 +19,13 @@ public class RMTransactionsStatusHistory {
     private  String Remarks;
     private int ServerUpdatedStatus;
 
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
+//    public int getId() {
+//        return Id;
+//    }
+//
+//    public void setId(int id) {
+//        Id = id;
+//    }
 
     public String getTransactionId() {
         return TransactionId;

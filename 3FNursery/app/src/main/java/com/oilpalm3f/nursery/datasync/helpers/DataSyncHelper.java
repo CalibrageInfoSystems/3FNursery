@@ -29,6 +29,7 @@ import com.oilpalm3f.nursery.dbmodels.NurseryLabourLog;
 import com.oilpalm3f.nursery.dbmodels.NurseryVisitLog;
 import com.oilpalm3f.nursery.dbmodels.RMTransactions;
 import com.oilpalm3f.nursery.dbmodels.RMTransactionsStatusHistory;
+import com.oilpalm3f.nursery.dbmodels.RMTransactions_New;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivity;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityHistoryModel;
 import com.oilpalm3f.nursery.dbmodels.SaplingActivityStatusModel;
@@ -541,7 +542,7 @@ public class DataSyncHelper {
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "Id", alertsList.getId()+""));
             }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {
-                RMTransactions rmTransactions = (RMTransactions) dataList.get(innerCountCheck);
+                RMTransactions_New rmTransactions = (RMTransactions_New) dataList.get(innerCountCheck);
                 rmTransactions.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId = '" + rmTransactions.getTransactionId() + "'";
                 try {
@@ -859,9 +860,9 @@ public class DataSyncHelper {
                                 dataToUpdate.put(tableName, alters);
                         }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {  // TODO need to check
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<RMTransactions>>() {
+                            Type type = new TypeToken<List<RMTransactions_New>>() {
                             }.getType();
-                            List<RMTransactions> rmTransactions = gson.fromJson(dataArray.toString(), type);
+                            List<RMTransactions_New> rmTransactions = gson.fromJson(dataArray.toString(), type);
                             if (null != rmTransactions && rmTransactions.size() > 0)
                                 dataToUpdate.put(tableName, rmTransactions);
                         }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactionStatusHistory)) {  // TODO need to check

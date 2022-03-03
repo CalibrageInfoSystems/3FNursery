@@ -2026,7 +2026,7 @@ return Cullinglossrepolist;
 
                     RMTransactionsStatusHistory rmTransactionsStatusHistory  = new RMTransactionsStatusHistory();
 
-                    rmTransactionsStatusHistory.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                   // rmTransactionsStatusHistory.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     rmTransactionsStatusHistory.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     rmTransactionsStatusHistory.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     rmTransactionsStatusHistory.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));

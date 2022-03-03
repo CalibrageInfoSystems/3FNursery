@@ -1,9 +1,6 @@
 package com.oilpalm3f.nursery.dbmodels;
 
 public class NurseryIrrigationLogForDb {
-
-
-
     int Id;
     String LogDate;
     String IrrigationCode;
