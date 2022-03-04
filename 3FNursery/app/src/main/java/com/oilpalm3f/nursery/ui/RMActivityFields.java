@@ -109,7 +109,7 @@ public class RMActivityFields extends AppCompatActivity {
 
 
     private List<RMTransactions>RMTransactionData = new ArrayList<>();
-
+    double male_cost,Female_cost,male_cost_contract,Female_cost_contract;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,6 +253,7 @@ public class RMActivityFields extends AppCompatActivity {
                 else{
                     comment.setText(RMTransactionData.get(0).getComments()+"");
                 }
+                local_ImagePath = RMTransactionData.get(0).getFileLocation();
                 Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
                 imageView.setImageBitmap(bitmap);
@@ -515,9 +516,25 @@ else {
         Date_history =  dataAccessHandler.getSingleValue(Queries.getRMupdateddate(transactionId));
         RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
         String Remarks = dataAccessHandler.getSingleValue(Queries.getInstance().getRejectstring(transactionId));
-        Log.d("TransactionId===Remarks", transactionId +"========="+Remarks);
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+            male_cost =(Double.parseDouble(male_reg)  * Double.parseDouble(mandaysmale.getText().toString().trim()));
 
-    //    int Activity_typeID =
+        }
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+            Female_cost =Double.parseDouble(femmale_reg) * Double.parseDouble(mandaysfemale.getText().toString().trim()) ;
+        }
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+            male_cost_contract = Double.parseDouble(male_contract) * Double.parseDouble(mandaysmaleoutside.getText().toString().trim());
+        }
+
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+            Female_cost_contract =(Double.parseDouble(female_contract)  * Double.parseDouble(mandaysfemaleoutside.getText().toString().trim()));
+        }
+
+
+        Double TotalCost =(male_cost+Female_cost+male_cost_contract+Female_cost_contract);
+        Log.e("==========>733",TotalCost+"");
+        //    int Activity_typeID =
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
         Log.d("TransactionId===update", transactionId);
 
@@ -580,29 +597,33 @@ else {
             mapStatus.put("Quantity",quantity.getText());
         }
 
-        if (!TextUtils.isEmpty(cost.getText().toString())){
-            mapStatus.put("TotalCost",cost.getText());
-        }else{
-            mapStatus.put("TotalCost"," ");
-        }
-
-        if(typespinner.getSelectedItemPosition() == 1) {
-            mapStatus.put("Comments",comment.getText());
-        }
-
-        if(typespinner.getSelectedItemPosition() == 2) {
-            mapStatus.put("Comments",othercomments.getText());
-        }
+//        if (!TextUtils.isEmpty(cost.getText().toString())){
+//            mapStatus.put("TotalCost",cost.getText());
+//        }else{
+//            mapStatus.put("TotalCost"," ");
+//        }
+//
+//        if(typespinner.getSelectedItemPosition() == 1) {
+//            mapStatus.put("Comments",comment.getText());
+//        }
+//
+//        if(typespinner.getSelectedItemPosition() == 2) {
+//            mapStatus.put("Comments",othercomments.getText());
+//        }
 
 
         if(typespinner.getSelectedItemPosition() == 2){
             mapStatus.put("FileName","");
             mapStatus.put("FileLocation",local_ImagePath);
             mapStatus.put("FileExtension",".jpg");
+            mapStatus.put("TotalCost",cost.getText()+"");
+            mapStatus.put("Comments",othercomments.getText());
         }else {
             mapStatus.put("FileName","");
             mapStatus.put("FileLocation","");
             mapStatus.put("FileExtension","");
+            mapStatus.put("TotalCost",TotalCost);
+            mapStatus.put("Comments",comment.getText());
         }
 
         mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
@@ -653,37 +674,37 @@ else {
         @Override
         public void execute(boolean success, String result, String msg) {
             if (success) {
-//                if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
+                if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
+
+
+                    DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
+                        @Override
+                        public void execute(boolean success, Object result, String msg) {
+                            if (success) {
+                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
 //
-//
-//                    DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
-//                        @Override
-//                        public void execute(boolean success, Object result, String msg) {
-//                            if (success) {
-//                                ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
-////
-//                                        finish();
-//                                    }
-//                                });
-//                            } else {
-//                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//
-//
-//                                        ProgressBar.hideProgressBar();
-//                                        //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-//                                        finish();
-//
-//                                    }
-//                                });
-//                            }
-//                        }
-//                    });
-//                }
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                    @Override
+                                    public void run() {
+
+
+                                        ProgressBar.hideProgressBar();
+                                        //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
                 finish();
 
           Log.d(ActivityTask.class.getSimpleName(), "==> RMTransactionStatusHistory INSERT COMPLETED");}
@@ -703,6 +724,25 @@ else {
         String femmale_reg = dataAccessHandler.getSingleValue(Queries.getregfemalerate(CommonConstants.NurseryCode));
         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
+
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+             male_cost =(Double.parseDouble(male_reg)  * Double.parseDouble(mandaysmale.getText().toString().trim()));
+
+        }
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+             Female_cost =Double.parseDouble(femmale_reg) * Double.parseDouble(mandaysfemale.getText().toString().trim()) ;
+        }
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+             male_cost_contract = Double.parseDouble(male_contract) * Double.parseDouble(mandaysmaleoutside.getText().toString().trim());
+        }
+
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+             Female_cost_contract =(Double.parseDouble(female_contract)  * Double.parseDouble(mandaysfemaleoutside.getText().toString().trim()));
+        }
+
+
+        Double TotalCost =(male_cost+Female_cost+male_cost_contract+Female_cost_contract);
+Log.e("==========>733",TotalCost+"");
 
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
         Log.d("TransactionId======new", newtransactionId);
@@ -772,24 +812,23 @@ else {
             mapStatus.put("TotalCost"," ");
         }
 
-        if(typespinner.getSelectedItemPosition() == 1) {
-            mapStatus.put("Comments",comment.getText());
-        }
-
-        if(typespinner.getSelectedItemPosition() == 2) {
-            mapStatus.put("Comments",othercomments.getText());
-        }
+    
 
 
         if(typespinner.getSelectedItemPosition() == 2){
             mapStatus.put("FileName","");
             mapStatus.put("FileLocation",local_ImagePath);
             mapStatus.put("FileExtension",".jpg");
+            mapStatus.put("TotalCost",cost.getText()+"");
+            mapStatus.put("Comments",othercomments.getText());
         }else {
             mapStatus.put("FileName","");
             mapStatus.put("FileLocation","");
             mapStatus.put("FileExtension","");
+            mapStatus.put("TotalCost",TotalCost);
+            mapStatus.put("Comments",comment.getText());
         }
+
 
         mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
         mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
@@ -807,6 +846,37 @@ else {
 
                         if (success) {
                             Toast.makeText(RMActivityFields.this, "Insert Successful", Toast.LENGTH_SHORT).show();
+//                            if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
+//
+//
+//                                DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
+//                                    @Override
+//                                    public void execute(boolean success, Object result, String msg) {
+//                                        if (success) {
+//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+////
+//                                                    finish();
+//                                                }
+//                                            });
+//                                        } else {
+//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//
+//
+//                                                    ProgressBar.hideProgressBar();
+//                                                    //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+//                                                    finish();
+//
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                });
+//                            }
                         }
                     }
                     });
