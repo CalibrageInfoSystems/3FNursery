@@ -812,7 +812,7 @@ Log.e("==========>733",TotalCost+"");
             mapStatus.put("TotalCost"," ");
         }
 
-    
+
 
 
         if(typespinner.getSelectedItemPosition() == 2){
@@ -846,37 +846,37 @@ Log.e("==========>733",TotalCost+"");
 
                         if (success) {
                             Toast.makeText(RMActivityFields.this, "Insert Successful", Toast.LENGTH_SHORT).show();
-//                            if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
+                            if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
+
+
+                                DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
+                                    @Override
+                                    public void execute(boolean success, Object result, String msg) {
+                                        if (success) {
+                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
 //
-//
-//                                DataSyncHelper.performRefreshTransactionsSync(RMActivityFields.this, new ApplicationThread.OnComplete() {
-//                                    @Override
-//                                    public void execute(boolean success, Object result, String msg) {
-//                                        if (success) {
-//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    Toast.makeText(RMActivityFields.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
-////
-//                                                    finish();
-//                                                }
-//                                            });
-//                                        } else {
-//                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//
-//
-//                                                    ProgressBar.hideProgressBar();
-//                                                    //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
-//                                                    finish();
-//
-//                                                }
-//                                            });
-//                                        }
-//                                    }
-//                                });
-//                            }
+                                                    finish();
+                                                }
+                                            });
+                                        } else {
+                                            ApplicationThread.uiPost(LOG_TAG, "transactions sync failed message", new Runnable() {
+                                                @Override
+                                                public void run() {
+
+
+                                                    ProgressBar.hideProgressBar();
+                                                    //    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                                    finish();
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
                         }
                     }
                     });
