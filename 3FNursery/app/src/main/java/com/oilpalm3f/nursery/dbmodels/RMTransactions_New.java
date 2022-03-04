@@ -1,7 +1,7 @@
 package com.oilpalm3f.nursery.dbmodels;
 
 public class RMTransactions_New {
-    private  int Id;
+   // private  int Id;
     private  String TransactionId;
     private String NurseryCode;
     private  int ActivityId;
@@ -66,13 +66,13 @@ public class RMTransactions_New {
         UpdatedDate = updatedDate;
     }
 
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
+//    public int getId() {
+//        return Id;
+//    }
+//
+//    public void setId(int id) {
+//        Id = id;
+//    }
 
     public String getTransactionId() {
         return TransactionId;
