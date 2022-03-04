@@ -516,18 +516,19 @@ else {
         Date_history =  dataAccessHandler.getSingleValue(Queries.getRMupdateddate(transactionId));
         RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
         String Remarks = dataAccessHandler.getSingleValue(Queries.getInstance().getRejectstring(transactionId));
-        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null") && mandaysmale != null && !TextUtils.isEmpty(mandaysmale.getText()) && !mandaysmale.getText().equals("null"))){
             male_cost =(Double.parseDouble(male_reg)  * Double.parseDouble(mandaysmale.getText().toString().trim()));
 
         }
-        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null") && mandaysfemale != null && !TextUtils.isEmpty(mandaysfemale.getText()) && !mandaysfemale.getText().equals("null"))){
             Female_cost =Double.parseDouble(femmale_reg) * Double.parseDouble(mandaysfemale.getText().toString().trim()) ;
         }
-        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null") && mandaysmaleoutside != null && !TextUtils.isEmpty(mandaysmaleoutside.getText()) && !mandaysmaleoutside.getText().equals("null"))){
             male_cost_contract = Double.parseDouble(male_contract) * Double.parseDouble(mandaysmaleoutside.getText().toString().trim());
         }
 
-        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null") && mandaysfemaleoutside != null && !TextUtils.isEmpty(mandaysfemaleoutside.getText()) && !mandaysfemaleoutside.getText().equals("null"))){
             Female_cost_contract =(Double.parseDouble(female_contract)  * Double.parseDouble(mandaysfemaleoutside.getText().toString().trim()));
         }
 
@@ -725,18 +726,18 @@ else {
         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
 
-        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null") && mandaysmale != null && !TextUtils.isEmpty(mandaysmale.getText()) && !mandaysmale.getText().equals("null"))){
              male_cost =(Double.parseDouble(male_reg)  * Double.parseDouble(mandaysmale.getText().toString().trim()));
 
         }
-        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null") && mandaysfemale != null && !TextUtils.isEmpty(mandaysfemale.getText()) && !mandaysfemale.getText().equals("null"))){
              Female_cost =Double.parseDouble(femmale_reg) * Double.parseDouble(mandaysfemale.getText().toString().trim()) ;
         }
-        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null") && mandaysmaleoutside != null && !TextUtils.isEmpty(mandaysmaleoutside.getText()) && !mandaysmaleoutside.getText().equals("null"))){
              male_cost_contract = Double.parseDouble(male_contract) * Double.parseDouble(mandaysmaleoutside.getText().toString().trim());
         }
 
-        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null") && mandaysfemaleoutside != null && !TextUtils.isEmpty(mandaysfemaleoutside.getText()) && !mandaysfemaleoutside.getText().equals("null"))){
              Female_cost_contract =(Double.parseDouble(female_contract)  * Double.parseDouble(mandaysfemaleoutside.getText().toString().trim()));
         }
 
@@ -806,13 +807,11 @@ Log.e("==========>733",TotalCost+"");
             mapStatus.put("Quantity",quantity.getText());
         }
 
-        if (!TextUtils.isEmpty(cost.getText().toString())){
-            mapStatus.put("TotalCost",cost.getText());
-        }else{
-            mapStatus.put("TotalCost"," ");
-        }
-
-    
+//        if (!TextUtils.isEmpty(cost.getText().toString())){
+//            mapStatus.put("TotalCost",cost.getText());
+//        }else{
+//            mapStatus.put("TotalCost"," ");
+//        }
 
 
         if(typespinner.getSelectedItemPosition() == 2){
