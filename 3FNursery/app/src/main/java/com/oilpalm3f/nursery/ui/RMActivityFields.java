@@ -264,7 +264,7 @@ public class RMActivityFields extends AppCompatActivity {
                     nameactivity.setVisibility(View.GONE);
                 }
                 Log.d(LOG_TAG, "transactionId=====prev232" + transactionId);
-
+                imageView.setEnabled(false);
 
             } else if (Flag == 3) {
                 Log.v(LOG_TAG, "===220"+RMTransactionData.size()+"");
