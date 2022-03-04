@@ -30,6 +30,15 @@ public class RMTransactions_New {
     private String UpdatedByUserId;
     private String UpdatedDate;
     private int ServerUpdatedStatus;
+    private  String Remarks;
+
+    public String getRemarks() {
+        return Remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        Remarks = remarks;
+    }
 
     private String ByteImage;
 

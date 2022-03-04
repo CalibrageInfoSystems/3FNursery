@@ -82,7 +82,7 @@ public class RMActivityFields extends AppCompatActivity {
     TextView activity_name, nurseryname;
     DatePickerDialog picker;
     int labourcost = 10;
-
+    String Remarks;
     String currentDate,sendcurrentDate,Userid,Date_history;
 
  //   TextView cost;
@@ -515,25 +515,26 @@ else {
         Userid =  dataAccessHandler.getSingleValue(Queries.getRMuserid(transactionId));
         Date_history =  dataAccessHandler.getSingleValue(Queries.getRMupdateddate(transactionId));
         RMTransactionData = dataAccessHandler.getRMTransactions(Queries.getInstance().getRmTransactiondata(transactionId));
-        String Remarks = dataAccessHandler.getSingleValue(Queries.getInstance().getRejectstring(transactionId));
-        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+         Remarks = dataAccessHandler.getSingleValue(Queries.getInstance().getRejectstring(transactionId));
+Log.e("===========Remarks519",Remarks+"");
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null") && mandaysmale != null && !TextUtils.isEmpty(mandaysmale.getText()) && !mandaysmale.getText().equals("null"))){
             male_cost =(Double.parseDouble(male_reg)  * Double.parseDouble(mandaysmale.getText().toString().trim()));
 
         }
-        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null") && mandaysfemale != null && !TextUtils.isEmpty(mandaysfemale.getText()) && !mandaysfemale.getText().equals("null"))){
             Female_cost =Double.parseDouble(femmale_reg) * Double.parseDouble(mandaysfemale.getText().toString().trim()) ;
         }
-        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null") && mandaysmaleoutside != null && !TextUtils.isEmpty(mandaysmaleoutside.getText()) && !mandaysmaleoutside.getText().equals("null"))){
             male_cost_contract = Double.parseDouble(male_contract) * Double.parseDouble(mandaysmaleoutside.getText().toString().trim());
         }
 
-        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null") && mandaysfemaleoutside != null && !TextUtils.isEmpty(mandaysfemaleoutside.getText()) && !mandaysfemaleoutside.getText().equals("null"))){
             Female_cost_contract =(Double.parseDouble(female_contract)  * Double.parseDouble(mandaysfemaleoutside.getText().toString().trim()));
         }
 
 
         Double TotalCost =(male_cost+Female_cost+male_cost_contract+Female_cost_contract);
-        Log.e("==========>733",TotalCost+"");
+        Log.e("==========>537",TotalCost+"");
         //    int Activity_typeID =
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
         Log.d("TransactionId===update", transactionId);
@@ -665,7 +666,6 @@ else {
                     status.put("CreatedByUserId", Userid);
                     status.put("CreatedDate", Date_history);
                     status.put("Remarks", Remarks);
-
                     status.put("ServerUpdatedStatus", 0);
 
     final List<LinkedHashMap> historyList = new ArrayList<>();
@@ -725,18 +725,18 @@ else {
         String male_contract = dataAccessHandler.getSingleValue(Queries.getcontractmalerate(CommonConstants.NurseryCode));
         String female_contract = dataAccessHandler.getSingleValue(Queries.getcontractfemalerate(CommonConstants.NurseryCode));
 
-        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null"))){
+        if ((male_reg != null && !male_reg.isEmpty() && !male_reg.equals("null") && mandaysmale != null && !TextUtils.isEmpty(mandaysmale.getText()) && !mandaysmale.getText().equals("null"))){
              male_cost =(Double.parseDouble(male_reg)  * Double.parseDouble(mandaysmale.getText().toString().trim()));
 
         }
-        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null"))){
+        if ((femmale_reg != null && !femmale_reg.isEmpty() && !femmale_reg.equals("null") && mandaysfemale != null && !TextUtils.isEmpty(mandaysfemale.getText()) && !mandaysfemale.getText().equals("null"))){
              Female_cost =Double.parseDouble(femmale_reg) * Double.parseDouble(mandaysfemale.getText().toString().trim()) ;
         }
-        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null"))){
+        if ((male_contract != null && !male_contract.isEmpty() && !male_contract.equals("null") && mandaysmaleoutside != null && !TextUtils.isEmpty(mandaysmaleoutside.getText()) && !mandaysmaleoutside.getText().equals("null"))){
              male_cost_contract = Double.parseDouble(male_contract) * Double.parseDouble(mandaysmaleoutside.getText().toString().trim());
         }
 
-        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null"))){
+        if ((female_contract != null && !female_contract.isEmpty() && !female_contract.equals("null") && mandaysfemaleoutside != null && !TextUtils.isEmpty(mandaysfemaleoutside.getText()) && !mandaysfemaleoutside.getText().equals("null"))){
              Female_cost_contract =(Double.parseDouble(female_contract)  * Double.parseDouble(mandaysfemaleoutside.getText().toString().trim()));
         }
 
@@ -806,12 +806,15 @@ Log.e("==========>733",TotalCost+"");
             mapStatus.put("Quantity",quantity.getText());
         }
 
-        if (!TextUtils.isEmpty(cost.getText().toString())){
-            mapStatus.put("TotalCost",cost.getText());
-        }else{
-            mapStatus.put("TotalCost"," ");
-        }
 
+
+
+
+//        if (!TextUtils.isEmpty(cost.getText().toString())){
+//            mapStatus.put("TotalCost",cost.getText());
+//        }else{
+//            mapStatus.put("TotalCost"," ");
+//        }
 
 
 

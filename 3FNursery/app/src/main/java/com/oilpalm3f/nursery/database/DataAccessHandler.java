@@ -1965,7 +1965,7 @@ return Cullinglossrepolist;
                         }
                     }
 
-                    rmTransactions.setId(cursor.getInt(cursor.getColumnIndex("Id")));
+                   // rmTransactions.setId(cursor.getInt(cursor.getColumnIndex("Id")));
                     rmTransactions.setTransactionId(cursor.getString(cursor.getColumnIndex("TransactionId")));
                     rmTransactions.setNurseryCode(cursor.getString(cursor.getColumnIndex("NurseryCode")));
                     rmTransactions.setActivityId(cursor.getInt(cursor.getColumnIndex("ActivityId")));
@@ -1991,7 +1991,7 @@ return Cullinglossrepolist;
                     rmTransactions.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
                     //rmTransactions.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
                     rmTransactions.setFileExtension(cursor.getString(cursor.getColumnIndex("FileExtension")));
-
+                    rmTransactions.setRemarks(cursor.getString(cursor.getColumnIndex("Remarks")));
                     rmTransactions.setCreatedByUserId(cursor.getInt(cursor.getColumnIndex("CreatedByUserId")));
                     rmTransactions.setCreatedDate(cursor.getString(cursor.getColumnIndex("CreatedDate")));
                     rmTransactions.setUpdatedByUserId(cursor.getString(cursor.getColumnIndex("UpdatedByUserId")));

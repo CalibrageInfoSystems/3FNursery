@@ -69,7 +69,8 @@ import static com.oilpalm3f.nursery.cloudhelper.HttpClient.getOkHttpClient;
 public class DataSyncHelper {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String LOG_TAG = DataSyncHelper.class.getName();
-    public static String PREVIOUS_SYNC_DATE = "previous_sync_date";
+    //public static String PREVIOUS_SYNC_DATE = "previous_sync_date";
+    public static String PREVIOUS_SYNC_DATE = "null";
     public static LinkedHashMap<String, List> dataToUpdate = new LinkedHashMap<>();
     public static int countCheck, transactionsCheck = 0, imagesCount = 0, reverseSyncTransCount = 0, innerCountCheck = 0;
     public static List<String> refreshtableNamesList = new ArrayList<>();
