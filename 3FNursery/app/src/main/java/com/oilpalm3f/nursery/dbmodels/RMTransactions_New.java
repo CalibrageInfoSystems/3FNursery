@@ -22,9 +22,9 @@ public class RMTransactions_New {
     private double Quantity;
     private  double TotalCost;
     private String Comments;
-//    private String FileName;
-//    private String FileLocation;
-//    private String FileExtension;
+    private String FileName;
+    private String FileLocation;
+    private String FileExtension;
     private int CreatedByUserId;
     private String CreatedDate;
     private String UpdatedByUserId;

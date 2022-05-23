@@ -2,7 +2,12 @@ package com.oilpalm3f.nursery.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,9 +32,19 @@ import com.oilpalm3f.nursery.common.CommonUtils;
 import com.oilpalm3f.nursery.database.DataAccessHandler;
 import com.oilpalm3f.nursery.database.Queries;
 import com.oilpalm3f.nursery.datasync.helpers.DataManager;
+import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.ConsignmentDetails;
 import com.oilpalm3f.nursery.dbmodels.NurseryDetails;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -143,9 +158,13 @@ public class  HomeActivity extends AppCompatActivity {
             }
         });
         refreshRel.setOnClickListener(view -> {
+          //  downloadImagesToSdCard("http://developer.android.com/images/activity_lifecycle.png","Roja");
+
             resetPrevRegData();
             startActivity(new Intent(HomeActivity.this, RefreshSyncActivity.class));
         });
+
+
         nurserylabourlogsrel.setOnClickListener(new View.OnClickListener() {  // CheckActivity
             @Override
             public void onClick(View view) {
@@ -197,6 +216,28 @@ public class  HomeActivity extends AppCompatActivity {
         });
     }
 
+
+
+//    public void viewimage()
+//    {
+//        String path = serialnumber+".png";
+//        ContextWrapper cw = new ContextWrapper(getActivity());
+//
+//        //path to /data/data/yourapp/app_data/dirName
+//        File directory = cw.getDir("files", Context.MODE_PRIVATE);
+//
+//        File mypath=new File(directory,"folder/"+path);
+//
+//        Bitmap b;
+//        try {
+//            b = BitmapFactory.decodeStream(new FileInputStream(mypath));
+//            //  b.compress(format, quality, stream)
+//            profile_image.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
     public static void resetPrevRegData() {
         DataManager.getInstance().deleteData(DataManager.SAPLING);
         DataManager.getInstance().deleteData(DataManager.SAPLING_ACTIVITY);
@@ -347,5 +388,8 @@ public class  HomeActivity extends AppCompatActivity {
         circleView.setTitleText(unreadNotificationsCount);
 
     }
+
+
+
 
 }

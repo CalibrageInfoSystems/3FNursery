@@ -87,6 +87,7 @@ public class RefreshSyncActivity extends AppCompatActivity implements View.OnCli
         allRefreshDataMap.add(DatabaseKeys.TABLE_NurseryIrrigationhistory);
         allRefreshDataMap.add(DatabaseKeys.TABLE_FILEREPOSITORY);
         allRefreshDataMap.add(DatabaseKeys.TABLE_ALERTS);
+        allRefreshDataMap.add(DatabaseKeys.TABLE_NURSERYVISITLOGS);
         allRefreshDataMap.add(DatabaseKeys.TABLE_RMTransactions);
         allRefreshDataMap.add(DatabaseKeys.TABLE_RMTransactionStatusHistory);
 

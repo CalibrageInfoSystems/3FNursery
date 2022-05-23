@@ -1,10 +1,21 @@
 package com.oilpalm3f.nursery.datasync.helpers;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,11 +52,16 @@ import com.oilpalm3f.nursery.uihelper.ProgressBar;
 import com.oilpalm3f.nursery.uihelper.ProgressDialogFragment;
 import com.oilpalm3f.nursery.utils.UiUtils;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -83,7 +99,12 @@ public class DataSyncHelper {
     public static int AdvanceTourPlan = 0;
     public static int FarmerResetCount;
     public static int PlotResetCount;
+public static String str;
+    private static String[] PERMISSIONS_REQUIRED = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
 
+    };
 
     public static synchronized void performMasterSync(final Context context, final boolean firstTimeInsertFinished, final ApplicationThread.OnComplete onComplete) {
         IMEINUMBER = CommonUtils.getIMEInumber(context);
@@ -120,7 +141,7 @@ public class DataSyncHelper {
                                                                 Log.v(LOG_TAG, "@@@ sync success for " + tableName);
                                                             } else {
                                                                 Log.v(LOG_TAG, "@@@ check 1 " + masterData.size() + "...pos " + countCheck);
-                                                                Log.v(LOG_TAG, "@@@ sync failed for " + tableName + " message " + msg);
+                                                              Log.v(LOG_TAG, "@@@ sync failed for " + tableName + " message " + msg);
                                                             }
                                                             if (countCheck == masterData.size()) {
                                                                 Log.v(LOG_TAG, "@@@ Done with master sync " + countCheck);
@@ -543,7 +564,7 @@ public class DataSyncHelper {
                 }
                 recordExisted = dataAccessHandler.checkValueExistedInDatabase(Queries.getInstance().checkRecordStatusInTable(tableName, "Id", alertsList.getId()+""));
             }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {
-                RMTransactions_New rmTransactions = (RMTransactions_New) dataList.get(innerCountCheck);
+                RMTransactions rmTransactions = (RMTransactions) dataList.get(innerCountCheck);
                 rmTransactions.setServerUpdatedStatus(1);
                 whereCondition = " where  TransactionId = '" + rmTransactions.getTransactionId() + "'";
                 try {
@@ -776,6 +797,12 @@ public class DataSyncHelper {
                 JSONArray dataArray = new JSONArray(strResponse);
 
                 if (statusCode == HttpURLConnection.HTTP_OK) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions((Activity) context, PERMISSIONS_REQUIRED, 0);
+                        }
+
+                    }
 
                     if (TextUtils.isEmpty(date)) {
 
@@ -789,19 +816,48 @@ public class DataSyncHelper {
                             public void execute(boolean success, String result, String msg) {
                                 if (success) {
                                     Log.v(LOG_TAG, "@@@@ Data insertion status " + result);
-                                    if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_FARMER)) {
-                                        if (currentIndex == 0) {
-                                            FarmerResetCount = 1;
-                                        } else {
-                                            FarmerResetCount = FarmerResetCount + 1;
+                                    Log.v(LOG_TAG, "@@@@ Data 817 tableName  " + tableName);
+
+
+                                    if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {// TODO need to check
+
+                                        File dir = new File(Environment.getExternalStorageDirectory()
+                                                .getAbsolutePath() + File.separator + "3F_Pictures/" + "RM_Transactions");
+                                        try {
+                                            FileUtils.deleteDirectory(dir);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
                                         }
-                                    } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_PLOT)) {
-                                        if (currentIndex == 0) {
-                                            PlotResetCount = 1;
-                                        } else {
-                                            PlotResetCount = PlotResetCount + 1;
-                                        }
-                                    }
+                                        Gson gson = new Gson();
+                                        Type type = new TypeToken<List<RMTransactions>>() {
+                                        }.getType();
+                                        List<RMTransactions> rmTransactions = gson.fromJson(dataArray.toString(), type);
+                                        Log.v(LOG_TAG, "@@@@ Data  823  " + rmTransactions.size());
+                                        ArrayList<String> img = new ArrayList<>();
+                                        for(int i =0 ; i<rmTransactions.size() ;i++){
+                                            //str = Config.image_url_1+"//"+str;
+                                            str = Config.image_url+"/"+rmTransactions.get(i).getFileLocation()+"/"+rmTransactions.get(i).getFileName()+rmTransactions.get(i).getFileExtension();
+                                            str.replace('\\', '/');
+                                            Log.e("=======>image save", str);
+                                            img.add(str);
+                                            downloadFile(str,rmTransactions.get(i).getTransactionId());
+                                            //       new DownloadImage().execute("http://developer.android.com/images/activity_lifecycle.png");
+                                            Log.e("image",str+"");
+                                        }}
+//
+//                                        if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_FARMER)) {
+//                                        if (currentIndex == 0) {
+//                                            FarmerResetCount = 1;
+//                                        } else {
+//                                            FarmerResetCount = FarmerResetCount + 1;
+//                                        }
+//                                    } else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_PLOT)) {
+//                                        if (currentIndex == 0) {
+//                                            PlotResetCount = 1;
+//                                        } else {
+//                                            PlotResetCount = PlotResetCount + 1;
+//                                        }
+//                                    }
                                 } else {
                                     Log.v(LOG_TAG, "@@@@ Data insertion Failed In Table-" + tableName + "Due to" + result);
                                 }
@@ -861,9 +917,21 @@ public class DataSyncHelper {
                                 dataToUpdate.put(tableName, alters);
                         }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactions)) {  // TODO need to check
                             Gson gson = new Gson();
-                            Type type = new TypeToken<List<RMTransactions_New>>() {
+                            Type type = new TypeToken<List<RMTransactions>>() {
                             }.getType();
-                            List<RMTransactions_New> rmTransactions = gson.fromJson(dataArray.toString(), type);
+                            List<RMTransactions> rmTransactions = gson.fromJson(dataArray.toString(), type);
+                            ArrayList<String> img = new ArrayList<>();
+                            for(int i =0 ; i<rmTransactions.size() ;i++){
+                                //str = Config.image_url_1+"//"+str;
+                                str = Config.image_url+"/"+rmTransactions.get(i).getFileLocation()+"/"+rmTransactions.get(i).getFileName()+rmTransactions.get(i).getFileExtension();
+                                str.replace('\\', '/');
+                                img.add(str);
+                                downloadFile(str,rmTransactions.get(i).getTransactionId());
+                         //       new DownloadImage().execute("http://developer.android.com/images/activity_lifecycle.png");
+                                Log.e("image",str+"");
+                            }
+
+
                             if (null != rmTransactions && rmTransactions.size() > 0)
                                 dataToUpdate.put(tableName, rmTransactions);
                         }else if (tableName.equalsIgnoreCase(DatabaseKeys.TABLE_RMTransactionStatusHistory)) {  // TODO need to check
@@ -885,6 +953,35 @@ public class DataSyncHelper {
             }
             return resultMessage;
         }
+
+        public void downloadFile(String uRl, String TransID) {
+
+            File direct = new File(
+                    Environment.getExternalStorageDirectory() + "/3F_Pictures/" + "RM_Transactions");
+            // have the object build the directory structure, if needed.
+
+            if (!direct.exists()) {
+                direct.mkdirs();
+            }
+
+            DownloadManager mgr = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+            Uri downloadUri = Uri.parse(uRl);
+            DownloadManager.Request request = new DownloadManager.Request(
+                    downloadUri);
+
+            request.setAllowedNetworkTypes(
+                    DownloadManager.Request.NETWORK_WIFI
+                            | DownloadManager.Request.NETWORK_MOBILE)
+                    .setAllowedOverRoaming(false).setTitle("Demo")
+                    .setDescription("Something useful. No, really.")
+                    .setDestinationInExternalPublicDir("/3F_Pictures/" + "RM_Transactions/", TransID+".jpg");
+
+            mgr.enqueue(request);
+
+        }
+
+
 
         @Override
         protected void onPostExecute(String result) {
@@ -952,5 +1049,31 @@ public class DataSyncHelper {
                 new DownLoadData(context, date, totalData, totalDataCount, currentIndex, dataAccessHandler, progressDialogFragment).execute();
             }
         }
+//        public void downloadFile(String uRl) {
+//            File direct = new File(Environment.getExternalStorageDirectory()
+//                    + "/AnhsirkDasarp");
+//
+//            if (!direct.exists()) {
+//                direct.mkdirs();
+//            }
+//
+//            DownloadManager mgr = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+//
+//            Uri downloadUri = Uri.parse(uRl);
+//            DownloadManager.Request request = new DownloadManager.Request(
+//                    downloadUri);
+//
+//            request.setAllowedNetworkTypes(
+//                    DownloadManager.Request.NETWORK_WIFI
+//                            | DownloadManager.Request.NETWORK_MOBILE)
+//                    .setAllowedOverRoaming(false).setTitle("Demo")
+//                    .setDescription("Something useful. No, really.")
+//                    .setDestinationInExternalPublicDir("/AnhsirkDasarp", "fileName.jpg");
+//
+//            mgr.enqueue(request);
+//
+//        }
+
+//
     }
 }

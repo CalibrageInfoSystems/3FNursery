@@ -1973,15 +1973,15 @@ return Cullinglossrepolist;
                     rmTransactions.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
                     rmTransactions.setStatusTypeId(cursor.getInt(cursor.getColumnIndex("StatusTypeId")));
                     rmTransactions.setTransactionDate(cursor.getString(cursor.getColumnIndex("TransactionDate")));
-                    rmTransactions.setMaleRegular(cursor.getInt(cursor.getColumnIndex("MaleRegular")));
-                    rmTransactions.setFemaleRegular(cursor.getInt(cursor.getColumnIndex("FemaleRegular")));
+                    rmTransactions.setMaleRegular(cursor.getDouble(cursor.getColumnIndex("MaleRegular")));
+                    rmTransactions.setFemaleRegular(cursor.getDouble(cursor.getColumnIndex("FemaleRegular")));
 
-                    rmTransactions.setMaleOutside(cursor.getInt(cursor.getColumnIndex("MaleOutside")));
-                    rmTransactions.setFemaleOutside(cursor.getInt(cursor.getColumnIndex("FemaleOutside")));
+                    rmTransactions.setMaleOutside(cursor.getDouble(cursor.getColumnIndex("MaleOutside")));
+                    rmTransactions.setFemaleOutside(cursor.getDouble(cursor.getColumnIndex("FemaleOutside")));
                     rmTransactions.setMaleRegularCost(cursor.getDouble(cursor.getColumnIndex("MaleRegularCost")));
                     rmTransactions.setFemaleRegularCost(cursor.getDouble(cursor.getColumnIndex("FemaleRegularCost")));
-                    rmTransactions.setMaleOutsideCost(cursor.getInt(cursor.getColumnIndex("MaleOutsideCost")));
-                    rmTransactions.setFemaleoutsideCost(cursor.getInt(cursor.getColumnIndex("FemaleoutsideCost")));
+                    rmTransactions.setMaleOutsideCost(cursor.getDouble(cursor.getColumnIndex("MaleOutsideCost")));
+                    rmTransactions.setFemaleoutsideCost(cursor.getDouble(cursor.getColumnIndex("FemaleoutsideCost")));
                     rmTransactions.setExpenseType(cursor.getString(cursor.getColumnIndex("ExpenseType")));
                     rmTransactions.setUOMId(cursor.getInt(cursor.getColumnIndex("UOMId")));
                     rmTransactions.setQuantity(cursor.getDouble(cursor.getColumnIndex("Quantity")));
@@ -2065,18 +2065,18 @@ return Cullinglossrepolist;
                     rmTransactions.setActivityName(cursor.getString(cursor.getColumnIndex("ActivityName")));
                     rmTransactions.setActivityTypeId(cursor.getInt(cursor.getColumnIndex("ActivityTypeId")));
 
-                    rmTransactions.setMaleRegular(cursor.getInt(cursor.getColumnIndex("MaleRegular")));
-                    rmTransactions.setFemaleRegular(cursor.getInt(cursor.getColumnIndex("FemaleRegular")));
+                    rmTransactions.setMaleRegular(cursor.getDouble(cursor.getColumnIndex("MaleRegular")));
+                    rmTransactions.setFemaleRegular(cursor.getDouble(cursor.getColumnIndex("FemaleRegular")));
 
-                    rmTransactions.setMaleOutside(cursor.getInt(cursor.getColumnIndex("MaleOutside")));
-                    rmTransactions.setFemaleOutside(cursor.getInt(cursor.getColumnIndex("FemaleOutside")));
+                    rmTransactions.setMaleOutside(cursor.getDouble(cursor.getColumnIndex("MaleOutside")));
+                    rmTransactions.setFemaleOutside(cursor.getDouble(cursor.getColumnIndex("FemaleOutside")));
 
                     rmTransactions.setExpenseType(cursor.getString(cursor.getColumnIndex("ExpenseType")));
                     rmTransactions.setUOMId(cursor.getInt(cursor.getColumnIndex("UOMId")));
                     rmTransactions.setQuantity(cursor.getDouble(cursor.getColumnIndex("Quantity")));
                     rmTransactions.setTotalCost(cursor.getDouble(cursor.getColumnIndex("TotalCost")));
                     rmTransactions.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
-
+                    rmTransactions.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
                     rmTransactions.setFileLocation(cursor.getString(cursor.getColumnIndex("FileLocation")));
 
 

@@ -52,6 +52,7 @@ import com.oilpalm3f.nursery.dbmodels.ActivityTasks;
 import com.oilpalm3f.nursery.dbmodels.CullinglossFileRepository;
 import com.oilpalm3f.nursery.dbmodels.DisplayData;
 import com.oilpalm3f.nursery.ui.Adapter.RVAdapter_ImageList;
+import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
 import com.oilpalm3f.nursery.utils.ImageUtility;
 import com.oilpalm3f.nursery.utils.UiUtils;
@@ -578,7 +579,9 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                                                     ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
                                                         @Override
                                                         public void run() {
+                                                            Toast.makeText(ActivityTask.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
                                                             finish();
+
                                                         }
                                                     });
                                                 } else {
@@ -630,6 +633,8 @@ Log.e("=========>SCREEN_FROM",SCREEN_FROM+"");
                                                     ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
                                                         @Override
                                                         public void run() {
+                                                            Toast.makeText(ActivityTask.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
+//
                                                             finish();
                                                         }
                                                     });
@@ -2778,7 +2783,7 @@ else{
                                             ApplicationThread.uiPost(LOG_TAG, "transactions sync message", new Runnable() {
                                                 @Override
                                                 public void run() {
-
+                                                    Toast.makeText(ActivityTask.this, "Successfully data sent to server", Toast.LENGTH_SHORT).show();
 //                                                    Toast.makeText(ActivityTask.this, "Data Saved Successfully", Toast.LENGTH_SHORT).show();
 //                                                    UiUtils.showCustomToastMessage("Successfully data sent to server",ActivityTask.this, 0);
                                                     finish();

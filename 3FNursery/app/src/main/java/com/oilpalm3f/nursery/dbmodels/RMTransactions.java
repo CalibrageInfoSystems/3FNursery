@@ -9,10 +9,10 @@ public class RMTransactions {
     private int ActivityTypeId;
     private  int StatusTypeId;
     private String TransactionDate;
-    private int MaleRegular;
-    private int FemaleRegular;
-    private int MaleOutside;
-    private int FemaleOutside;
+    private double MaleRegular;
+    private double FemaleRegular;
+    private double MaleOutside;
+    private double FemaleOutside;
     private double MaleRegularCost;
     private double FemaleRegularCost;
     private double MaleOutsideCost;
@@ -130,32 +130,36 @@ public class RMTransactions {
         TransactionDate = transactionDate;
     }
 
-    public int getMaleRegular() {
+    public double getMaleRegular() {
         return MaleRegular;
     }
 
-    public void setMaleRegular(int maleRegular) {
+    public void setMaleRegular(double maleRegular) {
         MaleRegular = maleRegular;
     }
 
-    public int getFemaleRegular() {
+    public double getFemaleRegular() {
         return FemaleRegular;
     }
 
-    public void setFemaleRegular(int femaleRegular) {
+    public void setFemaleRegular(double femaleRegular) {
         FemaleRegular = femaleRegular;
     }
 
-    public int getMaleOutside() {
+    public double getMaleOutside() {
         return MaleOutside;
     }
 
-    public void setMaleOutside(int maleOutside) {
+    public void setMaleOutside(double maleOutside) {
         MaleOutside = maleOutside;
     }
 
-    public int getFemaleOutside() {
+    public double getFemaleOutside() {
         return FemaleOutside;
+    }
+
+    public void setFemaleOutside(double femaleOutside) {
+        FemaleOutside = femaleOutside;
     }
 
     public void setFemaleOutside(int femaleOutside) {

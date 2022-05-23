@@ -258,10 +258,10 @@ public class DataBaseUpgrade {
                 "ActivityTypeId INT , \n" +
                 "StatusTypeId INT , \n" +
                 "TransactionDate DATETIME , \n" +
-                "MaleRegular INT , \n" +
-                "FemaleRegular INT , \n" +
-                "MaleOutside INT , \n" +
-                "FemaleOutside INT , \n" +
+                "MaleRegular FLOAT , \n" +
+                "FemaleRegular FLOAT , \n" +
+                "MaleOutside FLOAT , \n" +
+                "FemaleOutside FLOAT , \n" +
                 "MaleRegularCost FLOAT , \n" +
                 "FemaleRegularCost FLOAT , \n" +
                 "MaleOutsideCost FLOAT , \n" +
@@ -294,6 +294,7 @@ public class DataBaseUpgrade {
         String column16 = "Alter Table RMTransactionStatusHistory Add Remarks VARCHAR(500)";
 
         String column17 = "Alter Table RMTransactions Add ByteImage";
+        String column18 = "Alter Table Tablet Add IMEINumber2";
 
         try {
             db.execSQL(cullingLossFileRepository);
@@ -319,6 +320,7 @@ public class DataBaseUpgrade {
             db.execSQL(column15);
             db.execSQL(column16);
             db.execSQL(column17);
+            db.execSQL(column18);
 
         } catch (Exception e) {
             e.printStackTrace();

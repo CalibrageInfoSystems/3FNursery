@@ -45,7 +45,7 @@ import com.oilpalm3f.nursery.datasync.helpers.DataSyncHelper;
 import com.oilpalm3f.nursery.dbmodels.NurseryRMActivity;
 import com.oilpalm3f.nursery.dbmodels.RMTransactions;
 import com.oilpalm3f.nursery.ui.irrigation.IrrigationActivity;
-
+import java.text.DecimalFormat;
 import com.oilpalm3f.nursery.common.CommonUtils;
 
 import com.oilpalm3f.nursery.uihelper.ProgressBar;
@@ -98,7 +98,7 @@ public class RMActivityFields extends AppCompatActivity {
     LinkedHashMap<String, Pair> activityTypeDataMap = null;
     LinkedHashMap<String, Pair> uomTypeDataMap = null;
 
-
+    DecimalFormat precision = new DecimalFormat("0.00");
 
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.CAMERA,
@@ -128,7 +128,7 @@ public class RMActivityFields extends AppCompatActivity {
         nameactivity = findViewById(R.id.nameactivity);
         nurseryname = findViewById(R.id.nurseryname);
         date = findViewById(R.id.rmdate);
-
+        date.setEnabled(false);
         typespinner = findViewById(R.id.typeSpinner);
         uomSpinner = findViewById(R.id.uomspinner);
 
@@ -216,12 +216,12 @@ public class RMActivityFields extends AppCompatActivity {
             if (Flag == 2) {
                 nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name + "");
-                mandaysmale.setText(RMTransactionData.get(0).getMaleRegular()+"");
-                mandaysfemale.setText(RMTransactionData.get(0).getFemaleRegular()+"");
-                mandaysmaleoutside.setText(RMTransactionData.get(0).getMaleOutside()+"");
-                mandaysfemaleoutside.setText(RMTransactionData.get(0).getFemaleOutside()+"");
+                mandaysmale.setText(precision.format(RMTransactionData.get(0).getMaleRegular()));
+                mandaysfemale.setText(precision.format(RMTransactionData.get(0).getFemaleRegular()));
+                mandaysmaleoutside.setText(precision.format(RMTransactionData.get(0).getMaleOutside()));
+                mandaysfemaleoutside.setText(precision.format(RMTransactionData.get(0).getFemaleOutside()));
                 expensetype.setText(RMTransactionData.get(0).getExpenseType()+"");
-                quantity.setText(RMTransactionData.get(0).getQuantity()+"");
+                quantity.setText(precision.format(RMTransactionData.get(0).getQuantity()));
                 if (RMTransactionData.get(0).getActivityTypeId() == 379) {
                     typespinner.setSelection(2);
 
@@ -232,12 +232,12 @@ public class RMActivityFields extends AppCompatActivity {
                 }
 
 
-                cost.setText(RMTransactionData.get(0).getTotalCost()+"");
-                if (RMTransactionData.get(0).getUOMId() == 261) {
+                cost.setText(precision.format(RMTransactionData.get(0).getTotalCost()));
+                if (RMTransactionData.get(0).getUOMId() == 285) {
                     uomSpinner.setSelection(1);
 
 
-                } else if (RMTransactionData.get(0).getUOMId() == 262) {
+                } else if (RMTransactionData.get(0).getUOMId() == 286) {
 
                     uomSpinner.setSelection(2);
 
@@ -253,10 +253,11 @@ public class RMActivityFields extends AppCompatActivity {
                 else{
                     comment.setText(RMTransactionData.get(0).getComments()+"");
                 }
-                local_ImagePath = RMTransactionData.get(0).getFileLocation();
-                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
-
-                imageView.setImageBitmap(bitmap);
+               local_ImagePath = RMTransactionData.get(0).getFileLocation();
+                String filePath = Environment.getExternalStorageDirectory()
+                        .getAbsolutePath() + File.separator + "3F_Pictures/" + "RM_Transactions/"+RMTransactionData.get(0).getTransactionId()+".jpg";
+                Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                imageView.setImageBitmap(bmp);
                 if (Activity_Name.equalsIgnoreCase("Others")) {
                     nameactivity.setVisibility(View.VISIBLE);
                 nameofactivity.setText((RMTransactionData.get(0).getActivityName()+""));
@@ -273,12 +274,12 @@ public class RMActivityFields extends AppCompatActivity {
                 comment.setText(RMTransactionData.get(0).getComments());
                 nurseryname.setText(CommonConstants.NurseryName + "");
                 activity_name.setText(Activity_Name + "");
-                mandaysmale.setText(RMTransactionData.get(0).getMaleRegular()+"");
-                mandaysfemale.setText(RMTransactionData.get(0).getFemaleRegular()+"");
-                mandaysmaleoutside.setText(RMTransactionData.get(0).getMaleOutside()+"");
-                mandaysfemaleoutside.setText(RMTransactionData.get(0).getFemaleOutside()+"");
+                mandaysmale.setText(precision.format(RMTransactionData.get(0).getMaleRegular()));
+                mandaysfemale.setText(precision.format(RMTransactionData.get(0).getFemaleRegular()));
+                mandaysmaleoutside.setText(precision.format(RMTransactionData.get(0).getMaleOutside()));
+                mandaysfemaleoutside.setText(precision.format(RMTransactionData.get(0).getFemaleOutside()));
                 expensetype.setText(RMTransactionData.get(0).getExpenseType()+"");
-                quantity.setText(RMTransactionData.get(0).getQuantity()+"");
+                quantity.setText(precision.format(RMTransactionData.get(0).getQuantity()));
 
                 if (RMTransactionData.get(0).getActivityTypeId() == 379) {
                     typespinner.setSelection(2);
@@ -289,11 +290,11 @@ public class RMActivityFields extends AppCompatActivity {
 
                 }
 
-                if (RMTransactionData.get(0).getUOMId() == 261) {
+                if (RMTransactionData.get(0).getUOMId() == 285) {
                     uomSpinner.setSelection(1);
 
 
-                } else if (RMTransactionData.get(0).getUOMId() == 262) {
+                } else if (RMTransactionData.get(0).getUOMId() == 286) {
 
                     uomSpinner.setSelection(2);
 
@@ -309,13 +310,24 @@ public class RMActivityFields extends AppCompatActivity {
                 }
                 else{
                     comment.setText(RMTransactionData.get(0).getComments()+"");
-                }
-                Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
 
-                imageView.setImageBitmap(bitmap);
+
+                }
+                Log.e("=========>316", RMTransactionData.get(0).getFileName().length()+"");
+if( RMTransactionData.get(0).getFileLocation().length() < 25){
+                String filePath = Environment.getExternalStorageDirectory()
+                        .getAbsolutePath() + File.separator + "3F_Pictures/" + "RM_Transactions/"+RMTransactionData.get(0).getTransactionId()+".jpg";
+                Bitmap bmp = BitmapFactory.decodeFile(filePath);
+                imageView.setImageBitmap(bmp);}
+else{
+    Bitmap bitmap = BitmapFactory.decodeFile(RMTransactionData.get(0).getFileLocation());
+
+    imageView.setImageBitmap(bitmap);
+}
+
                 submitBtn.setVisibility(View.GONE);
 
-                cost.setText(RMTransactionData.get(0).getTotalCost()+"");
+                cost.setText(precision.format(RMTransactionData.get(0).getTotalCost()));
 
 
                 comment.setText(RMTransactionData.get(0).getComments()+"");
@@ -385,6 +397,16 @@ public class RMActivityFields extends AppCompatActivity {
 
                     labourlyt.setVisibility(View.GONE);
                     otherlyt.setVisibility(View.GONE);
+                    expensetype.setText("");
+                    cost.setText("");
+                    quantity.setText("");
+                    othercomments.setText("");
+                    uomSpinner.setSelection(0);
+                    mandaysmale.setText("");
+                    mandaysfemale.setText("");
+                    mandaysmaleoutside.setText("");
+                    mandaysfemaleoutside.setText("");
+                    comment.setText("");
 
                 } else if (typespinner.getSelectedItemPosition() == 1) {
                     labourlyt.setVisibility(View.VISIBLE);
@@ -486,9 +508,11 @@ public class RMActivityFields extends AppCompatActivity {
             public void onClick(View view) {
                 if (validations()) {
 if(Flag == 2){
-    UpdateRMTransactionsData(transactionId);}
+    UpdateRMTransactionsData(transactionId);
+    local_ImagePath = null; }
 else {
     saveRMTransactionsData(Transactionid_New);
+    local_ImagePath = null;
 }
                     Toast.makeText(RMActivityFields.this, "Submit Success", Toast.LENGTH_SHORT).show();
                     finish();
@@ -589,7 +613,7 @@ Log.e("===========Remarks519",Remarks+"");
         if(uomSpinner.getSelectedItemPosition() == 0){
             mapStatus.put("UOMId","");
         }else{
-            mapStatus.put("UOMId",262);
+            mapStatus.put("UOMId",Integer.parseInt(uomId));
         }
 
         if(quantity.getText().equals("")){
@@ -626,7 +650,7 @@ Log.e("===========Remarks519",Remarks+"");
             mapStatus.put("TotalCost",TotalCost);
             mapStatus.put("Comments",comment.getText());
         }
-
+        mapStatus.put("Remarks","");
         mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
         mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         mapStatus.put("UpdatedByUserId",CommonConstants.USER_ID);
@@ -743,6 +767,7 @@ Log.e("===========Remarks519",Remarks+"");
 
         Double TotalCost =(male_cost+Female_cost+male_cost_contract+Female_cost_contract);
 Log.e("==========>733",TotalCost+"");
+        Log.d("==labour count==", mandaysmale.getText()+"" + mandaysfemale.getText() +" ");
 
         //String transactionid = "TRANRM"+ CommonConstants.TAB_ID + CommonConstants.NurseryCode + activityId + "-" + (dataAccessHandler.getOnlyOneIntValueFromDb(Queries.getInstance().getRMActivityMaxNumber(CommonConstants.NurseryCode, activityTypeId)) + 1);
         Log.d("TransactionId======new", newtransactionId);
@@ -762,13 +787,13 @@ Log.e("==========>733",TotalCost+"");
         if(mandaysmale.getText().length() == 0){
             mapStatus.put("MaleRegular","");
         }else{
-            mapStatus.put("MaleRegular",mandaysmale.getText());
+            mapStatus.put("MaleRegular",mandaysmale.getText()+"");
         }
 
         if(mandaysfemale.getText().length() == 0){
             mapStatus.put("FemaleRegular","");
         }else{
-            mapStatus.put("FemaleRegular",mandaysfemale.getText());
+            mapStatus.put("FemaleRegular",mandaysfemale.getText()+"");
         }
 
         if(mandaysmaleoutside.getText().length() == 0){
@@ -832,7 +857,7 @@ Log.e("==========>733",TotalCost+"");
             mapStatus.put("Comments",comment.getText());
         }
 
-
+        mapStatus.put("Remarks","");
         mapStatus.put("CreatedByUserId",CommonConstants.USER_ID);
         mapStatus.put("CreatedDate",CommonUtils.getcurrentDateTime(CommonConstants.DATE_FORMAT_DDMMYYYY_HHMMSS));
         mapStatus.put("UpdatedByUserId",CommonConstants.USER_ID);
@@ -848,6 +873,7 @@ Log.e("==========>733",TotalCost+"");
                     public void execute(boolean success, String result, String msg) {
 
                         if (success) {
+
                             Toast.makeText(RMActivityFields.this, "Insert Successful", Toast.LENGTH_SHORT).show();
                             if (CommonUtils.isNetworkAvailable(RMActivityFields.this)) {
 
@@ -948,7 +974,7 @@ Log.e("==========>733",TotalCost+"");
 
 
     public boolean validations() {
-
+        Log.d("TAG", "File Saved::--->2" + local_ImagePath);
         if (Activity_Name.equalsIgnoreCase("Others")) {
 
             if (TextUtils.isEmpty(nameofactivity.getText().toString())) {

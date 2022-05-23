@@ -1765,7 +1765,7 @@ public class Queries {
                 "    )S on S.ActivityId  = NA.Id AND S.ConsignmentCode = NA.ConsignmentCode)R \n" +
                 "\t\n" +
                 "\tWHERE \n" +
-                "\tTargetDate is not null ";
+                "\tTargetDate is not null  AND ( StatusTypeId is NULL OR StatusTypeId in (352,349))";
     }
 
     public String getdata(String date) {
@@ -1939,7 +1939,7 @@ public class Queries {
 
     public String getRmTransactiondata(String TransactionId) {
         return "Select TransactionId,ActivityName ,ActivityTypeId,MaleRegular,FemaleRegular,MaleOutside," +
-                "FemaleOutside,ExpenseType, UOMId,Quantity,TotalCost,Comments,FileLocation  " +
+                "FemaleOutside,ExpenseType, UOMId,Quantity,TotalCost,Comments,FileName,FileLocation  " +
                 "from RMTransactions  WHERE TransactionId = '" + TransactionId + "'";
     }
     public static String getRMuserid(String TransactionId) {
